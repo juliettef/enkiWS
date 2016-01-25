@@ -14,6 +14,15 @@
 
             <h1>{{ _( "Store" )}}</h1>
 
+            <div class="jumbotron">
+                <h1>{{ product }}</h1>
+	            <form class="form-group" action="{{ 'store'|local }}" method="post">
+	                <p>
+                       <button class="btn btn-success btn-lg" type="submit" name="buy" value="{{ product }}">{{ _( "Buy" )}}</button>
+	                </p>
+                </form>
+            </div>
+
 	        {% include "incpageextensions.html" %}
 
             {% include "incfooter.html" %}

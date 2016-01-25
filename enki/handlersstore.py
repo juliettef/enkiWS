@@ -3,7 +3,7 @@ import webapp2
 from webapp2_extras.i18n import gettext as _
 
 import enki
-
+from enki.modelproductkey import EnkiModelProductKey
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 
@@ -12,7 +12,14 @@ class HandlerStore( enki.HandlerBase ):
 
 	def get( self ):
 		self.render_tmpl( 'store.html',
-		                  active_page = 'store' )
+		                  active_page = 'store',
+		                  product = 'Avoyd')
+
+	def post( self ):
+		product = 'Avoyd'
+		item = EnkiModelProductKey( product_name = product )
+		EnkiModelProductKey.put( item )
+
 
 class ExtensionPageProducts( ExtensionPage ):
 
