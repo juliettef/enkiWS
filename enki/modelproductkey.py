@@ -4,12 +4,14 @@ from google.appengine.ext.ndb import model
 class EnkiModelProductKey( model.Model ):
 
 	product_code = model.StringProperty()  # mandatory
+	product_name = model.TextProperty()  # mandatory
+
 	purchaser_email = model.TextProperty()  # mandatory
 	purchaser_user_id = model.IntegerProperty() # if the purchaser is registered
-	product_name = model.TextProperty()  # mandatory
-	purchase_date = model.DateTimeProperty( auto_now_add = True )   # mandatory
 
-	purchase_price = model.IntegerProperty()
+	purchase_date = model.DateTimeProperty()
+
+	purchase_price = model.FloatProperty()
 
 	registered_to_user = model.IntegerProperty()
 

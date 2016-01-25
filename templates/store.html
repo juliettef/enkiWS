@@ -15,8 +15,9 @@
             <h1>{{ _( "Store" )}}</h1>
 
             <div class="jumbotron">
-                <h1>{{ product }}</h1>
+                <h1>{{ product[ 'name' ] }}</h1>
 	            <form class="form-group" action="{{ 'store'|local }}" method="post">
+		            <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 	                <p>
                        <button class="btn btn-success btn-lg" type="submit" name="buy" value="{{ product }}">{{ _( "Buy" )}}</button>
 	                </p>
