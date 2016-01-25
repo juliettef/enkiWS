@@ -4,6 +4,7 @@ from webapp2_extras.i18n import gettext as _
 
 import enki
 import enki.libstore
+import enki.textmessages as MSG
 from enki.modelproductkey import EnkiModelProductKey
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
@@ -17,11 +18,10 @@ products = { 'avoyd': { 'name' : 'Avoyd', 'price' : 3.00 },
 class HandlerStore( enki.HandlerBase ):
 
 	def get( self ):
-		product = products[ 'avoyd' ]
 		self.render_tmpl( 'store.html',
 		                  active_page = 'store',
 		                  CSRFtoken = self.create_CSRF( 'store' ),
-		                  product = product )
+		                  product = products[ 'avoyd' ] )
 
 	def post( self ):
 		self.check_CSRF( 'store' )
@@ -39,6 +39,26 @@ class HandlerStore( enki.HandlerBase ):
 		                            purchase_price = float( products[ product ][ 'price' ]),
 		                            )
 		EnkiModelProductKey.put( item )
+		product_name = products[ product ][ 'name' ]
+		product_code_formatted = enki.libstore.insert_dash_5_10( product_code.encode( 'utf-8' ) )
+		link_product_code = enki.libutil.get_local_url( 'profile', { 'code' : product_code_formatted })
+		if purchaser_email: # TODO: get email address
+			self.send_email( purchaser_email, MSG.SEND_EMAIL_PRODUCT_OWN_SUBJECT( product_name ),
+			                 MSG.SEND_EMAIL_PRODUCT_OWN_BODY( product = product_name,
+			                                                  code = product_code_formatted,
+			                                                  link = link_product_code ))
+		self.add_infomessage( 'success', MSG.SUCCESS(), MSG.PRODUCT_OWNED(  product = product_name,
+			                                                                code = product_code_formatted,
+			                                                                link = link_product_code ))
+		self.render_tmpl( 'store.html',
+		                  active_page = 'store',
+		                  CSRFtoken = self.create_CSRF( 'store' ),
+		                  product = products[ product ])
+
+#TODO: 1. Add POST render of success page.
+#TODO: 2. Add a page extension to the profile (not public) which lists your products you have purchased, and their status (registered or not).
+#TODO: 3. Add a way to register a product you own.
+#TODO: 4. Add a way to register any product from a key.
 
 
 class ExtensionPageProducts( ExtensionPage ):

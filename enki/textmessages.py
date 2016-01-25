@@ -45,6 +45,8 @@ def POST_PUBLISHED(): return _( "Your post is published." )
 def POST_MODIFIED(): return _( "Your post is modified." )
 def POST_DELETED(): return _( "Your post is deleted." )
 
+def PRODUCT_OWNED( product, code, link ): return _( '''Congratulations, you own <b>%(product)s</b>. The product key is <b>%(code)s</b>. Check your email or <a href="%(link)s" class="alert-link">visit this page to activate it</a>.''', product = product, code = code, link = link )
+
 # error messages
 def WRONG_EMAIL_OR_PW(): return _( "Wrong email or password." )
 def WRONG_PW(): return _( "Invalid password." )
@@ -83,6 +85,8 @@ def SEND_EMAIL_ACCOUT_DELETE_SUBJECT(): return _( "Account deletion" )
 def SEND_EMAIL_ACCOUT_DELETE_BODY( link ): return _( "A request to delete your account was made. Follow this link to confirm deletion - WARNING: this cannot be undone! - %(link)s (click or copy and paste in your browser)", link = link )
 def SEND_EMAIL_ACCOUT_POSTS_DELETE_SUBJECT(): return _( "Account and forum posts deletion" )
 def SEND_EMAIL_ACCOUT_POSTS_DELETE_BODY( link ): return _( "A request to delete your account and your forum posts was made. Follow this link to confirm deletion - WARNING: this cannot be undone! - %(link)s (click or copy and paste in your browser)", link = link )
+def SEND_EMAIL_PRODUCT_OWN_SUBJECT( product ): return _( "%(product)s product key", product = product )
+def SEND_EMAIL_PRODUCT_OWN_BODY( product, code, link ): return _( "Congratulations, you own %(product)s. The product key is %(code)s. Visit this page to activate it: %(link)s (click or copy and paste in your browser)", product = product, code = code, link = link )
 
 # display name
 def DISPLAY_NAME_DELETED_DISPLAY(): return _( "[Deleted user]" )
