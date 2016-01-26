@@ -102,7 +102,8 @@ According to the [EU legislation on cookies](http://ec.europa.eu/ipg/basics/lega
 Developed by [Juliette Foucaut](http://www.enkisoftware.com/about.html#juliette) - [@juliettef](https://github.com/juliettef)  
 Architecture and OAuth implementation - [Doug Binks](http://www.enkisoftware.com/about.html#doug) - [@dougbinks](https://github.com/dougbinks)  
 Testing - [Andy Binks](http://www.enkisoftware.com/about.html#andy)  
-Testing - Sven Bentlage - [@sbe-dev](https://github.com/sbe-dev)
+Testing - Sven Bentlage - [@sbe-dev](https://github.com/sbe-dev)  
+Localisation - Charlotte Foucaut - [@charlf](https://github.com/charlf)
 
 
 ## License
