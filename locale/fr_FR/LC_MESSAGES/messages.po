@@ -788,8 +788,8 @@ msgid ""
 msgstr ""
 "Une fois enregistré, votre nom d'affichage <b>ne peut pas être "
 "effacé</b>, mais vous pouvez le remplacer par un nouveau nom. <b>Les noms"
-" d'affichage actuel et ancien(s) sont publics</b> et visibles sur la page "
-"de l'utilsateur."
+" d'affichage actuel et ancien(s) sont publics</b> et visibles sur la page"
+" de l'utilsateur."
 
 #: templates/displayname.html:58
 msgid "Save my new display name"
