@@ -15,7 +15,7 @@
             <h1>{{ _( "Store" )}}</h1>
 
             <div class="jumbotron">
-                <h1>{{ product[ 'name' ] }}</h1>
+                <h1>{{ product[ 'displayname' ] }}</h1>
 	            <form class="form-group" action="{{ 'store'|local }}" method="post">
 		            <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 	                <p>

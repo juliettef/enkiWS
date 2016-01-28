@@ -1,0 +1,6 @@
+{% if data %}
+	<div>
+	    <h2>{{ _( "Library" ) }}</h2>
+		{{ data  | join(', ') }}
+	</div>
+{% endif %}
