@@ -8,7 +8,7 @@ import enki.libutil
 from enki.modelproductkey import EnkiModelProductKey
 
 
-def generate_product_code():
+def generate_license_key( ):
 	code = webapp2_extras.security.generate_random_string( length = 15, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
 	return code
 

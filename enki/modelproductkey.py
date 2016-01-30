@@ -3,15 +3,18 @@ from google.appengine.ext.ndb import model
 
 class EnkiModelProductKey( model.Model ):
 
-	product_code = model.StringProperty()  # mandatory
-	product_name = model.TextProperty()  # mandatory
+	license_key = model.StringProperty()  # mandatory
+	product_name = model.StringProperty()  # mandatory
 
-	purchaser_email = model.TextProperty()  # mandatory
+	purchaser_email = model.StringProperty()  # mandatory
 	purchaser_user_id = model.IntegerProperty() # if the purchaser is registered
 
-	purchase_date = model.DateTimeProperty()
-
-	purchase_price = model.FloatProperty()
+	shop_name = model.StringProperty() #choices = [ 'FastSpring' ])
+	purchase_price = model.StringProperty()
+	quantity = model.IntegerProperty()
+	reference = model.StringProperty() # TEMPORARY
+	order_id = model.StringProperty()
+	order_type = model.StringProperty( choices = [ 'test', 'normal' ])
 
 	registered_to_user = model.IntegerProperty()
 

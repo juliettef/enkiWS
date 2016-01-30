@@ -13,5 +13,6 @@ class EnkiModelTokenVerify( model.Model ):
 	                                         'accountdelete',
 	                                         'accountandpostsdelete',
 	                                         'preventmultipost',
+	                                         'purchasebyuser',
 	                                         ] )
 	auth_ids_provider = model.StringProperty() # store auth Id info for registration
