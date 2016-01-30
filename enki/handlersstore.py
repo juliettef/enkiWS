@@ -124,7 +124,7 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 		return
 
 
-class HandlerEmulateStoreFastSpring( enki.HandlerBase ): # TODO: ? had to use handlerbase to use add_debugmessage
+class HandlerEmulateStoreFastSpring( enki.HandlerBase ):
 
 	def get( self ):
 		if not SECRET_FASTSPRING or enki.libutil.is_debug():
@@ -133,6 +133,7 @@ class HandlerEmulateStoreFastSpring( enki.HandlerBase ): # TODO: ? had to use ha
 			quantity = 3
 			price = '$2.00'
 			license_keys = 'not generated'
+			user_id = ''
 
 			url = enki.libutil.get_local_url( 'genlicensefastspring' )
 			form_fields = { 'secret': 'pretendsecret', 'quantity': str( quantity ) }
@@ -143,7 +144,8 @@ class HandlerEmulateStoreFastSpring( enki.HandlerBase ): # TODO: ? had to use ha
 
 			referrer = xstr( self.request.get( 'referrer' ))
 			token = enki.libuser.get_VerifyToken_by_token_type( referrer, 'purchasebyuser' )
-			user_id = token.user_id
+			if token:
+				user_id = token.user_id
 			self.add_debugmessage( '<h1>Emulator - Store FastSpring</h1>'+
 									'<h2>Mandatory</h2>' +
 									'<ul>' +
