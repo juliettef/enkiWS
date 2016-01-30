@@ -47,13 +47,6 @@ class HandlerStore( enki.HandlerBase ):
 		self.redirect( url )
 
 
-#TODO: 1. [DONE] Add POST render of success page.
-#TODO: 2. Add a page extension to the profile (not public) which lists your products you have purchased, and their status (registered or not).
-#TODO: 3. Add a way to register a product you own.
-#TODO: 4. Add a way to register any product from a key.
-#TODO: 5. [DONE] Security key for FastSpring
-
-
 def xstr( value ):
 	if not value:
 		return ''
@@ -147,13 +140,13 @@ class HandlerEmulateStoreFastSpring( enki.HandlerBase ):
 			if token:
 				user_id = token.user_id
 			self.add_debugmessage( '<h1>Emulator - Store FastSpring</h1>'+
-									'<h2>Mandatory</h2>' +
+									'<h2>Emulated purchase details</h2>' +
 									'<ul>' +
 			                            '<li>quantity = ' + xstr( quantity ) + '</li>' +
 			                            '<li>price = ' + xstr( price ) + '</li>' +
 			                            '<li>license(s) = ' + xstr( license_keys ) + '</li>' +
 									'</ul>'
-									'<h2>Optional</h2>' +
+									'<h2>Internal data</h2>' +
 									'<ul>' +
 			                            '<li>referrer = token purchasebyuser = ' + ( xstr( referrer ) if referrer else 'None' ) + '</li>' +
 				                        '<li>purchaser user_id (if token purchasebyuser ) = ' + ( xstr( user_id ) if user_id else 'None' ) + '</li>' +
@@ -173,7 +166,9 @@ class HandlerEmulateStoreFastSpring( enki.HandlerBase ):
 			form_data = urllib.urlencode( form_fields )
 			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )
 			if result.status_code == 200:
-				self.add_debugmessage( '<h1>purchase records created<h1>' )
+				self.add_debugmessage( '<h2>Purchase records created<h2>' )
+			else:
+				self.add_debugmessage( '<h2>ERROR - purchase records not created<h2>' )
 
 			self.redirect_to_relevant_page()
 

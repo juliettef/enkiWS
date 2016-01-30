@@ -12,7 +12,6 @@ class EnkiModelProductKey( model.Model ):
 	shop_name = model.StringProperty() #choices = [ 'FastSpring' ])
 	purchase_price = model.StringProperty()
 	quantity = model.IntegerProperty()
-	reference = model.StringProperty() # TEMPORARY
 	order_id = model.StringProperty()
 	order_type = model.StringProperty( choices = [ 'emulated', 'test', 'normal' ])
 
