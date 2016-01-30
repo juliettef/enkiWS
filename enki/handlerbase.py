@@ -569,7 +569,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		if ref and ref != home_page:
 			ref_path = urlparse.urlparse( ref ).path
 			# Create the list of pages the user can be sent to (relevant pages)
-			relevant_pages = { '/forums' }
+			relevant_pages = { '/forums', '/store' }
 			relevant_paths = { '/f/', '/t/', '/p/' }
 			if self.is_logged_in():
 				relevant_pages |= { '/profile', '/displayname', '/emailchange', '/passwordchange', '/friends', '/messages' }
