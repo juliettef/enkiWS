@@ -14,7 +14,7 @@ class EnkiModelProductKey( model.Model ):
 	quantity = model.IntegerProperty()
 	reference = model.StringProperty() # TEMPORARY
 	order_id = model.StringProperty()
-	order_type = model.StringProperty( choices = [ 'test', 'normal' ])
+	order_type = model.StringProperty( choices = [ 'emulated', 'test', 'normal' ])
 
 	registered_to_user = model.IntegerProperty()
 

@@ -552,7 +552,7 @@ class HandlerBase( webapp2.RequestHandler ):
 					register_token = EnkiModelTokenVerify( token = token, email = email, auth_ids_provider = authId, type = 'register' )
 				register_token.put()
 				self.session[ 'tokenregisterauth' ] = token
-				self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ) )
+				self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
 		else:
 			self.redirect_to_relevant_page()
 

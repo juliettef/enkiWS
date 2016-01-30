@@ -1,12 +1,15 @@
 import webapp2
+import urllib
 
+from google.appengine.api import urlfetch
 from webapp2_extras import security
 from webapp2_extras.i18n import gettext as _
 
 import enki
+import enki.libutil
 import enki.libstore
 import enki.libuser
-import enki.textmessages as MSG
+
 from enki.modelproductkey import EnkiModelProductKey
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.extensions import Extension
@@ -19,8 +22,8 @@ products = { 'avoyd': { 'displayname' : 'Avoyd', 'price' : 3.00 },
              }
 
 SECRET_FASTSPRING = '67Rbc2TphwLw8DGfmstdVmsx' # TODO: move to secrets
-SEPARATOR_LICENSE_KEY_FASTSPRING = '\n'
 URL_PURCHASE_FASTSPRING = str( 'https://sites.fastspring.com/enkisoftware/product/avoyd' )
+
 
 class HandlerStore( enki.HandlerBase ):
 
@@ -32,14 +35,16 @@ class HandlerStore( enki.HandlerBase ):
 
 	def post( self ):
 		self.check_CSRF( 'store' )
-		url_purchase = URL_PURCHASE_FASTSPRING
+		url = URL_PURCHASE_FASTSPRING
+		if not SECRET_FASTSPRING or enki.libutil.is_debug():
+			url = enki.libutil.get_local_url( 'emulatestorefastspring' )
 		if self.is_logged_in():
 			purchaser_user_id = self.enki_user.key.id()
 			token = security.generate_random_string( entropy = 256 )
 			token_purchase = EnkiModelTokenVerify( token = token, user_id = purchaser_user_id, type = 'purchasebyuser' )
 			token_purchase.put()
-			url_purchase += str( '?referrer=' + token_purchase.token )
-		self.redirect( url_purchase )
+			url += str( '?referrer=' + token_purchase.token )
+		self.redirect( url )
 
 
 #TODO: 1. [DONE] Add POST render of success page.
@@ -66,18 +71,11 @@ class HandlerGenLicenseFastSpring( webapp2.RequestHandler ):
 
 	def post( self ):
 		secret = xstr( self.request.get( 'secret' ))
-		if secret == SECRET_FASTSPRING:
-
+		if secret == SECRET_FASTSPRING or enki.libutil.is_debug():
 			quantity = xint( self.request.get( 'quantity' ))
-			license_keys = ''
-			if quantity:
-				quantity = int( quantity )
-				while quantity > 0:
-					license_keys += enki.libstore.insert_dash_5_10( enki.libstore.generate_license_key( ) ) \
-					                + SEPARATOR_LICENSE_KEY_FASTSPRING
-					quantity -= 1
-				self.response.write( license_keys )
-				return
+			license_keys = enki.libstore.generate_license_keys( quantity )
+			self.response.write( license_keys )
+			return
 		self.abort( 404 )
 
 
@@ -88,7 +86,7 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 
 	def post( self ):
 		secret = xstr( self.request.get( 'secret' ))
-		if secret == SECRET_FASTSPRING:
+		if secret == SECRET_FASTSPRING or enki.libutil.is_debug():
 
 			license_key_bundle = xstr( self.request.get( 'license_key' ))
 			purchase_price = xstr( self.request.get( 'purchase_price' ))
@@ -108,11 +106,10 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 			is_test = self.request.get( 'is_test' )
 			if is_test:
 				order_type = 'test'
+				if enki.libutil.is_debug():
+					order_type = 'emulated'
 
-			license_keys = [ license_key_bundle.rstrip( SEPARATOR_LICENSE_KEY_FASTSPRING ) ]
-			if (SEPARATOR_LICENSE_KEY_FASTSPRING) in license_key_bundle:
-				# split the bundled license keys and create a record for each
-				license_keys = license_key_bundle.split( SEPARATOR_LICENSE_KEY_FASTSPRING )
+			license_keys = license_key_bundle.split()
 			for license_key in license_keys:
 				item = EnkiModelProductKey( license_key = license_key,
 				                            purchase_price = purchase_price,
@@ -125,6 +122,58 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 				                            order_type = order_type )
 				item.put()
 		return
+
+
+class HandlerEmulateStoreFastSpring( enki.HandlerBase ): # TODO: ? had to use handlerbase to use add_debugmessage
+
+	def get( self ):
+		if not SECRET_FASTSPRING or enki.libutil.is_debug():
+
+			product = 'product_name'
+			quantity = 3
+			price = '$2.00'
+			license_keys = 'not generated'
+
+			url = enki.libutil.get_local_url( 'genlicensefastspring' )
+			form_fields = { 'secret': 'pretendsecret', 'quantity': str( quantity ) }
+			form_data = urllib.urlencode( form_fields )
+			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )
+			if result.status_code == 200:
+				license_keys = result.content
+
+			referrer = xstr( self.request.get( 'referrer' ))
+			token = enki.libuser.get_VerifyToken_by_token_type( referrer, 'purchasebyuser' )
+			user_id = token.user_id
+			self.add_debugmessage( '<h1>Emulator - Store FastSpring</h1>'+
+									'<h2>Mandatory</h2>' +
+									'<ul>' +
+			                            '<li>quantity = ' + xstr( quantity ) + '</li>' +
+			                            '<li>price = ' + xstr( price ) + '</li>' +
+			                            '<li>license(s) = ' + xstr( license_keys ) + '</li>' +
+									'</ul>'
+									'<h2>Optional</h2>' +
+									'<ul>' +
+			                            '<li>referrer = token purchasebyuser = ' + ( xstr( referrer ) if referrer else 'None' ) + '</li>' +
+				                        '<li>purchaser user_id (if token purchasebyuser ) = ' + ( xstr( user_id ) if user_id else 'None' ) + '</li>' +
+			                        '</ul>' )
+
+			url = enki.libutil.get_local_url( 'ordercompletefastspring' )
+			form_fields = { 'license_key' : license_keys,
+			                'purchase_price' : price,
+			                'order_id' : 'Emulator_order_id',
+							'product_name' : product,
+							'purchaser_email' : 'user_email@provided_to_Fastspring.com' ,
+							'shop_name' : 'Emulator_FastSpring',
+							'quantity' : int( quantity ),
+			                'referrer' : referrer,
+			                'is_test' : True }
+
+			form_data = urllib.urlencode( form_fields )
+			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )
+			if result.status_code == 200:
+				self.add_debugmessage( '<h1>purchase records created<h1>' )
+
+			self.redirect_to_relevant_page()
 
 
 class ExtensionPageProducts( ExtensionPage ):
@@ -154,7 +203,8 @@ class ExtensionStore( Extension ):
 	def get_routes( self ):
 		return  [ webapp2.Route( '/store', HandlerStore, name = 'store' ),
 		          webapp2.Route( '/genlicensefastspring', HandlerGenLicenseFastSpring, name = 'genlicensefastspring' ),
-		          webapp2.Route( '/ordercompletefastspring', HandlerOrderCompleteFastSpring, name = 'ordercompletefastspring' )]
+		          webapp2.Route( '/ordercompletefastspring', HandlerOrderCompleteFastSpring, name = 'ordercompletefastspring' ),
+		          webapp2.Route( '/emulatestorefastspring', HandlerEmulateStoreFastSpring, name = 'emulatestorefastspring' ) ]
 
 	def get_navbar_items( self ):
 		return [( enki.libutil.get_local_url( 'store' ), 'store', _( "Store" ))]
