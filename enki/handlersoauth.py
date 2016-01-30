@@ -301,8 +301,8 @@ class HandlerOAuthSteam( HandlerOAuthBase ):
 		              'email_verified': '' }
 
 		urlParams = urllib.urlencode( params )
-		fullURL = 'https://steamcommunity.com/openid/login?' + urlParams
-		result = urlfetch.fetch( url = fullURL )
+		fullURL = 'https://steamcommunity.com/openid/login'
+		result = urlfetch.fetch( url = fullURL, payload = urlParams, method = urlfetch.POST )
 		if 'ns:http://specs.openid.net/auth/2.0\nis_valid:true\n' in result.content: # only if is_valid do we trust the loginInfo
 			self.provider_authenticated_callback( loginInfo )
 
