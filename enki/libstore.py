@@ -31,11 +31,11 @@ def generate_license_keys( quantity ):
 #=== QUERIES ==================================================================
 
 
-def fetch_EnkiProuctKey_by_purchaser( user_id ):
+def fetch_EnkiProductKey_by_purchaser( user_id ):
 	list = EnkiModelProductKey.query( EnkiModelProductKey.purchaser_user_id == user_id ).fetch()
 	return list
 
 
 def fetch_EnkiProuctKey_by_registered_to( user_id ):
-	list = EnkiModelProductKey.query( EnkiModelProductKey.registered_to_user == user_id ).fetch()
+	list = EnkiModelProductKey.query( EnkiModelProductKey.activated_by_user == user_id ).fetch( )
 	return list

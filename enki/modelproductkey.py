@@ -15,7 +15,7 @@ class EnkiModelProductKey( model.Model ):
 	order_id = model.StringProperty()
 	order_type = model.StringProperty( choices = [ 'emulated', 'test', 'normal' ])
 
-	registered_to_user = model.IntegerProperty()
+	activated_by_user = model.IntegerProperty( )
 
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )

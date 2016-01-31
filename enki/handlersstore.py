@@ -201,9 +201,18 @@ class ExtensionPageLibrary( ExtensionPage ):
 		ExtensionPage.__init__( self, route_name = 'profile', template_include = 'inclibrary.html' )
 
 	def get_data( self, handler ):
-		data = []
-		user_id = 6173208034148352
-		data = enki.libstore.fetch_EnkiProuctKey_by_purchaser( user_id )
+		products = []
+		products_activated = []
+		if handler.is_logged_in():
+			user_id = handler.enki_user.key.id()
+		list = enki.libstore.fetch_EnkiProductKey_by_purchaser( user_id )
+		if list:
+			for i, item in enumerate( list ):
+				if item.activated_by_user and item.activated_by_user == user_id:
+					products_activated.append([ item.product_name, item.license_key ])
+				else:
+					products.append([ item.product_name, item.license_key ])
+		data = [ products, products_activated ]
 		return data
 
 

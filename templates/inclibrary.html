@@ -1,6 +1,15 @@
-{% if data %}
-	<div>
-	    <h2>{{ _( "Library" ) }}</h2>
-		{{ data  | join(', ') }}
-	</div>
-{% endif %}
+<div>
+    <h2>{{ _( "Library" ) }}</h2>
+	{% if data[ 0 ] %}
+		<h3>{{ _( "New" ) }}</h3>
+		<ul>{% for item in data[ 0 ] %}
+			<li>{{ item[ 0 ] }} - {{ item[ 1 ] }}</li>
+		{% endfor %}</ul>
+	{% endif %}
+	{% if data[ 1 ] %}
+		<h3>{{ _( "Owned" ) }}</h3>
+		<ul>{% for item in data[ 1 ] %}
+			<li>{{ item[ 0 ] }} - {{ item[ 1 ] }}</li>
+		{% endfor %}</ul>
+	{% endif %}
+</div>
