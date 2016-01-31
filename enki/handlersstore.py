@@ -37,7 +37,7 @@ class HandlerStore( enki.HandlerBase ):
 		self.check_CSRF( 'store' )
 		url = URL_PURCHASE_FASTSPRING
 		if not SECRET_FASTSPRING or enki.libutil.is_debug():
-			url = enki.libutil.get_local_url( 'emulatestorefastspring' )
+			url = enki.libutil.get_local_url( 'storeemulatefastspring' )
 		if self.is_logged_in():
 			purchaser_user_id = self.enki_user.key.id()
 			token = security.generate_random_string( entropy = 256 )
@@ -117,14 +117,25 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 		return
 
 
-class HandlerEmulateStoreFastSpring( enki.HandlerBase ):
+class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 
 	def get( self ):
+
+		self.render_tmpl( 'storeemulatefastspring.html',
+		                  active_page = 'store',
+						  purchase_price = '$2.00',
+						  purchaser_email = 'user_email@provided_to_Fastspring.com' ,
+						  quantity = 2,
+		                  CSRFtoken = self.create_CSRF( 'store' ),
+		                  product = products[ 'avoyd' ] )
+
+	def post( self ):
 		if not SECRET_FASTSPRING or enki.libutil.is_debug():
 
 			product = 'product_name'
-			quantity = 3
-			price = '$2.00'
+			quantity = xint( self.request.get('quantity'))
+			purchase_price = xstr( self.request.get( 'purchase_price' ))
+			purchaser_email = xstr( self.request.get( 'purchaser_email' ))
 			license_keys = 'not generated'
 			user_id = ''
 
@@ -143,7 +154,8 @@ class HandlerEmulateStoreFastSpring( enki.HandlerBase ):
 									'<h2>Emulated purchase details</h2>' +
 									'<ul>' +
 			                            '<li>quantity = ' + xstr( quantity ) + '</li>' +
-			                            '<li>price = ' + xstr( price ) + '</li>' +
+			                            '<li>price = ' + purchase_price + '</li>' +
+			                            '<li>email = ' + purchaser_email + '</li>' +
 			                            '<li>license(s) = ' + xstr( license_keys ) + '</li>' +
 									'</ul>'
 									'<h2>Internal data</h2>' +
@@ -154,12 +166,12 @@ class HandlerEmulateStoreFastSpring( enki.HandlerBase ):
 
 			url = enki.libutil.get_local_url( 'ordercompletefastspring' )
 			form_fields = { 'license_key' : license_keys,
-			                'purchase_price' : price,
+			                'purchase_price' : purchase_price,
 			                'order_id' : 'Emulator_order_id',
 							'product_name' : product,
-							'purchaser_email' : 'user_email@provided_to_Fastspring.com' ,
+							'purchaser_email' : purchaser_email,
 							'shop_name' : 'Emulator_FastSpring',
-							'quantity' : int( quantity ),
+							'quantity' : quantity ,
 			                'referrer' : referrer,
 			                'is_test' : True }
 
@@ -201,7 +213,7 @@ class ExtensionStore( Extension ):
 		return  [ webapp2.Route( '/store', HandlerStore, name = 'store' ),
 		          webapp2.Route( '/genlicensefastspring', HandlerGenLicenseFastSpring, name = 'genlicensefastspring' ),
 		          webapp2.Route( '/ordercompletefastspring', HandlerOrderCompleteFastSpring, name = 'ordercompletefastspring' ),
-		          webapp2.Route( '/emulatestorefastspring', HandlerEmulateStoreFastSpring, name = 'emulatestorefastspring' ) ]
+		          webapp2.Route( '/emulatestorefastspring', HandlerStoreEmulateFastSpring, name = 'storeemulatefastspring' ) ]
 
 	def get_navbar_items( self ):
 		return [( enki.libutil.get_local_url( 'store' ), 'store', _( "Store" ))]
