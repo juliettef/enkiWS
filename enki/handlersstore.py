@@ -1,6 +1,7 @@
 import webapp2
 import urllib
 
+import webapp2_extras
 from google.appengine.api import urlfetch
 from webapp2_extras import security
 from webapp2_extras.i18n import gettext as _
@@ -139,6 +140,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			purchaser_email = xstr( self.request.get( 'purchaser_email' ))
 			license_keys = 'not generated'
 			user_id = ''
+			emulator_order_id = 'EMULATED_' + webapp2_extras.security.generate_random_string( length = 10, pool = webapp2_extras.security.DIGITS )
 
 			url = enki.libutil.get_local_url( 'genlicensefastspring' )
 			form_fields = { 'secret': 'pretendsecret', 'quantity': str( quantity ) }
@@ -154,6 +156,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			self.add_debugmessage( '<h1>Emulator - Store FastSpring</h1>'+
 									'<h2>Emulated purchase details</h2>' +
 									'<ul>' +
+			                            '<li>Purchase Reference = ' + emulator_order_id + '</li>' +
 			                            '<li>quantity = ' + xstr( quantity ) + '</li>' +
 			                            '<li>price = ' + purchase_price + '</li>' +
 			                            '<li>email = ' + purchaser_email + '</li>' +
@@ -168,7 +171,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			url = enki.libutil.get_local_url( 'ordercompletefastspring' )
 			form_fields = { 'license_key' : license_keys,
 			                'purchase_price' : purchase_price,
-			                'order_id' : 'Emulator_order_id',
+			                'order_id' : emulator_order_id,
 							'product_name' : product,
 							'purchaser_email' : purchaser_email,
 							'shop_name' : 'Emulator_FastSpring',
