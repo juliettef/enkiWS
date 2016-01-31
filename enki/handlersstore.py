@@ -122,6 +122,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 	def get( self ):
 
 		self.render_tmpl( 'storeemulatefastspring.html',
+						  referrer = xstr( self.request.get('referrer') ),
 		                  active_page = 'store',
 						  purchase_price = '$2.00',
 						  purchaser_email = 'user_email@provided_to_Fastspring.com' ,
