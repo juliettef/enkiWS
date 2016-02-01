@@ -38,6 +38,7 @@
             {% if data.auth_provider %}
                 <h3>{{ _( "Linked accounts" )}}</h3>
                 <form class="form-group" action="{{ 'profile'|local }}" method="post">
+                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     {% for item in data.auth_provider %}
                         <p>
                             {{ _( "Provider:" )}} {{ item.provider_name }} | {{ _( "Unique Id:" )}} {{ item.provider_uid }}

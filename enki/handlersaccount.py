@@ -88,10 +88,12 @@ class HandlerProfile( enki.HandlerBase ):
 			data = data( current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, messages, friends )
 			self.render_tmpl( 'profile.html',
 			                  active_page = 'profile',
+			                  CSRFtoken = self.create_CSRF( 'profile' ),
 			                  data = data )
 
 	def post( self ):
 		if self.ensure_is_logged_in():
+			self.check_CSRF( 'profile' )
 			remove_account = self.request.get( 'remove' )
 			result = self.remove_authid( remove_account )
 			provider_name = str( remove_account[ :remove_account.find( ':' )])
