@@ -226,7 +226,7 @@ class ExtensionStore( Extension ):
 		return  [ webapp2.Route( '/store', HandlerStore, name = 'store' ),
 		          webapp2.Route( '/genlicensefastspring', HandlerGenLicenseFastSpring, name = 'genlicensefastspring' ),
 		          webapp2.Route( '/ordercompletefastspring', HandlerOrderCompleteFastSpring, name = 'ordercompletefastspring' ),
-		          webapp2.Route( '/emulatestorefastspring', HandlerStoreEmulateFastSpring, name = 'storeemulatefastspring' ) ]
+		          webapp2.Route( '/storeemulatefastspring', HandlerStoreEmulateFastSpring, name = 'storeemulatefastspring' ) ]
 
 	def get_navbar_items( self ):
 		return [( enki.libutil.get_local_url( 'store' ), 'store', _( "Store" ))]
