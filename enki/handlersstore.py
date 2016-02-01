@@ -6,10 +6,12 @@ from google.appengine.api import urlfetch
 from webapp2_extras import security
 from webapp2_extras.i18n import gettext as _
 
+import settings
 import enki
 import enki.libutil
 import enki.libstore
 import enki.libuser
+import enki.textmessages as MSG
 
 from enki.modelproductkey import EnkiModelProductKey
 from enki.modeltokenverify import EnkiModelTokenVerify
@@ -18,8 +20,8 @@ from enki.extensions import ExtensionPage
 
 
 
-products = { 'avoyd': { 'displayname' : 'Avoyd', 'price' : 3.00 },
-             'avoyd-1999' : { 'displayname' : 'Avoyd-1999', 'price' : 0.00 },
+products = { 'product_a': { 'displayname' : 'Product A', 'price' : 3.00 },
+             'product_b' : { 'displayname' : 'Product B', 'price' : 0.00 },
              }
 
 SECRET_FASTSPRING = '67Rbc2TphwLw8DGfmstdVmsx' # TODO: move to secrets
@@ -32,12 +34,12 @@ class HandlerStore( enki.HandlerBase ):
 		self.render_tmpl( 'store.html',
 		                  active_page = 'store',
 		                  CSRFtoken = self.create_CSRF( 'store' ),
-		                  product = products[ 'avoyd' ] )
+		                  product = products[ 'product_a' ] )
 
 	def post( self ):
 		self.check_CSRF( 'store' )
 		url = URL_PURCHASE_FASTSPRING
-		if not SECRET_FASTSPRING or enki.libutil.is_debug():
+		if not SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
 			url = enki.libutil.get_local_url( 'storeemulatefastspring' )
 		if self.is_logged_in():
 			purchaser_user_id = self.enki_user.key.id()
@@ -65,7 +67,7 @@ class HandlerGenLicenseFastSpring( webapp2.RequestHandler ):
 
 	def post( self ):
 		secret = xstr( self.request.get( 'secret' ))
-		if secret == SECRET_FASTSPRING or enki.libutil.is_debug():
+		if secret == SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
 			quantity = xint( self.request.get( 'quantity' ))
 			license_keys = enki.libstore.generate_license_keys( quantity )
 			self.response.write( license_keys )
@@ -80,7 +82,7 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 
 	def post( self ):
 		secret = xstr( self.request.get( 'secret' ))
-		if secret == SECRET_FASTSPRING or enki.libutil.is_debug():
+		if secret == SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
 
 			license_key_bundle = xstr( self.request.get( 'license_key' ))
 			purchase_price = xstr( self.request.get( 'purchase_price' ))
@@ -100,7 +102,7 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 			is_test = self.request.get( 'is_test' )
 			if is_test:
 				order_type = 'test'
-				if enki.libutil.is_debug():
+				if enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
 					order_type = 'emulated'
 
 			license_keys = license_key_bundle.split()
@@ -125,17 +127,17 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 		self.render_tmpl( 'storeemulatefastspring.html',
 						  referrer = xstr( self.request.get('referrer') ),
 		                  active_page = 'store',
-						  purchase_price = '$2.00',
-						  purchaser_email = 'user_email@provided_to_Fastspring.com' ,
+						  purchase_price = '$3.00',
+						  purchaser_email = 'user_email@provided_to_fastspring.com' ,
 						  quantity = 2,
 		                  CSRFtoken = self.create_CSRF( 'storeemulatefastspring' ),
-		                  product = products[ 'avoyd' ] )
+		                  product = products[ 'product_a' ] )
 
 	def post( self ):
-		if not SECRET_FASTSPRING or enki.libutil.is_debug():
+		if not SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
 			self.check_CSRF( 'storeemulatefastspring' )
 
-			product = 'product_name'
+			product = 'product_a'
 			quantity = xint( self.request.get('quantity'))
 			purchase_price = xstr( self.request.get( 'purchase_price' ))
 			purchaser_email = xstr( self.request.get( 'purchaser_email' ))
@@ -154,19 +156,22 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			token = enki.libuser.get_VerifyToken_by_token_type( referrer, 'purchasebyuser' )
 			if token:
 				user_id = token.user_id
-			self.add_debugmessage( '<h1>Emulator - Store FastSpring</h1>'+
-									'<h2>Emulated purchase details</h2>' +
+			self.add_infomessage( 'info', MSG.INFORMATION(),'<h3>FastSpring Store Emulator - Step 1</h3>'+
+									'<h4>Emulated purchase details</h4>' +
 									'<ul>' +
-			                            '<li>Purchase Reference = ' + emulator_order_id + '</li>' +
-			                            '<li>quantity = ' + xstr( quantity ) + '</li>' +
-			                            '<li>price = ' + purchase_price + '</li>' +
-			                            '<li>email = ' + purchaser_email + '</li>' +
-			                            '<li>license(s) = ' + xstr( license_keys ) + '</li>' +
+										'<li>&lt;EnkiModelProductKey&gt; #{FastSpring variable} = <em>&lt;emulated value&gt;</em></li>' +
+										'<li>product_name #{orderItem.productName} = <em>' + product + '</em></li>' +
+			                            '<li>order_id #{order.id} = <em>' + emulator_order_id + '</em></li>' +
+			                            '<li>quantity #{orderItem.quantity} = <em>' + xstr( quantity ) + '</em></li>' +
+			                            '<li>purchase_price #{orderItem.totalUSD} = <em>' + purchase_price + '</em></li>' +
+			                            '<li>purchaser_email #{order.customer.email} = <em>' + purchaser_email + '</em></li>' +
+										'<li>shop_name = <em>Emulator_FastSpring</em></li>' +
+			                            '<li>license_key #{orderItem.fulfillment.license.licenses.list} = <br><em><b>' + '<br>'.join( xstr( license_keys ).split()) + '</b></em></li>' +
 									'</ul>'
-									'<h2>Internal data</h2>' +
+									'<h4>Internal data - generated if the purchaser was logged in when they bought the product</h4>' +
 									'<ul>' +
-			                            '<li>referrer = token purchasebyuser = ' + ( xstr( referrer ) if referrer else 'None' ) + '</li>' +
-				                        '<li>purchaser user_id (if token purchasebyuser ) = ' + ( xstr( user_id ) if user_id else 'None' ) + '</li>' +
+										'<li>EnkiModelTokenVerify.user_id = purchaser user_id = <em>' + ( xstr( user_id ) if user_id else 'None' ) + '</em></li>' +
+			                            '<li>EnkiModelTokenVerify.type purchasebyuser referrer #{order.referrer} = <em>' + ( xstr( referrer ) if referrer else 'None' ) + '</em></li>' +
 			                        '</ul>' )
 
 			url = enki.libutil.get_local_url( 'ordercompletefastspring' )
@@ -183,9 +188,9 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			form_data = urllib.urlencode( form_fields )
 			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )
 			if result.status_code == 200:
-				self.add_debugmessage( '<h2>Purchase records created<h2>' )
+				self.add_infomessage( 'success', MSG.SUCCESS(),'<h3>FastSpring Store Emulator - Step 2</h3><p>Purchase records created<p>' )
 			else:
-				self.add_debugmessage( '<h2>ERROR - purchase records not created<h2>' )
+				self.add_infomessage( 'warning', MSG.WARNING(),'<h3>FastSpring Store Emulator - Step 2 FAILED: Purchase records not created</h3>' )
 
 			self.redirect_to_relevant_page()
 
@@ -213,10 +218,11 @@ class ExtensionPageLibrary( ExtensionPage ):
 		list = enki.libstore.fetch_EnkiProductKey_by_purchaser( user_id )
 		if list:
 			for i, item in enumerate( list ):
+				# product_dn = products[ item.product_name ]
 				if item.activated_by_user and item.activated_by_user == user_id:
 					products_activated.append([ item.product_name, item.license_key ])
 				else:
-					products.append([ item.product_name, item.license_key ])
+					products.append([ item.product_name , item.license_key ])
 		data = [ products, products_activated ]
 		return data
 

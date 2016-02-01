@@ -3,6 +3,7 @@ import enki.modelforum
 
 
 ENKI_FORCE_DEBUG = False    # If True, behaves as if it's offline
+ENKI_SIMULATE_STORE = True  # If True, use the store simulator
 
 
 def get_forum_default_topics():
