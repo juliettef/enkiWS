@@ -12,38 +12,42 @@
             {% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
-            <h1>{{ _( "FastSpring Store Emulation" )}}</h1>
-
-            <div class="jumbotron">
-                <h1>{{ product[ 'displayname' ] }}</h1>
-	            <form class="form-group" action="{{ 'storeemulatefastspring'|local }}" method="post">
+            <div class="well bs-component">
+	            <form class="form-horizontal" action="{{ 'storeemulatefastspring'|local }}" method="post">
  		            <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
   		            <input type="hidden" name="referrer" value="{{ referrer }}">
                     <fieldset>
-                        <div class="form-group {% if error %}has-error{% endif%}">
+
+                        <legend>{{ _( "FastSpring Store Emulation" )}} - product {{ product[ 'displayname' ] }}</legend>
+
+                        <div class="form-group">
                             <label for="purchase_price" class="col-lg-2 control-label">{{ _( "Purchase Price" ) }}</label>
                             <div class="col-lg-10">
                                 <input class="form-control" type="text" name="purchase_price" value="{{ purchase_price }}">
                             </div>
                         </div>
 
-                        <div class="form-group {% if error %}has-error{% endif%}">
+                        <div class="form-group">
                             <label for="purchaser_email" class="col-lg-2 control-label">{{ _( "Purchaser Email" ) }}</label>
                             <div class="col-lg-10">
                                 <input class="form-control" type="text" name="purchaser_email" value="{{ purchaser_email }}">
                             </div>
                         </div>
 
-                        <div class="form-group {% if error %}has-error{% endif%}">
+                        <div class="form-group">
                             <label for="quantity" class="col-lg-2 control-label">{{ _( "Quantity" ) }}</label>
                             <div class="col-lg-10">
                                 <input class="form-control" type="text" name="quantity" value="{{ quantity }}">
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-2">
+                                <button class="btn btn-primary" type="submit" name="buy" value="{{ product }}">{{ _( "Emulate a purchase" ) }}</button>
+                            </div>
+                        </div>
+
                     </fieldset>
-	                <p>
-                       <button class="btn btn-success btn-lg" type="submit" name="buy" value="{{ product }}">{{ _( "Emulate a buy" )}}</button>
-	                </p>
                 </form>
             </div>
 

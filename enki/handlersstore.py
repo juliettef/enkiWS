@@ -128,11 +128,12 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 						  purchase_price = '$2.00',
 						  purchaser_email = 'user_email@provided_to_Fastspring.com' ,
 						  quantity = 2,
-		                  CSRFtoken = self.create_CSRF( 'store' ),
+		                  CSRFtoken = self.create_CSRF( 'storeemulatefastspring' ),
 		                  product = products[ 'avoyd' ] )
 
 	def post( self ):
 		if not SECRET_FASTSPRING or enki.libutil.is_debug():
+			self.check_CSRF( 'storeemulatefastspring' )
 
 			product = 'product_name'
 			quantity = xint( self.request.get('quantity'))
