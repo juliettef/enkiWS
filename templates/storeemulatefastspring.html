@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>{{ _( "Store" )}}</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+            <h1>{{ _( "FastSpring Store Emulation" )}}</h1>
+
+            <div class="jumbotron">
+                <h1>{{ product[ 'displayname' ] }}</h1>
+	            <form class="form-group" action="{{ 'storeemulatefastspring'|local }}" method="post">
+ 		            <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+  		            <input type="hidden" name="referrer" value="{{ referrer }}">
+                    <fieldset>
+                        <div class="form-group {% if error %}has-error{% endif%}">
+                            <label for="purchase_price" class="col-lg-2 control-label">{{ _( "Purchase Price" ) }}</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="purchase_price" value="{{ purchase_price }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group {% if error %}has-error{% endif%}">
+                            <label for="purchaser_email" class="col-lg-2 control-label">{{ _( "Purchaser Email" ) }}</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="purchaser_email" value="{{ purchaser_email }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group {% if error %}has-error{% endif%}">
+                            <label for="quantity" class="col-lg-2 control-label">{{ _( "Quantity" ) }}</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="quantity" value="{{ quantity }}">
+                            </div>
+                        </div>
+                    </fieldset>
+	                <p>
+                       <button class="btn btn-success btn-lg" type="submit" name="buy" value="{{ product }}">{{ _( "Emulate a buy" )}}</button>
+	                </p>
+                </form>
+            </div>
+
+	        {% include "incpageextensions.html" %}
+
+            {% include "incfooter.html" %}
+    	</div>
+    </body>
+</html>
