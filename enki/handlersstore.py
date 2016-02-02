@@ -37,7 +37,7 @@ class HandlerStore( enki.HandlerBase ):
 		                  product = products[ 'product_a' ] )
 
 	def post( self ):
-		self.check_CSRF( 'store' )
+		self.check_CSRF()
 		url = URL_PURCHASE_FASTSPRING
 		if not SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
 			url = enki.libutil.get_local_url( 'storeemulatefastspring' )
@@ -135,7 +135,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 
 	def post( self ):
 		if not SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
-			self.check_CSRF( 'storeemulatefastspring' )
+			self.check_CSRF()
 
 			product = 'product_a'
 			quantity = xint( self.request.get('quantity'))

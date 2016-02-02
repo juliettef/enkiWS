@@ -15,7 +15,7 @@ class HandlerFriends( enki.HandlerBase ):
 
 	def post( self ):
 		if self.ensure_is_logged_in():
-			self.check_CSRF( 'friends' )
+			self.check_CSRF()
 			user_id = self.user_id
 			instruction = self.request.arguments()[ 0 ]
 			friend_name = self.request.get( instruction )
@@ -52,7 +52,7 @@ class HandlerMessages( enki.HandlerBase ):
 
 	def post( self ):
 		if self.ensure_is_logged_in():
-			self.check_CSRF( 'messages' )
+			self.check_CSRF()
 			user_id = self.user_id
 			instruction = self.request.arguments()[ 0 ]
 			message_id = int( self.request.get( instruction ))

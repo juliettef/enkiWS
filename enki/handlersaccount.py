@@ -31,7 +31,7 @@ class HandlerLogin( enki.HandlerBase ):
 	def post( self ):
 		self.cleanup_item()
 		self.log_out()
-		self.check_CSRF( 'login' )
+		self.check_CSRF()
 		submit_type = self.request.get( 'submittype' )
 		email = self.request.get( 'email' )
 		if submit_type == 'login':
@@ -93,7 +93,7 @@ class HandlerProfile( enki.HandlerBase ):
 
 	def post( self ):
 		if self.ensure_is_logged_in():
-			self.check_CSRF( 'profile' )
+			self.check_CSRF()
 			remove_account = self.request.get( 'remove' )
 			result = self.remove_authid( remove_account )
 			provider_name = str( remove_account[ :remove_account.find( ':' )])
@@ -128,7 +128,7 @@ class HandlerRegister( enki.HandlerBase ):
 		                  email = email )
 
 	def post( self ):
-		self.check_CSRF( 'register' )
+		self.check_CSRF()
 		submit_type = self.request.get( 'submittype' )
 		email = self.request.get( 'email' )
 		if submit_type == 'register':
@@ -177,7 +177,7 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 			self.abort( 404 )
 
 	def post( self, **kwargs ):
-		self.check_CSRF( 'registerconfirm' ),
+		self.check_CSRF(),
 		token = kwargs[ 'verifytoken' ]
 		tokenEntity = enki.libuser.get_VerifyToken_by_token_type( token, 'register' )
 		if tokenEntity:
@@ -234,7 +234,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 			self.abort( 404 )
 
 	def post( self ):
-		self.check_CSRF( 'registeroauthconfirm' )
+		self.check_CSRF()
 		choice = self.request.get( 'choice' )
 		# step 1
 		if choice == 'create' or choice == 'cancel':
@@ -314,7 +314,7 @@ class HandlerPasswordChange( enki.HandlerBase ):
 
 	def post( self ):
 		if self.ensure_is_logged_in():
-			self.check_CSRF( 'passwordchange' )
+			self.check_CSRF()
 			password = self.request.get( 'password' )
 			email = self.enki_user.email
 			error_password_message = ''
@@ -357,7 +357,7 @@ class HandlerPasswordRecover( enki.HandlerBase ):
 		                  email = email )
 
 	def post( self ):
-		self.check_CSRF( 'passwordrecover' )
+		self.check_CSRF()
 		submit_type = self.request.get( 'submittype' )
 		email = self.request.get( 'email' )
 		if submit_type == 'recoverpass':
@@ -401,7 +401,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 			self.abort( 404 )
 
 	def post( self, **kwargs ):
-		self.check_CSRF( 'passwordrecoverconfirm' )
+		self.check_CSRF()
 		token = kwargs[ 'verifytoken' ]
 		tokenEntity = enki.libuser.get_VerifyToken_by_token_type( token, 'passwordchange' )
 		if tokenEntity:
@@ -442,7 +442,7 @@ class HandlerDisplayName( enki.HandlerBase ):
 
 	def post( self ):
 		if self.ensure_is_logged_in():
-			self.check_CSRF( 'displayname' )
+			self.check_CSRF()
 			user_id = self.user_id
 			prefix = self.request.get( 'prefix' )
 			result = enki.libdisplayname.make_unique_and_set_display_name( user_id, prefix )
@@ -502,7 +502,7 @@ class HandlerEmailChange( enki.HandlerBase ):
 
 	def post( self ):
 		if self.ensure_is_logged_in():
-			self.check_CSRF( 'emailchange' )
+			self.check_CSRF()
 			email = self.request.get( 'email' )
 			old_email_existed = True if ( self.enki_user.email and self.enki_user.email != 'removed' ) else False
 			result = enki.libuser.validate_email( email )
@@ -593,7 +593,7 @@ class HandlerAccountDelete( enki.HandlerBase ):
 
 	def post( self ):
 		if self.ensure_is_logged_in():
-			self.check_CSRF( 'accountdelete' )
+			self.check_CSRF()
 			submit_type = self.request.get( 'submittype' )
 			error_message = ''
 			if submit_type == 'cancel':

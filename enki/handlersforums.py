@@ -47,7 +47,7 @@ class HandlerForum( enki.HandlerBase ):
 	def post( self, forum ):
 		if self.ensure_is_logged_in() and enki.libdisplayname.ensure_has_display_name( self ):
 			if forum.isdigit() and EnkiModelForum.get_by_id( int( forum ) ):
-				self.check_CSRF( 'forum' )
+				self.check_CSRF()
 				user_id = self.user_id
 				thread_title = self.request.get( 'thread_title' )
 				post_body = self.request.get( 'post_body' )
@@ -145,7 +145,7 @@ class HandlerThread( enki.HandlerBase ):
 	def post( self, thread ):
 		if self.ensure_is_logged_in() and enki.libdisplayname.ensure_has_display_name( self ):
 			if thread.isdigit() and EnkiModelThread.get_by_id( int( thread ) ):
-				self.check_CSRF( 'thread' )
+				self.check_CSRF()
 				user = self.user_id
 				post_body = self.request.get( 'post_body' )
 				submit_type = self.request.get( 'submittype' )
@@ -236,7 +236,7 @@ class HandlerPost( enki.HandlerBase ):
 	def post( self, post ):
 		if self.ensure_is_logged_in() and enki.libdisplayname.ensure_has_display_name( self ):
 			if post.isdigit() and enki.libforum.EnkiModelPost.get_by_id( int( post ) ):
-				self.check_CSRF( 'post' )
+				self.check_CSRF()
 				data = enki.libforum.get_post_data( post )
 				is_author = True if self.user_id == data.author_data.user_id else False
 				user = self.user_id

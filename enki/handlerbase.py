@@ -94,12 +94,14 @@ class HandlerBase( webapp2.RequestHandler ):
 			CSRFToken = ( random )
 			sessionCSRFs.update({ form_name : CSRFToken })
 			self.session[ 'CSRF' ] = sessionCSRFs
-		return CSRFToken
+		return form_name + '-' + CSRFToken
 
 
-	def check_CSRF( self, form_name, query_name = 'CSRF' ):     # protect against forging login requests http://en.wikipedia.org/wiki/Cross-site_request_forgery http://www.ethicalhack3r.co.uk/login-cross-site-request-forgery-csrf/
+	def check_CSRF( self, query_name = 'CSRF' ):    # protect against forging login requests http://en.wikipedia.org/wiki/Cross-site_request_forgery http://www.ethicalhack3r.co.uk/login-cross-site-request-forgery-csrf/
 		if 'CSRF' in self.session:
-			CSRFToken = self.request.get( query_name )
+			request_token = self.request.get( query_name ).split( '-' )
+			form_name = request_token[ 0 ]
+			CSRFToken = request_token[ 1 ]
 			sessionCSRFs = self.session.get( 'CSRF' )
 			sessionCSRF = sessionCSRFs.get( form_name )
 			if sessionCSRF == CSRFToken and CSRFToken:

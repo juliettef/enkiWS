@@ -50,7 +50,7 @@ class HandlerOAuthBase( enki.HandlerBase ):
 		return loginInfo
 
 	def auth_check_CSRF( self ):
-		self.check_CSRF( 'oauth', 'state' )
+		self.check_CSRF( 'state' )
 
 	def process_result_as_JSON( self, result ):
 		return json.loads( result.content )
