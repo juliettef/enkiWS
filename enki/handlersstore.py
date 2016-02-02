@@ -31,9 +31,8 @@ URL_PURCHASE_FASTSPRING = str( 'https://sites.fastspring.com/enkisoftware/produc
 class HandlerStore( enki.HandlerBase ):
 
 	def get( self ):
-		self.render_tmpl( 'store.html',
+		self.render_tmpl( 'store.html', False,
 		                  active_menu = 'store',
-		                  CSRFtoken = self.create_CSRF( 'store' ),
 		                  product = products[ 'product_a' ] )
 
 	def post( self ):
@@ -130,7 +129,6 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 						  purchase_price = '$3.00',
 						  purchaser_email = 'user_email@provided_to_fastspring.com' ,
 						  quantity = 2,
-		                  CSRFtoken = self.create_CSRF( 'storeemulatefastspring' ),
 		                  product = products[ 'product_a' ] )
 
 	def post( self ):

@@ -110,7 +110,7 @@ class HandlerProfilePublic( enki.HandlerBase ):
 				display_name_data = enki.libdisplayname.get_display_name_data( int( useridnumber ))
 			else:
 				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.USER_NOT_EXIST())
-			self.render_tmpl( 'profilepublic.html',
+			self.render_tmpl( 'profilepublic.html', False,
 			                  active_menu = 'home',
 			                  display_name_data = display_name_data )
 
@@ -463,7 +463,7 @@ class HandlerDisplayName( enki.HandlerBase ):
 					error_message = MSG.DISPLAY_NAME_WRONG_SYMBOLS()
 				elif result == enki.libdisplayname.ERROR_DISPLAY_NAME_IN_USE:
 					error_message = MSG.DISPLAY_NAME_ALREADY_USED()
-				self.render_tmpl( 'displayname.html',
+				self.render_tmpl( 'displayname.html', False,
 				                  active_menu = 'profile',
 				                  prefix = prefix,
 				                  data = enki.libdisplayname.get_display_name_data( user_id ),

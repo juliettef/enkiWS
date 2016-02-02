@@ -19,7 +19,7 @@ class HandlerForums( enki.HandlerBase ):
 		if not enki.libforum.exist_EnkiForums():
 			# if no forum topic exists , populate the forums with default topics
 			enki.libforum.set_forum()
-		self.render_tmpl( 'forums.html',
+		self.render_tmpl( 'forums.html', False,
 		                  active_menu = 'forums',
 		                  thread_view_count = thread_view_count,
 		                  data_company = enki.libforum.get_forums_data( 'Company' ),

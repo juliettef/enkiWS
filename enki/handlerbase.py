@@ -99,7 +99,7 @@ class HandlerBase( webapp2.RequestHandler ):
 
 	def check_CSRF( self, query_name = 'CSRF' ):    # protect against forging login requests http://en.wikipedia.org/wiki/Cross-site_request_forgery http://www.ethicalhack3r.co.uk/login-cross-site-request-forgery-csrf/
 		if 'CSRF' in self.session:
-			request_token = self.request.get( query_name ).split( '-' )
+			request_token = self.request.get( query_name ).rsplit( '-', 1 )
 			form_name = request_token[ 0 ]
 			CSRFToken = request_token[ 1 ]
 			sessionCSRFs = self.session.get( 'CSRF' )
@@ -244,15 +244,19 @@ class HandlerBase( webapp2.RequestHandler ):
 			return None
 
 
-	def render_tmpl( self, template_file, **kwargs ):
+	def render_tmpl( self, template_file, CSRFneeded = True, **kwargs ):
 	# render an html template with data using jinja2
 		try:
 			navbar_extensions = enki.ExtensionLibrary.get_navbar_items()
 			page_extensions = enki.ExtensionLibrary.get_page_extensions( self )
 			display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id ) if self.is_logged_in( ) else ''
+			CSRFtoken = ''
+			if CSRFneeded:
+				CSRFtoken = self.create_CSRF( self.request.path )
 			self.response.write( self.jinja2.render_template(
 									template_file,
 									request_url = self.request.url,
+									CSRFtoken = CSRFtoken,
 				                    is_logged_in = self.is_logged_in(),
 									navbar_extensions = navbar_extensions,
 									page_extensions = page_extensions,
