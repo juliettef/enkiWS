@@ -20,7 +20,7 @@ class HandlerForums( enki.HandlerBase ):
 			# if no forum topic exists , populate the forums with default topics
 			enki.libforum.set_forum()
 		self.render_tmpl( 'forums.html',
-		                  active_page = 'forums',
+		                  active_menu = 'forums',
 		                  thread_view_count = thread_view_count,
 		                  data_company = enki.libforum.get_forums_data( 'Company' ),
 		                  data_game = enki.libforum.get_forums_data( 'Game' ) )
@@ -37,7 +37,7 @@ class HandlerForum( enki.HandlerBase ):
 		else:
 			not_found = MSG.FORUM_NOT_EXIST( )
 		self.render_tmpl( 'forum.html',
-		                  active_page = 'forums',
+		                  active_menu = 'forums',
 		                  CSRFtoken = self.create_CSRF( 'forum' ),
 		                  data = data,
 		                  not_found = not_found,
@@ -100,7 +100,7 @@ class HandlerForum( enki.HandlerBase ):
 							post_body = ''
 
 				self.render_tmpl( 'forum.html',
-				                  active_page = 'forums',
+				                  active_menu = 'forums',
 				                  CSRFtoken = self.create_CSRF( 'forum' ),
 				                  data = enki.libforum.get_forum_data( forum ),
 				                  show_input = show_input,
@@ -134,7 +134,7 @@ class HandlerThread( enki.HandlerBase ):
 		else:
 			not_found = MSG.POST_THREAD_NOT_EXIST( )
 		self.render_tmpl( 'thread.html',
-		                  active_page = 'forums',
+		                  active_menu = 'forums',
 		                  CSRFtoken = self.create_CSRF( 'thread' ),
 		                  data = data,
 		                  pagination = pagination,
@@ -194,7 +194,7 @@ class HandlerThread( enki.HandlerBase ):
 				data = enki.libforum.get_thread_data( thread, post_requested, post_count )
 				pagination = enki.libforum.get_thread_pagination_data( thread, post_requested, post_count )
 				self.render_tmpl( 'thread.html',
-				                  active_page = 'forums',
+				                  active_menu = 'forums',
 				                  CSRFtoken = self.create_CSRF( 'thread' ),
 				                  data = data,
 				                  pagination = pagination,
@@ -223,7 +223,7 @@ class HandlerPost( enki.HandlerBase ):
 		else:
 			not_found = MSG.POST_NOT_EXIST( )
 		self.render_tmpl( 'post.html',
-		                  active_page = 'forums',
+		                  active_menu = 'forums',
 		                  CSRFtoken = self.create_CSRF( 'post' ),
 		                  data = data,
 		                  not_found = not_found,
@@ -278,7 +278,7 @@ class HandlerPost( enki.HandlerBase ):
 						preview = post_body
 
 				self.render_tmpl( 'post.html',
-				                  active_page = 'forums',
+				                  active_menu = 'forums',
 				                  CSRFtoken = self.create_CSRF( 'post' ),
 				                  data = data,
 				                  change = self.request.get( 'change' ),

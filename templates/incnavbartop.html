@@ -34,18 +34,18 @@
         <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
             <ul class="nav navbar-nav">
                {% for href, id, caption in navigation_bar_top %}
-                    <li {% if id == active_page %}class="active"{% endif %}>
+                    <li {% if id == active_menu %}class="active"{% endif %}>
                         <a href="{{ href|e }}">
-                            {{ caption|e }}{% if id == active_page %}<span class="sr-only">(current)</span>{% endif %}
+                            {{ caption|e }}{% if id == active_menu %}<span class="sr-only">(current)</span>{% endif %}
                         </a>
                     </li>
                {% endfor %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% for href, id, caption in navigation_bar_top_right %}
-                    <li {% if id == active_page %}class="active"{% endif %}>
+                    <li {% if id == active_menu %}class="active"{% endif %}>
                         <a href="{{ href|e }}">
-                            {{ caption|e }}{% if id == active_page %}<span class="sr-only">(current)</span>{% endif %}
+                            {{ caption|e }}{% if id == active_menu %}<span class="sr-only">(current)</span>{% endif %}
                         </a>
                     </li>
                {% endfor %}

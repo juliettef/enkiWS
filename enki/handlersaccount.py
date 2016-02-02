@@ -23,7 +23,7 @@ class HandlerLogin( enki.HandlerBase ):
 			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LOGIN_NEEDED())
 		self.session[ 'sessionrefpath' ] = self.session.pop( 'sessionloginrefpath', self.request.referrer )
 		self.render_tmpl( 'login.html',
-		                  active_page = 'login',
+		                  active_menu = 'login',
 		                  CSRFtoken = self.create_CSRF( 'login' ),
 		                  authhandlers = settings.HANDLERS,
 		                  email = email )
@@ -52,7 +52,7 @@ class HandlerLogin( enki.HandlerBase ):
 				if backoff_timer != 0:
 					error_message = MSG.BACKOFF_LOGIN( enki.libutil.format_timedelta( backoff_timer ) )
 				self.render_tmpl( 'login.html',
-				                  active_page = 'login',
+				                  active_menu = 'login',
 				                  CSRFtoken = self.create_CSRF( 'login' ),
 				                  authhandlers = settings.HANDLERS,
 				                  email = email,
@@ -87,7 +87,7 @@ class HandlerProfile( enki.HandlerBase ):
 			friends = 'debug d'
 			data = data( current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, messages, friends )
 			self.render_tmpl( 'profile.html',
-			                  active_page = 'profile',
+			                  active_menu = 'profile',
 			                  CSRFtoken = self.create_CSRF( 'profile' ),
 			                  data = data )
 
@@ -111,7 +111,7 @@ class HandlerProfilePublic( enki.HandlerBase ):
 			else:
 				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.USER_NOT_EXIST())
 			self.render_tmpl( 'profilepublic.html',
-			                  active_page = 'home',
+			                  active_menu = 'home',
 			                  display_name_data = display_name_data )
 
 
@@ -122,7 +122,7 @@ class HandlerRegister( enki.HandlerBase ):
 		# Get referal path to return the user to the page they were on after they've logged in using auth
 		self.session[ 'sessionrefpath' ] = self.request.referrer
 		self.render_tmpl( 'register.html',
-		                  active_page = 'register',
+		                  active_menu = 'register',
 		                  CSRFtoken = self.create_CSRF( 'register' ),
 		                  authhandlers = settings.HANDLERS,
 		                  email = email )
@@ -149,7 +149,7 @@ class HandlerRegister( enki.HandlerBase ):
 				elif result == enki.libuser.ERROR_EMAIL_MISSING:
 					error_message = MSG.MISSING_EMAIL()
 				self.render_tmpl( 'register.html',
-				                  active_page = 'register',
+				                  active_menu = 'register',
 				                  CSRFtoken = self.create_CSRF( 'register' ),
 				                  authhandlers = settings.HANDLERS,
 				                  email = email,
@@ -169,7 +169,7 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 			email = tokenEntity.email
 			link = enki.libutil.get_local_url( 'registerconfirm', { 'verifytoken': token } )
 			self.render_tmpl( 'registerconfirm.html',
-			                  active_page = 'register',
+			                  active_menu = 'register',
 			                  CSRFtoken = self.create_CSRF( 'registerconfirm' ),
 			                  email = email,
 			                  url = link )
@@ -194,8 +194,8 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 				elif result == enki.handlerbase.ERROR_USER_NOT_CREATED:
 					error_message = MSG.FAIL_REGISTRATION()
 					self.render_tmpl( 'register.html',
-					                  active_page = 'register',
-					                  CSRFtoken = self.create_CSRF( 'registerconfirm' ),
+					                  active_menu = 'register',
+					                  CSRFtoken = self.create_CSRF( 'register' ),
 					                  email = email,
 					                  error = error_message )
 			else:
@@ -206,7 +206,7 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 					length = len( password )
 					error_message = " ".join( [ MSG.PW_TOO_SHORT( length ), MSG.PW_ENSURE_MIN_LENGTH( enki.libuser.PASSWORD_LENGTH_MIN ) ] )
 				self.render_tmpl( 'registerconfirm.html',
-				                  active_page = 'register',
+				                  active_menu = 'register',
 				                  CSRFtoken = self.create_CSRF( 'registerconfirm' ),
 				                  email = email,
 				                  url = link,
@@ -225,7 +225,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 			provider_name = str( tokenEntity.auth_ids_provider[ :colon ])
 			provider_uid = str( tokenEntity.auth_ids_provider[ colon+1: ])
 			self.render_tmpl( 'registeroauthconfirm.html',
-			                  active_page = 'register',
+			                  active_menu = 'register',
 			                  CSRFtoken = self.create_CSRF( 'registeroauthconfirm' ),
 			                  token = tokenEntity,
 			                  provider_name = provider_name,
@@ -278,7 +278,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 					elif result == enki.libuser.ERROR_EMAIL_MISSING:
 							error_message = MSG.MISSING_EMAIL()
 					self.render_tmpl( 'registeroauthconfirm.html',
-					                  active_page = 'register',
+					                  active_menu = 'register',
 					                  CSRFtoken = self.create_CSRF( 'registeroauthconfirm' ),
 					                  token = tokenEntity,
 					                  provider_name = provider_name,
@@ -309,7 +309,7 @@ class HandlerPasswordChange( enki.HandlerBase ):
 				self.redirect( enki.libutil.get_local_url( 'passwordrecover' ) )
 			else:
 				self.render_tmpl( 'passwordchange.html',
-				                  active_page = 'profile',
+				                  active_menu = 'profile',
 				                  CSRFtoken = self.create_CSRF( 'passwordchange' ) )
 
 	def post( self ):
@@ -339,7 +339,7 @@ class HandlerPasswordChange( enki.HandlerBase ):
 				if backoff_timer != 0:
 					error_password_message = MSG.BACKOFF_LOGIN( enki.libutil.format_timedelta( backoff_timer ) )
 			self.render_tmpl( 'passwordchange.html',
-			                  active_page = 'profile',
+			                  active_menu = 'profile',
 			                  CSRFtoken = self.create_CSRF( 'passwordchange' ),
 			                  error_password = error_password_message,
 			                  error_passwordnew = error_passwordnew_message )
@@ -394,7 +394,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 		if enki.libuser.exist_VerifyToken( token, 'passwordchange' ):
 			link = enki.libutil.get_local_url( 'passwordrecoverconfirm', { 'verifytoken': token } )
 			self.render_tmpl( 'passwordrecoverconfirm.html',
-			                  active_page = 'profile',
+			                  active_menu = 'profile',
 			                  CSRFtoken = self.create_CSRF( 'passwordrecoverconfirm' ),
 			                  url = link )
 		else:
@@ -464,7 +464,7 @@ class HandlerDisplayName( enki.HandlerBase ):
 				elif result == enki.libdisplayname.ERROR_DISPLAY_NAME_IN_USE:
 					error_message = MSG.DISPLAY_NAME_ALREADY_USED()
 				self.render_tmpl( 'displayname.html',
-				                  active_page = 'profile',
+				                  active_menu = 'profile',
 				                  prefix = prefix,
 				                  data = enki.libdisplayname.get_display_name_data( user_id ),
 				                  prefix_length_min = enki.libdisplayname.PREFIX_LENGTH_MIN,
@@ -482,7 +482,7 @@ class HandlerDisplayName( enki.HandlerBase ):
 				auto_generated = enki.libdisplayname.cosmopompe( )[0 ]
 				intro_message = " ".join([ MSG.DISPLAY_NAME_INTRO(), MSG.DISPLAY_NAME_AUTO_GENERATED() ])
 			self.render_tmpl( 'displayname.html',
-			                     active_page = 'profile',
+			                     active_menu = 'profile',
 			                     CSRFtoken = self.create_CSRF( 'displayname' ),
 			                     auto_generated = auto_generated,
 			                     intro = intro_message,
@@ -497,7 +497,7 @@ class HandlerEmailChange( enki.HandlerBase ):
 	def get( self ):
 		if self.ensure_is_logged_in():
 			self.render_tmpl( 'emailchange.html',
-			                  active_page = 'profile',
+			                  active_menu = 'profile',
 			                  CSRFtoken = self.create_CSRF( 'emailchange' ) )
 
 	def post( self ):
@@ -528,7 +528,7 @@ class HandlerEmailChange( enki.HandlerBase ):
 				error_message = MSG.WRONG_EMAIL_FORMAT()
 			if error_message:
 				self.render_tmpl( 'emailchange.html',
-				                  active_page = 'profile',
+				                  active_menu = 'profile',
 				                  CSRFtoken = self.create_CSRF( 'emailchange' ),
 				                  email = email,
 				                  error = error_message )
@@ -586,7 +586,7 @@ class HandlerAccountDelete( enki.HandlerBase ):
 			has_friends = 'debug d'
 			data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends )
 			self.render_tmpl( 'accountdelete.html',
-			                  active_page = 'profile',
+			                  active_menu = 'profile',
 			                  CSRFtoken = self.create_CSRF( 'accountdelete' ),
 			                  data = data,
 			                  is_active = True if enki.HandlerBase.account_is_active( self.enki_user.key.id( ) ) else False )

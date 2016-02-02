@@ -11,7 +11,7 @@ class HandlerMain( enki.HandlerBase ):
 		if not settings.SECRETS_EXIST:
 			self.add_infomessage( 'warning', MSG.WARNING(), 'Setup incomplete, see <a class="alert-link"" href="https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter">documentation</a>.')
 		self.render_tmpl( 'home.html',
-		                  active_page = 'home' )
+		                  active_menu = 'home' )
 
 enki.ExtensionLibrary.set_extensions([ enki.ExtensionStore(), enki.ExtensionForums()])
 

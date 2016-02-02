@@ -32,7 +32,7 @@ class HandlerStore( enki.HandlerBase ):
 
 	def get( self ):
 		self.render_tmpl( 'store.html',
-		                  active_page = 'store',
+		                  active_menu = 'store',
 		                  CSRFtoken = self.create_CSRF( 'store' ),
 		                  product = products[ 'product_a' ] )
 
@@ -126,7 +126,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 
 		self.render_tmpl( 'storeemulatefastspring.html',
 						  referrer = xstr( self.request.get('referrer') ),
-		                  active_page = 'store',
+		                  active_menu = 'store',
 						  purchase_price = '$3.00',
 						  purchaser_email = 'user_email@provided_to_fastspring.com' ,
 						  quantity = 2,

@@ -9,7 +9,7 @@ class HandlerFriends( enki.HandlerBase ):
 	def get( self ):
 		if self.ensure_is_logged_in():
 			self.render_tmpl( 'friends.html',
-			                  active_page = 'profile',
+			                  active_menu = 'profile',
 			                  CSRFtoken = self.create_CSRF( 'friends' ),
 			                  data = enki.libfriends.get_friends( self.user_id ) )
 
