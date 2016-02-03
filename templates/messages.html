@@ -17,7 +17,6 @@
             {% if data %}
 
             <form class="form" action= "{{ 'messages'|local }}" method="post" id="listform">
-                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                 {% for item in data %}
 
                     <p>

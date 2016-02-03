@@ -10,12 +10,10 @@ class HandlerFriends( enki.HandlerBase ):
 		if self.ensure_is_logged_in():
 			self.render_tmpl( 'friends.html',
 			                  active_menu = 'profile',
-			                  CSRFtoken = self.create_CSRF( 'friends' ),
 			                  data = enki.libfriends.get_friends( self.user_id ) )
 
 	def post( self ):
 		if self.ensure_is_logged_in():
-			self.check_CSRF()
 			user_id = self.user_id
 			instruction = self.request.arguments()[ 0 ]
 			friend_name = self.request.get( instruction )
@@ -47,12 +45,10 @@ class HandlerMessages( enki.HandlerBase ):
 	def get( self ):
 		if self.ensure_is_logged_in():
 			self.render_tmpl( 'messages.html',
-			                  CSRFtoken = self.create_CSRF( 'messages' ),
 			                  data = enki.libmessage.get_messages( self.user_id ) )
 
 	def post( self ):
 		if self.ensure_is_logged_in():
-			self.check_CSRF()
 			user_id = self.user_id
 			instruction = self.request.arguments()[ 0 ]
 			message_id = int( self.request.get( instruction ))

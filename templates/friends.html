@@ -25,7 +25,6 @@
 
             {% if result %}
                 <form class="form" action= "{{ 'friends'|local }}" method="post" id="listform">
-                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     {% if result.best_guess %}
                         <p>
                             You want to add this particular friend:<br>
@@ -49,7 +48,6 @@
 
             {% if data %}
                 <form class="form" action= "{{ 'friends'|local }}" method="post" id="listform">
-                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     {% for item in data %}
                         <p>
                             <ul>
