@@ -47,7 +47,6 @@
 	                        {% if change == 'delete' %}
 	                            <div class="well bs-component">
 		                            <form class="form-horizontal" action="{{ data.post_page|joinurl({ 'change':'delete' }) }}" method="post" id="mainform">
-		                                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 			                            <fieldset>
 			                                <legend>{{ _( "Delete post" ) }}</legend>
 		                                    <div class="form-group {% if error %}has-error{% endif%}">
@@ -104,7 +103,6 @@
 
 	                            {% else %} {# <!-- unlikely condition --> #}
 									<form class="form-horizontal" action="{{ data.post_page|joinurl({ 'change':'edit' }) }}" method="post" id="mainform">
-										<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 										<p class="text-info">{{ _( "Please set up your display name to modify your post." ) }}</p>
 										<button class="btn btn-info" type="submit" name="submittype">{{ _( "Set display name" ) }}</button> {# will be handled by enkilibdisplayname.ensure_has_display_name #}
 									</form>

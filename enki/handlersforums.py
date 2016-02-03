@@ -36,9 +36,8 @@ class HandlerForum( enki.HandlerBase ):
 			data = enki.libforum.get_forum_data( forum )
 		else:
 			not_found = MSG.FORUM_NOT_EXIST( )
-		self.render_tmpl( 'forum.html',
+		self.render_tmpl( 'forum.html', False,
 		                  active_menu = 'forums',
-		                  CSRFtoken = self.create_CSRF( 'forum' ),
 		                  data = data,
 		                  not_found = not_found,
 		                  maxpostlength = enki.libforum.POST_LENGTH_MAX,
@@ -99,9 +98,8 @@ class HandlerForum( enki.HandlerBase ):
 							thread_title = ''
 							post_body = ''
 
-				self.render_tmpl( 'forum.html',
+				self.render_tmpl( 'forum.html', CSRFneeded = True if show_input else False,
 				                  active_menu = 'forums',
-				                  CSRFtoken = self.create_CSRF( 'forum' ),
 				                  data = enki.libforum.get_forum_data( forum ),
 				                  show_input = show_input,
 				                  preventmultitoken = pmtoken,
@@ -133,9 +131,8 @@ class HandlerThread( enki.HandlerBase ):
 			pagination = enki.libforum.get_thread_pagination_data( thread, post_requested, post_count )
 		else:
 			not_found = MSG.POST_THREAD_NOT_EXIST( )
-		self.render_tmpl( 'thread.html',
+		self.render_tmpl( 'thread.html', False,
 		                  active_menu = 'forums',
-		                  CSRFtoken = self.create_CSRF( 'thread' ),
 		                  data = data,
 		                  pagination = pagination,
 		                  user_id = self.user_id,
@@ -193,9 +190,8 @@ class HandlerThread( enki.HandlerBase ):
 
 				data = enki.libforum.get_thread_data( thread, post_requested, post_count )
 				pagination = enki.libforum.get_thread_pagination_data( thread, post_requested, post_count )
-				self.render_tmpl( 'thread.html',
+				self.render_tmpl( 'thread.html', CSRFneeded = True if show_input else False,
 				                  active_menu = 'forums',
-				                  CSRFtoken = self.create_CSRF( 'thread' ),
 				                  data = data,
 				                  pagination = pagination,
 				                  user_id = self.user_id,
@@ -222,9 +218,8 @@ class HandlerPost( enki.HandlerBase ):
 				post_body = '' if data.post.body == enki.libforum.POST_DELETED else data.post.body
 		else:
 			not_found = MSG.POST_NOT_EXIST( )
-		self.render_tmpl( 'post.html',
+		self.render_tmpl( 'post.html', False,
 		                  active_menu = 'forums',
-		                  CSRFtoken = self.create_CSRF( 'post' ),
 		                  data = data,
 		                  not_found = not_found,
 		                  change = self.request.get( 'change' ),
@@ -276,12 +271,11 @@ class HandlerPost( enki.HandlerBase ):
 							error_message = MSG.FAIL_POST_MODIFICATION()
 					elif submit_type == 'preview':
 						preview = post_body
-
-				self.render_tmpl( 'post.html',
+				change = self.request.get( 'change' )
+				self.render_tmpl( 'post.html', CSRFneeded = True if change == 'edit' else False,
 				                  active_menu = 'forums',
-				                  CSRFtoken = self.create_CSRF( 'post' ),
 				                  data = data,
-				                  change = self.request.get( 'change' ),
+				                  change = change,
 				                  isauthor = is_author,
 				                  error = error_message,
 				                  postbody = post_body,

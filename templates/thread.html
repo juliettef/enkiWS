@@ -64,7 +64,6 @@
                 {% if is_logged_in %}
                     {% if not show_input %}
 						<form class="form-horizontal" action="{{ pagination.page_last }}#bottom" method="post" id="mainform">
-                            <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 							<button class="btn btn-primary" type="submit" name="submittype" value="input" >{{ _( "Reply" ) }}</button>
 						</form>
                     {% else %}
@@ -110,7 +109,6 @@
 
                         {% else %}
                             <form class="form-horizontal" action="{{ pagination.page_current[0] }}" method="post" id="mainform">
-	                            <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 	                            <p class="text-info">{{ _( "Please set up your display name to post an answer." ) }}</p>
                                 <button class="btn btn-info" type="submit" name="submittype">{{ _( "Set display name" ) }}</button> {# will be handled by enkilibdisplayname.ensure_has_display_name #}
                             </form>
