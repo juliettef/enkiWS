@@ -225,7 +225,6 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 			self.abort( 404 )
 
 	def post( self ):
-		self.check_CSRF()
 		choice = self.request.get( 'choice' )
 		# step 1
 		if choice == 'create' or choice == 'cancel':
@@ -249,6 +248,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 					tokenEntity.key.delete()
 					self.session.pop( 'tokenregisterauth' )
 				else: # if the email isn't given by the provider, use the manually entered email.
+					self.check_CSRF()
 					email = self.request.get( 'email' )
 					user = self.get_or_create_user_from_authid( authId, allow_create = True )
 					self.log_in_session_token_create( user )
