@@ -220,8 +220,8 @@ class ExtensionPageLibrary( ExtensionPage ):
 					product.activated_by_user = user_id
 					product.put()
 					handler.add_infomessage( 'success', MSG.SUCCESS(), _( 'License activated.' ))
-			else:
-				handler.add_infomessage( 'info', MSG.INFORMATION(), _( 'You already own this product. Do you want to give your spare license to a friend ?' ))
+				else:
+					handler.add_infomessage( 'info', MSG.INFORMATION(), _( 'You already own this product. Do you want to give your spare license to a friend ?' ))
 
 		products = []
 		products_activated = []
