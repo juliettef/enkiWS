@@ -18,24 +18,31 @@
   		            <input type="hidden" name="referrer" value="{{ referrer }}">
                     <fieldset>
 
-                        <legend>{{ _( "FastSpring Store Emulation" )}} - {{ product[ 'displayname' ] }}</legend>
+                        <legend>{{ _( "FastSpring Store Emulator" ) }} - {{ product }}</legend>
 
                         <div class="form-group">
-                            <label for="purchase_price" class="col-lg-2 control-label">{{ _( "Purchase Price" ) }}</label>
+                            <label for="product" class="col-lg-2 control-label">{{ _( 'Product - <font color = "blue">editable for testing purposes</font>' ) }}</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="product" value="{{ product }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="purchase_price" class="col-lg-2 control-label">{{ _( 'Purchase Price' ) }}</label>
                             <div class="col-lg-10">
                                 <input class="form-control" type="text" name="purchase_price" value="{{ purchase_price }}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="purchaser_email" class="col-lg-2 control-label">{{ _( "Purchaser Email" ) }}</label>
+                            <label for="purchaser_email" class="col-lg-2 control-label">{{ _( 'Purchaser Email' ) }}</label>
                             <div class="col-lg-10">
                                 <input class="form-control" type="text" name="purchaser_email" value="{{ purchaser_email }}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="quantity" class="col-lg-2 control-label">{{ _( "Quantity" ) }}</label>
+                            <label for="quantity" class="col-lg-2 control-label">{{ _( 'Quantity' ) }}</label>
                             <div class="col-lg-10">
                                 <input class="form-control" type="text" name="quantity" value="{{ quantity }}">
                             </div>

@@ -95,7 +95,7 @@ class HandlerProfile( enki.HandlerBase ):
 			result = self.remove_authid( remove_account )
 			provider_name = str( remove_account[ :remove_account.find( ':' )])
 			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_METHOD_REMOVED( provider_name ))
-			self.get()
+			self.redirect( enki.libutil.get_local_url( 'profile' ))
 
 
 class HandlerProfilePublic( enki.HandlerBase ):

@@ -2,7 +2,7 @@
     <h2>{{ _( "Library" ) }}</h2>
 	{% if data[ 0 ] %}
 		<h3>{{ _( "New" ) }}</h3>
-		<form class="form-group" action="{{ 'profile'|local  }}" method="post">
+		<form class="form-group" action="{{ 'library'|local  }}" method="post">
 			<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 			{% for item in data[ 0 ] %}
 				<p>{{ item[ 0 ] }} - {{ item[ 1 ] }}

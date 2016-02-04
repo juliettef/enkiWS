@@ -34,7 +34,7 @@ def generate_license_keys( quantity ):
 
 def get_EnkiProductKey_by_purchaser_license_key( user_id, license_key ):
 	entity = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.purchaser_user_id == user_id,
-	                                             EnkiModelProductKey.license_key == license_key )).get()
+	                                             EnkiModelProductKey.license_key == license_key.replace( '-', '' ) )).get()
 	if entity:
 		return entity
 	else:

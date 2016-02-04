@@ -96,6 +96,7 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 				token = enki.libuser.get_VerifyToken_by_token_type( token_purchasebyuser, 'purchasebyuser' )
 				if token:
 					purchaser_user_id = token.user_id
+					token.key.delete()
 
 			is_test = self.request.get( 'is_test' )
 			if is_test:
@@ -103,7 +104,7 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 				if enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
 					order_type = 'emulated'
 
-			license_keys = license_key_bundle.split()
+			license_keys = license_key_bundle.replace( '-', '' ).split()
 			for license_key in license_keys:
 				item = EnkiModelProductKey( license_key = license_key,
 				                            purchase_price = purchase_price,
@@ -128,13 +129,13 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 						  purchase_price = '$3.00',
 						  purchaser_email = 'user_email@provided_to_fastspring.com' ,
 						  quantity = 2,
-		                  product = products[ 'product_a' ] )
+		                  product = 'product_a' )
 
 	def post( self ):
 		if not SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
 			self.check_CSRF()
 
-			product = 'product_a'
+			product = xstr( self.request.get( 'product' ))
 			quantity = xint( self.request.get('quantity'))
 			purchase_price = xstr( self.request.get( 'purchase_price' ))
 			purchaser_email = xstr( self.request.get( 'purchaser_email' ))
@@ -147,12 +148,17 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			form_data = urllib.urlencode( form_fields )
 			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )
 			if result.status_code == 200:
-				license_keys = result.content
+				license_keys = result.content.replace( '-', '' )
 
 			referrer = xstr( self.request.get( 'referrer' ))
 			token = enki.libuser.get_VerifyToken_by_token_type( referrer, 'purchasebyuser' )
 			if token:
 				user_id = token.user_id
+				token.key.delete()
+			license_key_display = []
+			for item in license_keys.split():
+				item_dash = enki.libstore.insert_dashes_5_10( item )
+				license_key_display.append( item_dash )
 			self.add_infomessage( 'info', MSG.INFORMATION(),'<h3>FastSpring Store Emulator - Step 1</h3>'+
 									'<h4>Emulated purchase details</h4>' +
 									'<ul>' +
@@ -163,7 +169,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			                            '<li>purchase_price #{orderItem.totalUSD} = <em>' + purchase_price + '</em></li>' +
 			                            '<li>purchaser_email #{order.customer.email} = <em>' + purchaser_email + '</em></li>' +
 										'<li>shop_name = <em>Emulator_FastSpring</em></li>' +
-			                            '<li>license_key #{orderItem.fulfillment.license.licenses.list} = <br><em><b>' + '<br>'.join( xstr( license_keys ).split()) + '</b></em></li>' +
+			                            '<li>license_key #{orderItem.fulfillment.license.licenses.list} = <br><em><b>' + '<br>'.join( license_key_display ) + '</b></em></li>' +
 									'</ul>'
 									'<h4>Internal data - generated if the purchaser was logged in when they bought the product</h4>' +
 									'<ul>' +
@@ -208,33 +214,39 @@ class ExtensionPageLibrary( ExtensionPage ):
 		ExtensionPage.__init__( self, route_name = 'profile', template_include = 'inclibrary.html' )
 
 	def get_data( self, handler ):
-		if handler.is_logged_in():
-			user_id = handler.enki_user.key.id()
-		if handler.request.method == 'POST':
-			handler.check_CSRF()
-			license_to_activate = handler.request.get( 'activate' )
-			product = enki.libstore.get_EnkiProductKey_by_purchaser_license_key( user_id, license_to_activate )
-			if product:
-				already_activated = enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, product.product_name )
-				if not already_activated:
-					product.activated_by_user = user_id
-					product.put()
-					handler.add_infomessage( 'success', MSG.SUCCESS(), _( 'License activated.' ))
-				else:
-					handler.add_infomessage( 'info', MSG.INFORMATION(), _( 'You already own this product. Do you want to give your spare license to a friend ?' ))
-
 		products = []
 		products_activated = []
-		list = enki.libstore.fetch_EnkiProductKey_by_purchaser( user_id ) # TODO: add products activated but not purchsed by user.
-		if list:
-			for i, item in enumerate( list ):
-				# product_dn = products[ item.product_name ]
-				if item.activated_by_user and item.activated_by_user == user_id:
-					products_activated.append([ item.product_name, item.license_key ])
-				else:
-					products.append([ item.product_name , item.license_key ])
+		if handler.is_logged_in():
+			user_id = handler.enki_user.key.id()
+			list = enki.libstore.fetch_EnkiProductKey_by_purchaser( user_id ) # TODO: add products activated but not purchsed by user.
+			if list:
+				for i, item in enumerate( list ):
+					item_licence_key = enki.libstore.insert_dashes_5_10( item.license_key )
+					if item.activated_by_user and item.activated_by_user == user_id:
+						products_activated.append([ item.product_name, item_licence_key ])
+					else:
+						products.append([ item.product_name , item_licence_key ])
 		data = [ products, products_activated ]
 		return data
+
+
+class HandlerLibrary( enki.HandlerBase ):
+
+	def post( self ):
+		if self.is_logged_in():
+			user_id = self.enki_user.key.id()
+			self.check_CSRF()
+		license_to_activate = self.request.get( 'activate' )
+		product = enki.libstore.get_EnkiProductKey_by_purchaser_license_key( user_id, license_to_activate )
+		if product:
+			already_activated = enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, product.product_name )
+			if not already_activated:
+				product.activated_by_user = user_id
+				product.put()
+				self.add_infomessage( 'success', MSG.SUCCESS(), _( 'License activated.' ))
+			else:
+				self.add_infomessage( 'info', MSG.INFORMATION(), _( 'You already own this product. Do you want to give your spare license to a friend ?' ))
+		self.redirect_to_relevant_page()
 
 
 class ExtensionStore( Extension ):
@@ -244,6 +256,7 @@ class ExtensionStore( Extension ):
 		          webapp2.Route( '/genlicensefastspring', HandlerGenLicenseFastSpring, name = 'genlicensefastspring' ),
 		          webapp2.Route( '/ordercompletefastspring', HandlerOrderCompleteFastSpring, name = 'ordercompletefastspring' ),
 		          webapp2.Route( '/storeemulatefastspring', HandlerStoreEmulateFastSpring, name = 'storeemulatefastspring' ),
+		          webapp2.Route( '/library', HandlerLibrary, name = 'library' )
 		          ]
 
 	def get_navbar_items( self ):
