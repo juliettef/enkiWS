@@ -42,6 +42,7 @@ class HandlerBase( webapp2.RequestHandler ):
 	def __init__( self, request, response ):
 		self.initialize( request, response )
 		self.just_logged_in = False
+		self.just_checked_CSRF = False
 
 
 	def dispatch( self ): # https://webapp-improved.appspot.com/api/webapp2_extras/sessions.html
@@ -98,6 +99,8 @@ class HandlerBase( webapp2.RequestHandler ):
 
 
 	def check_CSRF( self, query_name = 'CSRF' ):    # protect against forging login requests http://en.wikipedia.org/wiki/Cross-site_request_forgery http://www.ethicalhack3r.co.uk/login-cross-site-request-forgery-csrf/
+		if self.just_checked_CSRF:
+			return
 		if 'CSRF' in self.session:
 			request_token = self.request.get( query_name ).rsplit( '-', 1 )
 			form_name = request_token[ 0 ]
@@ -106,9 +109,9 @@ class HandlerBase( webapp2.RequestHandler ):
 			sessionCSRF = sessionCSRFs.get( form_name )
 			if sessionCSRF == CSRFToken and CSRFToken:
 				del self.session[ 'CSRF' ][ form_name ]
-			else:
-				self.abort( 401 )
-		return
+				self.just_checked_CSRF = True
+				return
+		self.abort( 401 )
 
 
 	def is_logged_in( self ): # returns true if a session exists and corresponds to a logged in user (i.e. a user with a valid auth token)
