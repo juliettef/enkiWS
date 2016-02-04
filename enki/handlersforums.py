@@ -46,7 +46,6 @@ class HandlerForum( enki.HandlerBase ):
 	def post( self, forum ):
 		if self.ensure_is_logged_in() and enki.libdisplayname.ensure_has_display_name( self ):
 			if forum.isdigit() and EnkiModelForum.get_by_id( int( forum ) ):
-				self.check_CSRF()
 				user_id = self.user_id
 				thread_title = self.request.get( 'thread_title' )
 				post_body = self.request.get( 'post_body' )
@@ -62,6 +61,7 @@ class HandlerForum( enki.HandlerBase ):
 					post_body = ''
 					pmtoken = enki.libforum.add_preventmultipost_token( )
 				else:
+					self.check_CSRF()
 					if submit_type != 'cancel':
 						if not thread_title:
 							error_message_threadtitle = MSG.THREAD_TITLE_NEEDED( )
@@ -98,7 +98,7 @@ class HandlerForum( enki.HandlerBase ):
 							thread_title = ''
 							post_body = ''
 
-				self.render_tmpl( 'forum.html', CSRFneeded = True if show_input else False,
+				self.render_tmpl( 'forum.html', CSRFneeded = show_input,
 				                  active_menu = 'forums',
 				                  data = enki.libforum.get_forum_data( forum ),
 				                  show_input = show_input,
@@ -142,7 +142,6 @@ class HandlerThread( enki.HandlerBase ):
 	def post( self, thread ):
 		if self.ensure_is_logged_in() and enki.libdisplayname.ensure_has_display_name( self ):
 			if thread.isdigit() and EnkiModelThread.get_by_id( int( thread ) ):
-				self.check_CSRF()
 				user = self.user_id
 				post_body = self.request.get( 'post_body' )
 				submit_type = self.request.get( 'submittype' )
@@ -162,6 +161,7 @@ class HandlerThread( enki.HandlerBase ):
 					post_body = ''
 					pmtoken = enki.libforum.add_preventmultipost_token( )
 				else:
+					self.check_CSRF()
 					if submit_type != 'cancel':
 						if not post_body:
 							error_message = MSG.POST_BODY_NEEDED()
@@ -190,7 +190,7 @@ class HandlerThread( enki.HandlerBase ):
 
 				data = enki.libforum.get_thread_data( thread, post_requested, post_count )
 				pagination = enki.libforum.get_thread_pagination_data( thread, post_requested, post_count )
-				self.render_tmpl( 'thread.html', CSRFneeded = True if show_input else False,
+				self.render_tmpl( 'thread.html', CSRFneeded = show_input,
 				                  active_menu = 'forums',
 				                  data = data,
 				                  pagination = pagination,
@@ -218,11 +218,15 @@ class HandlerPost( enki.HandlerBase ):
 				post_body = '' if data.post.body == enki.libforum.POST_DELETED else data.post.body
 		else:
 			not_found = MSG.POST_NOT_EXIST( )
-		self.render_tmpl( 'post.html', False,
+		change = self.request.get( 'change' )
+		CSRFneeded = True
+		if change != 'edit' and change != 'delete':
+			CSRFneeded = False
+		self.render_tmpl( 'post.html', CSRFneeded,
 		                  active_menu = 'forums',
 		                  data = data,
 		                  not_found = not_found,
-		                  change = self.request.get( 'change' ),
+		                  change = change,
 		                  isauthor = is_author,
 		                  postbody = post_body,
 		                  maxpostlength = enki.libforum.POST_LENGTH_MAX )
@@ -231,16 +235,18 @@ class HandlerPost( enki.HandlerBase ):
 	def post( self, post ):
 		if self.ensure_is_logged_in() and enki.libdisplayname.ensure_has_display_name( self ):
 			if post.isdigit() and enki.libforum.EnkiModelPost.get_by_id( int( post ) ):
-				self.check_CSRF()
+
 				data = enki.libforum.get_post_data( post )
 				is_author = True if self.user_id == data.author_data.user_id else False
 				user = self.user_id
 				post_body = self.request.get( 'post_body' )
 				submit_type = self.request.get( 'submittype' )
+				change = self.request.get( 'change' )
 				error_message = ''
 				preview = ''
 
 				if submit_type == 'delete':
+					self.check_CSRF()
 					result = enki.libforum.delete_post( user, post )
 					if result[ 0 ] == enki.libutil.ENKILIB_OK:
 						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_DELETED())
@@ -262,6 +268,7 @@ class HandlerPost( enki.HandlerBase ):
 
 				if not error_message:
 					if submit_type == 'submit':
+						self.check_CSRF()
 						result = enki.libforum.edit_post( user, post, post_body )
 						if result[ 0 ] == enki.libutil.ENKILIB_OK:
 							self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_MODIFIED())
@@ -271,7 +278,7 @@ class HandlerPost( enki.HandlerBase ):
 							error_message = MSG.FAIL_POST_MODIFICATION()
 					elif submit_type == 'preview':
 						preview = post_body
-				change = self.request.get( 'change' )
+
 				self.render_tmpl( 'post.html',
 				                  active_menu = 'forums',
 				                  data = data,

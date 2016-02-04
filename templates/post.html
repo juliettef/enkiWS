@@ -47,6 +47,7 @@
 	                        {% if change == 'delete' %}
 	                            <div class="well bs-component">
 		                            <form class="form-horizontal" action="{{ data.post_page|joinurl({ 'change':'delete' }) }}" method="post" id="mainform">
+			                            <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 			                            <fieldset>
 			                                <legend>{{ _( "Delete post" ) }}</legend>
 		                                    <div class="form-group {% if error %}has-error{% endif%}">

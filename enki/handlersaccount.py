@@ -268,7 +268,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 							error_message = MSG.WRONG_EMAIL_FORMAT()
 					elif result == enki.libuser.ERROR_EMAIL_MISSING:
 							error_message = MSG.MISSING_EMAIL()
-					self.render_tmpl( 'registeroauthconfirm.html', CSRFneeded = True if not auth_email else False,
+					self.render_tmpl( 'registeroauthconfirm.html',
 					                  active_menu = 'register',
 					                  token = tokenEntity,
 					                  provider_name = provider_name,
