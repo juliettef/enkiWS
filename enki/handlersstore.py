@@ -212,15 +212,18 @@ class ExtensionPageLibrary( ExtensionPage ):
 			user_id = handler.enki_user.key.id()
 		if handler.request.method == 'POST':
 			license_to_activate = handler.request.get( 'activate' )
-			product_key = enki.libstore.get_EnkiProductKey_by_purchaser_license_key( user_id, license_to_activate )
-			if product_key:
-				product_key.activated_by_user = user_id
-				product_key.put()
-			handler.add_infomessage( 'success', MSG.SUCCESS(), _( 'License activated' ))
+			product = enki.libstore.get_EnkiProductKey_by_purchaser_license_key( user_id, license_to_activate )
+			already_activated = enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, product.product_name )
+			if product and not already_activated:
+				product.activated_by_user = user_id
+				product.put()
+				handler.add_infomessage( 'success', MSG.SUCCESS(), _( 'License activated.' ))
+			else:
+				handler.add_infomessage( 'info', MSG.INFORMATION(), _( 'You already own this product. Do you want to give your spare license to a friend ?' ))
 
 		products = []
 		products_activated = []
-		list = enki.libstore.fetch_EnkiProductKey_by_purchaser( user_id )
+		list = enki.libstore.fetch_EnkiProductKey_by_purchaser( user_id ) # TODO: add products activated but not purchsed by user.
 		if list:
 			for i, item in enumerate( list ):
 				# product_dn = products[ item.product_name ]

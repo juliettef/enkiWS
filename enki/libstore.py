@@ -34,18 +34,25 @@ def generate_license_keys( quantity ):
 
 def get_EnkiProductKey_by_purchaser_license_key( user_id, license_key ):
 	entity = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.purchaser_user_id == user_id,
-	                                              EnkiModelProductKey.license_key == license_key )).get()
+	                                             EnkiModelProductKey.license_key == license_key )).get()
 	if entity:
 		return entity
 	else:
 		return None
 
+def exist_EnkiProductKey_product_activated_by( user_id, product_name ):
+	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.activated_by_user == user_id,
+	                                            EnkiModelProductKey.product_name == product_name )).count( 1 )
+	if count:
+		return True
+	else:
+		return False
 
 def fetch_EnkiProductKey_by_purchaser( user_id ):
 	list = EnkiModelProductKey.query( EnkiModelProductKey.purchaser_user_id == user_id ).fetch()
 	return list
 
 
-def fetch_EnkiProuctKey_by_registered_to( user_id ):
+def fetch_EnkiProductKey_activated_by( user_id ):
 	list = EnkiModelProductKey.query( EnkiModelProductKey.activated_by_user == user_id ).fetch( )
 	return list
