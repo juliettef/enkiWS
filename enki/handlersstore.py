@@ -36,7 +36,6 @@ class HandlerStore( enki.HandlerBase ):
 		                  product = products[ 'product_a' ] )
 
 	def post( self ):
-		self.check_CSRF()
 		url = URL_PURCHASE_FASTSPRING
 		if not SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
 			url = enki.libutil.get_local_url( 'storeemulatefastspring' )
@@ -209,10 +208,18 @@ class ExtensionPageLibrary( ExtensionPage ):
 		ExtensionPage.__init__( self, route_name = 'profile', template_include = 'inclibrary.html' )
 
 	def get_data( self, handler ):
-		products = []
-		products_activated = []
 		if handler.is_logged_in():
 			user_id = handler.enki_user.key.id()
+		if handler.request.method == 'POST':
+			license_to_activate = handler.request.get( 'activate' )
+			product_key = enki.libstore.get_EnkiProductKey_by_purchaser_license_key( user_id, license_to_activate )
+			if product_key:
+				product_key.activated_by_user = user_id
+				product_key.put()
+			handler.add_infomessage( 'success', MSG.SUCCESS(), _( 'License activated' ))
+
+		products = []
+		products_activated = []
 		list = enki.libstore.fetch_EnkiProductKey_by_purchaser( user_id )
 		if list:
 			for i, item in enumerate( list ):
@@ -231,7 +238,8 @@ class ExtensionStore( Extension ):
 		return  [ webapp2.Route( '/store', HandlerStore, name = 'store' ),
 		          webapp2.Route( '/genlicensefastspring', HandlerGenLicenseFastSpring, name = 'genlicensefastspring' ),
 		          webapp2.Route( '/ordercompletefastspring', HandlerOrderCompleteFastSpring, name = 'ordercompletefastspring' ),
-		          webapp2.Route( '/storeemulatefastspring', HandlerStoreEmulateFastSpring, name = 'storeemulatefastspring' ) ]
+		          webapp2.Route( '/storeemulatefastspring', HandlerStoreEmulateFastSpring, name = 'storeemulatefastspring' ),
+		          ]
 
 	def get_navbar_items( self ):
 		return [( enki.libutil.get_local_url( 'store' ), 'store', _( "Store" ))]

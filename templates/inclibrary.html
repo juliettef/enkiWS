@@ -2,14 +2,19 @@
     <h2>{{ _( "Library" ) }}</h2>
 	{% if data[ 0 ] %}
 		<h3>{{ _( "New" ) }}</h3>
-		<ul>{% for item in data[ 0 ] %}
-			<li>{{ item[ 0 ] }} - {{ item[ 1 ] }}</li>
-		{% endfor %}</ul>
+		<form class="form-group" action="{{ 'profile'|local  }}" method="post">
+			<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+			{% for item in data[ 0 ] %}
+				<p>{{ item[ 0 ] }} - {{ item[ 1 ] }}
+                    &nbsp;<button class="btn btn-default btn-xs" type="submit" name="activate" value="{{ item[ 1 ] }}">{{ _( "Activate license" )}}</button>
+				</p>
+			{% endfor %}
+		</form>
 	{% endif %}
 	{% if data[ 1 ] %}
 		<h3>{{ _( "Owned" ) }}</h3>
-		<ul>{% for item in data[ 1 ] %}
-			<li>{{ item[ 0 ] }} - {{ item[ 1 ] }}</li>
-		{% endfor %}</ul>
+		{% for item in data[ 1 ] %}
+			<p>{{ item[ 0 ] }} - {{ item[ 1 ] }}</p>
+		{% endfor %}
 	{% endif %}
 </div>

@@ -43,7 +43,7 @@
                         <p>
                             {{ _( "Provider:" )}} {{ item.provider_name }} | {{ _( "Unique Id:" )}} {{ item.provider_uid }}
                             {% if data.enough_accounts %}
-                                &nbsp;<button class="btn btn-default" type="submit" name="remove" value="{{ item.provider_name }}:{{item.provider_uid}}">{{ _( "Remove" )}}</button>
+                                &nbsp;<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.provider_name }}:{{item.provider_uid}}">{{ _( "Remove" )}}</button>
                             {% endif %}
                         </p>
                     {% endfor %}
