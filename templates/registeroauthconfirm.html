@@ -11,7 +11,7 @@
 
             {% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
-
+            <div>
             {% if not success %}
                 <div class="well bs-component">
                     <form class="form-horizontal" action="{{ url }}" method="post">
@@ -55,7 +55,6 @@
             {% else %}
 	            <div>
 	                <form class="form-horizontal" action="{{ url }}" method="post">
-	                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 	                    <div class="col-lg-12">
 	                        <button class="btn btn-primary" type="submit" name = "choice" value="profile">{{ _( "Set up my profile" ) }}</button>
 	                        <button class="btn btn-default" type="submit" name = "choice" value="continue">{{ _( "Continue browsing" ) }}</button>
@@ -63,6 +62,7 @@
 	                </form>
 		        </div>
             {% endif%}
+            </div>
 
             {% include "incfooter.html" %}
         </div>

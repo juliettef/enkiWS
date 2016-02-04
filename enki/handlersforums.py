@@ -272,7 +272,7 @@ class HandlerPost( enki.HandlerBase ):
 					elif submit_type == 'preview':
 						preview = post_body
 				change = self.request.get( 'change' )
-				self.render_tmpl( 'post.html', CSRFneeded = True if change == 'edit' else False,
+				self.render_tmpl( 'post.html',
 				                  active_menu = 'forums',
 				                  data = data,
 				                  change = change,
