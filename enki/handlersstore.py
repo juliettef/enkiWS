@@ -211,13 +211,15 @@ class ExtensionPageLibrary( ExtensionPage ):
 		if handler.is_logged_in():
 			user_id = handler.enki_user.key.id()
 		if handler.request.method == 'POST':
+			handler.check_CSRF()
 			license_to_activate = handler.request.get( 'activate' )
 			product = enki.libstore.get_EnkiProductKey_by_purchaser_license_key( user_id, license_to_activate )
-			already_activated = enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, product.product_name )
-			if product and not already_activated:
-				product.activated_by_user = user_id
-				product.put()
-				handler.add_infomessage( 'success', MSG.SUCCESS(), _( 'License activated.' ))
+			if product:
+				already_activated = enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, product.product_name )
+				if not already_activated:
+					product.activated_by_user = user_id
+					product.put()
+					handler.add_infomessage( 'success', MSG.SUCCESS(), _( 'License activated.' ))
 			else:
 				handler.add_infomessage( 'info', MSG.INFORMATION(), _( 'You already own this product. Do you want to give your spare license to a friend ?' ))
 
