@@ -191,7 +191,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			form_data = urllib.urlencode( form_fields )
 			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )
 			if result.status_code == 200:
-				self.add_infomessage( 'success', MSG.SUCCESS(),'<h3>FastSpring Store Emulator - Step 2</h3><p>Purchase records created<p>' )
+				self.add_infomessage(  'info', MSG.INFORMATION(),'<h3>FastSpring Store Emulator - Step 2</h3><p>Purchase records created<p>' )
 			else:
 				self.add_infomessage( 'warning', MSG.WARNING(),'<h3>FastSpring Store Emulator - Step 2 FAILED: Purchase records not created</h3>' )
 
@@ -226,12 +226,19 @@ class ExtensionPageLibrary( ExtensionPage ):
 			if list_purchased:
 				for i, item in enumerate( list_purchased ):
 					item_licence_key = enki.libstore.insert_dashes_5_10( item.licence_key )
-					if item.activated_by_user and item.activated_by_user == user_id:
-						licences_activated.append([ item.product_name, item_licence_key ])
-					else:
-						licences_to_activate.append([ item.product_name , item_licence_key ])
+					product_already_owned = enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name )
+					if not item.activated_by_user:
+						if not product_already_owned:
+							licences_to_activate.append([ item.product_name , item_licence_key ])
+						else:
+							licences_to_give.append([ item.product_name , item_licence_key ])
+			list_activated = enki.libstore.fetch_EnkiProductKey_by_activator( user_id )
+			if list_activated:
+				for i, item in enumerate( list_activated ):
+					item_licence_key = enki.libstore.insert_dashes_5_10( item.licence_key )
+					licences_activated.append([ item.product_name , item_licence_key ])
 		error = handler.session.pop( 'error_library', None )
-		data = [ licences_to_activate, licences_activated, error ]
+		data = [ error, licences_to_activate, licences_to_give, licences_activated ]
 		return data
 
 
@@ -259,7 +266,7 @@ class HandlerLibrary( enki.HandlerBase ):
 					if enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name ):
 						# the user has already activated a key for the same product
 						if is_manual:
-							self.session[ 'error_library' ] = _( 'You already own %(product)s.', product = item.product_name )
+							self.session[ 'error_library' ] = _( 'You already activated %(product)s. Do you want to give your spare licence to a friend ? Licence key: %(licence)s', product = item.product_name, licence = licence_key )
 					else:
 						# activate the licence
 						item.activated_by_user = user_id
@@ -268,9 +275,9 @@ class HandlerLibrary( enki.HandlerBase ):
 				elif item.activated_by_user == user_id:
 					# the user has already activated this specific key
 					if is_manual:
-						self.session[ 'error_library' ] = _( 'You already activated %(product)s. Do you want to give your spare licence to a friend ? Licence key: %(licence)s', product = item.product_name, licence = licence_key )
+						self.session[ 'error_library' ] = _( 'You already own %(product)s.', product = item.product_name )
 					else:
-						self.add_infomessage( 'info', MSG.INFORMATION(), _( 'You already activated %(product)s. Do you want to give your spare licence to a friend ? Licence key: %(licence)s', product = item.product_name, licence = licence_key ))
+						self.add_infomessage( 'info', MSG.INFORMATION(), _( 'You already own %(product)s.', product = item.product_name ))
 				else:
 					# another user has activated the key
 					if is_manual:
