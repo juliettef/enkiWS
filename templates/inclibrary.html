@@ -6,7 +6,7 @@
 			<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 			{% for item in data[ 0 ] %}
 				<p>{{ item[ 0 ] }} - {{ item[ 1 ] }}
-                    &nbsp;<button class="btn btn-default btn-xs" type="submit" name="activate" value="{{ item[ 1 ] }}">{{ _( "Activate license" )}}</button>
+                    &nbsp;<button class="btn btn-default btn-xs" type="submit" name="licence_key_preset" value="{{ item[ 1 ] }}">{{ _( "Activate licence" )}}</button>
 				</p>
 			{% endfor %}
 		</form>
@@ -17,4 +17,31 @@
 			<p>{{ item[ 0 ] }} - {{ item[ 1 ] }}</p>
 		{% endfor %}
 	{% endif %}
+
+    <div class="well bs-component">
+    <form class="form-horizontal" action="{{ 'library'|local }}" method="post">
+        <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+        <fieldset>
+
+            <legend>{{ _( "Activate a licence" ) }}</legend>
+
+            <div class="form-group {% if data[ 2 ] %}has-error{% endif%}">
+                <label for="licence_key_manual" class="col-lg-2 control-label">{{ _( "licence key" ) }}</label>
+                 <div class="col-lg-10">
+                     <input class="form-control" type="text" name="licence_key_manual" placeholder="{{ _( "XXXXX-XXXXX-XXXXX" ) }}" />
+                     {% if data[ 2 ] %}<label class="control-label">{{ data[ 2 ] }}</label>{% endif%}
+	                 <p class="text-info">{{ _( "The licence key is a string of 15 alphanumeric characters, with or without dashes interspaced, e.g. 9CNJ5FLYH87HRZ1 and 9CNJ5-FLYH8-7HRZ1 are equally valid." ) }}</p>
+                 </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button class="btn btn-primary" type="submit" >{{ _( "Activate" ) }}</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+	</div>
+
 </div>

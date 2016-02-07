@@ -104,6 +104,6 @@ Architecture and OAuth implementation - [Doug Binks](http://www.enkisoftware.com
 Testing - Sven Bentlage - [@sbe-dev](https://github.com/sbe-dev)
 
 
-## License
+## Licence
 
 zlib - see [license.txt](https://github.com/juliettef/enkiWS/blob/master/license.txt)

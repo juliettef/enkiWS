@@ -3,7 +3,7 @@ from google.appengine.ext.ndb import model
 
 class EnkiModelProductKey( model.Model ):
 
-	license_key = model.StringProperty()  # mandatory
+	licence_key = model.StringProperty()  # mandatory
 	product_name = model.StringProperty()  # mandatory
 
 	purchaser_email = model.StringProperty()  # mandatory

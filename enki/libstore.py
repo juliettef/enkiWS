@@ -5,10 +5,10 @@ from google.appengine.ext import ndb
 from enki.modelproductkey import EnkiModelProductKey
 
 
-SEPARATOR_LICENSE_KEYS = '\n'
+SEPARATOR_licence_KEYS = '\n'
 
 
-def generate_license_key():
+def generate_licence_key():
 	code = webapp2_extras.security.generate_random_string( length = 15, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
 	return code
 
@@ -19,26 +19,35 @@ def insert_dashes_5_10( string ):
 	return result
 
 
-def generate_license_keys( quantity ):
-	license_keys = ''
+def generate_licence_keys( quantity ):
+	licence_keys = ''
 	if quantity:
 		quantity = int( quantity )
 		while quantity > 0:
-			license_keys += insert_dashes_5_10( generate_license_key()) + SEPARATOR_LICENSE_KEYS
+			licence_keys += insert_dashes_5_10( generate_licence_key()) + SEPARATOR_licence_KEYS
 			quantity -= 1
-	return license_keys
+	return licence_keys
 
 
 #=== QUERIES ==================================================================
 
 
-def get_EnkiProductKey_by_purchaser_license_key( user_id, license_key ):
-	entity = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.purchaser_user_id == user_id,
-	                                             EnkiModelProductKey.license_key == license_key.replace( '-', '' ) )).get()
+def get_EnkiProductKey_by_licence_key( licence_key ):
+	entity = EnkiModelProductKey.query( EnkiModelProductKey.licence_key == licence_key.replace( '-', '' ) ).get()
 	if entity:
 		return entity
 	else:
 		return None
+
+
+def get_EnkiProductKey_by_purchaser_licence_key( user_id, licence_key ):
+	entity = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.purchaser_user_id == user_id,
+	                                             EnkiModelProductKey.licence_key == licence_key.replace( '-', '' ) )).get()
+	if entity:
+		return entity
+	else:
+		return None
+
 
 def exist_EnkiProductKey_product_activated_by( user_id, product_name ):
 	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.activated_by_user == user_id,
@@ -47,6 +56,7 @@ def exist_EnkiProductKey_product_activated_by( user_id, product_name ):
 		return True
 	else:
 		return False
+
 
 def fetch_EnkiProductKey_by_purchaser( user_id ):
 	list = EnkiModelProductKey.query( EnkiModelProductKey.purchaser_user_id == user_id ).fetch()
