@@ -24,7 +24,7 @@ products = { 'product_a': { 'displayname' : 'Product A', 'price' : 3.00 },
              'product_b' : { 'displayname' : 'Product B', 'price' : 0.00 },
              }
 
-SECRET_FASTSPRING = '67Rbc2TphwLw8DGfmstdVmsx' # TODO: move to secrets
+
 URL_PURCHASE_FASTSPRING = str( 'https://sites.fastspring.com/enkisoftware/product/avoyd' )
 
 
@@ -37,7 +37,7 @@ class HandlerStore( enki.HandlerBase ):
 
 	def post( self ):
 		url = URL_PURCHASE_FASTSPRING
-		if not SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
+		if not settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_SIMULATE_STORE:
 			url = enki.libutil.get_local_url( 'storeemulatefastspring' )
 		if self.is_logged_in():
 			purchaser_user_id = self.enki_user.key.id()
@@ -65,7 +65,7 @@ class HandlerGenlicenceFastSpring( webapp2.RequestHandler ):
 
 	def post( self ):
 		secret = xstr( self.request.get( 'secret' ))
-		if secret == SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
+		if secret == settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_SIMULATE_STORE:
 			quantity = xint( self.request.get( 'quantity' ))
 			licence_keys = enki.libstore.generate_licence_keys( quantity )
 			self.response.write( licence_keys )
@@ -80,7 +80,7 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 
 	def post( self ):
 		secret = xstr( self.request.get( 'secret' ))
-		if secret == SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
+		if secret == settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_SIMULATE_STORE:
 
 			licence_key_bundle = xstr( self.request.get( 'licence_key' ))
 			purchase_price = xstr( self.request.get( 'purchase_price' ))
@@ -132,7 +132,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 		                  product = 'product_a' )
 
 	def post( self ):
-		if not SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_SIMULATE_STORE:
+		if not settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_SIMULATE_STORE:
 			self.check_CSRF()
 
 			product = xstr( self.request.get( 'product' ))

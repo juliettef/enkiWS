@@ -25,6 +25,7 @@ HANDLERS = [ enki.handlersoauth.HandlerOAuthSteam ]
 try:
 	from secrets import secrets
 	KEY_SESSION = secrets.KEY_SESSION
+	SECRET_FASTSPRING = secrets.SECRET_FASTSPRING
 	SECRETS_EXIST = True
 	if secrets.CLIENT_ID_GOOGLE:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthGoogle ]
@@ -34,6 +35,7 @@ try:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthTwitter ]
 except ImportError:
 	KEY_SESSION = 'See example_secrets.txt'
+	SECRET_FASTSPRING = ''
 	SECRETS_EXIST = False
 	pass
 
