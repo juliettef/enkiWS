@@ -3,7 +3,14 @@ import enki.modelforum
 
 
 ENKI_FORCE_DEBUG = False    # If True, behaves as if it's offline
-ENKI_SIMULATE_STORE = True  # If True, use the store simulator
+ENKI_EMULATE_STORE = True  # If True, use the store emulator
+
+
+URL_PURCHASE_FASTSPRING = str( 'https://sites.fastspring.com/enkisoftware/product/avoyd' )
+
+
+product_displayname = { 'product_a' : 'Product A',
+                        'product_b' : 'Product B',  }
 
 
 def get_forum_default_topics():

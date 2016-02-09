@@ -5,7 +5,7 @@
 		<form class="form-group" action="{{ 'library'|local  }}" method="post">
 			<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 			{% for item in data[ 1 ] %}
-				<p>{{ item[ 0 ] }} - {{ item[ 1 ] }}
+				<p>{{ item[ 2 ] }} - {{ item[ 1 ] }}
                     &nbsp;<button class="btn btn-default btn-xs" type="submit" name="licence_key_preset" value="{{ item[ 1 ] }}">{{ _( "Activate licence" )}}</button>
 				</p>
 			{% endfor %}
@@ -14,13 +14,13 @@
 	{% if data[ 2 ] %}
 		<h3>{{ _( "Available to give" ) }}</h3>
 		{% for item in data[ 2 ] %}
-			<p>{{ item[ 0 ] }} - {{ item[ 1 ] }}</p>
+			<p>{{ item[ 2 ] }} - {{ item[ 1 ] }}</p>
 		{% endfor %}
 	{% endif %}
 	{% if data[ 3 ] %}
 		<h3>{{ _( "Activated" ) }}</h3>
 		{% for item in data[ 3 ] %}
-			<p>{{ item[ 0 ] }} - {{ item[ 1 ] }}</p>
+			<p>{{ item[ 2 ] }} - {{ item[ 1 ] }}</p>
 		{% endfor %}
 	{% endif %}
 
@@ -34,7 +34,7 @@
             <div class="form-group {% if data[ 0 ] %}has-error{% endif%}">
                 <label for="licence_key_manual" class="col-lg-2 control-label">{{ _( "licence key" ) }}</label>
                  <div class="col-lg-10">
-                     <input class="form-control" type="text" name="licence_key_manual" placeholder="{{ _( "XXXXX-XXXXX-XXXXX" ) }}" />
+                     <input class="form-control" type="text" name="licence_key_manual" placeholder="{{ _( "XXXXX-XXXXX-XXXXX" ) }}" {% if data[ 4 ] %}value = "{{ data[ 4 ] }}"{% endif %} maxlength="24" />
                      {% if data[ 0 ] %}<label class="control-label">{{ data[ 0 ] }}</label>{% endif%}
 	                 <p class="text-info">{{ _( "The licence key is a string of 15 alphanumeric characters, with or without dashes interspaced, e.g. 9CNJ5FLYH87HRZ1 and 9CNJ5-FLYH8-7HRZ1 are equally valid." ) }}</p>
                  </div>

@@ -15,10 +15,10 @@
             <h1>{{ _( "Store" )}}</h1>
 
             <div class="jumbotron">
-                <h1>{{ product[ 'displayname' ] }}</h1>
+                <h1>{{ product_displayname[ 'product_a' ] }}</h1>
 	            <form class="form-group" action="{{ 'store'|local }}" method="post">
 	                <p>
-                       <button class="btn btn-success btn-lg" type="submit" name="buy" value="{{ product }}">{{ _( "Buy" )}}</button>
+                       <button class="btn btn-success btn-lg" type="submit" name="buy" value="{{ product }}">{{ _( "Purchase" )}}</button>
 	                </p>
                 </form>
             </div>

@@ -18,10 +18,14 @@
   		            <input type="hidden" name="referrer" value="{{ referrer }}">
                     <fieldset>
 
-                        <legend>{{ _( "FastSpring Store Emulator" ) }} - {{ product }}</legend>
+                        <legend>{{ _( "Store Emulator - FastSpring" ) }}</legend>
+
+                        <p class="text-info">{{ _( "This form enables you to emulate purchases. You have been redirected to the store emulator because either
+	                        the third-party FastSpring store is not set up, you are in debug mode or use of the emulator has been forced.
+	                        The emulator creates product licence records of order_type 'emulated'." ) }}</p>
 
                         <div class="form-group">
-                            <label for="product" class="col-lg-2 control-label">{{ _( 'Product - <font color = "blue">editable for testing purposes</font>' ) }}</label>
+                            <label for="product" class="col-lg-2 control-label">{{ _( 'Product (editable for testing purposes)' ) }}</label>
                             <div class="col-lg-10">
                                 <input class="form-control" type="text" name="product" value="{{ product }}">
                             </div>
