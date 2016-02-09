@@ -20,6 +20,6 @@ class TimeDeltaProperty( model.IntegerProperty ):
 
 class EnkiModelBackoffTimer( model.Model ):
 # protect password entry against brute force attack
-	email = model.StringProperty()
-	last_failed_login = model.DateTimeProperty()
+	identifier = model.StringProperty()
+	last_failure = model.DateTimeProperty( )
 	backoff_duration = TimeDeltaProperty()

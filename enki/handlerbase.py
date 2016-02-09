@@ -133,49 +133,49 @@ class HandlerBase( webapp2.RequestHandler ):
 		return True
 
 
-	def get_backoff_timer( self, email, increment = False ):
-		if self.exist_backoff_timer( email ):
-			entity = self.get_backofftimer( email )
-			result = entity.last_failed_login - datetime.datetime.now() + entity.backoff_duration
+	def get_backoff_timer( self, identifier, increment = False ):
+		if self.exist_backoff_timer( identifier ):
+			entity = self.get_backofftimer( identifier )
+			result = entity.last_failure - datetime.datetime.now() + entity.backoff_duration
 			if result <= datetime.timedelta( 0 ):
 				# inactive backoff timer. Increase the delay.
 				if increment:
 					entity.backoff_duration += entity.backoff_duration
-					entity.last_failed_login = datetime.datetime.now()
+					entity.last_failure = datetime.datetime.now()
 					entity.put()
 				return 0
 			else:
 				return result
 		else:
 			if increment:
-				self.add_backoff_timer( email )
+				self.add_backoff_timer( identifier )
 			return 0
 
 
-	def add_backoff_timer( self, email ):
-		if not self.exist_backoff_timer( email ):
-			entity = EnkiModelBackoffTimer( email = email,
-			                                last_failed_login = datetime.datetime.now(),
+	def add_backoff_timer( self, identifier ):
+		if not self.exist_backoff_timer( identifier ):
+			entity = EnkiModelBackoffTimer( identifier = identifier,
+			                                last_failure = datetime.datetime.now(),
 			                                backoff_duration = datetime.timedelta( milliseconds = 15 ))
 			entity.put()
 
 
-	def remove_backoff_timer( self, email ):
-		entity = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.email == email ).get()
+	def remove_backoff_timer( self, identifier ):
+		entity = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.identifier == identifier ).get()
 		if entity:
 			entity.key.delete()
 
 
-	def get_backofftimer( self, email ):
-		entity = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.email == email ).get()
+	def get_backofftimer( self, identifier ):
+		entity = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.identifier == identifier ).get()
 		if entity:
 			return entity
 		else:
 			return None
 
 
-	def exist_backoff_timer( self, email ):
-		count = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.email == email ).count( 1 )
+	def exist_backoff_timer( self, identifier ):
+		count = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.identifier == identifier ).count( 1 )
 		if count:
 			return True
 		else:
@@ -183,7 +183,7 @@ class HandlerBase( webapp2.RequestHandler ):
 
 
 	def fetch_old_backoff_timers( self, days_old ):
-		list = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.last_failed_login <= ( datetime.datetime.now() - datetime.timedelta( days = days_old ))).fetch( keys_only = True)
+		list = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.last_failure <= (datetime.datetime.now( ) - datetime.timedelta( days = days_old )) ).fetch( keys_only = True )
 		return list
 
 
