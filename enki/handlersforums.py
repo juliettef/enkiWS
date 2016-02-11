@@ -1,7 +1,5 @@
 import webapp2
 
-from webapp2_extras.i18n import gettext as _
-
 import enki
 import enki.textmessages as MSG
 
@@ -319,7 +317,7 @@ class ExtensionForums( Extension ):
                   ]
 
 	def get_navbar_items( self ):
-		return [( enki.libutil.get_local_url( 'forums' ), 'forums', _( "Forums" ))]
+		return [( enki.libutil.get_local_url( 'forums' ), 'forums', MSG.FORUMS())]
 
 	def get_page_extensions( self ):
 		return [ ExtensionPageUserPosts()]

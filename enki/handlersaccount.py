@@ -49,7 +49,7 @@ class HandlerLogin( enki.HandlerBase ):
 						self.send_email( email, MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_SUBJECT( ), MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link, email ) )
 				backoff_timer = self.get_backoff_timer( email )
 				if backoff_timer != 0:
-					error_message = MSG.BACKOFF_LOGIN( enki.libutil.format_timedelta( backoff_timer ) )
+					error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ) )
 				self.render_tmpl( 'login.html',
 				                  active_menu = 'login',
 				                  authhandlers = settings.HANDLERS,
@@ -326,7 +326,7 @@ class HandlerPasswordChange( enki.HandlerBase ):
 				error_password_message = MSG.WRONG_PW()
 				backoff_timer = self.get_backoff_timer( email )
 				if backoff_timer != 0:
-					error_password_message = MSG.BACKOFF_LOGIN( enki.libutil.format_timedelta( backoff_timer ) )
+					error_password_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ) )
 			self.render_tmpl( 'passwordchange.html',
 			                  active_menu = 'profile',
 			                  error_password = error_password_message,

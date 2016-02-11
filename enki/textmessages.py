@@ -45,13 +45,10 @@ def POST_PUBLISHED(): return _( "Your post is published." )
 def POST_MODIFIED(): return _( "Your post is modified." )
 def POST_DELETED(): return _( "Your post is deleted." )
 
-def PRODUCT_OWNED( product, code, link ): return _( '''Congratulations, you own <b>%(product)s</b>. The product key is <b>%(code)s</b>. Check your email or <a href="%(link)s" class="alert-link">visit this page to activate it</a>.''', product = product, code = code, link = link )
-
 # error messages
 def WRONG_EMAIL_OR_PW(): return _( "Wrong email or password." )
 def WRONG_PW(): return _( "Invalid password." )
-def BACKOFF_LOGIN( timeout ): return _( "You have attempted to log in too many times. Please wait %(timeout)s before you try again.", timeout = timeout )
-def BACKOFF_LICENCE( timeout ): return _( "You have attempted to activate a licence too many times. Please wait %(timeout)s before you try again.", timeout = timeout )
+def TIMEOUT( timeout ): return _( "Timeout. Please wait %(timeout)s before you try again.", timeout = timeout )
 def WRONG_EMAIL_FORMAT(): return _( "Invalid email address format." )
 def MISSING_EMAIL(): return _( "An email address is needed." )
 def MISSING_PW(): return _( "A password is needed." )
@@ -98,6 +95,7 @@ def DISPLAY_NAME_TOO_SHORT_LENGTHEN( length ): return ngettext( "It is too short
 def DISPLAY_NAME_TOO_LONG_SHORTEN( length ): return ngettext( "It is too long. Please ensure it is maximum %(length)s character long.", "It is too long. Please ensure it is maximum %(length)s characters long.", length, length = length )
 
 # forums
+def FORUMS(): return _( "Forums" )
 def POST_DELETED_DISPLAY(): return _( "[Deleted post]" )
 def USER_NOT_EXIST(): return _( "The user you requested does not exist or was deleted." )
 def FORUM_NOT_EXIST(): return _( "The forum you requested does not exist or was deleted." )
@@ -121,3 +119,12 @@ def CONNECT_WITH_FACEBOOK(): return _( "Login with Facebook" )
 def CONNECT_WITH_STEAM(): return _( "Sign in through Steam" )
 def CONNECT_WITH_TWITTER(): return _( "Sign in with Twitter" )
 
+# Store
+def STORE(): return _( "Store" )
+def PRODUCT_LICENCE_ACTIVATED( product, licence ): return _( "Product %(product)s licence %(licence)s activated.", product = product, licence = licence )
+def PRODUCT_ALREADY_ACTIVATED( product ): return _( "You already activated %(product)s.", product = product )
+def LICENCE_ALREADY_ACTIVATED_GIVE( product ): return _( "You already activated %(product)s. Do you want to give your spare licence key to a friend?", product = product )
+def LICENCE_ANOTHER_USER_ACTIVATED( product, licence ): return _( "Another user already activated %(product)s licence %(licence)s.", product = product, licence = licence )
+def LICENCE_INVALID(): return _( "Invalid licence key." )
+def LICENCE_MISSING(): return _( "A licence key is needed." )
+def LICENCE_TOO_LONG(): return _( "Licence key is too long." )

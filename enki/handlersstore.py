@@ -5,7 +5,6 @@ import re
 import webapp2_extras
 from google.appengine.api import urlfetch
 from webapp2_extras import security
-from webapp2_extras.i18n import gettext as _
 
 import settings
 import enki
@@ -36,7 +35,7 @@ class HandlerStore( enki.HandlerBase ):
 			token = security.generate_random_string( entropy = 256 )
 			token_purchase = EnkiModelTokenVerify( token = token, user_id = purchaser_user_id, type = 'purchasebyuser' )
 			token_purchase.put()
-			url += str( '?referrer=' + token_purchase.token )
+			url = enki.libutil.get_local_url( 'storeemulatefastspring', { 'referrer': token_purchase.token })
 		self.redirect( url )
 
 
@@ -259,7 +258,7 @@ class HandlerLibrary( enki.HandlerBase ):
 						item = enki.libstore.get_EnkiProductKey_by_licence_key( licence_key_reduced )
 						if not item:
 							if is_manual:
-								self.session[ 'error_library' ] = _( 'Invalid licence key.' )
+								self.session[ 'error_library' ] = MSG.LICENCE_INVALID()
 								self.session[ 'error_library_licence' ] = licence_key
 						elif item:
 							licence_key_formatted = enki.libstore.insert_dashes_5_10( licence_key_reduced )
@@ -268,43 +267,37 @@ class HandlerLibrary( enki.HandlerBase ):
 								if enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name ):
 									# the user has already activated a key for the same product
 									if is_manual:
-										self.session[ 'error_library' ] = _( 'You already activated %(product)s. Do you want to give your spare licence key to a friend?',
-										                                     product = settings.product_displayname[ item.product_name ] )
+										self.session[ 'error_library' ] = MSG.LICENCE_ALREADY_ACTIVATED_GIVE( settings.product_displayname[ item.product_name ])
 										self.session[ 'error_library_licence' ] = licence_key_formatted
 								else:
 									# activate the licence
 									item.activated_by_user = user_id
 									item.put()
 									self.remove_backoff_timer( str( user_id ))
-									self.add_infomessage( 'success', MSG.SUCCESS(), _( 'Product %(product)s licence %(licence)s activated.',
-										                                                product = settings.product_displayname[ item.product_name ], licence = licence_key_formatted ))
+									self.add_infomessage( 'success', MSG.SUCCESS(), MSG.PRODUCT_LICENCE_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
 							elif item.activated_by_user == user_id:
 								# the user has already activated this specific key
 								if is_manual:
-									self.session[ 'error_library' ] = _( 'You already activated %(product)s using this licence.',
-									                                     product = settings.product_displayname[ item.product_name ])
+									self.session[ 'error_library' ] = MSG.PRODUCT_ALREADY_ACTIVATED( settings.product_displayname[ item.product_name ])
 									self.session[ 'error_library_licence' ] = licence_key_formatted
 								else:
-									self.add_infomessage( 'info', MSG.INFORMATION(), _( 'You already activated %(product)s.',
-									                                                    product = settings.product_displayname[ item.product_name ]))
+									self.add_infomessage( 'info', MSG.INFORMATION(), MSG.PRODUCT_ALREADY_ACTIVATED( settings.product_displayname[ item.product_name ]))
 							else:
 								# another user has activated the key
 								if is_manual:
-									self.session[ 'error_library' ] = _( 'Another user already activated %(product)s licence %(licence)s.',
-									                                     product = settings.product_displayname[ item.product_name ], licence = licence_key_formatted )
+									self.session[ 'error_library' ] = MSG.LICENCE_ANOTHER_USER_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted )
 									self.session[ 'error_library_licence' ] = licence_key_formatted
 								else:
-									self.add_infomessage( 'info', MSG.INFORMATION(), _( 'Another user already activated %(product)s licence %(licence)s.',
-									                                                    product = settings.product_displayname[ item.product_name ], licence = licence_key_formatted ))
+									self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LICENCE_ANOTHER_USER_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
 					else:
-						self.session[ 'error_library' ] = _( 'Licence key is too long.' )
+						self.session[ 'error_library' ] = MSG.LICENCE_TOO_LONG()
 						self.session[ 'error_library_licence' ] = licence_key
 				elif is_manual:
-					self.session[ 'error_library' ] = _( 'A licence key is needed.' )
+					self.session[ 'error_library' ] = MSG.LICENCE_MISSING()
 			else:
 				backoff_timer = self.get_backoff_timer( str( user_id ))
 				if backoff_timer != 0:
-					self.session[ 'error_library' ] = MSG.BACKOFF_LICENCE( enki.libutil.format_timedelta( backoff_timer ))
+					self.session[ 'error_library' ] = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
 			self.redirect_to_relevant_page()
 
 
@@ -319,7 +312,7 @@ class ExtensionStore( Extension ):
 		          ]
 
 	def get_navbar_items( self ):
-		return [( enki.libutil.get_local_url( 'store' ), 'store', _( "Store" ))]
+		return [( enki.libutil.get_local_url( 'store' ), 'store', MSG.STORE())]
 
 	def get_page_extensions( self ):
 		return [ ExtensionPageProducts(), ExtensionPageLibrary()]
