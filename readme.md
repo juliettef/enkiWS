@@ -106,4 +106,4 @@ Testing - Sven Bentlage - [@sbe-dev](https://github.com/sbe-dev)
 
 ## Licence
 
-zlib - see [license.txt](https://github.com/juliettef/enkiWS/blob/master/license.txt)
+zlib - see [licence.txt](https://github.com/juliettef/enkiWS/blob/master/licence.txt)
