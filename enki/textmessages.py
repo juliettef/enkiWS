@@ -51,6 +51,7 @@ def PRODUCT_OWNED( product, code, link ): return _( '''Congratulations, you own 
 def WRONG_EMAIL_OR_PW(): return _( "Wrong email or password." )
 def WRONG_PW(): return _( "Invalid password." )
 def BACKOFF_LOGIN( timeout ): return _( "You have attempted to log in too many times. Please wait %(timeout)s before you try again.", timeout = timeout )
+def BACKOFF_LICENCE( timeout ): return _( "You have attempted to activate a licence too many times. Please wait %(timeout)s before you try again.", timeout = timeout )
 def WRONG_EMAIL_FORMAT(): return _( "Invalid email address format." )
 def MISSING_EMAIL(): return _( "An email address is needed." )
 def MISSING_PW(): return _( "A password is needed." )
