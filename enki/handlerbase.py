@@ -111,7 +111,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				del self.session[ 'CSRF' ][ form_name ]
 				self.just_checked_CSRF = True
 				return
-		self.abort( 401 )
+		self.redirect_to_relevant_page()
 
 
 	def is_logged_in( self ): # returns true if a session exists and corresponds to a logged in user (i.e. a user with a valid auth token)
