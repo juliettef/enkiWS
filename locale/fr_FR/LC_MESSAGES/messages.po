@@ -67,7 +67,7 @@ msgstr "Votre compte est créé."
 #, python-format
 msgid "Login with %(provider)s failed, please try again."
 msgstr ""
-"Votre authentification par l'intermédiare de %(provider)s a échoué. "
+"Votre authentification par l'intermédiaire de %(provider)s a échoué. "
 "Veuillez renouveler votre tentative."
 
 #: enki/textmessages.py:20
@@ -99,7 +99,7 @@ msgstr ""
 #: enki/textmessages.py:24
 msgid "Your account and forum posts are deleted"
 msgstr ""
-"Votre compte et les messages que vous avez publié dans le forum sont "
+"Votre compte et les messages que vous avez publiés dans le forum sont "
 "supprimés."
 
 #: enki/textmessages.py:25
@@ -112,7 +112,7 @@ msgstr ""
 "Un courrier électronique a été envoyé à l'adresse %(email)s. Veuillez "
 "vous rendre sur votre compte de messagerie et suivre les instructions "
 "contenues dans le message afin de supprimer votre compte ainsi que les "
-"messages que vous avez publié dans le forum."
+"messages que vous avez publiés dans le forum."
 
 #: enki/textmessages.py:27
 msgid "Your email address is set."
@@ -246,8 +246,8 @@ msgstr ""
 #, python-format
 msgid "Your password is %(length)s character long: it is too short."
 msgid_plural "Your password is %(length)s characters long: it is too short."
-msgstr[0] "Votre mot de passe contient %(length)s charactère : il est trop court."
-msgstr[1] "Votre mot de passe contient %(length)s charactères : il est trop court."
+msgstr[0] "Votre mot de passe contient %(length)s caractère : il est trop court."
+msgstr[1] "Votre mot de passe contient %(length)s caractères : il est trop court."
 
 #: enki/textmessages.py:58
 #, python-format
@@ -255,10 +255,10 @@ msgid "Please ensure your password is at least %(length)s character long."
 msgid_plural "Please ensure your password is at least %(length)s characters long."
 msgstr[0] ""
 "Veuillez vous assurer que la longueur de votre mot de passe excède "
-"%(length)s charactère."
+"%(length)s caractère."
 msgstr[1] ""
 "Veuillez vous assurer que la longueur de votre mot de passe excède "
-"%(length)s charactères."
+"%(length)s caractères."
 
 #: enki/textmessages.py:59
 msgid "This is your current email."
@@ -437,7 +437,7 @@ msgid ""
 "%(link)s (click or copy and paste in your browser)"
 msgstr ""
 "Vous avez demandé de supprimer votre compte et les messages que vous avez"
-" publié dans le forum. Suivez ce lien pour confirmer - ATTENTION: la "
+" publiés dans le forum. Suivez ce lien pour confirmer - ATTENTION: la "
 "suppression est définitive ! - %(link)s (cliquez ou copiez-collez le lien"
 " dans votre navigateur)."
 
@@ -456,7 +456,7 @@ msgstr ""
 #: enki/textmessages.py:90
 msgid "(The display name above was randomly generated, feel free to change it.)"
 msgstr ""
-"Le nom d'affichage ci-dessus a été généré au hazard, n'hésitez pas à le "
+"Le nom d'affichage ci-dessus a été généré au hasard, n'hésitez pas à le "
 "modifier."
 
 #: enki/textmessages.py:91
@@ -477,8 +477,8 @@ msgstr ""
 #, python-format
 msgid "Your name is %(length)s character long."
 msgid_plural "Your name is %(length)s characters long."
-msgstr[0] "Votre nom contient %(length)s charactère."
-msgstr[1] "Votre nom contient %(length)s charactères."
+msgstr[0] "Votre nom contient %(length)s caractère."
+msgstr[1] "Votre nom contient %(length)s caractères."
 
 #: enki/textmessages.py:94
 #, python-format
@@ -486,10 +486,10 @@ msgid "It is too short. Please ensure it is at least %(length)s character long."
 msgid_plural "It is too short. Please ensure it is at least %(length)s characters long."
 msgstr[0] ""
 "Il est trop court. Veuillez vous assurer que votre nom d'affichage "
-"contient plus de %(length)s charactère."
+"contient plus de %(length)s caractère."
 msgstr[1] ""
 "Il est trop court. Veuillez vous assurer que votre nom d'affichage "
-"contient plus de %(length)s charactères."
+"contient plus de %(length)s caractères."
 
 #: enki/textmessages.py:95
 #, python-format
@@ -497,10 +497,10 @@ msgid "It is too long. Please ensure it is maximum %(length)s character long."
 msgid_plural "It is too long. Please ensure it is maximum %(length)s characters long."
 msgstr[0] ""
 "Il est trop long. Veuillez vous assurer que votre nom d'affichage "
-"n'excède pas %(length)s charactère."
+"n'excède pas %(length)s caractère."
 msgstr[1] ""
 "Il est trop long. Veuillez vous assurer que votre nom d'affichage "
-"n'excède pas %(length)s charactères."
+"n'excède pas %(length)s caractères."
 
 #: enki/textmessages.py:98 templates/forum.html:22 templates/forums.html:6
 #: templates/forums.html:29 templates/incuserposts.html:8
@@ -542,10 +542,10 @@ msgid "Your thread title is too long by %(exceed)s character."
 msgid_plural "Your thread title is too long by %(exceed)s characters."
 msgstr[0] ""
 "Votre sujet est trop long. Il dépasse la longueur maximale de %(exceed)s "
-"charactère."
+"caractère."
 msgstr[1] ""
 "Votre sujet est trop long. Il dépasse la longueur maximale de %(exceed)s "
-"charactères."
+"caractères."
 
 #: enki/textmessages.py:107
 #, python-format
@@ -553,10 +553,10 @@ msgid "Your post is too long by %(exceed)s character."
 msgid_plural "Your post is too long by %(exceed)s characters."
 msgstr[0] ""
 "Votre message est trop long. Il dépasse la longueur maximale de "
-"%(exceed)s charactère."
+"%(exceed)s caractère."
 msgstr[1] ""
 "Votre message est trop long. Il dépasse la longueur maximale de "
-"%(exceed)s charactères."
+"%(exceed)s caractères."
 
 #: enki/textmessages.py:108
 msgid "Thread submission failed. Please try again."
@@ -588,7 +588,7 @@ msgid ""
 " you'd like to invite to be your friend."
 msgstr ""
 "Le nom que vous avez entré n'est pas valide. Veuillez entrer le nom de la"
-" personne que vous voudrier inviter à devenir votre ami.e."
+" personne que vous voudriez inviter à devenir votre ami.e."
 
 #: enki/textmessages.py:117
 msgid "Sign in with Google"
@@ -713,7 +713,7 @@ msgid ""
 "<em>%(deleted_dn)s</em>."
 msgstr ""
 "Forum: <em><a href='%(user_page_url)s'>les sujets et messages</a></em> "
-"que vous avez publiés demeurent visible mais sont anonymisés. L'auteur "
+"que vous avez publiés demeurent visibles mais sont anonymisés. L'auteur "
 "est <em>%(deleted_dn)s</em>."
 
 #: templates/accountdelete.html:36
@@ -805,7 +805,7 @@ msgid ""
 "lower case and accented characters - are allowed."
 msgstr ""
 "Il doit être <b>alphanumériques</b> : les chiffres et les lettres "
-"majuscules, minuscules et accentuées sont authorisés."
+"majuscules, minuscules et accentuées sont autorisés."
 
 #: templates/displayname.html:48
 msgid ""
@@ -833,8 +833,8 @@ msgid ""
 msgstr ""
 "Une fois enregistré, votre nom d'affichage <b>ne peut pas être "
 "effacé</b>, mais vous pouvez le remplacer par un nouveau nom. <b>Les noms"
-" d'affichage actuel et ancien(s) sont publics</b> et visible sur la page "
-"de l'utilsateur."
+" d'affichage actuel et ancien(s) sont publics</b> et visibles sur la page"
+" de l'utilsateur."
 
 #: templates/displayname.html:58
 msgid "Save my new display name"
@@ -898,8 +898,8 @@ msgstr "Intitulé de votre sujet"
 #, python-format
 msgid "Maximum thread title length: %(length)s character."
 msgid_plural "Maximum thread title length: %(length)s characters."
-msgstr[0] "Votre sujet peut contenir jusqu'à %(length)s charactère."
-msgstr[1] "Votre sujet peut contenir jusqu'à %(length)s charactères."
+msgstr[0] "Votre sujet peut contenir jusqu'à %(length)s caractère."
+msgstr[1] "Votre sujet peut contenir jusqu'à %(length)s caractères."
 
 #: templates/forum.html:75 templates/incuserposts.html:12 templates/post.html:6
 #: templates/post.html:29 templates/post.html:73 templates/thread.html:78
@@ -921,8 +921,8 @@ msgstr ""
 #, python-format
 msgid "Maximum post length: %(length)s character."
 msgid_plural "Maximum post length: %(length)s characters."
-msgstr[0] "Votre message peut contenir jusqu'à %(length)s charactère."
-msgstr[1] "Votre message peut contenir jusqu'à %(length)s charactères."
+msgstr[0] "Votre message peut contenir jusqu'à %(length)s caractère."
+msgstr[1] "Votre message peut contenir jusqu'à %(length)s caractères."
 
 #: templates/forum.html:84 templates/post.html:82 templates/thread.html:87
 msgid "Preview"
@@ -1188,7 +1188,7 @@ msgstr "Veuillez créer votre nom d'affichage afin de modifier votre message."
 
 #: templates/post.html:119
 msgid "Please log in to modify your post."
-msgstr "Veuillez vous connecter afin de modifier votre message"
+msgstr "Veuillez vous connecter afin de modifier votre message."
 
 #: templates/profile.html:6
 msgid "Profile"

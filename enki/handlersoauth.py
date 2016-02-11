@@ -301,8 +301,8 @@ class HandlerOAuthSteam( HandlerOAuthBase ):
 		              'email_verified': '' }
 
 		urlParams = urllib.urlencode( params )
-		fullURL = 'https://steamcommunity.com/openid/login?' + urlParams
-		result = urlfetch.fetch( url = fullURL )
+		fullURL = 'https://steamcommunity.com/openid/login'
+		result = urlfetch.fetch( url = fullURL, payload = urlParams, method = urlfetch.POST )
 		if 'ns:http://specs.openid.net/auth/2.0\nis_valid:true\n' in result.content: # only if is_valid do we trust the loginInfo
 			self.provider_authenticated_callback( loginInfo )
 
@@ -375,8 +375,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 		oauth_signature = self.auth_sign( normalised_url, params )
 		params.append(( 'oauth_signature', oauth_signature ))
 		url_params = urllib.urlencode( params )
-		full_url = normalised_url + '?' + url_params
-		result = urlfetch.fetch( url = full_url, method = urlfetch.POST )
+		result = urlfetch.fetch( url = normalised_url, payload = url_params, method = urlfetch.POST )
 		response = self.process_result_as_query_string( result )
 		# STEP 2
 		if response.get( 'oauth_callback_confirmed' ) != 'true' :
@@ -405,8 +404,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 		params.append(( 'oauth_signature', oauth_signature ))
 		params.append(( 'oauth_verifier', oauth_verifier ))
 		url_params = urllib.urlencode( params )
-		full_url = normalised_url + '?' + url_params
-		result = urlfetch.fetch( url = full_url, method = urlfetch.POST )
+		result = urlfetch.fetch( url = normalised_url, payload = url_params, method = urlfetch.POST )
 		response = self.process_result_as_query_string( result )
 		oauth_token = response.get( 'oauth_token' )
 		user_id = response.get( 'user_id')
