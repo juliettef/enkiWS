@@ -5,12 +5,13 @@
 
 A permissively licensed Python web service for games developers. enkiWS is a library for setting up a website and ancillary services for games on Google App Engine. GAE was chosen as the platform since it provides a low cost scalable solution.
 
-Online demo - https://enkisoftware-webservices.appspot.com
+Online demo *- may be out of sync with the source code -* https://enkisoftware-webservices.appspot.com
 
 
-## Status - version 0.1.0
+## Status - version 0.2.0
 
-This is a work in progress and not yet ready for production use.
+This is a work in progress and not yet ready for production use.  
+__[ NEW in 0.2 ] Online store__
 
 
 ## Functionality
@@ -21,10 +22,13 @@ This is a work in progress and not yet ready for production use.
 * Login through OAuth & OpenID providers - Valve's Steam, Facebook, Google, Twitter
 * Forums
 * Localisation - English & French implemented
+* __[ NEW in 0.2 ] Online store__
+    * payment provider [FastSpring](http://www.fastspring.com/)  
+    * licence key generation and activation
+    * store emulator
 
 ### Intended for release 1.0.0 
 
-* Sales ([FastSpring](http://www.fastspring.com/)), game key generation, registration
 * Friends
 * Game API
     * Authentication (account and game key)
