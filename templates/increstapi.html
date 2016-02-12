@@ -1,0 +1,6 @@
+{% if data %}
+	<div>
+	    <h2>{{ _( "Game connection" ) }}</h2>
+		{{ data | join(', ') }}
+	</div>
+{% endif %}
