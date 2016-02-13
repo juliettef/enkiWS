@@ -5,7 +5,6 @@ import re
 from google.appengine.ext import ndb
 
 import enki.libutil
-import enki.textmessages as MSG
 from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modeluser import EnkiModelUser
 
@@ -117,16 +116,6 @@ def cosmopompe():
 		if unique:
 			display_name_split = [ prefix, suffix ]
 			return display_name_split
-
-
-def ensure_has_display_name( self ):
-	user_display_name = get_EnkiUserDisplayName_by_user_id_current( self.user_id )
-	if not user_display_name:
-		self.session[ 'sessiondisplaynamerefpath' ] = self.request.url # get referal path to return the user to it after they've set their display name
-		self.add_infomessage( 'info', MSG.INFORMATION(), MSG.DISPLAYNAME_NEEDED())
-		self.redirect( enki.libutil.get_local_url( 'displayname' ) )
-		return False
-	return True
 
 
 def set_display_name( user_id, prefix, suffix ):

@@ -42,8 +42,8 @@ class HandlerForum( enki.HandlerBase ):
 		                  maxthreadtitlelength = enki.libforum.THREAD_TITLE_LENGTH_MAX )
 
 	def post( self, forum ):
-		if self.ensure_is_logged_in() and enki.libdisplayname.ensure_has_display_name( self ):
-			if forum.isdigit() and EnkiModelForum.get_by_id( int( forum ) ):
+		if self.ensure_is_logged_in() and self.ensure_has_display_name():
+			if forum.isdigit() and EnkiModelForum.get_by_id( int( forum )):
 				user_id = self.user_id
 				thread_title = self.request.get( 'thread_title' )
 				post_body = self.request.get( 'post_body' )
@@ -138,8 +138,8 @@ class HandlerThread( enki.HandlerBase ):
 		                  maxpostlength = enki.libforum.POST_LENGTH_MAX )
 
 	def post( self, thread ):
-		if self.ensure_is_logged_in() and enki.libdisplayname.ensure_has_display_name( self ):
-			if thread.isdigit() and EnkiModelThread.get_by_id( int( thread ) ):
+		if self.ensure_is_logged_in() and self.ensure_has_display_name():
+			if thread.isdigit() and EnkiModelThread.get_by_id( int( thread )):
 				user = self.user_id
 				post_body = self.request.get( 'post_body' )
 				submit_type = self.request.get( 'submittype' )
@@ -231,8 +231,8 @@ class HandlerPost( enki.HandlerBase ):
 
 
 	def post( self, post ):
-		if self.ensure_is_logged_in() and enki.libdisplayname.ensure_has_display_name( self ):
-			if post.isdigit() and enki.libforum.EnkiModelPost.get_by_id( int( post ) ):
+		if self.ensure_is_logged_in() and self.ensure_has_display_name():
+			if post.isdigit() and enki.libforum.EnkiModelPost.get_by_id( int( post )):
 
 				data = enki.libforum.get_post_data( post )
 				is_author = True if self.user_id == data.author_data.user_id else False

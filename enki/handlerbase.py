@@ -21,7 +21,8 @@ import enki.libfriends
 import enki.libmessage
 import enki.libuser
 import enki.libutil
-import enki.textmessages as MSG
+import enki.libdisplayname
+from enki import textmessages as MSG
 from enki.modelbackofftimer import EnkiModelBackoffTimer
 from enki.modeltokenauth import EnkiModelTokenAuth
 from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
@@ -114,7 +115,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		self.redirect_to_relevant_page()
 
 
-	def is_logged_in( self ): # returns true if a session exists and corresponds to a logged in user (i.e. a user with a valid auth token)
+	def is_logged_in( self ):   # returns true if a session exists and corresponds to a logged in user (i.e. a user with a valid auth token)
 		# get session info
 		if self.just_logged_in:
 			return True
@@ -129,6 +130,16 @@ class HandlerBase( webapp2.RequestHandler ):
 		if not self.is_logged_in():
 			self.session[ 'sessionloginrefpath' ] = self.request.url # get referal path to return the user to it after they've logged in
 			self.redirect( enki.libutil.get_local_url( 'login' ) )
+			return False
+		return True
+
+
+	def ensure_has_display_name( self ):    # user must set their display_name to continue
+		user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
+		if not user_display_name:
+			self.session[ 'sessiondisplaynamerefpath' ] = self.request.url # get referal path to return the user to it after they've set their display name
+			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.DISPLAYNAME_NEEDED())
+			self.redirect( enki.libutil.get_local_url( 'displayname' ) )
 			return False
 		return True
 

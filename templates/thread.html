@@ -110,7 +110,7 @@
                         {% else %}
                             <form class="form-horizontal" action="{{ pagination.page_current[0] }}" method="post" id="mainform">
 	                            <p class="text-info">{{ _( "Please set up your display name to post an answer." ) }}</p>
-                                <button class="btn btn-info" type="submit" name="submittype">{{ _( "Set display name" ) }}</button> {# will be handled by enkilibdisplayname.ensure_has_display_name #}
+                                <button class="btn btn-info" type="submit" name="submittype">{{ _( "Set display name" ) }}</button> {# will be handled by ensure_has_display_name #}
                             </form>
                         {% endif %}
 					{% endif %}

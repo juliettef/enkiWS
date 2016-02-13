@@ -109,7 +109,7 @@
                         {% else %}
                             <form class="form-horizontal" action="{{ 'forum'|local({ 'forum': data.forum_selected }) }}" method="post" id="mainform">
                                 <p class="text-info">{{ _( "Please set up your display name to start a new thread." ) }}</p>
-                                <button class="btn btn-info" type="submit" name="submittype">{{ _( "Set display name" ) }}</button> {# will be handled by enkilibdisplayname.ensure_has_display_name #}
+                                <button class="btn btn-info" type="submit" name="submittype">{{ _( "Set display name" ) }}</button> {# will be handled by ensure_has_display_name #}
                             </form>
                         {% endif %}
                     {% endif %}
