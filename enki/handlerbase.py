@@ -22,6 +22,7 @@ import enki.libmessage
 import enki.libuser
 import enki.libutil
 import enki.libdisplayname
+import enki.librestapi
 from enki import textmessages as MSG
 from enki.modelbackofftimer import EnkiModelBackoffTimer
 from enki.modeltokenauth import EnkiModelTokenAuth
@@ -134,10 +135,12 @@ class HandlerBase( webapp2.RequestHandler ):
 		return True
 
 
-	def ensure_has_display_name( self ):    # user must set their display_name to continue
+	def ensure_has_display_name( self, url = None ):    # user must set their display_name to continue
 		user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
 		if not user_display_name:
-			self.session[ 'sessiondisplaynamerefpath' ] = self.request.url # get referal path to return the user to it after they've set their display name
+			if not url:
+				url = self.request.url
+			self.session[ 'sessiondisplaynamerefpath' ] = url # get referal path to return the user to it after they've set their display name
 			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.DISPLAYNAME_NEEDED())
 			self.redirect( enki.libutil.get_local_url( 'displayname' ) )
 			return False
@@ -690,6 +693,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			ndb.delete_multi_async ( self.fetch_old_backoff_timers( 3 ))
 			ndb.delete_multi_async ( self.fetch_old_auth_tokens( 3 ))
 			ndb.delete_multi_async ( self.fetch_old_sessions( 30 ))
+			ndb.delete_multi_async ( enki.librestapi.fetch_old_rest_api_connect_tokens( ) )
 
 
 	def fetch_old_auth_tokens( self, days_old ):

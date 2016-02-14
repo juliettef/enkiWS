@@ -1,6 +1,9 @@
-{% if data %}
+<div>
+    <h2>{{ _( "Game connection token" ) }}</h2>
 	<div>
-	    <h2>{{ _( "Game connection" ) }}</h2>
-		{{ data | join(', ') }}
+        <form class="form-group" action="{{ 'restapi'|local }}" method="post">
+            <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+            <button class="btn btn-default" type="submit" name="generate">{{ _( "Generate" )}}</button>
+        </form>
 	</div>
-{% endif %}
+</div>

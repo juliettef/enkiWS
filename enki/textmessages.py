@@ -128,3 +128,6 @@ def LICENCE_ANOTHER_USER_ACTIVATED( product, licence ): return _( "Another user 
 def LICENCE_INVALID(): return _( "Invalid licence key." )
 def LICENCE_MISSING(): return _( "A licence key is needed." )
 def LICENCE_TOO_LONG(): return _( "Licence key is too long." )
+
+# Rest API
+def GAME_CONNECTION_TOKEN( token ): return _( 'Your game connection token: <h1><b>%(token)s</b></h1>', token = token )
