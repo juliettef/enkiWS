@@ -1,4 +1,5 @@
 import webapp2
+import json
 
 import enki
 import enki.librestapi
@@ -20,6 +21,36 @@ class HandlerPageRestAPI( enki.HandlerBase ):
 			self.redirect_to_relevant_page()
 
 
+class HandlerPageAPIv1( webapp2.RequestHandler ):
+
+	def post( self ):
+		jsonobject = json.loads( self.request.body )
+		success = False
+		error = 'Invalid request'
+		user_id = ''
+		auth_token = ''
+		if jsonobject:
+			code = jsonobject.get( 'code', '')
+			user_displayname = jsonobject.get( 'user_displayname', '')
+			if code and user_displayname:
+				entity = enki.librestapi.get_EnkiModelRestAPIConnectToken_by_token_prefix_valid_age( token = code, prefix = user_displayname)
+				if entity:
+					success = True
+					error = ''
+					user_id = entity.user_id
+					auth_token = enki.librestapi.generate_auth_token()
+					entity.key.delete()     # single use token
+				else:
+					error = 'Unauthorised'
+		answer = { 'success' : success,
+		           'error' : error,
+		           'userid' : user_id,
+		           'auth_token' : auth_token
+		           }
+		self.response.headers[ 'Content-Type' ] = 'application/json'
+		self.response.write( json.dumps( answer, separators=(',',':') ))
+
+
 class ExtensionPageRestAPI( ExtensionPage ):
 
 	def __init__( self ):
@@ -30,6 +61,7 @@ class ExtensionRestAPI( Extension ):
 
 	def get_routes( self ):
 		return  [ webapp2.Route( '/restapi', HandlerPageRestAPI, name = 'restapi' ),
+		          webapp2.Route( '/api/v1/connect', HandlerPageAPIv1, name = 'apiv1connect' ),
 				  ]
 
 	def get_page_extensions( self ):

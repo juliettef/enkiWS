@@ -10,9 +10,12 @@ from enki.modelrestapiconnecttoken import EnkiModelRestAPIConnectToken
 MAX_AGE = 15    # in minutes, duration of a connection token validity
 
 
-def licence():
-	code = webapp2_extras.security.generate_random_string( length = 5, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
-	return code
+def generate_connect_code():
+	return webapp2_extras.security.generate_random_string( length = 5, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
+
+
+def generate_auth_token():
+	return webapp2_extras.security.generate_random_string( length = 42, pool = webapp2_extras.security.ALPHANUMERIC )
 
 
 def cleanup_and_get_new_connection_token( user_id ):
@@ -23,7 +26,7 @@ def cleanup_and_get_new_connection_token( user_id ):
 		# create a new token and return it
 		current_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( user_id )
 		if current_display_name:
-			token = licence()
+			token = generate_connect_code()
 			entity = EnkiModelRestAPIConnectToken( token = token, prefix = current_display_name.prefix, user_id = int( user_id ))
 			entity.put()
 			return token
@@ -33,8 +36,9 @@ def cleanup_and_get_new_connection_token( user_id ):
 #=== QUERIES ==================================================================
 
 
-def get_EnkiModelRestAPIConnectToken_by_prefix_valid_age( prefix ):
-	entity = EnkiModelRestAPIConnectToken.query( ndb.AND( EnkiModelRestAPIConnectToken.prefix == prefix,
+def get_EnkiModelRestAPIConnectToken_by_token_prefix_valid_age( token, prefix ):
+	entity = EnkiModelRestAPIConnectToken.query( ndb.AND( EnkiModelRestAPIConnectToken.token == token,
+	                                                      EnkiModelRestAPIConnectToken.prefix == prefix,
 	                                                      EnkiModelRestAPIConnectToken.time_created > ( datetime.datetime.now( ) - datetime.timedelta( minutes = MAX_AGE )))).get()
 	if entity:
 		return entity
