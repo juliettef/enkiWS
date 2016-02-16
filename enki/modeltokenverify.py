@@ -7,12 +7,5 @@ class EnkiModelTokenVerify( model.Model ):
 	email = model.StringProperty()
 	user_id = model.IntegerProperty() # ndb user ID
 	time_created = model.DateTimeProperty( auto_now_add = True )
-	type = model.StringProperty( choices = [ 'register',
-	                                         'passwordchange',
-	                                         'emailchange',
-	                                         'accountdelete',
-	                                         'accountandpostsdelete',
-	                                         'preventmultipost',
-	                                         'purchasebyuser',
-	                                         ] )
+	type = model.StringProperty()
 	auth_ids_provider = model.StringProperty() # store auth Id info for registration

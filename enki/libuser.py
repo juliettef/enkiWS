@@ -193,6 +193,15 @@ def exist_VerifyToken( token, type ):
 		return False
 
 
+def exist_VerifyToken_by_user_id_token( user_id, token ):
+	count = EnkiModelTokenVerify.query( ndb.AND( EnkiModelTokenVerify.user_id == user_id,
+	                                             EnkiModelTokenVerify.token == token )).count( 1 )
+	if count:
+		return True
+	else:
+		return False
+
+
 def get_EmailRollbackToken_by_user_id_email( user_id, email ):
 	entity = EnkiModelTokenEmailRollback.query( ndb.AND( EnkiModelTokenEmailRollback.user_id == user_id,
 	                                                     EnkiModelTokenEmailRollback.email == email )).get()
