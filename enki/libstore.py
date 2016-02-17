@@ -57,3 +57,10 @@ def fetch_EnkiProductKey_by_purchaser( user_id ):
 def fetch_EnkiProductKey_by_activator( user_id ):
 	list = EnkiModelProductKey.query( EnkiModelProductKey.activated_by_user == user_id ).fetch()
 	return list
+
+
+def fetch_EnkiProductKey_by_activator_products_list( user_id, products_list ):
+	list = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.activated_by_user == user_id,
+	                                           EnkiModelProductKey.product_name.IN( products_list )
+	                                           )).fetch()
+	return list
