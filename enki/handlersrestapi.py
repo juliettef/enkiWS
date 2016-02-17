@@ -20,7 +20,7 @@ class HandlerPageRestAPI( enki.HandlerBase ):
 			self.check_CSRF()
 			user_id = self.enki_user.key.id()
 			token = enki.librestapi.cleanup_and_get_new_connection_token( user_id )
-			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.GAME_CONNECTION_TOKEN( token ))
+			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.GAME_CONNECTION_TOKEN( token, enki.librestapi.MAX_AGE ))
 			self.redirect_to_relevant_page()
 
 

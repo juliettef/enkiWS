@@ -49,6 +49,12 @@ indexes:
   - name: thread
   - name: time_created
 
+- kind: EnkiModelRestAPIConnectToken
+  properties:
+  - name: prefix
+  - name: token
+  - name: time_created
+
 - kind: EnkiModelThread
   properties:
   - name: forum

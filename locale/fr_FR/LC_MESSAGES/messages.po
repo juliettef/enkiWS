@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-02-11 19:07+0000\n"
+"POT-Creation-Date: 2016-02-17 17:38+0000\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -649,6 +649,21 @@ msgstr "Une licence est requise."
 msgid "Licence key is too long."
 msgstr "Clé de licence trop longue."
 
+#: enki/textmessages.py:133
+#, python-format
+msgid ""
+"Your single-use game connection token is valid for <b>%(minutes)s "
+"minute</b>. <h1><b>%(token)s</b></h1>"
+msgid_plural ""
+"Your single-use game connection token is valid for <b>%(minutes)s "
+"minutes</b>. <h1><b>%(token)s</b></h1>"
+msgstr[0] ""
+"Votre jeton de connexion à usage unique est valide pendant <b>%(minutes)s"
+" minute</b>. <h1><b>%(token)s</b></h1>"
+msgstr[1] ""
+"Votre jeton de connexion à usage unique est valide pendant <b>%(minutes)s"
+" minutes</b>. <h1><b>%(token)s</b></h1>"
+
 #: templates/accountdelete.html:6 templates/profile.html:35
 msgid "Delete account"
 msgstr "Supprimer mon compte"
@@ -1068,6 +1083,14 @@ msgstr "Veuillez créer votre nom d'affichage."
 #: templates/incproducts.html:3
 msgid "Products"
 msgstr "Produits"
+
+#: templates/increstapi.html:2
+msgid "Connection token"
+msgstr "Jeton de connexion"
+
+#: templates/increstapi.html:6
+msgid "Generate"
+msgstr "Créer"
 
 #: templates/incuserposts.html:13 templates/post.html:33
 #: templates/thread.html:36

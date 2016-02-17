@@ -130,4 +130,4 @@ def LICENCE_MISSING(): return _( "A licence key is needed." )
 def LICENCE_TOO_LONG(): return _( "Licence key is too long." )
 
 # Rest API
-def GAME_CONNECTION_TOKEN( token ): return _( 'Your game connection token: <h1><b>%(token)s</b></h1>', token = token )
+def GAME_CONNECTION_TOKEN( token, minutes ): return ngettext( 'Your single-use game connection token is valid for <b>%(minutes)s minute</b>. <h1><b>%(token)s</b></h1>', 'Your single-use game connection token is valid for <b>%(minutes)s minutes</b>. <h1><b>%(token)s</b></h1>', minutes, minutes = minutes, token = token )
