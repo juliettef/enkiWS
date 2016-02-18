@@ -66,7 +66,7 @@ class HandlerAPIv1AuthValidate( webapp2.RequestHandler ):
 			user_id = jsonobject.get( 'user_id', '')
 			auth_token = jsonobject.get( 'auth_token', '')
 			if user_id and auth_token:
-				if EnkiModelTokenVerify.exist_VerifyToken_by_user_id_token( user_id, auth_token ):
+				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					success = True
 					error = ''
 				else:
@@ -89,7 +89,7 @@ class HandlerAPIv1OwnsProducts( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			products = jsonobject.get( 'products', '')
 			if user_id and auth_token:
-				if EnkiModelTokenVerify.exist_VerifyToken_by_user_id_token( user_id, auth_token ):
+				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					if products:   # check which products in the list are activated by the user and return them
 						list_entities = enki.libstore.fetch_EnkiProductKey_by_activator_products_list( user_id, products )
 					else:    # no product specified, return all products activated by the user

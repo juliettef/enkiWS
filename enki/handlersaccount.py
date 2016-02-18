@@ -160,7 +160,7 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 
 	def get( self, **kwargs ):
 		token = kwargs[ 'verifytoken' ]
-		tokenEntity = EnkiModelTokenVerify.get_VerifyToken_by_token_type( token, 'register' )
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
 		if tokenEntity:
 			email = tokenEntity.email
 			link = enki.libutil.get_local_url( 'registerconfirm', { 'verifytoken': token } )
@@ -174,7 +174,7 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 	def post( self, **kwargs ):
 		self.check_CSRF(),
 		token = kwargs[ 'verifytoken' ]
-		tokenEntity = EnkiModelTokenVerify.get_VerifyToken_by_token_type( token, 'register' )
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
 		if tokenEntity:
 			email = tokenEntity.email
 			password = self.request.get( 'password' )
@@ -212,7 +212,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 # create or edit user based on auth login info
 	def get( self ):
 		token = self.session.get( 'tokenregisterauth' )
-		tokenEntity = EnkiModelTokenVerify.get_VerifyToken_by_token_type( token, 'register' )
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
 		if tokenEntity:
 			colon = tokenEntity.auth_ids_provider.find( ':' )
 			provider_name = str( tokenEntity.auth_ids_provider[ :colon ])
@@ -230,7 +230,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 		# step 1
 		if choice == 'create' or choice == 'cancel':
 			token = self.session.get( 'tokenregisterauth' )
-			tokenEntity = EnkiModelTokenVerify.get_VerifyToken_by_token_type( token, 'register' )
+			tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
 			authId = tokenEntity.auth_ids_provider
 			colon = authId.find( ':' )
 			provider_name = str( authId[ :colon ])
@@ -378,7 +378,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 
 	def get( self, **kwargs):
 		token = kwargs[ 'verifytoken' ]
-		if EnkiModelTokenVerify.exist_VerifyToken( token, 'passwordchange' ):
+		if EnkiModelTokenVerify.exist_by_token_type( token, 'passwordchange' ):
 			link = enki.libutil.get_local_url( 'passwordrecoverconfirm', { 'verifytoken': token } )
 			self.render_tmpl( 'passwordrecoverconfirm.html',
 			                  active_menu = 'profile',
@@ -389,7 +389,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 	def post( self, **kwargs ):
 		self.check_CSRF()
 		token = kwargs[ 'verifytoken' ]
-		tokenEntity = EnkiModelTokenVerify.get_VerifyToken_by_token_type( token, 'passwordchange' )
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'passwordchange' )
 		if tokenEntity:
 			email = tokenEntity.email
 			user = enki.libuser.get_EnkiUser( email )
@@ -521,7 +521,7 @@ class HandlerEmailChangeConfirm( enki.HandlerBase ):
 
 	def get( self, **kwargs ):
 		token = kwargs[ 'verifytoken' ]
-		tokenEntity = EnkiModelTokenVerify.get_VerifyToken_by_token_type( token, 'emailchange' )
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'emailchange' )
 		if tokenEntity:
 			self.email_change( tokenEntity )
 			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.EMAIL_SET())
@@ -608,9 +608,9 @@ class HandlerAccountDeleteConfirm( enki.HandlerBase ):
 	def get( self, **kwargs ):
 		token = kwargs[ 'verifytoken' ]
 		delete_posts = False
-		tokenExists = EnkiModelTokenVerify.exist_VerifyToken( token, 'accountdelete' )
+		tokenExists = EnkiModelTokenVerify.exist_by_token_type( token, 'accountdelete' )
 		if not tokenExists:
-			tokenExists = EnkiModelTokenVerify.exist_VerifyToken( token, 'accountandpostsdelete' )
+			tokenExists = EnkiModelTokenVerify.exist_by_token_type( token, 'accountandpostsdelete' )
 			if tokenExists:
 				delete_posts = True
 		if tokenExists:

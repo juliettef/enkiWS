@@ -48,7 +48,7 @@ def set_password( user, password ):
 
 def delete_verifytoken_by_email( email, type ):
 	# delete all verify tokens for a given email and type (cleanup)
-	entities = EnkiModelTokenVerify.fetch_keys_VerifyToken_by_email_type( email, type )
+	entities = EnkiModelTokenVerify.fetch_keys_by_email_type( email, type )
 	if entities:
 		ndb.delete_multi( entities )
 
