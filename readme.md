@@ -11,7 +11,7 @@ Online demo *- may be out of sync with the source code -* https://enkisoftware-w
 ## Status - version 0.2.0
 
 This is a work in progress and not yet ready for production use.  
-__[ NEW in 0.2 ] Online store__
+__[ NEW in v0.3 ] Game API__
 
 
 ## Functionality
@@ -22,16 +22,17 @@ __[ NEW in 0.2 ] Online store__
 * Login through OAuth & OpenID providers - Valve's Steam, Facebook, Google, Twitter
 * Forums
 * Localisation - English & French implemented
-* __[ NEW in 0.2 ] Online store__
+* [ v0.2 ] Online store
     * payment provider [FastSpring](http://www.fastspring.com/)  
     * licence key generation and activation
     * store emulator
+* [ v0.3 ] Game API
+    * Authentication (account and game key)
 
 ### Intended for release 1.0.0 
 
 * Friends
 * Game API
-    * Authentication (account and game key)
     * Multiplayer server list
     * Friends list & status
 * Admin tools
