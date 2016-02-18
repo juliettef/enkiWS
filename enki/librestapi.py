@@ -40,10 +40,7 @@ def get_EnkiModelRestAPIConnectToken_by_token_prefix_valid_age( token, prefix ):
 	entity = EnkiModelRestAPIConnectToken.query( ndb.AND( EnkiModelRestAPIConnectToken.token == token,
 	                                                      EnkiModelRestAPIConnectToken.prefix == prefix,
 	                                                      EnkiModelRestAPIConnectToken.time_created > ( datetime.datetime.now( ) - datetime.timedelta( minutes = MAX_AGE )))).get()
-	if entity:
-		return entity
-	else:
-		return None
+	return entity
 
 
 def fetch_EnkiModelRestAPIConnectToken_by_user( user_id ):

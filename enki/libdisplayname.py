@@ -192,10 +192,7 @@ def get_user_display_name_old( user_id ):
 def get_EnkiUserDisplayName_by_user_id_current( user_id ):
 	entity = EnkiModelDisplayName.query( EnkiModelDisplayName.current == True,
 	                                     ancestor = ndb.Key( EnkiModelUser, user_id )).get()
-	if entity:
-		return entity
-	else:
-		return None
+	return entity
 
 
 def get_EnkiUserDisplayName_by_prefix_suffix_current_minus_user_id( prefix, suffix, user_id ):
@@ -203,10 +200,7 @@ def get_EnkiUserDisplayName_by_prefix_suffix_current_minus_user_id( prefix, suff
 	                                              EnkiModelDisplayName.suffix == suffix,
 	                                              EnkiModelDisplayName.current == True,
 	                                              EnkiModelDisplayName.user_id != user_id )).get()
-	if entity:
-		return entity
-	else:
-		return None
+	return entity
 
 
 def fetch_EnkiUserDisplayName_by_prefix_current_minus_user_minus_best_guess( prefix, user_id, best_guess_user_id ):
@@ -219,37 +213,25 @@ def fetch_EnkiUserDisplayName_by_prefix_current_minus_user_minus_best_guess( pre
 
 def exist_EnkiUserDisplayName_by_user_id( user_id ):
 	count = EnkiModelDisplayName.query( ancestor = ndb.Key( EnkiModelUser, user_id )).count( 1 )
-	if count:
-		return True
-	else:
-		return False
+	return count > 0
 
 
 def exist_EnkiUserDisplayName_by_user_id_prefix( user_id, prefix ):
 	count = EnkiModelDisplayName.query( EnkiModelDisplayName.prefix == prefix,
 	                                    ancestor = ndb.Key( EnkiModelUser, user_id )).count( 1 )
-	if count:
-		return True
-	else:
-		return False
+	return count > 0
 
 
 def get_EnkiUserDisplayName_by_user_id_prefix( user_id, prefix ):
 	entity = EnkiModelDisplayName.query( EnkiModelDisplayName.prefix == prefix,
 	                                     ancestor = ndb.Key( EnkiModelUser, user_id )).get()
-	if entity:
-		return entity
-	else:
-		return None
+	return entity
 
 
 def exist_EnkiUserDisplayName_by_prefix_suffix( prefix, suffix ):
 	count = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix == prefix,
 	                                             EnkiModelDisplayName.suffix == suffix )).count( 1 )
-	if count:
-		return True
-	else:
-		return False
+	return count > 0
 
 
 def fetch_EnkiUserDisplayName_by_user_id( user_id ):

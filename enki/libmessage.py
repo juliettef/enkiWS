@@ -51,42 +51,27 @@ def fetch_EnkiMessage_by_recipient( user ):
 def get_key_EnkiMessage_by_sender_recipient( sender_id, recipient_id ):
 	entity = EnkiModelMessage.query( ndb.AND( EnkiModelMessage.sender == sender_id,
 	                                          EnkiModelMessage.recipient == recipient_id )).get( keys_only = True )
-	if entity:
-		return entity
-	else:
-		return None
+	return entity
 
 
 def exist_EnkiMessage_by_sender_recipient( sender_id, recipient_id ):
 	count = EnkiModelMessage.query( ndb.AND( EnkiModelMessage.sender == sender_id,
 	                                         EnkiModelMessage.recipient == recipient_id )).count( 1 )
-	if count:
-		return True
-	else:
-		return False
+	return count > 0
 
 
 def get_EnkiMessage_by_id( message_id ):
 	entity = ndb.Key( EnkiModelMessage, message_id ).get()
-	if entity:
-		return entity
-	else:
-		return None
+	return entity
 
 
 def get_EnkiMessage_by_sender_recipient( sender_id, recipient_id ):
 	entity = EnkiModelMessage.query( ndb.AND( EnkiModelMessage.sender == sender_id,
 	                                          EnkiModelMessage.recipient == recipient_id )).get()
-	if entity:
-		return entity
-	else:
-		return None
+	return entity
 
 
 def exist_sent_or_received_message( user_id ):
 	count = EnkiModelMessage.query( ndb.OR( EnkiModelMessage.sender == user_id,
 	                                        EnkiModelMessage.recipient == user_id )).count( 1 )
-	if count:
-		return True
-	else:
-		return False
+	return count > 0

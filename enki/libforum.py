@@ -330,10 +330,7 @@ def delete_user_posts( user_id ):
 
 def exist_EnkiForums():
 	count = EnkiModelForum.query().count( 1 )
-	if count:
-		return True
-	else:
-		return False
+	return count > 0
 
 
 def fetch_EnkiForum_by_group( group ):

@@ -65,16 +65,10 @@ def fetch_EnkiFriends_by_user( user ):
 def exist_EnkiFriends_by_friends( user_a_id, user_b_id ):
 	count = EnkiModelFriends.query( ndb.AND( EnkiModelFriends.friends == user_a_id,
 	                                         EnkiModelFriends.friends == user_b_id )).count( 1 )
-	if count:
-		return True
-	else:
-		return False
+	return count > 0
 
 
 def get_key_EnkiFriends_by_friends( user_a_id, user_b_id ):
 	entity = EnkiModelFriends.query( ndb.AND( EnkiModelFriends.friends == user_a_id,
 	                                          EnkiModelFriends.friends == user_b_id )).get( keys_only = True )
-	if entity:
-		return entity
-	else:
-		return None
+	return entity

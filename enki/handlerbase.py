@@ -183,18 +183,12 @@ class HandlerBase( webapp2.RequestHandler ):
 
 	def get_backofftimer( self, identifier ):
 		entity = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.identifier == identifier ).get()
-		if entity:
-			return entity
-		else:
-			return None
+		return entity
 
 
 	def exist_backoff_timer( self, identifier ):
 		count = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.identifier == identifier ).count( 1 )
-		if count:
-			return True
-		else:
-			return False
+		return count > 0
 
 
 	def fetch_old_backoff_timers( self, days_old ):
