@@ -84,7 +84,7 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 			purchaser_user_id = None
 			token_purchasebyuser = xstr( self.request.get( 'referrer' ))
 			if token_purchasebyuser:
-				token = enki.libuser.get_VerifyToken_by_token_type( token_purchasebyuser, 'purchasebyuser' )
+				token = EnkiModelTokenVerify.get_VerifyToken_by_token_type( token_purchasebyuser, 'purchasebyuser' )
 				if token:
 					purchaser_user_id = token.user_id
 					token.key.delete()
@@ -141,7 +141,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 				licence_keys = result.content.replace( '-', '' )
 
 			referrer = xstr( self.request.get( 'referrer' ))
-			token = enki.libuser.get_VerifyToken_by_token_type( referrer, 'purchasebyuser' )
+			token = EnkiModelTokenVerify.get_VerifyToken_by_token_type( referrer, 'purchasebyuser' )
 			if token:
 				user_id = token.user_id
 				token.key.delete()

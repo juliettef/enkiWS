@@ -235,7 +235,7 @@ def add_preventmultipost_token():
 def check_and_delete_preventmultipost_token( token ):
 	# prevent accidental multiple posting
 	result = False
-	verify_token = enki.libuser.get_VerifyToken_by_token_type( token, 'preventmultipost' )
+	verify_token = EnkiModelTokenVerify.get_VerifyToken_by_token_type( token, 'preventmultipost' )
 	if verify_token:
 		verify_token.key.delete()
 		result = True

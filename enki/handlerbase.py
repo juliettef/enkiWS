@@ -23,6 +23,7 @@ import enki.libuser
 import enki.libutil
 import enki.libdisplayname
 import enki.librestapi
+import enki.modeltokenverify
 from enki import textmessages as MSG
 from enki.modelbackofftimer import EnkiModelBackoffTimer
 from enki.modeltokenauth import EnkiModelTokenAuth
@@ -365,7 +366,7 @@ class HandlerBase( webapp2.RequestHandler ):
 					return result
 			else:
 				# email the new, unverified address with a link to allow the user to verify the email
-				tokenEntity = enki.libuser.get_VerifyToken_by_user_id_email_type( userId, email, 'emailchange' )
+				tokenEntity = EnkiModelTokenVerify.get_VerifyToken_by_user_id_email_type( userId, email, 'emailchange' )
 				if tokenEntity:
 					# if a verify token for the same new email address and user already exists, use its token
 					token = tokenEntity.token
@@ -404,7 +405,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		user = self.set_email( email, user_id )
 		if user:
 			# delete all potential remaining email verify tokens for that user
-			tokens = enki.libuser.fetch_keys_VerifyToken_by_user_id_type( user_id, 'emailchange' )
+			tokens = EnkiModelTokenVerify.fetch_keys_VerifyToken_by_user_id_type( user_id, 'emailchange' )
 			if tokens:
 				ndb.delete_multi( tokens )
 			# note: the old email remains saved in the rollback token db
@@ -425,7 +426,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			if youngerTokens:
 				ndb.delete_multi( youngerTokens )
 			# delete all potential remaining email verify tokens for that user
-			userTokens = enki.libuser.fetch_keys_VerifyToken_by_user_id_type( user_id, 'emailchange' )
+			userTokens = EnkiModelTokenVerify.fetch_keys_VerifyToken_by_user_id_type( user_id, 'emailchange' )
 			if userTokens:
 				ndb.delete_multi( userTokens )
 
@@ -564,7 +565,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				self.redirect_to_relevant_page()
 			else:
 				# generate & store a verification token and the auth provider. save the token number in the session.
-				register_token =  enki.libuser.get_VerifyToken_by_authid_type( authId, 'register' )
+				register_token =  EnkiModelTokenVerify.get_VerifyToken_by_authid_type( authId, 'register' )
 				if register_token:
 					# if a token already exists, get the token value and update the email
 					token = register_token.token
@@ -620,7 +621,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		if delete_posts:
 			token_type = 'accountandpostsdelete'
 		# if the user has an email, create an email verify token, send it to the email address
-		tokenEntity = enki.libuser.get_VerifyToken_by_user_id_email_type( self.enki_user.key.id( ), self.enki_user.email, token_type )
+		tokenEntity = EnkiModelTokenVerify.get_VerifyToken_by_user_id_email_type( self.enki_user.key.id( ), self.enki_user.email, token_type )
 		if tokenEntity:
 			# if a verify token for the same new email address and user already exists, use its token
 			token = tokenEntity.token
@@ -645,12 +646,12 @@ class HandlerBase( webapp2.RequestHandler ):
 			user = self.enki_user
 		else:
 			# a user has followed a accountdelete token link. The user account associated with the token will be deleted
-			tokenEntity = enki.libuser.get_VerifyToken( token )
+			tokenEntity = EnkiModelTokenVerify.get_VerifyToken( token )
 			user = EnkiModelUser.get_by_id( tokenEntity.user_id )
 			# delete all user related tokens except any verify token related to account deletion that's not yet been used
 			if tokenEntity.type == token_to_save:
 				token_to_save = 'accountandpostsdelete'
-		verify_tokens_to_delete = enki.libuser.fetch_keys_VerifyToken_by_user_id_except_type( user.key.id(), token_to_save )
+		verify_tokens_to_delete = EnkiModelTokenVerify.fetch_keys_VerifyToken_by_user_id_except_type( user.key.id(), token_to_save )
 		if verify_tokens_to_delete:
 			ndb.delete_multi( verify_tokens_to_delete )
 		email_rollback_tokens_to_delete = enki.libuser.fetch_keys_RollbackToken( user.key.id())
