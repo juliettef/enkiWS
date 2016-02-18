@@ -8,7 +8,7 @@ A permissively licensed Python web service for games developers. enkiWS is a lib
 Online demo *- may be out of sync with the source code -* https://enkisoftware-webservices.appspot.com
 
 
-## Status - version 0.2.0
+## Status
 
 This is a work in progress and not yet ready for production use.  
 __[ NEW in v0.3 ] Game API__
