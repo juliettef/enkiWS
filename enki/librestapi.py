@@ -7,7 +7,7 @@ import enki.libdisplayname
 from enki.modelrestapiconnecttoken import EnkiModelRestAPIConnectToken
 
 
-MAX_AGE = 15    # in minutes, duration of a connection token validity
+MAX_AGE = 5    # in minutes, duration of a connection token validity
 
 
 def generate_connect_code():
