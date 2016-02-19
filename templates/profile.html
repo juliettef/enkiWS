@@ -50,15 +50,14 @@
                 </form>
             {% endif %}
 
-            {% include "incpageextensions.html" %}
-
-{# Hide for first round of testing
-            <h3>{{ _( "Friends" )}}</h3>
+            <h2>{{ _( "Friends" )}}</h2>
             <p>
 	            <a href="{{ 'friends'|local }}" class="btn btn-default">{{ _( "Friends" )}}</a>
                 <a href="{{ 'messages'|local }}" class="btn btn-default">{{ _( "Messages" )}}</a>
 	        </p>
-#}
+
+
+            {% include "incpageextensions.html" %}
 
             {% include "incfooter.html" %}
         </div>

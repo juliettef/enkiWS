@@ -3,17 +3,19 @@ import webapp2
 import enki
 import enki.textmessages as MSG
 
+from enki.extensions import Extension
+
 
 class HandlerFriends( enki.HandlerBase ):
 
 	def get( self ):
-		if self.ensure_is_logged_in():
+		if self.ensure_is_logged_in() and self.ensure_has_display_name():
 			self.render_tmpl( 'friends.html',
 			                  active_menu = 'profile',
 			                  data = enki.libfriends.get_friends( self.user_id ) )
 
 	def post( self ):
-		if self.ensure_is_logged_in():
+		if self.ensure_is_logged_in() and self.ensure_has_display_name():
 			user_id = self.user_id
 			instruction = self.request.arguments()[ 0 ]
 			friend_name = self.request.get( instruction )
@@ -43,12 +45,12 @@ class HandlerFriends( enki.HandlerBase ):
 class HandlerMessages( enki.HandlerBase ):
 
 	def get( self ):
-		if self.ensure_is_logged_in():
+		if self.ensure_is_logged_in() and self.ensure_has_display_name():
 			self.render_tmpl( 'messages.html',
 			                  data = enki.libmessage.get_messages( self.user_id ) )
 
 	def post( self ):
-		if self.ensure_is_logged_in():
+		if self.ensure_is_logged_in() and self.ensure_has_display_name():
 			user_id = self.user_id
 			instruction = self.request.arguments()[ 0 ]
 			message_id = int( self.request.get( instruction ))
@@ -63,6 +65,9 @@ class HandlerMessages( enki.HandlerBase ):
 			                  data = enki.libmessage.get_messages( self.user_id ) )
 
 
-routes_friends = [ webapp2.Route( '/friends', HandlerFriends, name = 'friends' ),
-                   webapp2.Route( '/messages', HandlerMessages, name = 'messages' ),
-                   ]
+class ExtensionFriends( Extension ):
+
+	def get_routes( self ):
+		return [ webapp2.Route( '/friends', HandlerFriends, name = 'friends' ),
+		         webapp2.Route( '/messages', HandlerMessages, name = 'messages' ),
+		         ]

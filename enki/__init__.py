@@ -4,5 +4,5 @@ from handlersaccount import routes_account
 from handlersforums import ExtensionForums
 from handlersstore import ExtensionStore
 from handlersrestapi import ExtensionRestAPI
-from handlersfriends import routes_friends
+from handlersfriends import ExtensionFriends
 import jinjafilters
