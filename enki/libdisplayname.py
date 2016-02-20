@@ -40,7 +40,7 @@ def find_users_by_display_name( input_name, user_id ):
 	prefix = ''
 	suffix = ''
 	error = None
-	best_guess = []
+	best_guess = None
 	suggestions = []
 	# check whether the display name has a suffix in it. If so extract the presumed suffix and prefix.
 	found_suffix = re.search( '\#[1-9][0-9]{3}', input_name )
@@ -59,17 +59,14 @@ def find_users_by_display_name( input_name, user_id ):
 	if not error:
 		# return the display name suggestions
 		# best guess: if there is a match for prefix + suffix
-		best_guess_entity = get_EnkiUserDisplayName_by_prefix_suffix_current_minus_user_id( prefix.lower(), suffix, user_id )
-		user_id_best_guess = None
-		if best_guess_entity:
-			best_guess = get_user_id_display_name_url( best_guess_entity )
-			user_id_best_guess = best_guess.user_id
-		# suggestions other than best guess: based on prefix only
-		suggested_items = fetch_EnkiUserDisplayName_by_prefix_current_minus_user_minus_best_guess( prefix.lower(), user_id, user_id_best_guess )
+		suggested_items = fetch_EnkiUserDisplayName_by_prefix_current_minus_user_id( prefix.lower(), user_id )
 		if suggested_items:
 			for i, item in enumerate( suggested_items ):
-				suggestions.append( get_user_id_display_name_url( item ))
-		elif not user_id_best_guess:
+				if suffix and item.suffix == suffix:
+					best_guess = get_user_id_display_name_url( item )
+				else:
+					suggestions.append( get_user_id_display_name_url( item ))
+		else:
 			error = ERROR_DISPLAY_NAME_INVALID
 
 	return displayNameSelection( error, best_guess, suggestions)
@@ -193,19 +190,10 @@ def get_EnkiUserDisplayName_by_user_id_current( user_id ):
 	return entity
 
 
-def get_EnkiUserDisplayName_by_prefix_suffix_current_minus_user_id( prefix_lower, suffix, user_id ):
-	entity = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix_lower == prefix_lower,
-	                                              EnkiModelDisplayName.suffix == suffix,
-	                                              EnkiModelDisplayName.current == True,
-	                                              EnkiModelDisplayName.user_id != user_id )).get()
-	return entity
-
-
-def fetch_EnkiUserDisplayName_by_prefix_current_minus_user_minus_best_guess( prefix_lower, user_id, best_guess_user_id ):
+def fetch_EnkiUserDisplayName_by_prefix_current_minus_user_id( prefix_lower, user_id ):
 	list = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix_lower == prefix_lower,
 	                                            EnkiModelDisplayName.current == True,
-	                                            EnkiModelDisplayName.user_id != user_id,
-	                                            EnkiModelDisplayName.user_id != best_guess_user_id )).fetch()
+	                                            EnkiModelDisplayName.user_id != user_id, )).fetch()
 	return list
 
 
