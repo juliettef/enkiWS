@@ -9,7 +9,7 @@ from enki.modelmessage import EnkiModelMessage
 messageData = collections.namedtuple( 'message_data', 'message_id, type, sender' )
 
 
-def get_messages( user_id ): # MOVE TO MESSAGE
+def get_messages( user_id ):
 	list = fetch_EnkiMessage_by_recipient( user_id )
 	message_list = []
 	if list:

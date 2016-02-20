@@ -37,24 +37,25 @@ def get_user_id_display_name_url( entity ):
 
 
 def find_users_by_display_name( input_name, user_id ):
+	prefix = ''
+	suffix = ''
 	# check whether the display name has a suffix in it. If so extract the presumed suffix and prefix.
 	found = re.search('\#[1-9][0-9]{3}', input_name)
 	if found:
 		prefix = input_name[:found.start()]
 		suffix = found.group(0)
 		not_exact = input_name[found.end():]   # check if there's extra text after the suffix
-		if not((PREFIX_LENGTH_MIN <= len( prefix ) <= PREFIX_LENGTH_MAX) or prefix.isalnum( )) or not_exact:
+		if not((PREFIX_LENGTH_MIN <= len( prefix ) <= PREFIX_LENGTH_MAX) or prefix.isalnum()) or not_exact:
 			return displayNameSelection( ERROR_DISPLAY_NAME_INVALID, None, [])
 	# otherwise, if input_name is the right format, assume it's a prefix
 	elif (PREFIX_LENGTH_MIN <= len( input_name ) <= PREFIX_LENGTH_MAX) and input_name.isalnum( ):
 		prefix = input_name
-		suffix = ''
 	else:
 		return displayNameSelection( ERROR_DISPLAY_NAME_INVALID, None, [])
 
 	# return the display name suggestions
 	# best guess: if there is a match for prefix + suffix
-	best_guess_entity = get_EnkiUserDisplayName_by_prefix_suffix_current_minus_user_id( prefix, suffix, user_id )
+	best_guess_entity = get_EnkiUserDisplayName_by_prefix_suffix_current_minus_user_id( prefix.lower(), suffix, user_id )
 	best_guess = []
 	best_guess_id = None
 	if best_guess_entity:
@@ -62,14 +63,14 @@ def find_users_by_display_name( input_name, user_id ):
 		best_guess_id = best_guess.user_id
 
 	# suggestions other than best guess: based on prefix only
-	suggestions = fetch_EnkiUserDisplayName_by_prefix_current_minus_user_minus_best_guess( prefix, user_id, best_guess_id )
+	suggestions = fetch_EnkiUserDisplayName_by_prefix_current_minus_user_minus_best_guess( prefix.lower(), user_id, best_guess_id )
 	suggestion_list = []
 	if suggestions:
 		for i, item in enumerate( suggestions ):
-			id = item.user_id
+			user_id = item.user_id
 			display_name = item.prefix + item.suffix
 			user_page = enki.libutil.get_local_url( 'profilepublic', { 'useridnumber': str( item.user_id ) } )
-			user_display_name_page = userDisplayNamePage( id, display_name, user_page )
+			user_display_name_page = userDisplayNamePage( user_id, display_name, user_page )
 			suggestion_list.append( user_display_name_page )
 	elif suggestions == []:
 		return displayNameSelection( ERROR_DISPLAY_NAME_INVALID, None, [])
@@ -195,19 +196,19 @@ def get_EnkiUserDisplayName_by_user_id_current( user_id ):
 	return entity
 
 
-def get_EnkiUserDisplayName_by_prefix_suffix_current_minus_user_id( prefix, suffix, user_id ):
-	entity = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix == prefix,
+def get_EnkiUserDisplayName_by_prefix_suffix_current_minus_user_id( prefix_lower, suffix, user_id ):
+	entity = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix_lower == prefix_lower,
 	                                              EnkiModelDisplayName.suffix == suffix,
 	                                              EnkiModelDisplayName.current == True,
 	                                              EnkiModelDisplayName.user_id != user_id )).get()
 	return entity
 
 
-def fetch_EnkiUserDisplayName_by_prefix_current_minus_user_minus_best_guess( prefix, user_id, best_guess_user_id ):
-	list = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix == prefix,
-	                                           EnkiModelDisplayName.current == True,
-	                                           EnkiModelDisplayName.user_id != user_id,
-	                                           EnkiModelDisplayName.user_id != best_guess_user_id )).fetch()
+def fetch_EnkiUserDisplayName_by_prefix_current_minus_user_minus_best_guess( prefix_lower, user_id, best_guess_user_id ):
+	list = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix_lower == prefix_lower,
+	                                            EnkiModelDisplayName.current == True,
+	                                            EnkiModelDisplayName.user_id != user_id,
+	                                            EnkiModelDisplayName.user_id != best_guess_user_id )).fetch()
 	return list
 
 

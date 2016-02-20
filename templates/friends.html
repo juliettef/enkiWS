@@ -29,7 +29,7 @@
                         <p>
                             You want to add this particular friend:<br>
                             {{ result.best_guess.prefix }}{{ result.best_guess.suffix }}
-                            <a href="{{ result.best_guess.user_page|local }}">{{ result.best_guess.display_name }}</a>
+                            <a href="{{ result.best_guess.user_page }}">{{ result.best_guess.display_name }}</a>
                             <button type="submit" form="listform" name="confirm" value="{{ result.best_guess.user_id }}"/>Confirm Invitation</button>
                         </p>
                     {% endif %}
@@ -38,7 +38,7 @@
                         <p>
                             Your friend could be any of these:<br>
                             {% for item in result.suggestions %}
-                                <a href="{{ item.user_page|local }}">{{ item.display_name }}</a>
+                                <a href="{{ item.user_page }}">{{ item.display_name }}</a>
                                 <button type="submit" form="listform" name="confirm" value="{{ item.user_id }}"/>Confirm Invitation</button><br>
                             {% endfor %}
                         </p>

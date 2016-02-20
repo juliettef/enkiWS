@@ -26,7 +26,7 @@ def send_friend_request( sender_id, friend_id ):
 		if not exist_EnkiFriends_by_friends( sender_id, friend_id ): # we're not currently friends
 			already_invited = enki.libmessage.get_key_EnkiMessage_by_sender_recipient( friend_id, sender_id )
 			if already_invited:
-				# if an invite from the potential friend already exists, add the couple of friends immediately and delete the invite(s)
+				# if an invite from the potential friend already exists, add the pair of friends immediately and delete the invite(s)
 				add_friend( sender_id, friend_id )
 			# send an invitation to friend (unless it's a duplicate)
 			elif not enki.libmessage.exist_EnkiMessage_by_sender_recipient( sender_id, friend_id ):
@@ -46,7 +46,7 @@ def add_friend( user_id, friend_id ):
 	enki.libmessage.remove_messages_crossed( user_id, friend_id )
 
 
-def remove_friend( user_id, friend_id ):    # MOVE TO FRIEND
+def remove_friend( user_id, friend_id ):
 	friends = get_key_EnkiFriends_by_friends( user_id, friend_id )
 	if friends:
 		friends.delete()
