@@ -39,43 +39,40 @@ def get_user_id_display_name_url( entity ):
 def find_users_by_display_name( input_name, user_id ):
 	prefix = ''
 	suffix = ''
+	error = None
+	best_guess = []
+	suggestions = []
 	# check whether the display name has a suffix in it. If so extract the presumed suffix and prefix.
-	found = re.search('\#[1-9][0-9]{3}', input_name)
-	if found:
-		prefix = input_name[:found.start()]
-		suffix = found.group(0)
-		not_exact = input_name[found.end():]   # check if there's extra text after the suffix
-		if not((PREFIX_LENGTH_MIN <= len( prefix ) <= PREFIX_LENGTH_MAX) or prefix.isalnum()) or not_exact:
-			return displayNameSelection( ERROR_DISPLAY_NAME_INVALID, None, [])
+	found_suffix = re.search( '\#[1-9][0-9]{3}', input_name )
+	if found_suffix:
+		prefix = input_name[ :found_suffix.start()]
+		suffix = found_suffix.group( 0 )
+		not_exact = input_name[ found_suffix.end(): ]   # check if there's extra text after the suffix
+		if not(( PREFIX_LENGTH_MIN <= len( prefix ) <= PREFIX_LENGTH_MAX ) or prefix.isalnum()) or not_exact:
+			error = ERROR_DISPLAY_NAME_INVALID
 	# otherwise, if input_name is the right format, assume it's a prefix
-	elif (PREFIX_LENGTH_MIN <= len( input_name ) <= PREFIX_LENGTH_MAX) and input_name.isalnum( ):
+	elif ( PREFIX_LENGTH_MIN <= len( input_name ) <= PREFIX_LENGTH_MAX ) and input_name.isalnum():
 		prefix = input_name
 	else:
-		return displayNameSelection( ERROR_DISPLAY_NAME_INVALID, None, [])
+		error = ERROR_DISPLAY_NAME_INVALID
 
-	# return the display name suggestions
-	# best guess: if there is a match for prefix + suffix
-	best_guess_entity = get_EnkiUserDisplayName_by_prefix_suffix_current_minus_user_id( prefix.lower(), suffix, user_id )
-	best_guess = []
-	best_guess_id = None
-	if best_guess_entity:
-		best_guess = get_user_id_display_name_url( best_guess_entity )
-		best_guess_id = best_guess.user_id
+	if not error:
+		# return the display name suggestions
+		# best guess: if there is a match for prefix + suffix
+		best_guess_entity = get_EnkiUserDisplayName_by_prefix_suffix_current_minus_user_id( prefix.lower(), suffix, user_id )
+		user_id_best_guess = None
+		if best_guess_entity:
+			best_guess = get_user_id_display_name_url( best_guess_entity )
+			user_id_best_guess = best_guess.user_id
+		# suggestions other than best guess: based on prefix only
+		suggested_items = fetch_EnkiUserDisplayName_by_prefix_current_minus_user_minus_best_guess( prefix.lower(), user_id, user_id_best_guess )
+		if suggested_items:
+			for i, item in enumerate( suggested_items ):
+				suggestions.append( get_user_id_display_name_url( item ))
+		elif not user_id_best_guess:
+			error = ERROR_DISPLAY_NAME_INVALID
 
-	# suggestions other than best guess: based on prefix only
-	suggestions = fetch_EnkiUserDisplayName_by_prefix_current_minus_user_minus_best_guess( prefix.lower(), user_id, best_guess_id )
-	suggestion_list = []
-	if suggestions:
-		for i, item in enumerate( suggestions ):
-			user_id = item.user_id
-			display_name = item.prefix + item.suffix
-			user_page = enki.libutil.get_local_url( 'profilepublic', { 'useridnumber': str( item.user_id ) } )
-			user_display_name_page = userDisplayNamePage( user_id, display_name, user_page )
-			suggestion_list.append( user_display_name_page )
-	elif suggestions == []:
-		return displayNameSelection( ERROR_DISPLAY_NAME_INVALID, None, [])
-
-	return displayNameSelection( None, best_guess, suggestion_list)
+	return displayNameSelection( error, best_guess, suggestions)
 
 
 def cosmopompe():
