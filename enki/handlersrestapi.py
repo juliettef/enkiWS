@@ -49,7 +49,7 @@ class HandlerAPIv1Connect( webapp2.RequestHandler ):
 					error = 'Unauthorised'
 		answer = { 'success' : success,
 		           'error' : error,
-		           'user_id' : user_id,
+		           'user_id' : str( user_id ),
 		           'auth_token' : auth_token
 		           }
 		self.response.headers[ 'Content-Type' ] = 'application/json'
@@ -63,7 +63,7 @@ class HandlerAPIv1AuthValidate( webapp2.RequestHandler ):
 		success = False
 		error = 'Invalid request'
 		if jsonobject:
-			user_id = jsonobject.get( 'user_id', '')
+			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
 			if user_id and auth_token:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
@@ -85,7 +85,7 @@ class HandlerAPIv1OwnsProducts( webapp2.RequestHandler ):
 		error = 'Invalid request'
 		list_products = []
 		if jsonobject:
-			user_id = jsonobject.get( 'user_id', '')
+			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
 			products = jsonobject.get( 'products', '')
 			if user_id and auth_token:
