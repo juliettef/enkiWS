@@ -24,10 +24,10 @@ def cleanup_and_get_new_connection_token( user_id ):
 		# delete any existing connect token for the user
 		ndb.delete_multi_async( fetch_EnkiModelRestAPIConnectToken_by_user( user_id ))
 		# create a new token and return it
-		current_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( user_id )
-		if current_display_name:
+		display_name = enki.libdisplayname.get_display_name( user_id )
+		if display_name:
 			token = generate_connect_code()
-			entity = EnkiModelRestAPIConnectToken( token = token, prefix = current_display_name.prefix, user_id = int( user_id ))
+			entity = EnkiModelRestAPIConnectToken( token = token, display_name = display_name, user_id = int( user_id ))
 			entity.put()
 			return token
 	return None
@@ -36,9 +36,9 @@ def cleanup_and_get_new_connection_token( user_id ):
 #=== QUERIES ==================================================================
 
 
-def get_EnkiModelRestAPIConnectToken_by_token_prefix_valid_age( token, prefix ):
+def get_EnkiModelRestAPIConnectToken_by_token_user_id_valid_age( token, user_id ):
 	entity = EnkiModelRestAPIConnectToken.query( ndb.AND( EnkiModelRestAPIConnectToken.token == token,
-	                                                      EnkiModelRestAPIConnectToken.prefix == prefix,
+	                                                      EnkiModelRestAPIConnectToken.user_id == user_id,
 	                                                      EnkiModelRestAPIConnectToken.time_created > ( datetime.datetime.now( ) - datetime.timedelta( minutes = MAX_AGE )))).get()
 	return entity
 

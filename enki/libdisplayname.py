@@ -27,6 +27,21 @@ ERROR_DISPLAY_NAME_IN_USE = -43
 ERROR_DISPLAY_NAME_INVALID = -44
 
 
+def get_display_name( user_id ):
+	# returns a user's full display name i.e. prefix + suffix from their user id
+	entity = get_EnkiUserDisplayName_by_user_id_current( user_id )
+	display_name = entity.prefix + entity.suffix
+	return display_name
+
+
+def get_user_id_from_display_name( display_name ):
+	# return the user Id from a full display name
+	prefix = display_name[ : -5 ]
+	suffix = display_name[ -5: ]
+	entity = get_EnkiUserDisplayName_by_prefix_suffix( prefix, suffix )
+	return entity.user_id
+
+
 def get_user_id_display_name_url( entity ):
 	# based on a display name entity, return a named tuple containing their user_id, display name and url
 	user_id = entity.user_id
@@ -211,6 +226,12 @@ def exist_EnkiUserDisplayName_by_user_id_prefix( user_id, prefix ):
 def get_EnkiUserDisplayName_by_user_id_prefix( user_id, prefix ):
 	entity = EnkiModelDisplayName.query( EnkiModelDisplayName.prefix == prefix,
 	                                     ancestor = ndb.Key( EnkiModelUser, user_id )).get()
+	return entity
+
+
+def get_EnkiUserDisplayName_by_prefix_suffix( prefix, suffix ):
+	entity = EnkiModelDisplayName.query( EnkiModelDisplayName.prefix == prefix,
+	                                     EnkiModelDisplayName.suffix == suffix ).get()
 	return entity
 
 

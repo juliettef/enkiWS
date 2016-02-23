@@ -4,8 +4,8 @@ import json
 print( 'TEST Rest API')
 
 # set domain name url
-url_default = 'http://127.0.0.1:8881'   # local
-# url_default = 'https://enkisoftware-webservices.appspot.com'
+# url_default = 'http://127.0.0.1:8881'   # local
+url_default = 'https://enkisoftware-webservices.appspot.com'
 url = ''
 url = raw_input( ' - Enter url (domain name, press enter to use default url ' + url_default + '): ' )
 if not url:
@@ -16,8 +16,8 @@ print( '* Connection token' )
 url_connect = url + '/api/v1/connect'
 prefix = ''
 code = ''
-prefix = raw_input( ' - Enter prefix (display name without the # and suffix numbers): ' )
-code = raw_input( ' - Enter code (connection token, 5 alphanumeric characters): ' )
+prefix = raw_input( " - Enter display name (format: alphanumeric prefix + '#' + 4 digits): " )
+code = raw_input( ' - Enter code (connection token, format: 5 alphanumeric characters): ' )
 payload = { 'user_displayname' : prefix, 'code' : code }
 r_connect = requests.post( url_connect, json = payload )
 print( ' => Response: ' + r_connect.text )

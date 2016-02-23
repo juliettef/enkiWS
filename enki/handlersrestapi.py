@@ -3,6 +3,7 @@ import json
 
 import enki
 import enki.libuser
+import enki.libdisplayname
 import enki.libstore
 import enki.librestapi
 import enki.textmessages as MSG
@@ -35,8 +36,9 @@ class HandlerAPIv1Connect( webapp2.RequestHandler ):
 		if jsonobject:
 			code = jsonobject.get( 'code', '')
 			user_displayname = jsonobject.get( 'user_displayname', '')
+			user_id = enki.libdisplayname.get_user_id_from_display_name( user_displayname )
 			if code and user_displayname:
-				entity = enki.librestapi.get_EnkiModelRestAPIConnectToken_by_token_prefix_valid_age( token = code, prefix = user_displayname)
+				entity = enki.librestapi.get_EnkiModelRestAPIConnectToken_by_token_user_id_valid_age( token = code, user_id = user_id )
 				if entity:
 					success = True
 					error = ''
@@ -69,11 +71,13 @@ class HandlerAPIv1AuthValidate( webapp2.RequestHandler ):
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					success = True
 					error = ''
+					user_displayname = enki.libdisplayname.get_display_name( user_id )
 				else:
 					error = 'Unauthorised'
 		answer = { 'success' : success,
-		           'error' : error
-		           }
+		           'error' : error,
+		           'user_displayname' : user_displayname,
+					}
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
