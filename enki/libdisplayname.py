@@ -29,8 +29,10 @@ ERROR_DISPLAY_NAME_INVALID = -44
 
 def get_display_name( user_id ):
 	# returns a user's full display name i.e. prefix + suffix from their user id
+	display_name = ''
 	entity = get_EnkiUserDisplayName_by_user_id_current( user_id )
-	display_name = entity.prefix + entity.suffix
+	if entity:
+		display_name = entity.prefix + entity.suffix
 	return display_name
 
 

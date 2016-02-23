@@ -261,7 +261,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		try:
 			navbar_extensions = enki.ExtensionLibrary.get_navbar_items()
 			page_extensions = enki.ExtensionLibrary.get_page_extensions( self )
-			display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id ) if self.is_logged_in( ) else ''
+			display_name = enki.libdisplayname.get_display_name( self.user_id ) if self.is_logged_in( ) else ''
 			CSRFtoken = ''
 			if CSRFneeded:
 				CSRFtoken = self.create_CSRF( self.request.path )
@@ -272,7 +272,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				                    is_logged_in = self.is_logged_in(),
 									navbar_extensions = navbar_extensions,
 									page_extensions = page_extensions,
-									display_name = ( display_name.prefix + display_name.suffix ) if display_name else '',
+									display_name = display_name,
 									locale = i18n.get_i18n().locale,
 				                    debug = self.session.pop( 'debugmessage', None ) if enki.libutil.is_debug else None,
 				                    infomessage = self.session.pop( 'infomessage', None ),
