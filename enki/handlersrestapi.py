@@ -58,12 +58,35 @@ class HandlerAPIv1Connect( webapp2.RequestHandler ):
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
 
+class HandlerAPIv1Logout( webapp2.RequestHandler ):
+
+	def post( self ):
+		jsonobject = json.loads( self.request.body )
+		success = False
+		error = 'Invalid request'
+		if jsonobject:
+			user_id = int( jsonobject.get( 'user_id', ''))
+			auth_token = jsonobject.get( 'auth_token', '')
+			if user_id and auth_token:
+				if EnkiModelTokenVerify.delete_by_user_id_token( user_id, auth_token ):
+					success = True
+					error = ''
+				else:
+					error = 'Unauthorised'
+		answer = { 'success' : success,
+		           'error' : error,
+					}
+		self.response.headers[ 'Content-Type' ] = 'application/json'
+		self.response.write( json.dumps( answer, separators=(',',':') ))
+
+
 class HandlerAPIv1AuthValidate( webapp2.RequestHandler ):
 
 	def post( self ):
 		jsonobject = json.loads( self.request.body )
 		success = False
 		error = 'Invalid request'
+		user_displayname = ''
 		if jsonobject:
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
@@ -123,6 +146,7 @@ class ExtensionRestAPI( Extension ):
 	def get_routes( self ):
 		return  [ webapp2.Route( '/restapi', HandlerPageRestAPI, name = 'restapi' ),
 		          webapp2.Route( '/api/v1/connect', HandlerAPIv1Connect, name = 'apiv1connect' ),
+		          webapp2.Route( '/api/v1/logout', HandlerAPIv1Logout, name = 'apiv1logout' ),
 		          webapp2.Route( '/api/v1/authvalidate', HandlerAPIv1AuthValidate, name = 'apiv1authvalidate' ),
 		          webapp2.Route( '/api/v1/ownsproducts', HandlerAPIv1OwnsProducts, name = 'apiv1ownsproducts' ),
 				  ]

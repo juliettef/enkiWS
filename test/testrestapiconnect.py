@@ -25,9 +25,9 @@ print( ' => Response: ' + r_connect.text )
 # HandlerAPIv1AuthValidate
 print( '* Validate auth token' )
 url_validate = url + '/api/v1/authvalidate'
-r_connect = r_connect.json()
-user_id = r_connect[ 'user_id' ]
-auth_token = r_connect[ 'auth_token' ]
+r_connect_json = r_connect.json()
+user_id = r_connect_json[ 'user_id' ]
+auth_token = r_connect_json[ 'auth_token' ]
 payload = { 'user_id' : user_id, 'auth_token' : auth_token }
 r_validate = requests.post( url_validate, json = payload )
 print( ' => Response: ' + r_validate.text )
@@ -42,3 +42,12 @@ if s:
 payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'products' : products }
 r_products = requests.post( url_products, json = payload )
 print( ' => Response: ' + r_products.text )
+
+# HandlerAPIv1Logout
+print( '* Logout, delete auth token' )
+url_logout = url + '/api/v1/logout'
+user_id = r_connect_json[ 'user_id' ]
+auth_token = r_connect_json[ 'auth_token' ]
+payload = { 'user_id' : user_id, 'auth_token' : auth_token }
+r_validate = requests.post( url_logout, json = payload )
+print( ' => Response: ' + r_validate.text )

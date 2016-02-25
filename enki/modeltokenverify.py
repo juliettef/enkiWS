@@ -55,3 +55,11 @@ class EnkiModelTokenVerify( model.Model ):
 	def exist_by_user_id_token( cls, user_id, token ):
 		count = cls.query( ndb.AND( cls.user_id == user_id, cls.token == token )).count( 1 )
 		return count > 0
+
+	@classmethod
+	def delete_by_user_id_token( cls, user_id, token ):
+		key = cls.query( ndb.AND( cls.user_id == user_id, cls.token == token )).fetch( keys_only = True )
+		if key:
+			key[ 0 ].delete()
+			return True
+		return False
