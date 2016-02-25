@@ -111,7 +111,7 @@ def FAIL_POST_MODIFICATION(): return _( "Post modification failed. Please try ag
 def FAIL_POST_DELETION(): return _( "Post deletion failed. Please try again." )
 
 # friends
-def DISPLAY_NAME_NOT_EXIST(): return _( "The name you entered is invalid. Please enter the user name of the person you'd like to invite to be your friend." )
+def DISPLAY_NAME_NOT_EXIST(): return _( "The display name you entered is invalid or does not exist." )
 
 # OAuth
 def CONNECT_WITH_GOOGLE(): return _( "Sign in with Google" )

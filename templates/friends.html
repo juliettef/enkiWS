@@ -12,50 +12,61 @@
             {% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
-            <h3>Invite friends</h3>
+            <h1>{{ _( "Friends" )}}</h1>
 
-            <form class="form" action= "{{ 'friends'|local }}" method="post" id="mainform">
-                <input type="text" name="invite" label="Name"/>
-                <input type="submit" value="invite to become friend"/>
+            <div class="well bs-component">
+            <form class="form-horizontal" action="{{ 'friends'|local }}" method="post">
+                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+                <fieldset>
+
+                    <legend>{{ _( "Invite someone to become a friend" ) }}</legend>
+
+                    <div class="form-group {% if error %}has-error{% endif %}">
+                        <label for="friend_display_name" class="col-lg-2 control-label">{{ _( "Display name" ) }}</label>
+                         <div class="col-lg-10">
+                             <input class="form-control" type="text" name="invite" placeholder="{{ _( "display name" ) }}" {% if friend_name %}value = "{{ friend_name }}"{% endif %} maxlength="20" />
+                             {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
+                             <p class="text-info">{{ _( "Enter the display name of the person you want to invite to become a friend. The display name is a string of 3 to 12 alphanumeric characters (prefix), followed by '#' and 4 digits (suffix). You can enter the full display name or just the prefix. The search is case insensitive." ) }}</p>
+                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-2">
+                            <button class="btn btn-primary" type="submit" >{{ _( "Invite" ) }}</button>
+                        </div>
+                    </div>
+
+                </fieldset>
             </form>
+            </div>
 
-            {% if error %}
-                <font color="red">{{ error }}</font>
-            {% endif %}
 
             {% if result %}
-                <form class="form" action= "{{ 'friends'|local }}" method="post" id="listform">
+                <form class="form-group" action= "{{ 'friends'|local }}" method="post">
+	                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     {% if result.best_guess %}
-                        <p>
-                            You want to add this particular friend:<br>
-                            {{ result.best_guess.prefix }}{{ result.best_guess.suffix }}
-                            <a href="{{ result.best_guess.user_page }}">{{ result.best_guess.display_name }}</a>
-                            <button type="submit" form="listform" name="confirm" value="{{ result.best_guess.user_id }}"/>Confirm Invitation</button>
+                        <h3>{{ _( "Please confirm" )}}</h3>
+                        {{ result.best_guess.prefix }}{{ result.best_guess.suffix }}
+                        <p><a href="{{ result.best_guess.user_page }}">{{ result.best_guess.display_name }}</a>
+                            &nbsp;<button class="btn btn-default btn-xs" type="submit" name="confirm" value="{{ result.best_guess.user_id }}">{{ _( "Confirm Invitation" )}}</button>
                         </p>
-                    {% endif %}
-
-                    {% if result.suggestions %}
-                        <p>
-                            Your friend could be any of these:<br>
-                            {% for item in result.suggestions %}
-                                <a href="{{ item.user_page }}">{{ item.display_name }}</a>
-                                <button type="submit" form="listform" name="confirm" value="{{ item.user_id }}"/>Confirm Invitation</button><br>
-                            {% endfor %}
-                        </p>
+                    {% elif result.suggestions %}
+                        <h3>{{ _( "Users with a similar prefix" )}}</h3>
+                        {% for item in result.suggestions %}
+                            <p><a href="{{ item.user_page }}">{{ item.display_name }}</a>
+                                &nbsp;<button class="btn btn-default btn-xs" type="submit" name="confirm" value="{{ item.user_id }}">{{ _( "Invite" )}}</button>
+                            </p>
+                        {% endfor %}
                     {% endif %}
                 </form>
             {% endif %}
 
             {% if data %}
-                <form class="form" action= "{{ 'friends'|local }}" method="post" id="listform">
+                <form class="form-group" action= "{{ 'friends'|local }}" method="post">
+	                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     {% for item in data %}
-                        <p>
-                            <ul>
-                                <li>
-                                    <a href="{{ item.user_page|local }}">{{ item.display_name }}</a>
-                                    <button type="submit" form="listform" name="remove" value="{{ item.user_id }}"/>Remove</button>
-                                </li>
-                            </ul>
+                        <p><a href="{{ item.user_page|local }}">{{ item.display_name }}</a>
+                            &nbsp;<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.user_id }}">{{ _( "Remove" )}}</button>
                         </p>
                     {% endfor %}
                 </form>

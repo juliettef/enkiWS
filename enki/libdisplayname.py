@@ -54,6 +54,7 @@ def get_user_id_display_name_url( entity ):
 
 
 def find_users_by_display_name( input_name, user_id ):
+	# TODO: problem: the search is case insensitive on the prefix => if CCC#1234 and Ccc#1234 exist, requesting CCc#1234 will return 1 best guess only
 	prefix = ''
 	suffix = ''
 	error = None
@@ -76,7 +77,7 @@ def find_users_by_display_name( input_name, user_id ):
 	if not error:
 		# return the display name suggestions
 		# best guess: if there is a match for prefix + suffix
-		suggested_items = fetch_EnkiUserDisplayName_by_prefix_current_minus_user_id( prefix.lower(), user_id )
+		suggested_items = fetch_EnkiUserDisplayName_by_prefix_lower_current_minus_user_id( prefix.lower( ), user_id )
 		if suggested_items:
 			for i, item in enumerate( suggested_items ):
 				if suffix and item.suffix == suffix:
@@ -207,7 +208,7 @@ def get_EnkiUserDisplayName_by_user_id_current( user_id ):
 	return entity
 
 
-def fetch_EnkiUserDisplayName_by_prefix_current_minus_user_id( prefix_lower, user_id ):
+def fetch_EnkiUserDisplayName_by_prefix_lower_current_minus_user_id( prefix_lower, user_id ):
 	list = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix_lower == prefix_lower,
 	                                            EnkiModelDisplayName.current == True,
 	                                            EnkiModelDisplayName.user_id != user_id, )).fetch()

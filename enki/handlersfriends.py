@@ -16,6 +16,7 @@ class HandlerFriends( enki.HandlerBase ):
 
 	def post( self ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
+			self.check_CSRF()
 			user_id = self.user_id
 			instruction = self.request.arguments()[ 0 ]
 			friend_name = self.request.get( instruction )
@@ -24,22 +25,21 @@ class HandlerFriends( enki.HandlerBase ):
 				if not preselection.error:
 					# display the preselection of friends
 					error_message = ''
-					self.render_tmpl( 'friends.html',
-					                  data = enki.libfriends.get_friends( user_id ),
-					                  error = error_message,
-					                  result = preselection )
+					result = preselection
 				elif preselection.error == enki.libdisplayname.ERROR_DISPLAY_NAME_INVALID:
 					error_message = MSG.DISPLAY_NAME_NOT_EXIST()
-					self.render_tmpl( 'friends.html',
-					                  data = enki.libfriends.get_friends( user_id ),
-					                  error = error_message,
-					                  result = '' )
+					result = ''
 			elif instruction == 'confirm': # send invitation to user to become friend
 				friend_id = int( self.request.get( instruction ))
 				enki.libfriends.send_friend_request( user_id, friend_id )
 			elif instruction == 'remove': # unfriend
 				friend_id = int( self.request.get( instruction ))
 				enki.libfriends.remove_friend( user_id, friend_id )
+			self.render_tmpl( 'friends.html',
+			                  data = enki.libfriends.get_friends( user_id ),
+			                  error = error_message,
+			                  result = result,
+			                  friend_name = friend_name )
 
 
 class HandlerMessages( enki.HandlerBase ):
