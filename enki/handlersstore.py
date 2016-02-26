@@ -144,7 +144,6 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			token = EnkiModelTokenVerify.get_by_token_type( referrer, 'purchasebyuser' )
 			if token:
 				user_id = token.user_id
-				token.key.delete()
 			licence_key_display = []
 			for item in licence_keys.split():
 				item_dash = enki.libstore.insert_dashes_5_10( item )
