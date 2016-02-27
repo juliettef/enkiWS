@@ -40,7 +40,7 @@ def get_user_id_from_display_name( display_name ):
 	# return the user Id from a full display name
 	prefix = display_name[ : -5 ]
 	suffix = display_name[ -5: ]
-	entity = get_EnkiUserDisplayName_by_prefix_suffix( prefix, suffix )
+	entity = get_EnkiUserDisplayName_by_prefix_lower_suffix( prefix.lower(), suffix )
 	return entity.user_id
 
 
@@ -77,7 +77,7 @@ def find_users_by_display_name( input_name, user_id ):
 	if not error:
 		# return the display name suggestions
 		# best guess: if there is a match for prefix + suffix
-		suggested_items = fetch_EnkiUserDisplayName_by_prefix_lower_current_minus_user_id( prefix.lower( ), user_id )
+		suggested_items = fetch_EnkiUserDisplayName_by_prefix_lower_current_minus_user_id( prefix.lower(), user_id )
 		if suggested_items:
 			for i, item in enumerate( suggested_items ):
 				if suffix and item.suffix == suffix:
@@ -116,7 +116,7 @@ def cosmopompe():
 				syllable_counter += 1
 		suffix = '#' + str( random.randint( 1000, 9999 ))
 		attempt_suffix = 0
-		while exist_EnkiUserDisplayName_by_prefix_suffix( prefix, suffix ) :
+		while exist_EnkiUserDisplayName_by_prefix_lower_suffix( prefix.lower(), suffix ) :
 			suffix = '#' + str( random.randint( 1000, 9999 ))
 			attempt_suffix += 1
 			if attempt_suffix > 999:
@@ -148,22 +148,28 @@ def make_unique_and_set_display_name( user_id, prefix ):
 		if prefix.isalnum():
 			result = enki.libutil.ENKILIB_OK
 			# get the current name
-			old_display_name = get_EnkiUserDisplayName_by_user_id_current( user_id )
+			display_name_current = get_EnkiUserDisplayName_by_user_id_current( user_id )
 
 			# if the user has used the same prefix in the past, reuse it
-			if exist_EnkiUserDisplayName_by_user_id_prefix( user_id, prefix ):
-				display_name = get_EnkiUserDisplayName_by_user_id_prefix( user_id, prefix )
-				if display_name != old_display_name: # swap the names
-					old_display_name.current = False
-					old_display_name.put()
-					display_name.current = True
-					display_name.put()
+			display_name_old = get_EnkiUserDisplayName_by_user_id_prefix_lower( user_id, prefix.lower())
+			if display_name_old:
+				if display_name_current != display_name_old:
+					# swap the names
+					display_name_current.current = False
+					display_name_current.put()
+					display_name_old.prefix = prefix   # update the mixed case prefix in case it has changed
+					display_name_old.current = True
+					display_name_old.put()
+				elif display_name_current.prefix != prefix:
+					# update the mixed case prefix of the current name
+					display_name_current.prefix = prefix
+					display_name_current.put()
 				return True
 			else:
-			# if the user has never used that prefix, generate a suffix so that the combo prefix + suffix is unique over all users
+			# if the user has never used that prefix, generate a suffix so that the combo lowercase prefix + suffix is unique over all users
 				suffix = '#' + str( random.randint( 1000, 9999 ))
 				i = 0
-				while exist_EnkiUserDisplayName_by_prefix_suffix( prefix, suffix ) :
+				while exist_EnkiUserDisplayName_by_prefix_lower_suffix( prefix.lower(), suffix ) :
 					# generate a new suffix until the prefix + suffix combo is unique
 					suffix = '#' + str( random.randint( 1000, 9999 ))
 					i += 1
@@ -220,26 +226,26 @@ def exist_EnkiUserDisplayName_by_user_id( user_id ):
 	return count > 0
 
 
-def exist_EnkiUserDisplayName_by_user_id_prefix( user_id, prefix ):
-	count = EnkiModelDisplayName.query( EnkiModelDisplayName.prefix == prefix,
+def exist_EnkiUserDisplayName_by_user_id_prefix_lower( user_id, prefix_lower ):
+	count = EnkiModelDisplayName.query( EnkiModelDisplayName.prefix_lower == prefix_lower,
 	                                    ancestor = ndb.Key( EnkiModelUser, user_id )).count( 1 )
 	return count > 0
 
 
-def get_EnkiUserDisplayName_by_user_id_prefix( user_id, prefix ):
-	entity = EnkiModelDisplayName.query( EnkiModelDisplayName.prefix == prefix,
+def get_EnkiUserDisplayName_by_user_id_prefix_lower( user_id, prefix_lower ):
+	entity = EnkiModelDisplayName.query( EnkiModelDisplayName.prefix_lower == prefix_lower,
 	                                     ancestor = ndb.Key( EnkiModelUser, user_id )).get()
 	return entity
 
 
-def get_EnkiUserDisplayName_by_prefix_suffix( prefix, suffix ):
-	entity = EnkiModelDisplayName.query( EnkiModelDisplayName.prefix == prefix,
+def get_EnkiUserDisplayName_by_prefix_lower_suffix( prefix_lower, suffix ):
+	entity = EnkiModelDisplayName.query( EnkiModelDisplayName.prefix_lower == prefix_lower,
 	                                     EnkiModelDisplayName.suffix == suffix ).get()
 	return entity
 
 
-def exist_EnkiUserDisplayName_by_prefix_suffix( prefix, suffix ):
-	count = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix == prefix,
+def exist_EnkiUserDisplayName_by_prefix_lower_suffix( prefix_lower, suffix ):
+	count = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix_lower == prefix_lower,
 	                                             EnkiModelDisplayName.suffix == suffix )).count( 1 )
 	return count > 0
 

@@ -38,7 +38,7 @@
                         <div class="form-group {% if error %}has-error{% endif%}">
                             <label for="prefix" class="col-lg-2 control-label">{{ _( "Display name" ) }}</label>
                              <div class="col-lg-10">
-                                 <input class="form-control" type="text" name="prefix" placeholder="{{ _( "Display name" ) }}" {% if auto_generated %}value ="{{ auto_generated }}"{% else %}value = "{{ prefix }}"{% endif %} />
+                                 <input class="form-control" type="text" name="prefix" placeholder="{{ _( "Display name" ) }}" {% if auto_generated %}value ="{{ auto_generated }}"{% else %}value = "{{ prefix }}"{% endif %}  maxlength="{{ prefix_length_max }}" />
                                  {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
                                  {% if intro %}<p class="text-primary">{{ intro }}</p>{% endif%}
                                  <p>
