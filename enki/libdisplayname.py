@@ -149,10 +149,9 @@ def make_unique_and_set_display_name( user_id, prefix ):
 			result = enki.libutil.ENKILIB_OK
 			# get the current name
 			display_name_current = get_EnkiUserDisplayName_by_user_id_current( user_id )
-
 			# if the user has used the same prefix in the past, reuse it
 			display_name_old = get_EnkiUserDisplayName_by_user_id_prefix_lower( user_id, prefix.lower())
-			if display_name_old:
+			if display_name_current and display_name_old:
 				if display_name_current != display_name_old:
 					# swap the names
 					display_name_current.current = False
