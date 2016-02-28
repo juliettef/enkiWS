@@ -244,16 +244,16 @@ class HandlerLibrary( enki.HandlerBase ):
 			self.check_CSRF()
 			user_id = self.enki_user.key.id()
 			if self.get_backoff_timer( str( user_id ), True ) == 0:
-				licence_key_preset = self.request.get( 'licence_key_preset' ).strip()[:24] # 24 is arbitrary (and > 17)
-				licence_key_manual = self.request.get( 'licence_key_manual' ).strip()[:24]
+				licence_key_preset = self.request.get( 'licence_key_preset' ).strip()[:( enki.libstore.LICENCE_KEY_DASHES_LENGTH + 4 )] # 4 allows for some leading and trailing characters
+				licence_key_manual = self.request.get( 'licence_key_manual' ).strip()[:( enki.libstore.LICENCE_KEY_DASHES_LENGTH + 4 )]
 				licence_key = licence_key_manual
 				is_manual = True
 				if licence_key_preset and not licence_key_manual:
 					licence_key = licence_key_preset
 					is_manual = False
 				if licence_key:
-					if len( licence_key ) <= 17: # 15 alphanum chars + 2 dashes is the max length of a valid key
-						licence_key_reduced = re.sub( r'[^\w]', '', licence_key )[:15]
+					if len( licence_key ) <= ( enki.libstore.LICENCE_KEY_DASHES_LENGTH ):
+						licence_key_reduced = re.sub( r'[^\w]', '', licence_key )[:enki.libstore.LICENCE_KEY_LENGTH ]
 						item = enki.libstore.get_EnkiProductKey_by_licence_key( licence_key_reduced )
 						if not item:
 							if is_manual:

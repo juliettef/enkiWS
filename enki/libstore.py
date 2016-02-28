@@ -5,11 +5,13 @@ from google.appengine.ext import ndb
 from enki.modelproductkey import EnkiModelProductKey
 
 
-SEPARATOR_licence_KEYS = '\n'
+LICENCE_KEY_LENGTH = 15
+LICENCE_KEY_DASHES_LENGTH = LICENCE_KEY_LENGTH + 2  # licence including two inserted dashes
+SEPARATOR_LICENCE_KEYS = '\n'
 
 
 def generate_licence_key():
-	code = webapp2_extras.security.generate_random_string( length = 15, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
+	code = webapp2_extras.security.generate_random_string( length = LICENCE_KEY_LENGTH, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
 	return code
 
 
@@ -24,7 +26,7 @@ def generate_licence_keys( quantity ):
 	if quantity:
 		quantity = int( quantity )
 		while quantity > 0:
-			licence_keys += insert_dashes_5_10( generate_licence_key()) + SEPARATOR_licence_KEYS
+			licence_keys += insert_dashes_5_10( generate_licence_key()) + SEPARATOR_LICENCE_KEYS
 			quantity -= 1
 	return licence_keys
 
