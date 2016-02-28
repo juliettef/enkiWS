@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-02-17 17:38+0000\n"
+"POT-Creation-Date: 2016-02-28 20:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -472,67 +472,79 @@ msgid "Post deletion failed. Please try again."
 msgstr ""
 
 #: enki/textmessages.py:114
-msgid ""
-"The name you entered is invalid. Please enter the user name of the person"
-" you'd like to invite to be your friend."
+msgid "The display name you entered is invalid or does not exist."
+msgstr ""
+
+#: enki/textmessages.py:115
+msgid "A display name is needed"
+msgstr ""
+
+#: enki/textmessages.py:116
+#, python-format
+msgid "An invitation to be added to your friends has been sent to %(name)s."
 msgstr ""
 
 #: enki/textmessages.py:117
-msgid "Sign in with Google"
-msgstr ""
-
-#: enki/textmessages.py:118
-msgid "Login with Facebook"
-msgstr ""
-
-#: enki/textmessages.py:119
-msgid "Sign in through Steam"
+#, python-format
+msgid "%(name)s has been removed from your friends."
 msgstr ""
 
 #: enki/textmessages.py:120
+msgid "Sign in with Google"
+msgstr ""
+
+#: enki/textmessages.py:121
+msgid "Login with Facebook"
+msgstr ""
+
+#: enki/textmessages.py:122
+msgid "Sign in through Steam"
+msgstr ""
+
+#: enki/textmessages.py:123
 msgid "Sign in with Twitter"
 msgstr ""
 
-#: enki/textmessages.py:123 templates/store.html:6 templates/store.html:15
+#: enki/textmessages.py:126 templates/store.html:6 templates/store.html:15
 #: templates/storeemulatefastspring.html:6
 msgid "Store"
 msgstr ""
 
-#: enki/textmessages.py:124
+#: enki/textmessages.py:127
 #, python-format
 msgid "Product %(product)s licence %(licence)s activated."
 msgstr ""
 
-#: enki/textmessages.py:125
+#: enki/textmessages.py:128
 #, python-format
 msgid "You already activated %(product)s."
 msgstr ""
 
-#: enki/textmessages.py:126
+#: enki/textmessages.py:129
 #, python-format
 msgid ""
 "You already activated %(product)s. Do you want to give your spare licence"
 " key to a friend?"
 msgstr ""
 
-#: enki/textmessages.py:127
+#: enki/textmessages.py:130
 #, python-format
 msgid "Another user already activated %(product)s licence %(licence)s."
 msgstr ""
 
-#: enki/textmessages.py:128
+#: enki/textmessages.py:131
 msgid "Invalid licence key."
 msgstr ""
 
-#: enki/textmessages.py:129
+#: enki/textmessages.py:132
 msgid "A licence key is needed."
 msgstr ""
 
-#: enki/textmessages.py:130
+#: enki/textmessages.py:133
 msgid "Licence key is too long."
 msgstr ""
 
-#: enki/textmessages.py:133
+#: enki/textmessages.py:136
 #, python-format
 msgid ""
 "Your single-use game connection token is valid for <b>%(minutes)s "
@@ -638,7 +650,7 @@ msgid "Cancel"
 msgstr ""
 
 #: templates/displayname.html:6 templates/displayname.html:39
-#: templates/displayname.html:41
+#: templates/displayname.html:41 templates/friends.html:25
 msgid "Display name"
 msgstr ""
 
@@ -841,6 +853,47 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+#: templates/friends.html:15 templates/profile.html:53
+#: templates/profile.html:55
+msgid "Friends"
+msgstr ""
+
+#: templates/friends.html:22
+msgid "Invite someone to become a friend"
+msgstr ""
+
+#: templates/friends.html:27
+msgid "display name"
+msgstr ""
+
+#: templates/friends.html:29
+msgid ""
+"Enter the display name of the person you would like to add to your "
+"friends. The display name is a string of 3 to 12 alphanumeric characters "
+"(prefix), followed by '#' and 4 digits (suffix). You can enter the full "
+"display name or just the prefix. The search is case insensitive."
+msgstr ""
+
+#: templates/friends.html:35
+msgid "Search"
+msgstr ""
+
+#: templates/friends.html:47
+msgid "User found"
+msgstr ""
+
+#: templates/friends.html:50 templates/friends.html:57
+msgid "Invite"
+msgstr ""
+
+#: templates/friends.html:54
+msgid "Users with a similar prefix"
+msgstr ""
+
+#: templates/friends.html:76 templates/profile.html:46
+msgid "Remove"
+msgstr ""
+
 #: templates/home.html:6
 msgid "enkiWS"
 msgstr ""
@@ -916,7 +969,7 @@ msgid "Languages"
 msgstr ""
 
 #: templates/incnavbartop.html:56
-msgid "Logged in"
+msgid "Logged in as"
 msgstr ""
 
 #: templates/incnavbartop.html:60
@@ -1094,8 +1147,8 @@ msgstr ""
 msgid "Unique Id:"
 msgstr ""
 
-#: templates/profile.html:46
-msgid "Remove"
+#: templates/profile.html:56
+msgid "Messages"
 msgstr ""
 
 #: templates/profilepublic.html:6 templates/profilepublic.html:19

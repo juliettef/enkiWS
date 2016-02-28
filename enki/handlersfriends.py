@@ -1,6 +1,8 @@
 import webapp2
 
 import enki
+import enki.libfriends
+import enki.libdisplayname
 import enki.textmessages as MSG
 
 from enki.extensions import Extension
@@ -18,28 +20,38 @@ class HandlerFriends( enki.HandlerBase ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
 			self.check_CSRF()
 			user_id = self.user_id
-			instruction = self.request.arguments()[ 0 ]
-			friend_name = self.request.get( instruction )
-			if instruction == 'invite': # find a user to become a friend
-				preselection = enki.libdisplayname.find_users_by_display_name( friend_name, user_id )
-				if not preselection.error:
-					# display the preselection of friends
-					error_message = ''
-					result = preselection
-				elif preselection.error == enki.libdisplayname.ERROR_DISPLAY_NAME_INVALID:
+			friend_id_invite = self.request.get( 'invite' )
+			friend_id_remove = self.request.get( 'remove' )
+			friend_name_search = self.request.get( 'search' ).strip()[:(enki.libdisplayname.PREFIX_LENGTH_MAX + 4 )]  # 4 allows for some leading and trailing characters
+
+			already_friends = enki.libfriends.get_friends( user_id )
+			error_message = ''
+			result = ''
+
+			if friend_id_invite: # send invitation to user to become friend
+				enki.libfriends.send_friend_request( user_id, int( friend_id_invite ))
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_INVITATION_SENT( enki.libdisplayname.get_display_name( int( friend_id_invite ))))
+			elif friend_id_remove: # unfriend
+				enki.libfriends.remove_friend( user_id, int( friend_id_remove ))
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_REMOVED( enki.libdisplayname.get_display_name( int( friend_id_invite ))))
+			elif friend_name_search: # search for user to invite
+				result = enki.libdisplayname.find_users_by_display_name( friend_name_search, user_id )
+				if result.error == enki.libdisplayname.ERROR_DISPLAY_NAME_INVALID:
 					error_message = MSG.DISPLAY_NAME_NOT_EXIST()
-					result = ''
-			elif instruction == 'confirm': # send invitation to user to become friend
-				friend_id = int( self.request.get( instruction ))
-				enki.libfriends.send_friend_request( user_id, friend_id )
-			elif instruction == 'remove': # unfriend
-				friend_id = int( self.request.get( instruction ))
-				enki.libfriends.remove_friend( user_id, friend_id )
+				else:
+					# show suggestions minus users who are already friends
+					if already_friends:
+						for item in result.suggestions: # TODO: test
+							if item.user_id in already_friends:
+								item.remove()
+			else:
+				error_message = MSG.DISPLAY_NAME_NEEDED()
+
 			self.render_tmpl( 'friends.html',
-			                  data = enki.libfriends.get_friends( user_id ),
+			                  data = already_friends,
 			                  error = error_message,
 			                  result = result,
-			                  friend_name = friend_name )
+			                  friend_name = friend_name_search )
 
 
 class HandlerMessages( enki.HandlerBase ):

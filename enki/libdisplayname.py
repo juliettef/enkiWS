@@ -11,7 +11,7 @@ from enki.modeluser import EnkiModelUser
 
 entityList = collections.namedtuple( 'entity_list', 'entity, list' )
 userDisplayNamePage = collections.namedtuple( 'user_display_name_page', 'user_id, display_name, user_page' )
-displayNameSelection = collections.namedtuple( 'displayNameSelection', 'error, best_guess, suggestions')
+displayNameSelection = collections.namedtuple( 'displayNameSelection', 'error, best_match, suggestions')
 
 DELETED_PREFIX = '[deleted]'
 DELETED_SUFFIX = '#0000'
@@ -54,19 +54,18 @@ def get_user_id_display_name_url( entity ):
 
 
 def find_users_by_display_name( input_name, user_id ):
-	# TODO: problem: the search is case insensitive on the prefix => if CCC#1234 and Ccc#1234 exist, requesting CCc#1234 will return 1 best guess only
 	prefix = ''
 	suffix = ''
 	error = None
-	best_guess = None
+	best_match = None
 	suggestions = []
+
 	# check whether the display name has a suffix in it. If so extract the presumed suffix and prefix.
 	found_suffix = re.search( '\#[1-9][0-9]{3}', input_name )
 	if found_suffix:
 		prefix = input_name[ :found_suffix.start()]
 		suffix = found_suffix.group( 0 )
-		not_exact = input_name[ found_suffix.end(): ]   # check if there's extra text after the suffix
-		if not(( PREFIX_LENGTH_MIN <= len( prefix ) <= PREFIX_LENGTH_MAX ) or prefix.isalnum()) or not_exact:
+		if not(( PREFIX_LENGTH_MIN <= len( prefix ) <= PREFIX_LENGTH_MAX ) or prefix.isalnum()):
 			error = ERROR_DISPLAY_NAME_INVALID
 	# otherwise, if input_name is the right format, assume it's a prefix
 	elif ( PREFIX_LENGTH_MIN <= len( input_name ) <= PREFIX_LENGTH_MAX ) and input_name.isalnum():
@@ -81,13 +80,13 @@ def find_users_by_display_name( input_name, user_id ):
 		if suggested_items:
 			for i, item in enumerate( suggested_items ):
 				if suffix and item.suffix == suffix:
-					best_guess = get_user_id_display_name_url( item )
+					best_match = get_user_id_display_name_url( item )
 				else:
 					suggestions.append( get_user_id_display_name_url( item ))
 		else:
 			error = ERROR_DISPLAY_NAME_INVALID
 
-	return displayNameSelection( error, best_guess, suggestions)
+	return displayNameSelection( error, best_match, suggestions)
 
 
 def cosmopompe():
