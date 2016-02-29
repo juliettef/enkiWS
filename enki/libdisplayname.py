@@ -54,6 +54,14 @@ def get_user_id_display_name_url( entity ):
 	return result
 
 
+def get_user_id_display_name( entity ):
+	# based on a display name entity, returns a dictionary containing their user_id and display name
+	user_id = entity.user_id
+	display_name = entity.prefix + entity.suffix
+	result = { 'userid' : user_id, 'displayname' : display_name }
+	return result
+
+
 def find_users_by_display_name( input_name, user_id ):
 	prefix = ''
 	suffix = ''

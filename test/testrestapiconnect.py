@@ -43,6 +43,13 @@ payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'products' : product
 r_products = requests.post( url_products, json = payload )
 print( ' => Response: ' + r_products.text )
 
+# HandlerAPIv1Friends
+print( '* Friends' )
+url_friends = url + '/api/v1/friends'
+payload = { 'user_id' : user_id, 'auth_token' : auth_token }
+r_friends = requests.post( url_friends, json = payload )
+print( ' => Response: ' + r_friends.text )
+
 # HandlerAPIv1Logout
 print( '* Logout, delete auth token' )
 url_logout = url + '/api/v1/logout'

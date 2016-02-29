@@ -4,6 +4,7 @@ import json
 import enki
 import enki.libuser
 import enki.libdisplayname
+import enki.libfriends
 import enki.libstore
 import enki.librestapi
 import enki.textmessages as MSG
@@ -106,6 +107,7 @@ class HandlerAPIv1AuthValidate( webapp2.RequestHandler ):
 
 
 class HandlerAPIv1OwnsProducts( webapp2.RequestHandler ):
+
 	def post( self ):
 		jsonobject = json.loads( self.request.body )
 		success = False
@@ -135,6 +137,31 @@ class HandlerAPIv1OwnsProducts( webapp2.RequestHandler ):
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
 
+class HandlerAPIv1Friends( webapp2.RequestHandler ):
+
+	def post( self ):
+		jsonobject = json.loads( self.request.body )
+		success = False
+		error = 'Invalid request'
+		friends = []
+		if jsonobject:
+			user_id = int( jsonobject.get( 'user_id', ''))
+			auth_token = jsonobject.get( 'auth_token', '')
+			if user_id and auth_token:
+				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+					friends = enki.libfriends.get_friends_user_id_display_name( user_id )
+					success = True
+					error = ''
+				else:
+					error = 'Unauthorised'
+		answer = { 'success' : success,
+		           'error' : error,
+		           'friends' : friends,
+		           }
+		self.response.headers[ 'Content-Type' ] = 'application/json'
+		self.response.write( json.dumps( answer, separators=(',',':') ))
+
+
 class ExtensionPageRestAPI( ExtensionPage ):
 
 	def __init__( self ):
@@ -149,6 +176,7 @@ class ExtensionRestAPI( Extension ):
 		          webapp2.Route( '/api/v1/logout', HandlerAPIv1Logout, name = 'apiv1logout' ),
 		          webapp2.Route( '/api/v1/authvalidate', HandlerAPIv1AuthValidate, name = 'apiv1authvalidate' ),
 		          webapp2.Route( '/api/v1/ownsproducts', HandlerAPIv1OwnsProducts, name = 'apiv1ownsproducts' ),
+		          webapp2.Route( '/api/v1/friends', HandlerAPIv1Friends, name = 'apiv1friends' ),
 				  ]
 
 	def get_page_extensions( self ):

@@ -21,6 +21,20 @@ def get_friends( user_id ):
 	return friend_list
 
 
+def get_friends_user_id_display_name( user_id ):
+	list = fetch_EnkiFriends_by_user( user_id )
+	friend_list = []
+	if list:
+		for i, item in enumerate( list ):
+			if item.friends[ 0 ] == user_id:
+				friend_id = item.friends[ 1 ]
+			else:
+				friend_id = item.friends[ 0 ]
+			friend = enki.libdisplayname.get_user_id_display_name( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( friend_id ) )
+			friend_list.append( friend )
+	return friend_list
+
+
 def send_friend_request( sender_id, friend_id ):
 	if friend_id != sender_id: # friend is not me
 		if not exist_EnkiFriends_by_friends( sender_id, friend_id ): # we're not currently friends
