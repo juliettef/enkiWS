@@ -20,6 +20,7 @@ DELETED_SUFFIX = '#0000'
 # longest syllable in prefix generator <= PREFIX_LENGTH_MAX
 PREFIX_LENGTH_MAX = 12
 PREFIX_LENGTH_MIN = 3
+DISPLAY_NAME_LENGTH_MAX = PREFIX_LENGTH_MAX + 5     # prefix + suffix, suffix = '#' + 4 digits
 
 ERROR_DISPLAY_NAME_LENGTH = -41
 ERROR_DISPLAY_NAME_ALNUM = -42

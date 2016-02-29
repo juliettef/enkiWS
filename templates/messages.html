@@ -12,32 +12,27 @@
             {% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
-            <h3>Messages</h3>
+            <h1>{{ _( "Messages" )}}</h1>
 
             {% if data %}
+			<div>
+            <form class="form-group" action= "{{ 'messages'|local }}" method="post">
+                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+	            <fieldset>
 
-            <form class="form" action= "{{ 'messages'|local }}" method="post" id="listform">
-                {% for item in data %}
+                    <h3>{{ _( "Friend requests from" )}}</h3>
+		            {% for item in data %}
+		                {% if item.type == 'friend_request' %}
+	                    <p><a href="{{ item.sender.user_page }}">{{ item.sender.display_name }}</a>
+	                        &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="accept" value="{{ item.message_id }}">{{ _( "Accept" )}}</button>
+		                    &nbsp;<button class="btn btn-default btn-xs" type="submit" name="decline" value="{{ item.message_id }}">{{ _( "Decline" )}}</button>
+	                    </p>
+						{% endif %}
+                    {% endfor %}
 
-                    <p>
-                        <ul>
-                            {% if item.type == 'friend_request' %}
-                                <li><a href="{{ item.sender.user_page|local }}">{{ item.sender.display_name }}</a> invites you to be their friend.
-                                    <button type="submit" form="listform" name="accept" value="{{ item.message_id }}"/>Accept</button>
-                                    <button type="submit" form="listform" name="decline" value="{{ item.message_id }}"/>Decline</button>
-                                </li>
-                            {% else %}
-                                <li>Another type of message.
-                                    <button type="submit" form="listform" name="delete" value="{{ item.message_id }}"/>Delete message</button>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </p>
-
-                {% endfor %}
-
+	            </fieldset>
             </form>
-
+			</div>
             {% endif %}
 
             {% include "incfooter.html" %}

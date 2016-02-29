@@ -24,7 +24,7 @@
                     <div class="form-group {% if error %}has-error{% endif %}">
                         <label for="friend_display_name" class="col-lg-2 control-label">{{ _( "Display name" ) }}</label>
                          <div class="col-lg-10">
-                             <input class="form-control" type="text" name="search" placeholder="{{ _( "display name" ) }}" {% if friend_name %}value = "{{ friend_name }}"{% endif %} maxlength="20" />
+                             <input class="form-control" type="text" name="search" placeholder="{{ _( "display name" ) }}" {% if friend_name %}value = "{{ friend_name }}"{% endif %} maxlength="21" />
                              {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
                              <p class="text-info">{{ _( "Enter the display name of the person you would like to add to your friends. The display name is a string of 3 to 12 alphanumeric characters (prefix), followed by '#' and 4 digits (suffix). You can enter the full display name or just the prefix. The search is case insensitive." ) }}</p>
                          </div>
@@ -43,11 +43,11 @@
                 <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 	            <fieldset>
 
-                    {% if result.best_guess %}
+                    {% if result.best_match %}
                     <h3>{{ _( "User found" )}}</h3>
-                    {{ result.best_guess.prefix }}{{ result.best_guess.suffix }}
-                    <p><a href="{{ result.best_guess.user_page }}">{{ result.best_guess.display_name }}</a>
-                        &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="invite" value="{{ result.best_guess.user_id }}">{{ _( "Invite" )}}</button>
+                    {{ result.best_match.prefix }}{{ result.best_match.suffix }}
+                    <p><a href="{{ result.best_match.user_page }}">{{ result.best_match.display_name }}</a>
+                        &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="invite" value="{{ result.best_match.user_id }}">{{ _( "Invite" )}}</button>
                     </p>
 
                     {% elif result.suggestions %}
@@ -64,7 +64,6 @@
             {% endif %}
             </div>
 
-
             {% if data %}
 	        <div>
             <form class="form-group" action= "{{ 'friends'|local }}" method="post">
@@ -72,11 +71,11 @@
                 <fieldset>
 
                 {% for item in data %}
-                    <p><a href="{{ item.user_page|local }}">{{ item.display_name }}</a>
+                    <p><a href="{{ item.user_page }}">{{ item.display_name }}</a>
                         &nbsp;<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.user_id }}">{{ _( "Remove" )}}</button>
                     </p>
                 {% endfor %}
-
+                    
                 </fieldset>
             </form>
 	        </div>

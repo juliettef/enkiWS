@@ -5,5 +5,5 @@ class EnkiModelMessage( model.Model ):
 
 	sender = model.IntegerProperty()
 	recipient = model.IntegerProperty()
-	type = model.StringProperty( choices = [ 'friend_request' ] )
+	type = model.StringProperty()
 	time_created = model.DateTimeProperty( auto_now_add = True )
