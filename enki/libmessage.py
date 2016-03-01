@@ -43,8 +43,13 @@ def remove_messages_crossed( sender_or_receiver_a_id, sender_or_receiver_b_id ):
 #=== QUERIES ==================================================================
 
 
-def fetch_EnkiMessage_by_recipient( user ):
-	list = EnkiModelMessage.query( EnkiModelMessage.recipient == user ).fetch()
+def exist_EnkiMessage_by_recipient( user_id ):
+	count = EnkiModelMessage.query( EnkiModelMessage.recipient == user_id ).count( 1 )
+	return count > 0
+
+
+def fetch_EnkiMessage_by_recipient( user_id ):
+	list = EnkiModelMessage.query( EnkiModelMessage.recipient == user_id ).fetch()
 	return list
 
 

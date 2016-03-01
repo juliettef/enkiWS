@@ -61,5 +61,13 @@
 		        {% endif %}
 	        </p>
         </div>{% endif %}
+
+		<div class="text-right">
+	    {% for navbar_extension in navbar_extensions %}
+            {% set data = navbar_extension[ 1 ] %}
+            {% include navbar_extension[ 0 ] %}
+		{% endfor %}
+		</div>
+
     </div>
 </nav>

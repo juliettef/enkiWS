@@ -3,10 +3,12 @@ import webapp2
 import enki
 import enki.libutil
 import enki.libfriends
+import enki.libmessage
 import enki.libdisplayname
 import enki.textmessages as MSG
 
 from enki.extensions import Extension
+from enki.extensions import ExtensionPage
 
 
 class HandlerFriends( enki.HandlerBase ):
@@ -90,9 +92,25 @@ class HandlerMessages( enki.HandlerBase ):
 			                  data = enki.libmessage.get_messages( self.user_id ) )
 
 
+class ExtensionPageMessageAlert( ExtensionPage ):
+
+	def __init__( self ):
+		ExtensionPage.__init__( self, route_name = 'navbar', template_include = 'incmessagealert.html' )
+
+	def get_data( self, handler ):
+		data = [ False ]
+		if handler.is_logged_in:
+			if enki.libmessage.exist_EnkiMessage_by_recipient( handler.user_id ):
+				data = [ True ]
+		return data
+
+
 class ExtensionFriends( Extension ):
 
 	def get_routes( self ):
 		return [ webapp2.Route( '/friends', HandlerFriends, name = 'friends' ),
 		         webapp2.Route( '/messages', HandlerMessages, name = 'messages' ),
 		         ]
+
+	def get_page_extensions( self ):
+		return [ ExtensionPageMessageAlert()]

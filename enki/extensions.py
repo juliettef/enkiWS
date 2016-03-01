@@ -66,4 +66,4 @@ class ExtensionLibrary():
 
 	@classmethod
 	def get_navbar_extensions( cls, handler ):
-		return cls.get_page_extensions_route( 'navbar' )
+		return cls.get_page_extensions_route( handler, 'navbar' )

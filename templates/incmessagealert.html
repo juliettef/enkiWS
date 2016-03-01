@@ -1,0 +1,7 @@
+{% if data %}
+	{% if data[0] == True %}
+		<span><a href="{{ 'messages'|local }}" class="btn btn-info btn-xs"><abbr title="new message"><i class="fa fa-envelope-o"></i></abbr></a></span>
+		{% else %}
+		<span><a href="{{ 'messages'|local }}" class="btn btn-default btn-xs"><i class="fa fa-envelope-o"></i></a></span>
+	{% endif %}
+{% endif %}
