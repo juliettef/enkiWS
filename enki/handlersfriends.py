@@ -1,6 +1,7 @@
 import webapp2
 
 import enki
+import enki.libutil
 import enki.libfriends
 import enki.libdisplayname
 import enki.textmessages as MSG
@@ -29,8 +30,11 @@ class HandlerFriends( enki.HandlerBase ):
 			result = ''
 
 			if friend_id_invite: # send invitation to user to become friend
-				enki.libfriends.send_friend_request( user_id, int( friend_id_invite ))
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_INVITATION_SENT( enki.libdisplayname.get_display_name( int( friend_id_invite ))))
+				outcome = enki.libfriends.send_friend_request( user_id, int( friend_id_invite ))
+				if outcome == enki.libfriends.INFO_FRIENDS:
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_ADDED( enki.libdisplayname.get_display_name( int( friend_id_invite ))))
+				elif outcome == enki.libutil.ENKILIB_OK:
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_INVITATION_SENT( enki.libdisplayname.get_display_name( int( friend_id_invite ))))
 			elif friend_id_remove: # unfriend
 				enki.libfriends.remove_friend( user_id, int( friend_id_remove ))
 				has_friends = enki.libfriends.exist_EnkiFriends
@@ -63,20 +67,25 @@ class HandlerMessages( enki.HandlerBase ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
 			self.render_tmpl( 'messages.html',
 			                  active_menu = 'profile',
-			                  data = enki.libmessage.get_messages( self.user_id ) )
+			                  data = enki.libmessage.get_messages( self.user_id ))
 
 	def post( self ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
+			self.check_CSRF()
 			user_id = self.user_id
-			instruction = self.request.arguments()[ 0 ]
-			message_id = int( self.request.get( instruction ))
-			sender_id = enki.libmessage.get_EnkiMessage_by_id( message_id ).sender
-			if instruction == 'accept':
-				enki.libfriends.add_friend( user_id, sender_id )
-			elif instruction == 'decline':
-				enki.libmessage.remove_messages_crossed( user_id, sender_id )
-			elif instruction == 'delete':
-				enki.libmessage.remove_message( message_id )
+			message_accept = self.request.get( 'accept' )
+			message_decline = self.request.get( 'decline' )
+
+			if message_accept:
+				sender_id = enki.libmessage.get_EnkiMessage_by_id( int( message_accept )).sender
+				if sender_id:
+					enki.libfriends.add_friend( user_id, sender_id )
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_ADDED( enki.libdisplayname.get_display_name( sender_id )))
+			elif message_decline:
+				sender_id = enki.libmessage.get_EnkiMessage_by_id( int( message_decline )).sender
+				if sender_id:
+					enki.libmessage.remove_messages_crossed( user_id, sender_id )
+
 			self.render_tmpl( 'messages.html',
 			                  data = enki.libmessage.get_messages( self.user_id ) )
 
