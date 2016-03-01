@@ -111,7 +111,8 @@ def FAIL_POST_MODIFICATION(): return _( "Post modification failed. Please try ag
 def FAIL_POST_DELETION(): return _( "Post deletion failed. Please try again." )
 
 # friends
-def DISPLAY_NAME_NOT_EXIST(): return _( "The display name you entered is invalid or does not exist." )
+def DISPLAY_NAME_INVALID(): return _( "The display name you entered is invalid." )
+def DISPLAY_NAME_NOT_EXIST(): return _( "The display name you entered does not exist or the user is already in your friends list." )
 def DISPLAY_NAME_NEEDED(): return _( "A display name is needed" )
 def FRIEND_INVITATION_SENT( name ): return _( "An invitation to be added to your friends has been sent to %(name)s.", name = name )
 def FRIEND_REMOVED( name ): return _( "%(name)s has been removed from your friends.", name = name )

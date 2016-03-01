@@ -14,7 +14,7 @@ class HandlerFriends( enki.HandlerBase ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
 			self.render_tmpl( 'friends.html',
 			                  active_menu = 'profile',
-			                  data = enki.libfriends.get_friends( self.user_id ) )
+			                  data = enki.libfriends.get_friends_user_id_display_name_url( self.user_id ))
 
 	def post( self ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
@@ -23,8 +23,10 @@ class HandlerFriends( enki.HandlerBase ):
 			friend_id_invite = self.request.get( 'invite' )
 			friend_id_remove = self.request.get( 'remove' )
 			friend_name_search = self.request.get( 'search' ).strip()[:(enki.libdisplayname.DISPLAY_NAME_LENGTH_MAX + 4 )]  # 4 allows for some leading and trailing characters
-
-			already_friends = enki.libfriends.get_friends( user_id )
+			already_friends = ''
+			has_friends = enki.libfriends.exist_EnkiFriends
+			if has_friends:
+				already_friends = enki.libfriends.get_friends_user_id_display_name_url( user_id )
 			error_message = ''
 			result = ''
 
@@ -35,15 +37,14 @@ class HandlerFriends( enki.HandlerBase ):
 				enki.libfriends.remove_friend( user_id, int( friend_id_remove ))
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_REMOVED( enki.libdisplayname.get_display_name( int( friend_id_remove ))))
 			elif friend_name_search: # search for user to invite
-				result = enki.libdisplayname.find_users_by_display_name( friend_name_search, user_id )
+				users_ids_to_ignore = [ user_id ]
+				if has_friends:
+					users_ids_to_ignore += enki.libfriends.get_friends_user_id( user_id )
+				result = enki.libdisplayname.find_users_by_display_name( friend_name_search, users_ids_to_ignore )
 				if result.error == enki.libdisplayname.ERROR_DISPLAY_NAME_INVALID:
+					error_message = MSG.DISPLAY_NAME_INVALID()
+				elif result.error == enki.libdisplayname.ERROR_DISPLAY_NAME_NOT_EXIST:
 					error_message = MSG.DISPLAY_NAME_NOT_EXIST()
-				else:
-					# show suggestions minus users who are already friends
-					if already_friends:
-						for item in result.suggestions: # TODO: test
-							if item.user_id in already_friends:
-								item.remove()
 			else:
 				error_message = MSG.DISPLAY_NAME_NEEDED()
 

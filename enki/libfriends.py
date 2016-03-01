@@ -7,30 +7,35 @@ from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
 
 
-def get_friends( user_id ):
-	list = fetch_EnkiFriends_by_user( user_id )
+def get_friends_user_id( user_id ):
 	friend_list = []
+	list = fetch_EnkiFriends_by_user( user_id )
 	if list:
 		for i, item in enumerate( list ):
 			if item.friends[ 0 ] == user_id:
 				friend_id = item.friends[ 1 ]
 			else:
 				friend_id = item.friends[ 0 ]
-			friend = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( friend_id ) )
-			friend_list.append( friend )
+			friend_list.append( friend_id )
 	return friend_list
 
 
 def get_friends_user_id_display_name( user_id ):
-	list = fetch_EnkiFriends_by_user( user_id )
 	friend_list = []
+	list = get_friends_user_id( user_id )
 	if list:
-		for i, item in enumerate( list ):
-			if item.friends[ 0 ] == user_id:
-				friend_id = item.friends[ 1 ]
-			else:
-				friend_id = item.friends[ 0 ]
-			friend = enki.libdisplayname.get_user_id_display_name( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( friend_id ) )
+		for friend_id in list:
+			friend = enki.libdisplayname.get_user_id_display_name( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( friend_id ))
+			friend_list.append( friend )
+	return friend_list
+
+
+def get_friends_user_id_display_name_url( user_id ):
+	friend_list = []
+	list = get_friends_user_id( user_id )
+	if list:
+		for friend_id in list:
+			friend = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( friend_id ))
 			friend_list.append( friend )
 	return friend_list
 
@@ -69,6 +74,12 @@ def remove_friend( user_id, friend_id ):
 
 
 #=== QUERIES ==================================================================
+
+
+def exist_EnkiFriends( user_id ):
+	count = EnkiModelFriends.query( ndb.OR( EnkiModelFriends.friends == user_id,
+	                                         EnkiModelFriends.friends == user_id )).count( 1 )
+	return count > 0
 
 
 def fetch_EnkiFriends_by_user( user ):

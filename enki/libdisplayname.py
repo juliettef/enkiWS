@@ -26,6 +26,7 @@ ERROR_DISPLAY_NAME_LENGTH = -41
 ERROR_DISPLAY_NAME_ALNUM = -42
 ERROR_DISPLAY_NAME_IN_USE = -43
 ERROR_DISPLAY_NAME_INVALID = -44
+ERROR_DISPLAY_NAME_NOT_EXIST = -45
 
 
 def get_display_name( user_id ):
@@ -62,7 +63,7 @@ def get_user_id_display_name( entity ):
 	return result
 
 
-def find_users_by_display_name( input_name, user_id ):
+def find_users_by_display_name( display_name, user_ids_to_ignore = []):
 	prefix = ''
 	suffix = ''
 	error = None
@@ -70,30 +71,33 @@ def find_users_by_display_name( input_name, user_id ):
 	suggestions = []
 
 	# check whether the display name has a suffix in it. If so extract the presumed suffix and prefix.
-	found_suffix = re.search( '\#[1-9][0-9]{3}', input_name )
+	found_suffix = re.search( '\#[1-9][0-9]{3}', display_name )
 	if found_suffix:
-		prefix = input_name[ :found_suffix.start()]
+		prefix = display_name[ :found_suffix.start( ) ]
 		suffix = found_suffix.group( 0 )
 		if not(( PREFIX_LENGTH_MIN <= len( prefix ) <= PREFIX_LENGTH_MAX ) or prefix.isalnum()):
 			error = ERROR_DISPLAY_NAME_INVALID
-	# otherwise, if input_name is the right format, assume it's a prefix
-	elif ( PREFIX_LENGTH_MIN <= len( input_name ) <= PREFIX_LENGTH_MAX ) and input_name.isalnum():
-		prefix = input_name
+	# otherwise, if display_name is the right format, assume it's a prefix
+	elif (PREFIX_LENGTH_MIN <= len( display_name ) <= PREFIX_LENGTH_MAX) and display_name.isalnum():
+		prefix = display_name
 	else:
 		error = ERROR_DISPLAY_NAME_INVALID
 
 	if not error:
 		# return the display name suggestions
 		# best guess: if there is a match for prefix + suffix
-		suggested_items = fetch_EnkiUserDisplayName_by_prefix_lower_current_minus_user_id( prefix.lower(), user_id )
+		suggested_items = fetch_EnkiUserDisplayName_by_prefix_lower_current( prefix.lower())
 		if suggested_items:
 			for i, item in enumerate( suggested_items ):
-				if suffix and item.suffix == suffix:
-					best_match = get_user_id_display_name_url( item )
-				else:
-					suggestions.append( get_user_id_display_name_url( item ))
+				if item.user_id not in user_ids_to_ignore:
+					if suffix and item.suffix == suffix:
+						best_match = get_user_id_display_name_url( item )
+					else:
+						suggestions.append( get_user_id_display_name_url( item ))
+			if not best_match and not suggestions:
+				error = ERROR_DISPLAY_NAME_NOT_EXIST
 		else:
-			error = ERROR_DISPLAY_NAME_INVALID
+			error = ERROR_DISPLAY_NAME_NOT_EXIST
 
 	return displayNameSelection( error, best_match, suggestions)
 
@@ -221,10 +225,9 @@ def get_EnkiUserDisplayName_by_user_id_current( user_id ):
 	return entity
 
 
-def fetch_EnkiUserDisplayName_by_prefix_lower_current_minus_user_id( prefix_lower, user_id ):
+def fetch_EnkiUserDisplayName_by_prefix_lower_current( prefix_lower ):
 	list = EnkiModelDisplayName.query( ndb.AND( EnkiModelDisplayName.prefix_lower == prefix_lower,
-	                                            EnkiModelDisplayName.current == True,
-	                                            EnkiModelDisplayName.user_id != user_id, )).fetch()
+	                                            EnkiModelDisplayName.current == True )).fetch()
 	return list
 
 
