@@ -259,7 +259,7 @@ class HandlerBase( webapp2.RequestHandler ):
 	def render_tmpl( self, template_file, CSRFneeded = True, **kwargs ):
 	# render an html template with data using jinja2
 		try:
-			navbar_extensions = enki.ExtensionLibrary.get_navbar_items()
+			navbar_items = enki.ExtensionLibrary.get_navbar_items()
 			page_extensions = enki.ExtensionLibrary.get_page_extensions( self )
 			display_name = enki.libdisplayname.get_display_name( self.user_id ) if self.is_logged_in( ) else ''
 			CSRFtoken = ''
@@ -270,7 +270,7 @@ class HandlerBase( webapp2.RequestHandler ):
 									request_url = self.request.url,
 									CSRFtoken = CSRFtoken,
 				                    is_logged_in = self.is_logged_in(),
-									navbar_extensions = navbar_extensions,
+									navbar_items = navbar_items,
 									page_extensions = page_extensions,
 									display_name = display_name,
 									locale = i18n.get_i18n().locale,

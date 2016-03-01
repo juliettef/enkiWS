@@ -51,11 +51,19 @@ class ExtensionLibrary():
 		return items
 
 	@classmethod
-	def get_page_extensions( cls, handler ):
+	def get_page_extensions_route( cls, handler, route_name ):
 		list_data = []
-		page_extensions = cls.dict_page_extensions.get( handler.request.route.name )
+		page_extensions = cls.dict_page_extensions.get( route_name )
 		if page_extensions:
 			for page_extension in page_extensions:
 				data = page_extension.get_data( handler )
 				list_data += [( page_extension.template_include, data )]
 		return list_data
+
+	@classmethod
+	def get_page_extensions( cls, handler ):
+		return cls.get_page_extensions_route( handler, handler.request.route.name )
+
+	@classmethod
+	def get_navbar_extensions( cls, handler ):
+		return cls.get_page_extensions_route( 'navbar' )
