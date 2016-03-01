@@ -14,12 +14,29 @@
 
             <h1>{{ _( "Friends" )}}</h1>
 
+            {% if data %}
+	        <div>
+            <form class="form-group" action= "{{ 'friends'|local }}" method="post">
+                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+                <fieldset>
+
+                {% for item in data %}
+                    <p><a href="{{ item.user_page }}">{{ item.display_name }}</a>
+                        &nbsp;<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.user_id }}">{{ _( "Remove" )}}</button>
+                    </p>
+                {% endfor %}
+
+                </fieldset>
+            </form>
+	        </div>
+            {% endif %}
+
             <div class="well bs-component">
             <form class="form-horizontal" action="{{ 'friends'|local }}" method="post">
                 <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                 <fieldset>
 
-                    <legend>{{ _( "Invite someone to become a friend" ) }}</legend>
+                    <legend>{{ _( "Invite someone to join your friends list" ) }}</legend>
 
                     <div class="form-group {% if error %}has-error{% endif %}">
                         <label for="friend_display_name" class="col-lg-2 control-label">{{ _( "Display name" ) }}</label>
@@ -63,23 +80,6 @@
             </form>
             {% endif %}
             </div>
-
-            {% if data %}
-	        <div>
-            <form class="form-group" action= "{{ 'friends'|local }}" method="post">
-                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-                <fieldset>
-
-                {% for item in data %}
-                    <p><a href="{{ item.user_page }}">{{ item.display_name }}</a>
-                        &nbsp;<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.user_id }}">{{ _( "Remove" )}}</button>
-                    </p>
-                {% endfor %}
-                    
-                </fieldset>
-            </form>
-	        </div>
-            {% endif %}
 
             {% include "incfooter.html" %}
         </div>

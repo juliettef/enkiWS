@@ -25,8 +25,6 @@ class HandlerFriends( enki.HandlerBase ):
 			friend_name_search = self.request.get( 'search' ).strip()[:(enki.libdisplayname.DISPLAY_NAME_LENGTH_MAX + 4 )]  # 4 allows for some leading and trailing characters
 			already_friends = ''
 			has_friends = enki.libfriends.exist_EnkiFriends
-			if has_friends:
-				already_friends = enki.libfriends.get_friends_user_id_display_name_url( user_id )
 			error_message = ''
 			result = ''
 
@@ -35,6 +33,7 @@ class HandlerFriends( enki.HandlerBase ):
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_INVITATION_SENT( enki.libdisplayname.get_display_name( int( friend_id_invite ))))
 			elif friend_id_remove: # unfriend
 				enki.libfriends.remove_friend( user_id, int( friend_id_remove ))
+				has_friends = enki.libfriends.exist_EnkiFriends
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_REMOVED( enki.libdisplayname.get_display_name( int( friend_id_remove ))))
 			elif friend_name_search: # search for user to invite
 				users_ids_to_ignore = [ user_id ]
@@ -47,6 +46,9 @@ class HandlerFriends( enki.HandlerBase ):
 					error_message = MSG.DISPLAY_NAME_NOT_EXIST()
 			else:
 				error_message = MSG.DISPLAY_NAME_NEEDED()
+
+			if has_friends:
+				already_friends = enki.libfriends.get_friends_user_id_display_name_url( user_id )
 
 			self.render_tmpl( 'friends.html',
 			                  data = already_friends,

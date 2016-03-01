@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-02-28 20:13+0000\n"
+"POT-Creation-Date: 2016-03-01 15:33+0000\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -585,55 +585,65 @@ msgstr ""
 "tentative."
 
 #: enki/textmessages.py:114
-msgid "The display name you entered is invalid or does not exist."
-msgstr "Le nom d'affichage que vous avez fourni est incorrect ou n'existe pas."
+msgid "The display name you entered is invalid."
+msgstr "Le nom d'affichage que vous avez fourni est incorrect."
 
 #: enki/textmessages.py:115
+msgid ""
+"The display name you entered does not exist or the user is already in "
+"your friends list."
+msgstr ""
+"Le nom d'affichage que vous avez fourni n'existe pas ou "
+"l'utilisateur.trice fait déjà partie de votre liste d'ami.e.s."
+
+#: enki/textmessages.py:116
 msgid "A display name is needed"
 msgstr "Un nom d'affichage est requis."
 
-#: enki/textmessages.py:116
-#, python-format
-msgid "An invitation to be added to your friends has been sent to %(name)s."
-msgstr "Une invitation à être ajouté.e à vos ami.es été envoyée à %(name)s."
-
 #: enki/textmessages.py:117
 #, python-format
-msgid "%(name)s has been removed from your friends."
-msgstr "%(name)s a été retiré.e des vos amis."
+msgid "An invitation to join your friends list has been sent to %(name)s."
+msgstr ""
+"Une invitation à être ajouté.e à votre liste d'ami.e.s été envoyée à "
+"%(name)s."
 
-#: enki/textmessages.py:120
+#: enki/textmessages.py:118
+#, python-format
+msgid "%(name)s has been removed from your friends list."
+msgstr "%(name)s a été retiré.e de votre liste d'ami.e.s."
+
+#: enki/textmessages.py:121
 msgid "Sign in with Google"
 msgstr "Se connecter avec Google"
 
-#: enki/textmessages.py:121
+#: enki/textmessages.py:122
 msgid "Login with Facebook"
 msgstr "Se connecter avec Facebook"
 
-#: enki/textmessages.py:122
+#: enki/textmessages.py:123
 msgid "Sign in through Steam"
 msgstr "Se connecter avec Steam"
 
-#: enki/textmessages.py:123
+#: enki/textmessages.py:124
 msgid "Sign in with Twitter"
 msgstr "Se connecter avec Twitter"
 
-#: enki/textmessages.py:126 templates/store.html:6 templates/store.html:15
+#: enki/textmessages.py:127 templates/store.html:6 templates/store.html:15
 #: templates/storeemulatefastspring.html:6
 msgid "Store"
 msgstr "Magasin"
 
-#: enki/textmessages.py:127
+#: enki/textmessages.py:128
 #, python-format
 msgid "Product %(product)s licence %(licence)s activated."
 msgstr "La clé de licence %(licence)s du produit %(product)s est activée."
 
-#: enki/textmessages.py:128
+#: enki/textmessages.py:129
 #, python-format
 msgid "You already activated %(product)s."
 msgstr "Vous avez déjà activé le produit %(product)s."
 
-#: enki/textmessages.py:129
+#: enki/textmessages.py:130
 #, python-format
 msgid ""
 "You already activated %(product)s. Do you want to give your spare licence"
@@ -642,26 +652,26 @@ msgstr ""
 "Vous avez déjà activé le produit %(product)s. Vous pouvez donner cette "
 "clé de licence à un.e ami.e."
 
-#: enki/textmessages.py:130
+#: enki/textmessages.py:131
 #, python-format
 msgid "Another user already activated %(product)s licence %(licence)s."
 msgstr ""
 "Un.e autre utilisateur.trice a déjà activé la clé de licence %(licence)s "
 "du produit %(product)s."
 
-#: enki/textmessages.py:131
+#: enki/textmessages.py:132
 msgid "Invalid licence key."
 msgstr "Clé de licence non valable."
 
-#: enki/textmessages.py:132
+#: enki/textmessages.py:133
 msgid "A licence key is needed."
 msgstr "Une licence est requise."
 
-#: enki/textmessages.py:133
+#: enki/textmessages.py:134
 msgid "Licence key is too long."
 msgstr "Clé de licence trop longue."
 
-#: enki/textmessages.py:136
+#: enki/textmessages.py:137
 #, python-format
 msgid ""
 "Your single-use game connection token is valid for <b>%(minutes)s "
@@ -787,7 +797,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: templates/displayname.html:6 templates/displayname.html:39
-#: templates/displayname.html:41 templates/friends.html:25
+#: templates/displayname.html:41 templates/friends.html:42
 msgid "Display name"
 msgstr "Nom d'affichage"
 
@@ -1012,15 +1022,19 @@ msgstr "Description"
 msgid "Friends"
 msgstr "Amis"
 
-#: templates/friends.html:22
-msgid "Invite someone to become a friend"
-msgstr "Inviter quelqu'un à devenir un.e ami.e"
+#: templates/friends.html:25 templates/profile.html:46
+msgid "Remove"
+msgstr "Retirer"
 
-#: templates/friends.html:27
+#: templates/friends.html:39
+msgid "Invite someone to join your friends list"
+msgstr "Inviter quelqu'un à rejoindre votre liste d'ami.e.s"
+
+#: templates/friends.html:44
 msgid "display name"
 msgstr "Nom d'affichage"
 
-#: templates/friends.html:29
+#: templates/friends.html:46
 msgid ""
 "Enter the display name of the person you would like to add to your "
 "friends. The display name is a string of 3 to 12 alphanumeric characters "
@@ -1028,30 +1042,26 @@ msgid ""
 "display name or just the prefix. The search is case insensitive."
 msgstr ""
 "Veuillez entrer le nom d'affichage de la personne que vous voudriez "
-"ajouter à vos amis. Le nom d'affichage contient 3 à 12 caractères "
+"ajouter à vos ami.e.s. Le nom d'affichage contient 3 à 12 caractères "
 "alphanumériques (préfixe), suivis d'un '#'et de 4 chiffres (suffixe). "
 "Vous pouvez entrer le nom complet ou uniquement le préfixe. La recherche "
 "est insensible à la casse."
 
-#: templates/friends.html:35
+#: templates/friends.html:52
 msgid "Search"
 msgstr "Rechercher"
 
-#: templates/friends.html:47
+#: templates/friends.html:64
 msgid "User found"
 msgstr "Utilisateur.trice trouvé.e"
 
-#: templates/friends.html:50 templates/friends.html:57
+#: templates/friends.html:67 templates/friends.html:74
 msgid "Invite"
 msgstr "Inviter"
 
-#: templates/friends.html:54
+#: templates/friends.html:71
 msgid "Users with a similar prefix"
 msgstr "Utilisateurs.trices ayant un préfix similaire"
-
-#: templates/friends.html:76 templates/profile.html:46
-msgid "Remove"
-msgstr "Retirer"
 
 #: templates/home.html:6
 msgid "enkiWS"
@@ -1207,6 +1217,26 @@ msgstr "Accéder à mon compte en m'authentifiant auprès d'une tierce partie"
 msgid "You are currently logged in."
 msgstr "Vous êtes actuellement connecté.e."
 
+#: templates/messages.html:15 templates/profile.html:56
+msgid "Messages"
+msgstr "Messages"
+
+#: templates/messages.html:23
+msgid "Friend requests"
+msgstr "Demandes d'ajout à votre liste d'ami.e.s"
+
+#: templates/messages.html:27
+msgid "Accept"
+msgstr "Accepter"
+
+#: templates/messages.html:28
+msgid "Decline"
+msgstr "Décliner"
+
+#: templates/messages.html:37
+msgid "You do not have any messages."
+msgstr "Vous n'avez pas de messages."
+
 #: templates/passwordchange.html:6 templates/passwordchange.html:20
 #: templates/profile.html:34
 msgid "Change password"
@@ -1314,10 +1344,6 @@ msgstr "Fournisseur :"
 #: templates/profile.html:44
 msgid "Unique Id:"
 msgstr "Identité :"
-
-#: templates/profile.html:56
-msgid "Messages"
-msgstr "Messages"
 
 #: templates/profilepublic.html:6 templates/profilepublic.html:19
 msgid "User"

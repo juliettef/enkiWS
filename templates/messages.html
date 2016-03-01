@@ -20,7 +20,7 @@
                 <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 	            <fieldset>
 
-                    <h3>{{ _( "Friend requests from" )}}</h3>
+                    <h3>{{ _( "Friend requests" )}}</h3>
 		            {% for item in data %}
 		                {% if item.type == 'friend_request' %}
 	                    <p><a href="{{ item.sender.user_page }}">{{ item.sender.display_name }}</a>
@@ -33,6 +33,8 @@
 	            </fieldset>
             </form>
 			</div>
+	        {% else %}
+	        <p class="text-info">{{ _( "You do not have any messages." ) }}</p>
             {% endif %}
 
             {% include "incfooter.html" %}
