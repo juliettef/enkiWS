@@ -11,7 +11,7 @@ Online demo *- may be out of sync with the source code -* https://enkisoftware-w
 ## Status
 
 This is a work in progress and not yet ready for production use.  
-__[ NEW in v0.3 ] Game API__
+__[ NEW in v0.4 ] Friends__
 
 
 ## Functionality
@@ -28,13 +28,16 @@ __[ NEW in v0.3 ] Game API__
     * store emulator
 * [ v0.3 ] Game API
     * Authentication (account and game key)
+* [ v0.4 ] Friends
+    * Search by display name and invite
+    * Message alert for friend invite
+    * Game API for friends list   
 
 ### Intended for release 1.0.0 
 
-* Friends
 * Game API
     * Multiplayer server list
-    * Friends list & status
+    * Friends status
 * Admin tools
 * Installation and usage documentation
 
