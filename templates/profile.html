@@ -36,25 +36,38 @@
 	        </p>
 
             {% if data.auth_provider %}
-                <h3>{{ _( "Linked accounts" )}}</h3>
+                <h3>{{ _( "Linked accounts" ) }}</h3>
                 <form class="form-group" action="{{ 'profile'|local }}" method="post">
                     <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     {% for item in data.auth_provider %}
                         <p>
-                            {{ _( "Provider:" )}} {{ item.provider_name }} | {{ _( "Unique Id:" )}} {{ item.provider_uid }}
+                            {{ _( "Provider:" ) }} {{ item.provider_name }} | {{ _( "Unique Id:" ) }} {{ item.provider_uid }}
                             {% if data.enough_accounts %}
-                                &nbsp;<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.provider_name }}:{{item.provider_uid}}">{{ _( "Remove" )}}</button>
+                                &nbsp;<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Remove" )}}</button>
                             {% endif %}
                         </p>
                     {% endfor %}
                 </form>
             {% endif %}
 
+            {% if data.sessions %}
+                <h3>{{ _( "Sessions" ) }}</h3>
+                <form class="form-group" action="{{ 'profile'|local }}" method="post">
+                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+                    {% for session in data.sessions %}
+                        <p>
+                            {{ session[ 'name' ] }} | {{ session[ 'date' ] }}  | {{ session[ 'current' ] }}
+                            &nbsp;<button class="btn btn-default btn-xs" type="submit" name="disconnect" value="{{ session[ 'name' ] }}">{{ _( "Disconnect" ) }}</button>
+                        </p>
+                    {% endfor %}
+                </form>
+            {% endif %}
+
             <h2>{{ _( "Friends" )}}</h2>
-            <p>
-	            <a href="{{ 'friends'|local }}" class="btn btn-default">{{ _( "Friends" )}}</a>
-                <a href="{{ 'messages'|local }}" class="btn btn-default">{{ _( "Messages" )}}</a>
-	        </p>
+            <span>
+	            <a href="{{ 'friends'|local }}" class="btn btn-default">{{ _( "Friends" ) }}</a>
+	            <a href="{{ 'messages'|local }}" class="btn btn-default">{{ _( "Messages" ) }}</a>
+	        </span>
 
 
             {% include "incpageextensions.html" %}

@@ -66,7 +66,7 @@ class HandlerProfile( enki.HandlerBase ):
 
 	def get( self ):
 		if self.ensure_is_logged_in():
-			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, messages, friends' )
+			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions' )
 			current_display_name = ''
 			previous_display_names = ''
 			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
@@ -82,9 +82,8 @@ class HandlerProfile( enki.HandlerBase ):
 				colon = item.find( ':' )
 				auth_provider.append({ 'provider_name': str( item[ :colon ]), 'provider_uid': str( item[ colon+1: ])})
 			enough_accounts = self.has_enough_accounts()
-			messages = 'debug c'
-			friends = 'debug d'
-			data = data( current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, messages, friends )
+			sessions = [ {'name':'session1@@@', 'date':'11:dd:mm:yy', 'current' : True }, {'name':'session2@@@', 'date':'22:dd:mm:yy', 'current' : False } ] # todo: generate sessions list (include time last connected and flag the current session)
+			data = data( current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
 			                  data = data )
@@ -93,9 +92,16 @@ class HandlerProfile( enki.HandlerBase ):
 		if self.ensure_is_logged_in():
 			self.check_CSRF()
 			remove_account = self.request.get( 'remove' )
-			result = self.remove_authid( remove_account )
-			provider_name = str( remove_account[ :remove_account.find( ':' )])
-			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_METHOD_REMOVED( provider_name ))
+			disconnect_session = self.request.get( 'disconnect' )
+
+			if remove_account:
+				self.remove_authid( remove_account )
+				provider_name = str( remove_account[ :remove_account.find( ':' )])
+				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_METHOD_REMOVED( provider_name ))
+			elif disconnect_session:
+				# todo: disconnect the session disconnect_session
+				self.add_infomessage( 'success', MSG.SUCCESS( ), 'Session disconnected @@@')
+
 			self.redirect( enki.libutil.get_local_url( 'profile' ))
 
 
