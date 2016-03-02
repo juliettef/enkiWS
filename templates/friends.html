@@ -22,7 +22,7 @@
 
                 {% for item in data %}
                     <p><a href="{{ item.user_page }}">{{ item.display_name }}</a>
-                        &nbsp;<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.user_id }}">{{ _( "Remove" )}}</button>
+                        &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="remove" value="{{ item.user_id }}">{{ _( "Remove" )}}</button>
                     </p>
                 {% endfor %}
 

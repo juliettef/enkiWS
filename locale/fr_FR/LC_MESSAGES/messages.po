@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-01 17:28+0000\n"
+"POT-Creation-Date: 2016-03-02 13:04+0000\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -1143,11 +1143,11 @@ msgstr "Profil et paramètres du compte"
 msgid "Languages"
 msgstr "Langues"
 
-#: templates/incnavbartop.html:56
+#: templates/incnavbartop.html:57
 msgid "Logged in as"
 msgstr "Connecté.e"
 
-#: templates/incnavbartop.html:60
+#: templates/incnavbartop.html:61
 msgid "Please set up your display name"
 msgstr "Veuillez créer votre nom d'affichage."
 
