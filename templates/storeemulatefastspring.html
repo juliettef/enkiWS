@@ -26,7 +26,12 @@
                         <div class="form-group">
                             <label for="product" class="col-lg-2 control-label">{{ _( 'Product (editable for testing purposes)' ) }}</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" name="product" value="{{ product }}">
+                                <select class="form-control" type="text" name="product" value="{{ product }}">
+                                    <option>product_a</option>
+                                    <option>product_b</option>
+                                    <option>product_c</option>
+                                    <option>product_d</option>
+                                </select>
                             </div>
                         </div>
 

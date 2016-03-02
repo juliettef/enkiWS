@@ -46,12 +46,12 @@ def exist_EnkiProductKey_product_activated_by( user_id, product_name ):
 
 
 def fetch_EnkiProductKey_by_purchaser( user_id ):
-	list = EnkiModelProductKey.query( EnkiModelProductKey.purchaser_user_id == user_id ).fetch()
+	list = EnkiModelProductKey.query( EnkiModelProductKey.purchaser_user_id == user_id ).order( EnkiModelProductKey.product_name ).fetch()
 	return list
 
 
 def fetch_EnkiProductKey_by_activator( user_id ):
-	list = EnkiModelProductKey.query( EnkiModelProductKey.activated_by_user == user_id ).fetch()
+	list = EnkiModelProductKey.query( EnkiModelProductKey.activated_by_user == user_id ).order( EnkiModelProductKey.product_name ).fetch()
 	return list
 
 

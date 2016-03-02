@@ -6,7 +6,7 @@
 			<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 			{% for item in data[ 1 ] %}
 				<p>{{ item[ 2 ] }} - {{ item[ 1 ] }}
-                    &nbsp;<button class="btn btn-default btn-xs" type="submit" name="licence_key_preset" value="{{ item[ 1 ] }}">{{ _( "Activate licence" )}}</button>
+                    &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="licence_key_preset" value="{{ item[ 1 ] }}">{{ _( "Activate licence" )}}</button>
 				</p>
 			{% endfor %}
 		</form>
