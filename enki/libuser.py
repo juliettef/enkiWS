@@ -90,6 +90,11 @@ def exist_AuthToken( user_id, token ):
 	return count > 0
 
 
+def fetch_AuthTokens( user_id ):
+	list = EnkiModelTokenAuth.query( EnkiModelTokenAuth.user_id == user_id ).order( -EnkiModelTokenAuth.time_created ).fetch()
+	return list
+
+
 def fetch_keys_AuthToken( user_id ):
 	keys = EnkiModelTokenAuth.query( EnkiModelTokenAuth.user_id == user_id ).fetch( keys_only = True )
 	return keys

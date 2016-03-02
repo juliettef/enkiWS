@@ -56,8 +56,12 @@
                     <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     {% for session in data.sessions %}
                         <p>
-                            {{ session[ 'name' ] }} | {{ session[ 'date' ] }}  | {{ session[ 'current' ] }}
-                            &nbsp;<button class="btn btn-default btn-xs" type="submit" name="disconnect" value="{{ session[ 'name' ] }}">{{ _( "Disconnect" ) }}</button>
+                            {{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
+	                        {% if session[ 'current' ] %}
+	                            &nbsp;<button class="btn btn-default disabled btn-xs" }}">{{ _( "Current session" ) }}</button>
+	                        {% else %}
+                                &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect" value="{{ session[ 'tokenauth_id' ] }}">{{ _( "Disconnect" ) }}</button>
+	                        {% endif %}
                         </p>
                     {% endfor %}
                 </form>

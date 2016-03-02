@@ -67,22 +67,34 @@ class HandlerProfile( enki.HandlerBase ):
 	def get( self ):
 		if self.ensure_is_logged_in():
 			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions' )
+
 			current_display_name = ''
 			previous_display_names = ''
 			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
 			if user_display_name:
 				current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
 				previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
+
 			email = self.enki_user.email
 			allow_change_pw = True
 			if ( not email or email == 'removed' ) and not self.enki_user.password:
 				allow_change_pw = False
+
 			auth_provider = []
 			for item in self.enki_user.auth_ids_provider:
 				colon = item.find( ':' )
 				auth_provider.append({ 'provider_name': str( item[ :colon ]), 'provider_uid': str( item[ colon+1: ])})
 			enough_accounts = self.has_enough_accounts()
-			sessions = [ {'name':'session1@@@', 'date':'11:dd:mm:yy', 'current' : True }, {'name':'session2@@@', 'date':'22:dd:mm:yy', 'current' : False } ] # todo: generate sessions list (include time last connected and flag the current session)
+
+			sessions = []
+			current_token = self.session.get( 'auth_token' )
+			auth_tokens = enki.libuser.fetch_AuthTokens( self.user_id )
+			for item in auth_tokens:
+				current = False
+				if current_token == item.token:
+					current = True
+				sessions.append( { 'tokenauth_id':item.key.id(), 'time_created' : item.time_created, 'current' : current } )
+
 			data = data( current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
