@@ -53,6 +53,10 @@ def delete_verifytoken_by_email( email, type ):
 		ndb.delete_multi( entities )
 
 
+def delete_session_token_auth( token_auth_id ):
+	ndb.Key( EnkiModelTokenAuth, int( token_auth_id )).delete()
+
+
 def revoke_user_authentications( user_id ):
 	tokens = fetch_keys_AuthToken( user_id )
 	if tokens:
@@ -78,9 +82,9 @@ def exist_EnkiUser( email ):
 	return count > 0
 
 
-def get_AuthToken( user_id, token ):
+def fetch_key_AuthToken_by_user_id_token( user_id, token ):
 	entity = EnkiModelTokenAuth.query( ndb.AND( EnkiModelTokenAuth.user_id == user_id,
-	                                            EnkiModelTokenAuth.token == token )).get()
+	                                            EnkiModelTokenAuth.token == token )).fetch( keys_only = True )
 	return entity
 
 

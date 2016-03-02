@@ -11,6 +11,7 @@ def WARNING(): return _( "Warning" )
 def LOGGED_OUT(): return _( "You are logged out." )
 def LOGIN_NEEDED(): return _( "Please log in to access the page you requested." )
 def LOGGED_IN(): return _( "You are logged in." )
+def SESSION_DISCONNECTED(): return _( "Session disconnected." )
 
 def REGISTRATION_ABORT(): return _( "Sign up aborted." )
 def REGISTRATION_INFO_EMAIL_SENT( email ): return _( "If email address %(email)s is available, a registration email was sent to it. Please check your inbox and follow the instructions in the email to <b>confirm your registration</b>.", email = email )

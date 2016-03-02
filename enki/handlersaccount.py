@@ -104,15 +104,15 @@ class HandlerProfile( enki.HandlerBase ):
 		if self.ensure_is_logged_in():
 			self.check_CSRF()
 			remove_account = self.request.get( 'remove' )
-			disconnect_session = self.request.get( 'disconnect' )
+			disconnect_session_token = self.request.get( 'disconnect' )
 
 			if remove_account:
 				self.remove_authid( remove_account )
 				provider_name = str( remove_account[ :remove_account.find( ':' )])
 				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_METHOD_REMOVED( provider_name ))
-			elif disconnect_session:
-				# todo: disconnect the session disconnect_session
-				self.add_infomessage( 'success', MSG.SUCCESS( ), 'Session disconnected @@@')
+			elif disconnect_session_token:
+				enki.libuser.delete_session_token_auth( disconnect_session_token )
+				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.SESSION_DISCONNECTED())
 
 			self.redirect( enki.libutil.get_local_url( 'profile' ))
 

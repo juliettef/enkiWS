@@ -237,10 +237,10 @@ class HandlerBase( webapp2.RequestHandler ):
 	# log out the currently logged in user
 		if self.is_logged_in():
 			token = self.session.get( 'auth_token' )
-			tokenEntity = enki.libuser.get_AuthToken( self.user_id, token )
-			if tokenEntity:
+			token_key = enki.libuser.fetch_key_AuthToken_by_user_id_token( self.user_id, token )
+			if token_key:
 				# delete the token from the db
-				tokenEntity.key.delete()
+				ndb.delete_multi( token_key )
 			#delete the session
 			self.session.clear()
 			self.just_logged_in = False
