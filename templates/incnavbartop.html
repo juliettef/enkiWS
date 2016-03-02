@@ -51,23 +51,23 @@
                {% endfor %}
             </ul>
         </div>
-        {% if is_logged_in %}<div class="text-right">
-	        <p class="text-info">
-		        <small>{{ _( "Logged in as" ) }} </small>
+        {% if is_logged_in %}
+	    <div class="text-right">
+			<span>
+		        <small class="text-info">{{ _( "Logged in as" ) }} </small>
 		        {% if display_name %}
-		            <small>&nbsp;<b>{{display_name}}</b></small>
+		            &nbsp;<small class="text-info"><b>{{display_name}}</b></small>
 	            {% else %}
 		            &nbsp;<a href="{{ 'displayname'|local }}" class="btn btn-info btn-xs">{{ _( "Please set up your display name" ) }}</a>
 		        {% endif %}
-	        </p>
-        </div>{% endif %}
-
-		<div class="text-right">
-	    {% for navbar_extension in navbar_extensions %}
-            {% set data = navbar_extension[ 1 ] %}
-            {% include navbar_extension[ 0 ] %}
-		{% endfor %}
+				&nbsp;
+            </span>
+		    {% for navbar_extension in navbar_extensions %}
+            <span>{% set data = navbar_extension[ 1 ] %}
+            {% include navbar_extension[ 0 ] %}</span>
+			{% endfor %}
 		</div>
+	    {% endif %}
 
     </div>
 </nav>

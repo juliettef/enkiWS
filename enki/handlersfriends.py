@@ -98,10 +98,10 @@ class ExtensionPageMessageAlert( ExtensionPage ):
 		ExtensionPage.__init__( self, route_name = 'navbar', template_include = 'incmessagealert.html' )
 
 	def get_data( self, handler ):
-		data = [ False ]
-		if handler.is_logged_in:
+		data = [ 0 ]
+		if handler.user_id:
 			if enki.libmessage.exist_EnkiMessage_by_recipient( handler.user_id ):
-				data = [ True ]
+				data = [ 1 ]  # user has message
 		return data
 
 
