@@ -66,7 +66,7 @@ class HandlerProfile( enki.HandlerBase ):
 
 	def get( self ):
 		if self.ensure_is_logged_in():
-			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions' )
+			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions, sessions_app' )
 
 			current_display_name = ''
 			previous_display_names = ''
@@ -93,9 +93,14 @@ class HandlerProfile( enki.HandlerBase ):
 				current = False
 				if current_token == item.token:
 					current = True
-				sessions.append( { 'tokenauth_id':item.key.id(), 'time_created' : item.time_created, 'current' : current } )
+				sessions.append({ 'tokenauth_id' : item.key.id(), 'time_created' : item.time_created, 'current' : current })
 
-			data = data( current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions )
+			sessions_app = []
+			list = EnkiModelTokenVerify.fetch_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
+			for item in list:
+				sessions_app.append({ 'token_id' : item.key.id(), 'time_created' : item.time_created })
+
+			data = data( current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions, sessions_app )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
 			                  data = data )
@@ -105,6 +110,7 @@ class HandlerProfile( enki.HandlerBase ):
 			self.check_CSRF()
 			remove_account = self.request.get( 'remove' )
 			disconnect_session_token = self.request.get( 'disconnect' )
+			disconnect_app_token = self.request.get( 'disconnect_app' )
 
 			if remove_account:
 				self.remove_authid( remove_account )
@@ -112,7 +118,10 @@ class HandlerProfile( enki.HandlerBase ):
 				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_METHOD_REMOVED( provider_name ))
 			elif disconnect_session_token:
 				enki.libuser.delete_session_token_auth( disconnect_session_token )
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.SESSION_DISCONNECTED())
+				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISCONNECTED_SESSION( ) )
+			elif disconnect_app_token:
+				EnkiModelTokenVerify.delete_token_by_id( disconnect_app_token )
+				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISCONNECTED_APP( ) )
 
 			self.redirect( enki.libutil.get_local_url( 'profile' ))
 

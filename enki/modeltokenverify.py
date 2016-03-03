@@ -31,6 +31,11 @@ class EnkiModelTokenVerify( model.Model ):
 		entity = cls.query( ndb.AND( cls.auth_ids_provider == authId, cls.type == type )).get()
 		return entity
 
+	@classmethod
+	def fetch_by_user_id_type( cls, user_id, type ):
+		keys = cls.query( ndb.AND( cls.user_id == user_id, cls.type == type )).order( -cls.time_created ).fetch()
+		return keys
+
 	@classmethod	
 	def fetch_keys_by_user_id_type( cls, user_id, type ):
 		keys = cls.query( ndb.AND( cls.user_id == user_id, cls.type == type )).fetch( keys_only = True )
@@ -63,3 +68,7 @@ class EnkiModelTokenVerify( model.Model ):
 			key[ 0 ].delete()
 			return True
 		return False
+
+	@classmethod
+	def delete_token_by_id( cls, token_id ):
+		ndb.Key( EnkiModelTokenVerify, int( token_id )).delete()

@@ -49,10 +49,26 @@ indexes:
   - name: thread
   - name: time_created
 
+- kind: EnkiModelProductKey
+  properties:
+  - name: activated_by_user
+  - name: product_name
+
+- kind: EnkiModelProductKey
+  properties:
+  - name: purchaser_user_id
+  - name: product_name
+
 - kind: EnkiModelRestAPIConnectToken
   properties:
   - name: prefix
   - name: token
+  - name: time_created
+
+- kind: EnkiModelRestAPIConnectToken
+  properties:
+  - name: token
+  - name: user_id
   - name: time_created
 
 - kind: EnkiModelThread
@@ -61,10 +77,23 @@ indexes:
   - name: time_created
     direction: desc
 
+- kind: EnkiModelTokenAuth
+  properties:
+  - name: user_id
+  - name: time_created
+    direction: desc
+
 - kind: EnkiModelTokenEmailRollback
   properties:
   - name: user_id
   - name: time_created
+
+- kind: EnkiModelTokenVerify
+  properties:
+  - name: type
+  - name: user_id
+  - name: time_created
+    direction: desc
 
 - kind: EnkiModelTokenVerify
   properties:

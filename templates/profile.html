@@ -50,22 +50,37 @@
                 </form>
             {% endif %}
 
-            {% if data.sessions %}
-                <h3>{{ _( "Sessions" ) }}</h3>
-                <form class="form-group" action="{{ 'profile'|local }}" method="post">
-                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-                    {% for session in data.sessions %}
-                        <p>
-                            {{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
-	                        {% if session[ 'current' ] %}
-	                            &nbsp;<button class="btn btn-default disabled btn-xs" }}">{{ _( "Current session" ) }}</button>
-	                        {% else %}
-                                &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect" value="{{ session[ 'tokenauth_id' ] }}">{{ _( "Disconnect" ) }}</button>
-	                        {% endif %}
-                        </p>
-                    {% endfor %}
-                </form>
-            {% endif %}
+	        {% if data.sessions or data.sessions_app %}
+	            <h3>{{ _( "Sessions" ) }}</h3>
+                {% if data.sessions %}
+	                <h4>{{ _( "Browsers" ) }}</h4>
+	                <form class="form-group" action="{{ 'profile'|local }}" method="post">
+	                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+	                    {% for session in data.sessions %}
+	                        <p>
+	                            {{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
+		                        {% if session[ 'current' ] %}
+		                            &nbsp;<button class="btn btn-default disabled btn-xs" }}">{{ _( "Current session" ) }}</button>
+		                        {% else %}
+	                                &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect" value="{{ session[ 'tokenauth_id' ] }}">{{ _( "Disconnect" ) }}</button>
+		                        {% endif %}
+	                        </p>
+	                    {% endfor %}
+	                </form>
+                {% endif %}
+	            {% if data.sessions_app %}
+		            <h4>{{ _( "Applications" ) }}</h4>
+		            <form class="form-group" action="{{ 'profile'|local }}" method="post">
+		                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+		                {% for session_app in data.sessions_app %}
+		                    <p>
+		                        {{ _( "Connected" ) }} {{ session_app[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
+		                        &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect_app" value="{{ session_app[ 'token_id' ] }}">{{ _( "Disconnect" ) }}</button>
+		                    </p>
+		                {% endfor %}
+		            </form>
+	            {% endif %}
+	        {% endif %}
 
             <h2>{{ _( "Friends" )}}</h2>
             <span>
