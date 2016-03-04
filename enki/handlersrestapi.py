@@ -12,6 +12,7 @@ import enki.textmessages as MSG
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 from enki.modeltokenverify import EnkiModelTokenVerify
+from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 
 
 class HandlerPageRestAPI( enki.HandlerBase ):
