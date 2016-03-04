@@ -1,6 +1,8 @@
 import webapp2
 import json
 
+from google.appengine.ext import ndb
+
 import enki
 import enki.libuser
 import enki.libdisplayname
@@ -150,14 +152,97 @@ class HandlerAPIv1Friends( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			if user_id and auth_token:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
-					friends = enki.libfriends.get_friends_user_id_display_name( user_id )
 					success = True
 					error = ''
+					friends = enki.libfriends.get_friends_user_id_display_name( user_id )
 				else:
 					error = 'Unauthorised'
 		answer = { 'success' : success,
 		           'error' : error,
 		           'friends' : friends,
+		           }
+		self.response.headers[ 'Content-Type' ] = 'application/json'
+		self.response.write( json.dumps( answer, separators=(',',':') ))
+
+
+class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
+
+	def post( self ):
+		jsonobject = json.loads( self.request.body )
+		success = False
+		error = 'Invalid request'
+		if jsonobject:
+			user_id = int( jsonobject.get( 'user_id', ''))
+			auth_token = jsonobject.get( 'auth_token', '')
+			app_id = jsonobject.get( 'app_id', '')
+			data_key = jsonobject.get( 'data_key', '')
+			data_json = jsonobject.get( 'data_json', '')
+			if user_id and auth_token:
+				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+					success = True
+					error = ''
+					data_store = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
+					if data_store:  # update
+						data_store.data_json = data_json
+					else:   # create new
+						data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_json = data_json )
+					data_store.put()
+				else:
+					error = 'Unauthorised'
+		answer = { 'success' : success,
+		           'error' : error,
+		           }
+		self.response.headers[ 'Content-Type' ] = 'application/json'
+		self.response.write( json.dumps( answer, separators=(',',':') ))
+
+
+class HandlerAPIv1DataStoreGet( webapp2.RequestHandler ):
+
+	def post( self ):
+		jsonobject = json.loads( self.request.body )
+		success = False
+		error = 'Invalid request'
+		if jsonobject:
+			user_id = int( jsonobject.get( 'user_id', ''))
+			auth_token = jsonobject.get( 'auth_token', '')
+			app_id = jsonobject.get( 'app_id', '')
+			data_key = jsonobject.get( 'data_key', '')
+			if user_id and auth_token:
+				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+					success = True
+					error = ''
+					data_json = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key ).data_json
+				else:
+					error = 'Unauthorised'
+		answer = { 'success' : success,
+		           'error' : error,
+		           'data_json' : data_json
+		           }
+		self.response.headers[ 'Content-Type' ] = 'application/json'
+		self.response.write( json.dumps( answer, separators=(',',':') ))
+
+
+class HandlerAPIv1DataStoreDel( webapp2.RequestHandler ):
+
+	def post( self ):
+		jsonobject = json.loads( self.request.body )
+		success = False
+		error = 'Invalid request'
+		if jsonobject:
+			user_id = int( jsonobject.get( 'user_id', ''))
+			auth_token = jsonobject.get( 'auth_token', '')
+			app_id = jsonobject.get( 'app_id', '')
+			data_key = jsonobject.get( 'data_key', '')
+			if user_id and auth_token:
+				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+					success = True
+					error = ''
+					data_stores = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
+					ndb.delete_multi( data_stores )
+				else:
+					error = 'Unauthorised'
+		answer = { 'success' : success,
+		           'error' : error,
 		           }
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
@@ -178,6 +263,9 @@ class ExtensionRestAPI( Extension ):
 		          webapp2.Route( '/api/v1/authvalidate', HandlerAPIv1AuthValidate, name = 'apiv1authvalidate' ),
 		          webapp2.Route( '/api/v1/ownsproducts', HandlerAPIv1OwnsProducts, name = 'apiv1ownsproducts' ),
 		          webapp2.Route( '/api/v1/friends', HandlerAPIv1Friends, name = 'apiv1friends' ),
+		          webapp2.Route( '/api/v1/datastore/set', HandlerAPIv1DataStoreSet, name = 'apiv1datastoreset' ),
+		          webapp2.Route( '/api/v1/datastore/get', HandlerAPIv1DataStoreGet, name = 'apiv1datastoreget' ),
+		          webapp2.Route( '/api/v1/datastore/del', HandlerAPIv1DataStoreDel, name = 'apiv1datastoredel' ),
 				  ]
 
 	def get_page_extensions( self ):
