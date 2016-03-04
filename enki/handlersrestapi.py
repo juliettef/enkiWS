@@ -176,8 +176,8 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			app_id = jsonobject.get( 'app_id', '')
 			data_key = jsonobject.get( 'data_key', '')
-			data_json = jsonobject.get( 'data_json', '')
-			if user_id and auth_token:
+			data_json = jsonobject.get( 'data_json' )
+			if user_id and auth_token and data_json:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					success = True
 					error = ''
