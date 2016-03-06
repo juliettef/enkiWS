@@ -176,16 +176,16 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			app_id = jsonobject.get( 'app_id', '')
 			data_key = jsonobject.get( 'data_key', '')
-			data_json = jsonobject.get( 'data_json' )
-			if user_id and auth_token and data_json:
+			data_payload = jsonobject.get( 'data_payload' )
+			if user_id and auth_token and data_payload:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					success = True
 					error = ''
 					data_store = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
 					if data_store:  # update
-						data_store.data_json = data_json
+						data_store.data_payload = data_payload
 					else:   # create new
-						data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_json = data_json )
+						data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_payload = data_payload )
 					data_store.put()
 				else:
 					error = 'Unauthorised'
@@ -211,12 +211,12 @@ class HandlerAPIv1DataStoreGet( webapp2.RequestHandler ):
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					success = True
 					error = ''
-					data_json = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key ).data_json
+					data_payload = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key ).data_payload
 				else:
 					error = 'Unauthorised'
 		answer = { 'success' : success,
 		           'error' : error,
-		           'data_json' : data_json
+		           'data_payload' : data_payload
 		           }
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))

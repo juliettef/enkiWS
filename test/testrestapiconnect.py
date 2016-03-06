@@ -54,8 +54,8 @@ print( ' => Response:\n' + r_friends.text + '\n' )
 print( '* Data Store set - add new' )
 url_datastoreset = url + '/api/v1/datastore/set'
 data_type = 'appearance'
-data_json = json.loads( '{"colour":"blue", "shape":"cube", "size":"0.7"}' )
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'data_json' : data_json }
+data_payload = json.loads( '{"colour":"blue", "shape":"cube", "size":"0.7"}' )
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'data_payload' : data_payload }
 r_datastoreset = requests.post( url_datastoreset, json = payload )
 print( ' => Response:\n' + r_datastoreset.text + '\n' )
 
