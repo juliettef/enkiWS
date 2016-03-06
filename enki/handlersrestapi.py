@@ -35,29 +35,25 @@ class HandlerAPIv1Connect( webapp2.RequestHandler ):
 		jsonobject = json.loads( self.request.body )
 		success = False
 		error = 'Invalid request'
-		user_id = ''
-		auth_token = ''
+		answer = {}
 		if jsonobject:
 			code = jsonobject.get( 'code', '')
 			user_displayname = jsonobject.get( 'user_displayname', '')
-			user_id = enki.libdisplayname.get_user_id_from_display_name( user_displayname )
 			if code and user_displayname:
-				entity = enki.librestapi.get_EnkiModelRestAPIConnectToken_by_token_user_id_valid_age( token = code, user_id = user_id )
-				if entity:
-					success = True
-					error = ''
-					user_id = entity.user_id
-					auth_token = enki.librestapi.generate_auth_token()
-					entity.key.delete()     # single use token
-					verification_token = EnkiModelTokenVerify( token = auth_token, user_id = user_id, type = 'apiconnect' )
-					verification_token.put()    # persistent authentication token, a user may have several
-				else:
-					error = 'Unauthorised'
-		answer = { 'success' : success,
-		           'error' : error,
-		           'user_id' : str( user_id ),
-		           'auth_token' : auth_token
-		           }
+				user_id = enki.libdisplayname.get_user_id_from_display_name( user_displayname )
+				if user_id:
+					entity = enki.librestapi.get_EnkiModelRestAPIConnectToken_by_token_user_id_valid_age( token = code, user_id = user_id )
+					if entity:
+						auth_token = enki.librestapi.generate_auth_token()
+						entity.key.delete()     # single use token
+						verification_token = EnkiModelTokenVerify( token = auth_token, user_id = user_id, type = 'apiconnect' )
+						verification_token.put()    # persistent authentication token, a user may have several
+						answer.update({ 'user_id' : str( user_id ), 'auth_token' : auth_token })
+						success = True
+						error = ''
+					else:
+						error = 'Unauthorised'
+		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
@@ -68,6 +64,7 @@ class HandlerAPIv1Logout( webapp2.RequestHandler ):
 		jsonobject = json.loads( self.request.body )
 		success = False
 		error = 'Invalid request'
+		answer = {}
 		if jsonobject:
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
@@ -77,9 +74,7 @@ class HandlerAPIv1Logout( webapp2.RequestHandler ):
 					error = ''
 				else:
 					error = 'Unauthorised'
-		answer = { 'success' : success,
-		           'error' : error,
-					}
+		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
@@ -90,21 +85,22 @@ class HandlerAPIv1AuthValidate( webapp2.RequestHandler ):
 		jsonobject = json.loads( self.request.body )
 		success = False
 		error = 'Invalid request'
-		user_displayname = ''
+		answer = {}
 		if jsonobject:
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
 			if user_id and auth_token:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
-					success = True
-					error = ''
 					user_displayname = enki.libdisplayname.get_display_name( user_id )
+					if user_displayname:
+						answer.update({ 'user_displayname' : user_displayname })
+						success = True
+						error = ''
+					else:
+						error = 'Not found'
 				else:
 					error = 'Unauthorised'
-		answer = { 'success' : success,
-		           'error' : error,
-		           'user_displayname' : user_displayname,
-					}
+		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
@@ -115,7 +111,7 @@ class HandlerAPIv1OwnsProducts( webapp2.RequestHandler ):
 		jsonobject = json.loads( self.request.body )
 		success = False
 		error = 'Invalid request'
-		list_products = []
+		answer = {}
 		if jsonobject:
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
@@ -126,16 +122,18 @@ class HandlerAPIv1OwnsProducts( webapp2.RequestHandler ):
 						list_entities = enki.libstore.fetch_EnkiProductKey_by_activator_products_list( user_id, products )
 					else:    # no product specified, return all products activated by the user
 						list_entities = enki.libstore.fetch_EnkiProductKey_by_activator( user_id )
-					for i, item in enumerate( list_entities ):
-						list_products.append( item.product_name )
-					success = True
-					error = ''
+					if list_entities:
+						list_products = []
+						for i, item in enumerate( list_entities ):
+							list_products.append( item.product_name )
+						answer.update({ 'products_owned' : list_products })
+						success = True
+						error = ''
+					else:
+						error = 'Not found'
 				else:
 					error = 'Unauthorised'
-		answer = { 'success' : success,
-		           'error' : error,
-		           'products_owned' : list_products,
-		           }
+		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
@@ -146,21 +144,22 @@ class HandlerAPIv1Friends( webapp2.RequestHandler ):
 		jsonobject = json.loads( self.request.body )
 		success = False
 		error = 'Invalid request'
-		friends = []
+		answer = {}
 		if jsonobject:
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
 			if user_id and auth_token:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
-					success = True
-					error = ''
 					friends = enki.libfriends.get_friends_user_id_display_name( user_id )
+					if friends:
+						answer.update({ 'friends' : friends })
+						success = True
+						error = ''
+					else:
+						error = 'Not found'
 				else:
 					error = 'Unauthorised'
-		answer = { 'success' : success,
-		           'error' : error,
-		           'friends' : friends,
-		           }
+		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
@@ -171,27 +170,32 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 		jsonobject = json.loads( self.request.body )
 		success = False
 		error = 'Invalid request'
+		answer = {}
 		if jsonobject:
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
 			app_id = jsonobject.get( 'app_id', '')
 			data_key = jsonobject.get( 'data_key', '')
 			data_payload = jsonobject.get( 'data_payload' )
-			if user_id and auth_token and data_payload:
+			read_access = jsonobject.get( 'read_access', '' )
+			if user_id and auth_token and app_id and data_key and data_payload:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
-					success = True
-					error = ''
 					data_store = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
 					if data_store:  # update
 						data_store.data_payload = data_payload
+						if read_access: # if read_access is not specified, don't update it
+							data_store.read_access = read_access
 					else:   # create new
-						data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_payload = data_payload )
+						if not read_access: # if read_access is not specified, use model's default
+							data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_payload = data_payload )
+						else:
+							data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_payload = data_payload, read_access = read_access )
 					data_store.put()
+					success = True
+					error = ''
 				else:
 					error = 'Unauthorised'
-		answer = { 'success' : success,
-		           'error' : error,
-		           }
+		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
@@ -202,6 +206,7 @@ class HandlerAPIv1DataStoreGet( webapp2.RequestHandler ):
 		jsonobject = json.loads( self.request.body )
 		success = False
 		error = 'Invalid request'
+		answer = {}
 		if jsonobject:
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
@@ -209,15 +214,16 @@ class HandlerAPIv1DataStoreGet( webapp2.RequestHandler ):
 			data_key = jsonobject.get( 'data_key', '')
 			if user_id and auth_token:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
-					success = True
-					error = ''
-					data_payload = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key ).data_payload
+					data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
+					if data_store_item:
+						answer.update({ 'data_payload' : data_store_item.data_payload })
+						success = True
+						error = ''
+					else:
+						error = 'Not found'
 				else:
 					error = 'Unauthorised'
-		answer = { 'success' : success,
-		           'error' : error,
-		           'data_payload' : data_payload
-		           }
+		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
@@ -228,6 +234,7 @@ class HandlerAPIv1DataStoreDel( webapp2.RequestHandler ):
 		jsonobject = json.loads( self.request.body )
 		success = False
 		error = 'Invalid request'
+		answer = {}
 		if jsonobject:
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
@@ -235,15 +242,13 @@ class HandlerAPIv1DataStoreDel( webapp2.RequestHandler ):
 			data_key = jsonobject.get( 'data_key', '')
 			if user_id and auth_token:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
-					success = True
-					error = ''
 					data_stores = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
 					ndb.delete_multi( data_stores )
+					success = True
+					error = ''
 				else:
 					error = 'Unauthorised'
-		answer = { 'success' : success,
-		           'error' : error,
-		           }
+		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 

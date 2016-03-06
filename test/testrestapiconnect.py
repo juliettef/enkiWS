@@ -53,23 +53,25 @@ print( ' => Response:\n' + r_friends.text + '\n' )
 # HandlerAPIv1DataStoreSet
 print( '* Data Store set - add new' )
 url_datastoreset = url + '/api/v1/datastore/set'
-data_type = 'appearance'
+app_id = 'product_a'
+data_key = 'settings'
 data_payload = json.loads( '{"colour":"blue", "shape":"cube", "size":"0.7"}' )
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'data_payload' : data_payload }
+read_access = 'public'
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key, 'data_payload' : data_payload, 'read_access' : read_access }
 r_datastoreset = requests.post( url_datastoreset, json = payload )
 print( ' => Response:\n' + r_datastoreset.text + '\n' )
 
 # HandlerAPIv1DataStoreGet
 print( '* Data Store get' )
 url_datastoreget = url + '/api/v1/datastore/get'
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key }
 r_datastoreget = requests.post( url_datastoreget, json = payload )
 print( ' => Response:\n' + r_datastoreget.text + '\n' )
 
 # HandlerAPIv1DataStoreDel
 print( '* Data Store delete' )
 url_datastoredel = url + '/api/v1/datastore/del'
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_key' : data_key }
 r_datastoredel = requests.post( url_datastoredel, json = payload )
 print( ' => Response:\n' + r_datastoredel.text + '\n' )
 

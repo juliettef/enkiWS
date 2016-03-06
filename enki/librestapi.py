@@ -25,12 +25,10 @@ def cleanup_and_get_new_connection_token( user_id ):
 		# delete any existing connect token for the user
 		ndb.delete_multi_async( fetch_EnkiModelRestAPIConnectToken_by_user( user_id ))
 		# create a new token and return it
-		display_name = enki.libdisplayname.get_display_name( user_id )
-		if display_name:
-			token = generate_connect_code()
-			entity = EnkiModelRestAPIConnectToken( token = token, display_name = display_name, user_id = int( user_id ))
-			entity.put()
-			return token
+		token = generate_connect_code()
+		entity = EnkiModelRestAPIConnectToken( token = token, user_id = int( user_id ))
+		entity.put()
+		return token
 	return None
 
 
