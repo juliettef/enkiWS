@@ -1,85 +1,90 @@
 import requests
 import json
 
-print( 'TEST Rest API')
+# application url
+URL_LOCAL = 'http://127.0.0.1:8881'
+URL_ONLINE = 'https://enkisoftware-webservices.appspot.com'
+
+# default values
+URL_DEFAULT = URL_LOCAL
+PREFIX_DEFAULT = ''
+
+# routes
+ROUTE_CONNECT = '/api/v1/connect'
+ROUTE_LOGOUT = '/api/v1/logout'
+ROUTE_VALIDATE = '/api/v1/authvalidate'
+ROUTE_PRODUCTS = '/api/v1/ownsproducts'
+ROUTE_FRIENDS = '/api/v1/friends'
+ROUTE_DATASTORESET = '/api/v1/datastore/set'
+ROUTE_DATASTOREGET = '/api/v1/datastore/get'
+ROUTE_DATASTOREDEL = '/api/v1/datastore/del'
+
+
+def get_response( route, payload ):
+	url_route = url + route
+	response = requests.post( url_route, json = payload )
+	print( '\n> ' + route )
+	print( response.text + '\n' )
+	return response
+
 
 # set domain name url
-# url_default = 'http://127.0.0.1:8881'   # local
-url_default = 'https://enkisoftware-webservices.appspot.com'
 url = ''
-url = raw_input( ' - Enter url (domain name, press enter to use default url ' + url_default + '): ' )
+url = raw_input( '> Enter url (domain name, press enter to use default url ' + URL_DEFAULT + '): ' )
 if not url:
-	url = url_default
+	url = URL_DEFAULT
 
 # HandlerAPIv1Connect
-print( '* Connection token' )
-url_connect = url + '/api/v1/connect'
 prefix = ''
+prefix = raw_input( "> Enter display name (format: alphanumeric prefix + '#' + 4 digits): " )
+if not prefix:
+	prefix = PREFIX_DEFAULT
 code = ''
-prefix = raw_input( " - Enter display name (format: alphanumeric prefix + '#' + 4 digits): " )
-code = raw_input( ' - Enter code (connection token, format: 5 alphanumeric characters): ' )
+code = raw_input( '> Enter code (connection token, format: 5 alphanumeric characters): ' )
 payload = { 'user_displayname' : prefix, 'code' : code }
-r_connect = requests.post( url_connect, json = payload )
-print( ' => Response:\n' + r_connect.text + '\n' )
+r_connect = get_response( ROUTE_CONNECT, payload )
+
+# get user_id and auth_token from connect response
+r_connect_json = r_connect.json()
+if r_connect_json[ 'success' ]:
+	user_id = r_connect_json[ 'user_id' ]
+	auth_token = r_connect_json[ 'auth_token' ]
+else:
+	print( 'Abort test: missing user_id and/or auth_token' )
+	exit()
 
 # HandlerAPIv1AuthValidate
-print( '* Validate auth token' )
-url_validate = url + '/api/v1/authvalidate'
-r_connect_json = r_connect.json()
-user_id = r_connect_json[ 'user_id' ]
-auth_token = r_connect_json[ 'auth_token' ]
 payload = { 'user_id' : user_id, 'auth_token' : auth_token }
-r_validate = requests.post( url_validate, json = payload )
-print( ' => Response:\n' + r_validate.text + '\n' )
+get_response( ROUTE_VALIDATE, payload )
 
 # HandlerAPIv1OwnsProducts
-print( "* Validate auth token and list user's owned (activated) products" )
-url_products = url + '/api/v1/ownsproducts'
 products = []
-s = raw_input( " - Enter list of products to check (format comma separated, e.g. product_a, product_b, product_c. If left blank - press Enter - all activated products are returned.): " )
+s = raw_input( "\n> Enter list of products to check (format comma separated, e.g. product_a, product_b, product_c. If left blank - press Enter - all activated products are returned.): " )
 if s:
 	products = map( str, s.split( ', ' ))
 payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'products' : products }
-r_products = requests.post( url_products, json = payload )
-print( ' => Response:\n' + r_products.text + '\n' )
+get_response( ROUTE_PRODUCTS, payload )
 
 # HandlerAPIv1Friends
-print( '* Friends' )
-url_friends = url + '/api/v1/friends'
 payload = { 'user_id' : user_id, 'auth_token' : auth_token }
-r_friends = requests.post( url_friends, json = payload )
-print( ' => Response:\n' + r_friends.text + '\n' )
+get_response( ROUTE_FRIENDS, payload )
 
 # HandlerAPIv1DataStoreSet
-print( '* Data Store set - add new' )
-url_datastoreset = url + '/api/v1/datastore/set'
 app_id = 'product_a'
 data_key = 'settings'
 data_payload = json.loads( '{"colour":"blue", "shape":"cube", "size":"0.7"}' )
 read_access = 'public'
 payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key, 'data_payload' : data_payload, 'read_access' : read_access }
-r_datastoreset = requests.post( url_datastoreset, json = payload )
-print( ' => Response:\n' + r_datastoreset.text + '\n' )
+get_response( ROUTE_DATASTORESET, payload )
 
 # HandlerAPIv1DataStoreGet
-print( '* Data Store get' )
-url_datastoreget = url + '/api/v1/datastore/get'
 payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key }
-r_datastoreget = requests.post( url_datastoreget, json = payload )
-print( ' => Response:\n' + r_datastoreget.text + '\n' )
+get_response( ROUTE_DATASTOREGET, payload )
 
 # HandlerAPIv1DataStoreDel
-print( '* Data Store delete' )
-url_datastoredel = url + '/api/v1/datastore/del'
 payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_key' : data_key }
-r_datastoredel = requests.post( url_datastoredel, json = payload )
-print( ' => Response:\n' + r_datastoredel.text + '\n' )
+get_response( ROUTE_DATASTOREGET, payload )
 
 # HandlerAPIv1Logout
-print( '* Logout, delete auth token' )
-url_logout = url + '/api/v1/logout'
-user_id = r_connect_json[ 'user_id' ]
-auth_token = r_connect_json[ 'auth_token' ]
 payload = { 'user_id' : user_id, 'auth_token' : auth_token }
-r_validate = requests.post( url_logout, json = payload )
-print( ' => Response:\n' + r_validate.text + '\n' )
+get_response( ROUTE_LOGOUT, payload )
