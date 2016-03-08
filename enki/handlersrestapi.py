@@ -165,7 +165,7 @@ class HandlerAPIv1Friends( webapp2.RequestHandler ):
 
 
 class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
-
+# data identified by the combination of user_id & app_id & data_key
 	def post( self ):
 		jsonobject = json.loads( self.request.body )
 		success = False
@@ -186,7 +186,7 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 						if read_access: # if read_access is not specified, don't update it
 							data_store.read_access = read_access
 					else:   # create new
-						if not read_access: # if read_access is not specified, use model's default
+						if not read_access: # if read_access is not specified, use the model's default
 							data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_payload = data_payload )
 						else:
 							data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_payload = data_payload, read_access = read_access )
@@ -212,11 +212,82 @@ class HandlerAPIv1DataStoreGet( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			app_id = jsonobject.get( 'app_id', '')
 			data_key = jsonobject.get( 'data_key', '')
-			if user_id and auth_token:
+			if user_id and auth_token and app_id and data_key:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
 					if data_store_item:
 						answer.update({ 'data_payload' : data_store_item.data_payload })
+						success = True
+						error = ''
+					else:
+						error = 'Not found'
+				else:
+					error = 'Unauthorised'
+		answer.update({ 'success' : success, 'error' : error })
+		self.response.headers[ 'Content-Type' ] = 'application/json'
+		self.response.write( json.dumps( answer, separators=(',',':') ))
+
+
+class HandlerAPIv1DataStoreGetFriends( webapp2.RequestHandler ):
+# returns list of data payloads of the user's friends where data read_access = 'friends':
+	def post( self ):
+		jsonobject = json.loads( self.request.body )
+		success = False
+		error = 'Invalid request'
+		answer = {}
+		if jsonobject:
+			user_id = int( jsonobject.get( 'user_id', ''))
+			auth_token = jsonobject.get( 'auth_token', '')
+			app_id = jsonobject.get( 'app_id', '')
+			data_key = jsonobject.get( 'data_key', '')
+			if user_id and auth_token and app_id and data_key:
+				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+					# get the user friends' ids
+					friends_list = enki.libfriends.get_friends_user_id( user_id )
+					if friends_list:
+						read_access = 'friends'
+						data_payload_list = []
+						# get each friends' data
+						for friend_id in friends_list:
+							data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_read_access( friend_id, app_id, data_key, read_access )
+							if data_store_item:
+								data_payload_list.append( data_store_item.data_payload )
+						if data_payload_list:
+							answer.update({ 'data_payload' : data_payload_list })
+							success = True
+							error = ''
+						else:
+							error = 'Not found'
+					else:
+						error = 'Not found'
+				else:
+					error = 'Unauthorised'
+		answer.update({ 'success' : success, 'error' : error })
+		self.response.headers[ 'Content-Type' ] = 'application/json'
+		self.response.write( json.dumps( answer, separators=(',',':') ))
+
+
+class HandlerAPIv1DataStoreGetPublic( webapp2.RequestHandler ):
+# returns all data with read-access public
+	def post( self ):
+		jsonobject = json.loads( self.request.body )
+		success = False
+		error = 'Invalid request'
+		answer = {}
+		if jsonobject:
+			user_id = int( jsonobject.get( 'user_id', ''))
+			auth_token = jsonobject.get( 'auth_token', '')
+			app_id = jsonobject.get( 'app_id', '')
+			data_key = jsonobject.get( 'data_key', '')
+			if user_id and auth_token and app_id and data_key:
+				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+					read_access = 'public'
+					data_store_list = enki.librestapi.fetch_EnkiModelRestAPIConnectToken_by_app_id_data_key_read_access( app_id, data_key, read_access )
+					if data_store_list:
+						data_payload_list = []
+						for data_store_item in data_store_list:
+							data_payload_list.append( data_store_item.data_payload )
+						answer.update({ 'data_payload' : data_payload_list })
 						success = True
 						error = ''
 					else:
@@ -240,7 +311,7 @@ class HandlerAPIv1DataStoreDel( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			app_id = jsonobject.get( 'app_id', '')
 			data_key = jsonobject.get( 'data_key', '')
-			if user_id and auth_token:
+			if user_id and auth_token and app_id and data_key:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					data_stores = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
 					ndb.delete_multi( data_stores )
@@ -270,6 +341,8 @@ class ExtensionRestAPI( Extension ):
 		          webapp2.Route( '/api/v1/friends', HandlerAPIv1Friends, name = 'apiv1friends' ),
 		          webapp2.Route( '/api/v1/datastore/set', HandlerAPIv1DataStoreSet, name = 'apiv1datastoreset' ),
 		          webapp2.Route( '/api/v1/datastore/get', HandlerAPIv1DataStoreGet, name = 'apiv1datastoreget' ),
+		          webapp2.Route( '/api/v1/datastore/getfriends', HandlerAPIv1DataStoreGetFriends, name = 'apiv1datastoregetfriends' ),
+		          webapp2.Route( '/api/v1/datastore/getpublic', HandlerAPIv1DataStoreGetPublic, name = 'apiv1datastoregetpublic' ),
 		          webapp2.Route( '/api/v1/datastore/del', HandlerAPIv1DataStoreDel, name = 'apiv1datastoredel' ),
 				  ]
 

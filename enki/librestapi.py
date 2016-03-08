@@ -3,7 +3,6 @@ import webapp2_extras.security
 
 from google.appengine.ext import ndb
 
-import enki.libdisplayname
 from enki.modelrestapiconnecttoken import EnkiModelRestAPIConnectToken
 from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 
@@ -54,13 +53,28 @@ def fetch_old_rest_api_connect_tokens():
 
 def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key ):
 	entity = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
-	                                                  EnkiModelRestAPIDataStore.app_id == app_id,
-	                                                  EnkiModelRestAPIDataStore.data_key == data_key )).get()
+	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
+	                                                   EnkiModelRestAPIDataStore.data_key == data_key )).get()
+	return entity
+
+
+def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_read_access( user_id, app_id, data_key, read_access ):
+	entity = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
+	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
+	                                                   EnkiModelRestAPIDataStore.data_key == data_key,
+	                                                   EnkiModelRestAPIDataStore.read_access == read_access )).get()
 	return entity
 
 
 def fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key ):
 	list = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
-	                                                  EnkiModelRestAPIDataStore.app_id == app_id,
-	                                                  EnkiModelRestAPIDataStore.data_key == data_key )).fetch( keys_only = True )
+	                                                 EnkiModelRestAPIDataStore.app_id == app_id,
+	                                                 EnkiModelRestAPIDataStore.data_key == data_key )).fetch( keys_only = True )
+	return list
+
+
+def fetch_EnkiModelRestAPIConnectToken_by_app_id_data_key_read_access( app_id, data_key, read_access ):
+	list = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.app_id == app_id,
+	                                                 EnkiModelRestAPIDataStore.data_key == data_key,
+	                                                 EnkiModelRestAPIDataStore.read_access == read_access )).fetch()
 	return list

@@ -17,6 +17,8 @@ ROUTE_PRODUCTS = '/api/v1/ownsproducts'
 ROUTE_FRIENDS = '/api/v1/friends'
 ROUTE_DATASTORESET = '/api/v1/datastore/set'
 ROUTE_DATASTOREGET = '/api/v1/datastore/get'
+ROUTE_DATASTOREGETFRIENDS = '/api/v1/datastore/getfriends'
+ROUTE_DATASTOREGETPUBLIC = '/api/v1/datastore/getpublic'
 ROUTE_DATASTOREDEL = '/api/v1/datastore/del'
 
 
@@ -36,7 +38,10 @@ if not url:
 
 # HandlerAPIv1Connect
 prefix = ''
-prefix = raw_input( "> Enter display name (format: alphanumeric prefix + '#' + 4 digits): " )
+msg_default = ''
+if PREFIX_DEFAULT:
+	msg_default = ", press enter to use default prefix " + PREFIX_DEFAULT
+prefix = raw_input( "> Enter display name (format: alphanumeric prefix + '#' + 4 digits" + msg_default + "): " )
 if not prefix:
 	prefix = PREFIX_DEFAULT
 code = ''
@@ -81,9 +86,17 @@ get_response( ROUTE_DATASTORESET, payload )
 payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key }
 get_response( ROUTE_DATASTOREGET, payload )
 
+# HandlerAPIv1DataStoreGetFriends
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key }
+get_response( ROUTE_DATASTOREGETFRIENDS, payload )
+
+# HandlerAPIv1DataStoreGetPublic
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key }
+get_response( ROUTE_DATASTOREGETPUBLIC, payload )
+
 # HandlerAPIv1DataStoreDel
 payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_key' : data_key }
-get_response( ROUTE_DATASTOREGET, payload )
+get_response( ROUTE_DATASTOREDEL, payload )
 
 # HandlerAPIv1Logout
 payload = { 'user_id' : user_id, 'auth_token' : auth_token }
