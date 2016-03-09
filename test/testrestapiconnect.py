@@ -7,7 +7,7 @@ URL_ONLINE = 'https://enkisoftware-webservices.appspot.com'
 
 # default values
 URL_DEFAULT = URL_LOCAL
-PREFIX_DEFAULT = ''
+DISPLAYNAME_DEFAULT = ''
 
 # routes
 ROUTE_CONNECT = '/api/v1/connect'
@@ -17,8 +17,7 @@ ROUTE_PRODUCTS = '/api/v1/ownsproducts'
 ROUTE_FRIENDS = '/api/v1/friends'
 ROUTE_DATASTORESET = '/api/v1/datastore/set'
 ROUTE_DATASTOREGET = '/api/v1/datastore/get'
-ROUTE_DATASTOREGETFRIENDS = '/api/v1/datastore/getfriends'
-ROUTE_DATASTOREGETPUBLIC = '/api/v1/datastore/getpublic'
+ROUTE_DATASTOREGETLIST = '/api/v1/datastore/getlist'
 ROUTE_DATASTOREDEL = '/api/v1/datastore/del'
 
 
@@ -37,16 +36,16 @@ if not url:
 	url = URL_DEFAULT
 
 # HandlerAPIv1Connect
-prefix = ''
+displayname = ''
 msg_default = ''
-if PREFIX_DEFAULT:
-	msg_default = ", press enter to use default prefix " + PREFIX_DEFAULT
-prefix = raw_input( "> Enter display name (format: alphanumeric prefix + '#' + 4 digits" + msg_default + "): " )
-if not prefix:
-	prefix = PREFIX_DEFAULT
+if DISPLAYNAME_DEFAULT:
+	msg_default = ", press enter to use default display name " + DISPLAYNAME_DEFAULT
+displayname = raw_input( "> Enter display name (format: alphanumeric prefix + '#' + 4 digits" + msg_default + "): " )
+if not displayname:
+	displayname = DISPLAYNAME_DEFAULT
 code = ''
 code = raw_input( '> Enter code (connection token, format: 5 alphanumeric characters): ' )
-payload = { 'user_displayname' : prefix, 'code' : code }
+payload = { 'user_displayname' : displayname, 'code' : code }
 r_connect = get_response( ROUTE_CONNECT, payload )
 
 # get user_id and auth_token from connect response
@@ -64,10 +63,11 @@ get_response( ROUTE_VALIDATE, payload )
 
 # HandlerAPIv1OwnsProducts
 products = []
+payload = { 'user_id' : user_id, 'auth_token' : auth_token }
 s = raw_input( "\n> Enter list of products to check (format comma separated, e.g. product_a, product_b, product_c. If left blank - press Enter - all activated products are returned.): " )
 if s:
 	products = map( str, s.split( ', ' ))
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'products' : products }
+	payload.update({ 'products' : products })
 get_response( ROUTE_PRODUCTS, payload )
 
 # HandlerAPIv1Friends
@@ -86,16 +86,12 @@ get_response( ROUTE_DATASTORESET, payload )
 payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key }
 get_response( ROUTE_DATASTOREGET, payload )
 
-# HandlerAPIv1DataStoreGetFriends
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key }
-get_response( ROUTE_DATASTOREGETFRIENDS, payload )
-
-# HandlerAPIv1DataStoreGetPublic
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key }
-get_response( ROUTE_DATASTOREGETPUBLIC, payload )
+# HandlerAPIv1DataStoreGetList
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key, 'read_access': read_access }
+get_response( ROUTE_DATASTOREGETLIST, payload )
 
 # HandlerAPIv1DataStoreDel
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_key' : data_key }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_id' : app_id, 'data_key' : data_key }
 get_response( ROUTE_DATASTOREDEL, payload )
 
 # HandlerAPIv1Logout

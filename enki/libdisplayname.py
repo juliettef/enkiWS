@@ -57,9 +57,9 @@ def get_user_id_display_name_url( entity ):
 
 def get_user_id_display_name( entity ):
 	# based on a display name entity, returns a dictionary containing their user_id and display name
-	user_id = entity.user_id
-	display_name = entity.prefix + entity.suffix
-	result = { 'userid' : user_id, 'displayname' : display_name }
+	user_id = str( entity.user_id )
+	display_name = str( entity.prefix + entity.suffix )
+	result = { 'user_id' : user_id, 'displayname' : display_name }
 	return result
 
 
