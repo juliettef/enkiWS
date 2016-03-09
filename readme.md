@@ -113,8 +113,8 @@ Notes:
 | Error messages | Description | Response example (failure) |  
 | --- | --- | --- |  
 | Invalid request | Invalid or missing request parameters | {"success":false,"error":"Invalid request"} |  
-| Unauthorised | user could not be authenticated. Connect request: user_displayname/code invalid. Other requests:user_id/auth_token invalid | {"success":false,"error":"Unauthorised"} |  
-| Invalid request | No data found | {"success":false,"error":"Not found"} |  
+| Unauthorised | user could not be authenticated. Connect request: user_displayname/code invalid. Other requests: user_id/auth_token invalid | {"success":false,"error":"Unauthorised"} |  
+| Not Found | No data found | {"success":false,"error":"Not found"} |  
 
 
 ## Frequently Asked Questions
