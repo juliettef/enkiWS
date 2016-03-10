@@ -11,7 +11,7 @@ Online demo *- may be out of sync with the source code -* https://enkisoftware-w
 ## Status
 
 This is a work in progress and not yet ready for production use.  
-__[ NEW in v0.5 ] Game API Friends and data store__
+__[ NEW in v0.5 ] REST API Friends and data store__
 
 
 ## Functionality
@@ -29,7 +29,7 @@ __[ NEW in v0.5 ] Game API Friends and data store__
 * Friends
     * Search by display name and invite
     * Message alert for friend invite
-* Game API
+* REST API
     * Authentication (account and game key)
     * Friends list
     * Data Store   
@@ -38,6 +38,11 @@ __[ NEW in v0.5 ] Game API Friends and data store__
     
 * Admin tools
 * Installation and usage documentation
+* REST API improvements:
+    * datastore limits
+    * online datastore explorer
+    * authentication timeout control
+    * datastore object modifcation time and lifetime controls
 
 ### Intended for  release 1.x.x
 
@@ -90,10 +95,48 @@ Notes:
 
 ### REST API
 
- - Requests: POST  
+#### Overview
+
+The rest api provides a mechanism for developers to create games, apps and websites which interact with users data.
+
+ - Protocol: HTTPS
+ - Request method: POST  
  - Request and response format: JSON  
  - Request and result parameters format: String unless specified otherwise  
 
+The REST API security mechanism is to use HTTPS for as the protocol combined with user authentication (detailed later). Currently we do not implement a client secret or other application verification mechanism since any global key available on a client machine can be stolen - thus the REST API is deliberatly limited in the scope of the changes it can make.
+
+#### User Authentication via a Connect Code
+
+EnkiWS encourages the use of OAUTH so users may not have a password, and having users type their password into an unknown application is potentially risky. So we've developed an approach which allows users to authenticate an app by getting a temporary short code which they use to login, and the app exchanges this for a long lasting authentication token. Users can remove authantication priviledges using their profile page.
+
+1. User goes to their profile page and requests a 'Connect Code'
+1. EnkiWS displays the code e.g. 'Q354D'
+1. User types their full displayname and connect code into the app login screen
+1. App uses the /api/v1/connect API to login
+1. App receives an auth_token and user_id, which it can use for further API requests. This can be stored on disk and re-used if required
+ 
+#### The datastore
+
+The datastore provides a named json object store for users with private, friends, and public read access control. The Google App Engine backend limits the per-object size to around 1 megabyte, however we intend to add per user limits with product based increases (for example you could configure enkiTS to give all registered users a small amount of storage, but users with a given product several megabytes).
+
+#### Example REST API uses
+
+Once an app has authenticated the user, it can use the auth_token and user_id to perform further API queries, and use the datastore to store user data.
+
+- Check if a user has purchased a game
+    1. Use /api/v1/ownsproducts and request for your game
+- Store and find out if friends are online
+    1.  Get the list of friends with /api/v1/friends
+    1. Use the datastore /api/v1/datastore/set to store a json structure containing the details you need for friend status (online, ingame, IP address and ports for chat or game connect etc.). Make sure to have "read_access" : "friends"
+    1. Use /api/v1/datastore/getlist with "read_access" : "friends" to get a list of the status for each user_id
+- Invite a friend to play a game
+    1. We discover the friend status as above, ensuring that the datastore entry has an IP address and port for messages to be passed. The game can then connect via this address and send an invite
+- Get a list of open servers
+    1. Again using the datastore we store the details required (server name, IP address, port, game details) to connect to the game with "read_access" : "public"
+    1. Clients can pull this list using /api/v1/datastore/getlist with "read_access" : "public", and ping the servers for online status
+
+#### API Functionality table
 
 | URL | Functionality | Request Parameters | Request example | Response Parameters | Response example (success) |  
 | --- | --- | --- | --- | --- | --- |  
@@ -109,6 +152,7 @@ Notes:
 | /api/v1/datastore/getlist | Get data filtered by app id, data type and user's read_access setting to 'public' | user_id, auth_token, app_id, data_key, read_access (= 'public') | { 'user_id' : '5066549580791808', 'auth_token' : 'kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S', 'app_id' : 'product_a', 'data_key' : 'settings', 'read_access' : 'public' } | data_payloads (list of dictionaries (user_id, data_payload (JSON))), success, error | {"data_payloads":[{"user_id":"4537134732017664","data_payload":{"colour":"yellow","shape":"cube","size":"0.3"}},{"user_id":"6218562888794112","data_payload":{"colour":"teal","shape":"tetraedon","size":"1.9"}},{"user_id":"6368543146770432","data_payload":{"colour":"black","shape":"sphere","size":"0.2"}}],"success":true,"error":""} |  
 | /api/v1/datastore/del | Delete user's data filtered by app id and data type | user_id, auth_token, app_id, data_key | { 'user_id' : '5066549580791808', 'auth_token' : 'kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S', 'app_id' : 'product_a', 'data_key' : 'settings' } | success, error | {"success":true,"error":""} |  
 
+#### API Errors
 
 | Error messages | Description | Response example (failure) |  
 | --- | --- | --- |  
