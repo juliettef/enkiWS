@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-03 16:50+0000\n"
+"POT-Creation-Date: 2016-03-10 10:33+0000\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -685,10 +685,10 @@ msgstr "Clé de licence trop longue."
 #: enki/textmessages.py:140
 #, python-format
 msgid ""
-"Your single-use game connection token is valid for <b>%(minutes)s "
-"minute</b>. <h1><b>%(token)s</b></h1>"
+"Your single-use game connect code is valid for <b>%(minutes)s minute</b>."
+" <h1><b>%(token)s</b></h1>"
 msgid_plural ""
-"Your single-use game connection token is valid for <b>%(minutes)s "
+"Your single-use game connect code is valid for <b>%(minutes)s "
 "minutes</b>. <h1><b>%(token)s</b></h1>"
 msgstr[0] ""
 "Votre jeton de connexion à usage unique est valide pendant <b>%(minutes)s"
@@ -1164,7 +1164,7 @@ msgid "Products"
 msgstr "Produits"
 
 #: templates/increstapi.html:2
-msgid "Connection token"
+msgid "Connect code"
 msgstr "Jeton de connexion"
 
 #: templates/increstapi.html:6

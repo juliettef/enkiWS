@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-03 16:50+0000\n"
+"POT-Creation-Date: 2016-03-10 10:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -566,10 +566,10 @@ msgstr ""
 #: enki/textmessages.py:140
 #, python-format
 msgid ""
-"Your single-use game connection token is valid for <b>%(minutes)s "
-"minute</b>. <h1><b>%(token)s</b></h1>"
+"Your single-use game connect code is valid for <b>%(minutes)s minute</b>."
+" <h1><b>%(token)s</b></h1>"
 msgid_plural ""
-"Your single-use game connection token is valid for <b>%(minutes)s "
+"Your single-use game connect code is valid for <b>%(minutes)s "
 "minutes</b>. <h1><b>%(token)s</b></h1>"
 msgstr[0] ""
 msgstr[1] ""
@@ -1000,7 +1000,7 @@ msgid "Products"
 msgstr ""
 
 #: templates/increstapi.html:2
-msgid "Connection token"
+msgid "Connect code"
 msgstr ""
 
 #: templates/increstapi.html:6
