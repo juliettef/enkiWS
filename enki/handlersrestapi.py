@@ -178,6 +178,9 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 			data_key = jsonobject.get( 'data_key', '')
 			data_payload = jsonobject.get( 'data_payload' )
 			read_access = jsonobject.get( 'read_access', '' )
+			if 'ip_addr_verified' in data_payload:  # add IP address of the request to data_payload
+				remote_address = self.request.remote_addr
+				data_payload.update({ 'ip_addr_verified' : remote_address })
 			if user_id and auth_token and app_id and data_key and data_payload:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					data_store = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
