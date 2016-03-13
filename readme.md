@@ -138,27 +138,133 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
 
 #### API Functionality table
 
-| URL | Functionality | Request Parameters | Request example | Response Parameters | Response example (success) |  
-| --- | --- | --- | --- | --- | --- |  
-| /api/v1/connect | User connect | user_displayname, code | {"user_displayname":"Silvia#2702","code":"Q354D"} | user_id, auth_token, success, error | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S","success":true,"error":""} |  
-| /api/v1/logout | User logout | user_id, auth_token | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S"} | success, error | {"success":true,"error":""} |  
-| /api/v1/authvalidate | Validate user | user_id, auth_token | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S"} | user_displayname, success, error | {"user_displayname":"Silvia#2702","success":true,"error":""} |  
-| /api/v1/ownsproducts | List products activated by user | user_id, auth_token | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S"} | products_owned (list of strings), success, error | {"products_owned":["product_a","product_b","product_c"],"success":true,"error":""} |  
-| /api/v1/ownsproducts | List confirming products activated by user | user_id, auth_token, products (list of strings) | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S","products":["product_b","product_c","product_d"]} | products_owned (list of strings), success, error | {"products_owned":["product_b","product_c"],"success":true,"error":""} |  
-| /api/v1/friends | List user's friends | user_id, auth_token | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S"} | friends user_id and displayname (list of dictionaries of strings) , success, error | {"friends":[{"user_id":"4677872220372992","displayname":"Toto#2929"},{"user_id":"6454683010859008","displayname":"Ann#1234"}],"success":true,"error":""} |  
-| /api/v1/datastore/set | Create / update user's data filtered by app id and data type | user_id, auth_token, app_id, data_key data_payload (JSON), read_access | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S","app_id":"product_a","data_key":"settings","data_payload": json.loads("{"colour":"green", "shape":"tetraedron", "size":"0.5"}"),"read_access":"friends"} | success, error | {"success":true,"error":""} |  
-| /api/v1/datastore/get | Get user's data filtered by app id and data type | user_id, auth_token, app_id, data_key | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S","app_id":"product_a","data_key":"settings"} | data_payload (JSON), success, error | {"data_payload":[{"colour":"green","shape":"tetraedron","size":"0.5"}],"success":true,"error":""} |  
-| /api/v1/datastore/getlist | Get user's friend's data filtered by app id, data type and friends' read_access setting to 'friends' | user_id, auth_token, app_id, data_key, read_access (="friends") | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S","app_id":"product_a","data_key":"settings","read_access":"friends"} | data_payloads (list of dictionaries (user_id, data_payload (JSON))), success, error | {"data_payloads":[{"user_id":"4677872220372992","data_payload":{"colour":"blue","shape":"cube","size":"0.8"}},{"user_id":"6454683010859008","data_payload":{"colour":"red","shape":"sphere","size":"0.4"}}],"success":true,"error":""} |  
-| /api/v1/datastore/getlist | Get data filtered by app id, data type and user's read_access setting to 'public'| user_id, auth_token, app_id, data_key, read_access (="public") | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S","app_id":"product_a","data_key":"settings","read_access":"public"} | data_payloads (list of dictionaries (user_id, data_payload (JSON))), success, error | {"data_payloads":[{"user_id":"4537134732017664","data_payload":{"colour":"yellow","shape":"cube","size":"0.3"}},{"user_id":"6218562888794112","data_payload":{"colour":"teal","shape":"tetraedon","size":"1.9"}},{"user_id":"6368543146770432","data_payload":{"colour":"black","shape":"sphere","size":"0.2"}}],"success":true,"error":""} |  
-| /api/v1/datastore/del | Delete user's data filtered by app id and data type | user_id, auth_token, app_id, data_key | {"user_id":"5066549580791808","auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S","app_id":"product_a","data_key":"settings"} | success, error | {"success":true,"error":""} |  
+<table valign="top">
+    <tbody>
+        <tr>
+            <th><sup>URL</sup></th>
+            <th><sup>Functionality</sup></th>
+            <th><sup>Request Parameters</sup></th>
+            <th><sup>Request example</sup></th>
+            <th><sup>Response Parameters</sup></th>
+            <th><sup>Response example (success)</sup></th>           
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>connect</sup></td>
+            <td><sup>User connect</sup></td>
+            <td><sup>user_displayname,<br>code</sup></td>
+            <td><sup>{"user_displayname":"Silvia#2702",<br>"code":"Q354D"}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>success, error</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S",<br>"success":true, "error":""}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>logout</sup></td>
+            <td><sup>User logout</sup></td>
+            <td><sup>user_id,<br>auth_token</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S"}</sup></td>
+            <td><sup>success, error</sup></td>
+            <td><sup>{"success":true, "error":""}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>authvalidate</sup></td>
+            <td><sup>Validate user</sup></td>
+            <td><sup>user_id,<br>auth_token</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S"}</sup></td>
+            <td><sup>user_displayname,<br>success, error</sup></td>
+            <td><sup>{"user_displayname":"Silvia#2702",<br>"success":true,"error":""}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>ownsproducts</sup></td>
+            <td><sup>List products<br>activated by user</sup></td>
+            <td><sup>user_id,<br>auth_token</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S"}</sup></td>
+            <td><sup>products_owned (list of strings),<br>success, error</sup></td>
+            <td><sup>{"products_owned":["product_a","product_b","product_c"],<br>"success":true,"error":""}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>ownsproducts</sup></td>
+            <td><sup>List confirming<br>products activated<br>by user</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>products (list of strings)</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S",<br>"products":["product_b","product_c","product_d"]}</sup></td>
+            <td><sup>products_owned (list of strings),<br>success, error</sup></td>
+            <td><sup>{"products_owned":["product_b","product_c"],<br>"success":true,"error":""}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>friends</sup></td>
+            <td><sup>List user's friends</sup></td>
+            <td><sup>user_id,<br>auth_token</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S"}</sup></td>
+            <td><sup>friends user_id<br>and displayname<br>(list of dictionaries of strings),<br>success, error</sup></td>
+            <td><sup>{"friends":[<br>{"user_id":"4677872220372992","displayname":"Toto#2929"},<br>{"user_id":"6454683010859008","displayname":"Ann#1234"}],<br>"success":true,"error":""}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>datastore/set</sup></td>
+            <td><sup>Create / update<br>user's data<br>filtered by app id<br>and data type.</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_id,<br>data_key,<br>data_payload (JSON),<br>read_access,<br>calc_ip_addr (optional)</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S",<br>"app_id":"product_a",<br>"data_key":"settings",<br>"data_payload": json.loads("{"colour":"green", "shape":"cone", "size":"0.5"}"),<br>"read_access":"friends",<br>"calc_ip_addr":""}</sup></td>
+            <td><sup>success, error</sup></td>
+            <td><sup>{"success":true,"error":""}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>datastore/get</sup></td>
+            <td><sup>Get user's data<br>filtered by app id<br>and data type</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_id,<br>data_key</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S",<br>"app_id":"product_a",<br>"data_key":"settings"</sup></td>
+            <td><sup>data_payload (JSON),<br>success, error</sup></td>
+            <td><sup>{"data_payload":[<br>{"colour":"green","shape":"tetraedron","size":"0.5"}],<br>"success":true,"error":""}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>datastore/getlist</sup></td>
+            <td><sup>Get user's<br>friend's data<br>filtered by app id,<br>data type and<br>friends' read_access<br>setting to 'friends'</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_id,<br>data_key,<br>read_access (="friends")</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S",<br>"app_id":"product_a",<br>"data_key":"settings",<br>"read_access":"friends"}</sup></td>
+            <td><sup>data_payloads<br>(list of dictionaries<br>(user_id, data_payload (JSON))),<br>success, error</sup></td>
+            <td><sup>{"data_payloads":[<br>{"user_id":"4677872220372992",<br>"data_payload":{"colour":"blue","shape":"cube","size":"0.8"}},<br>{"user_id":"6454683010859008",<br>"data_payload":{"colour":"red","shape":"sphere","size":"0.4"}}],<br>"success":true,"error":""}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>datastore/getlist</sup></td>
+            <td><sup>Get data<br>filtered by app id,<br>data type and<br>user's read_access<br>setting to 'public'</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_id,<br>data_key,<br>read_access (="public")</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S",<br>"app_id":"product_a",<br>"data_key":"settings",<br>"read_access":"public"}</sup></td>
+            <td><sup>data_payloads<br>(list of dictionaries<br>(user_id, data_payload (JSON))),<br>success, error</sup></td>
+            <td><sup>{"data_payloads":[<br>{"user_id":"4537134732017664",<br>"data_payload":{"colour":"yellow","shape":"cube","size":"0.3"}},<br>{"user_id":"6218562888794112",<br>"data_payload":{"colour":"teal","shape":"tetraedon","size":"1.9"}},<br>{"user_id":"6368543146770432",<br>"data_payload":{"colour":"black","shape":"sphere","size":"0.2"}}],<br>"success":true,"error":""}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>/api/v1/<br>datastore/del</sup></td>
+            <td><sup>Delete user's data<br>filtered by app id<br>and data type</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_id,<br>data_key</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1F6KkQu9E1yNaPhcvo46YVNQF8dz9AruNdw3S",<br>"app_id":"product_a",<br>"data_key":"settings"}</sup></td>
+            <td><sup>success, error</sup></td>
+            <td><sup>{"success":true,"error":""}</sup></td>
+        </tr>
+    </tbody>
+</table>
 
 #### API Errors
 
-| Error messages | Description | Response example (failure) |  
-| --- | --- | --- |  
-| Invalid request | Invalid or missing request parameters | {"success":false,"error":"Invalid request"} |  
-| Unauthorised | user could not be authenticated. Connect request: user_displayname/code invalid. Other requests: user_id/auth_token invalid | {"success":false,"error":"Unauthorised"} |  
-| Not Found | No data found | {"success":false,"error":"Not found"} |  
+<table valign="top">
+    <tbody>
+        <tr>
+            <th><sup>Error messages</sup></th>
+            <th><sup>Description</sup></th>
+            <th><sup>Response example (failure)</sup></th>
+        </tr>
+        <tr>
+            <td><sup>Invalid request</sup></td>
+            <td><sup>Invalid or missing request parameters</sup></td>
+            <td><sup>{"success":false,"error":"Invalid request"}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>Unauthorised</sup></td>
+            <td><sup>User could not be authenticated.<br> - Connect request: user_displayname/code invalid.<br> - Other requests: user_id/auth_token invalid.</sup></td>
+            <td><sup>{"success":false,"error":"Unauthorised"}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>Not Found</sup></td>
+            <td><sup>No data found</sup></td>
+            <td><sup>{"success":false,"error":"Not found"}</sup></td>
+        </tr>
+    </tbody>
+</table>
 
 
 ## Frequently Asked Questions
