@@ -151,8 +151,8 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         <tr>
             <td><sup>/api/v1/<br>connect</sup></td>
             <td><sup>User connect</sup></td>
-            <td><sup>user_displayname,<br>code</sup></td>
-            <td><sup>{"user_displayname":"Silvia#2702",<br>"code":"Q354D"}</sup></td>
+            <td><sup>displayname,<br>code</sup></td>
+            <td><sup>{"displayname":"Silvia#2702",<br>"code":"Q354D"}</sup></td>
             <td><sup>user_id,<br>auth_token,<br>success, error</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"success":true, "error":""}</sup></td>
         </tr>

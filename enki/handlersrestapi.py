@@ -38,9 +38,9 @@ class HandlerAPIv1Connect( webapp2.RequestHandler ):
 		answer = {}
 		if jsonobject:
 			code = jsonobject.get( 'code', '')
-			user_displayname = jsonobject.get( 'user_displayname', '')
-			if code and user_displayname:
-				user_id = enki.libdisplayname.get_user_id_from_display_name( user_displayname )
+			displayname = jsonobject.get( 'displayname', '')
+			if code and displayname:
+				user_id = enki.libdisplayname.get_user_id_from_display_name( displayname )
 				if user_id:
 					entity = enki.librestapi.get_EnkiModelRestAPIConnectToken_by_token_user_id_valid_age( token = code, user_id = user_id )
 					if entity:

@@ -6,7 +6,7 @@ URL_LOCAL = 'http://127.0.0.1:8881'
 URL_ONLINE = 'https://enkisoftware-webservices.appspot.com'
 
 # default values
-URL_DEFAULT = URL_LOCAL
+URL_DEFAULT = URL_ONLINE
 DISPLAYNAME_DEFAULT = ''
 
 # routes
@@ -45,7 +45,7 @@ if not displayname:
 	displayname = DISPLAYNAME_DEFAULT
 code = ''
 code = raw_input( '> Enter code (connection token, format: 5 alphanumeric characters): ' )
-payload = { 'user_displayname' : displayname, 'code' : code }
+payload = { 'displayname' : displayname, 'code' : code }
 r_connect = get_response( ROUTE_CONNECT, payload )
 
 # get user_id and auth_token from connect response
