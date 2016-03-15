@@ -60,31 +60,34 @@ def fetch_EnkiModelRestAPIConnectToken_by_user( user_id ):
 	return list
 
 
-def fetch_EnkiModelRestAPIConnectToken_by_app_id_data_key_read_access( app_id, data_key, read_access ):
-	list = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.app_id == app_id,
-	                                                 EnkiModelRestAPIDataStore.data_key == data_key,
-	                                                 EnkiModelRestAPIDataStore.read_access == read_access )).fetch()
-	return list
-
-
 def fetch_EnkiModelRestAPIConnectToken_expired():
 	list = EnkiModelRestAPIConnectToken.query( EnkiModelRestAPIConnectToken.time_created < ( datetime.datetime.now( ) - datetime.timedelta( minutes = MAX_AGE ))).fetch( keys_only = True )
 	return list
 
 
-def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key ):
-	entity = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
-	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
-	                                                   EnkiModelRestAPIDataStore.data_key == data_key )).get()
-	return entity
-
-
-def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_read_access( user_id, app_id, data_key, read_access ):
+def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_not_expired( user_id, app_id, data_key ):
 	entity = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
 	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
 	                                                   EnkiModelRestAPIDataStore.data_key == data_key,
-	                                                   EnkiModelRestAPIDataStore.read_access == read_access )).get()
+	                                                   EnkiModelRestAPIDataStore.time_expires < datetime.datetime.now())).get()
 	return entity
+
+
+def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_read_access_not_expired( user_id, app_id, data_key, read_access ):
+	entity = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
+	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
+	                                                   EnkiModelRestAPIDataStore.data_key == data_key,
+	                                                   EnkiModelRestAPIDataStore.read_access == read_access,
+	                                                   EnkiModelRestAPIDataStore.time_expires < datetime.datetime.now())).get()
+	return entity
+
+
+def fetch_EnkiModelRestAPIDataStore_by_app_id_data_key_read_access_not_expired( app_id, data_key, read_access ):
+	list = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.app_id == app_id,
+	                                                 EnkiModelRestAPIDataStore.data_key == data_key,
+	                                                 EnkiModelRestAPIDataStore.read_access == read_access,
+	                                                 EnkiModelRestAPIDataStore.time_expires < datetime.datetime.now())).fetch()
+	return list
 
 
 def fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key ):

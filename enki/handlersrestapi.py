@@ -196,7 +196,7 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 					if 'calc_ip_addr' in data_payload:    # IP address of the request
 						remote_address = self.request.remote_addr
 						data_payload.update({ 'calc_ip_addr' : remote_address })
-					data_store = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
+					data_store = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_not_expired( user_id, app_id, data_key )
 					if data_store:  # update
 						data_store.data_payload = data_payload
 						data_store.time_expires = time_expires  # update the expiry time
@@ -231,7 +231,7 @@ class HandlerAPIv1DataStoreGet( webapp2.RequestHandler ):
 			data_key = jsonobject.get( 'data_key', '')
 			if user_id and auth_token and app_id and data_key:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
-					data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
+					data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_not_expired( user_id, app_id, data_key )
 					if data_store_item:
 						answer.update({ 'data_payload' : data_store_item.data_payload })
 						success = True
@@ -268,7 +268,7 @@ class HandlerAPIv1DataStoreGetList( webapp2.RequestHandler ):
 							data_payloads = []
 							# get each friends' data
 							for friend_id in friends_list:
-								data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_read_access( friend_id, app_id, data_key, read_access )
+								data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_read_access_not_expired( friend_id, app_id, data_key, read_access )
 								if data_store_item:
 									data_payloads.append({ 'user_id' : str( data_store_item.user_id ), 'data_payload' : data_store_item.data_payload })
 							if data_payloads:
@@ -276,7 +276,7 @@ class HandlerAPIv1DataStoreGetList( webapp2.RequestHandler ):
 								success = True
 								error = ''
 					elif read_access == 'public':   # returns all data with read-access public
-						data_store_list = enki.librestapi.fetch_EnkiModelRestAPIConnectToken_by_app_id_data_key_read_access( app_id, data_key, read_access )
+						data_store_list = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_app_id_data_key_read_access_not_expired( app_id, data_key, read_access )
 						if data_store_list:
 							data_payloads = []
 							for data_store_item in data_store_list:
