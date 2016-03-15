@@ -1,4 +1,5 @@
 import datetime
+import random
 import webapp2_extras.security
 
 from google.appengine.ext import ndb
@@ -8,6 +9,9 @@ from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 
 
 MAX_AGE = 5    # in minutes, duration of a connection token validity
+DATASTORE_EXPIRY_DEFAULT = 86400    # 24h
+DATASTORE_NON_EXPIRING = 3154000000 # 100 years
+DATASTORE_NON_EXPIRING_REFRESH = DATASTORE_NON_EXPIRING / 2
 
 
 def generate_connect_code():
@@ -31,6 +35,16 @@ def cleanup_and_get_new_connection_token( user_id ):
 	return None
 
 
+def refresh_EnkiModelRestAPIConnectToken_non_expiring():
+	likelyhood = 10 # occurs with a probability of 1%
+	number = random.randint( 1, 1000 )
+	if number < likelyhood:
+		list = fetch_EnkiModelRestAPIDataStore_non_expiring()
+		for item in list:
+			item.time_expires = datetime.datetime.now() + datetime.timedelta( seconds = DATASTORE_NON_EXPIRING )
+		ndb.put_multi_async( list )
+
+
 #=== QUERIES ==================================================================
 
 
@@ -46,7 +60,14 @@ def fetch_EnkiModelRestAPIConnectToken_by_user( user_id ):
 	return list
 
 
-def fetch_old_rest_api_connect_tokens():
+def fetch_EnkiModelRestAPIConnectToken_by_app_id_data_key_read_access( app_id, data_key, read_access ):
+	list = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.app_id == app_id,
+	                                                 EnkiModelRestAPIDataStore.data_key == data_key,
+	                                                 EnkiModelRestAPIDataStore.read_access == read_access )).fetch()
+	return list
+
+
+def fetch_EnkiModelRestAPIConnectToken_expired():
 	list = EnkiModelRestAPIConnectToken.query( EnkiModelRestAPIConnectToken.time_created < ( datetime.datetime.now( ) - datetime.timedelta( minutes = MAX_AGE ))).fetch( keys_only = True )
 	return list
 
@@ -73,8 +94,11 @@ def fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id,
 	return list
 
 
-def fetch_EnkiModelRestAPIConnectToken_by_app_id_data_key_read_access( app_id, data_key, read_access ):
-	list = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.app_id == app_id,
-	                                                 EnkiModelRestAPIDataStore.data_key == data_key,
-	                                                 EnkiModelRestAPIDataStore.read_access == read_access )).fetch()
+def fetch_EnkiModelRestAPIDataStore_expired():
+	list = EnkiModelRestAPIDataStore.query( EnkiModelRestAPIDataStore.time_expires < datetime.datetime.now()).fetch( keys_only = True )
+	return list
+
+
+def fetch_EnkiModelRestAPIDataStore_non_expiring():
+	list = EnkiModelRestAPIDataStore.query( EnkiModelRestAPIDataStore.time_expires > ( datetime.datetime.now() + datetime.timedelta( seconds = DATASTORE_NON_EXPIRING_REFRESH ))).fetch()
 	return list

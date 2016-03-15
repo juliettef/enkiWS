@@ -684,13 +684,15 @@ class HandlerBase( webapp2.RequestHandler ):
 
 
 	def cleanup_item( self ):
-		likelyhood = 10 # deletion occurs with a probability of 1%
+		likelyhood = 10 # occurs with a probability of 1%
 		number = random.randint( 1, 1000 )
 		if number < likelyhood:
 			ndb.delete_multi_async ( self.fetch_old_backoff_timers( 3 ))
 			ndb.delete_multi_async ( self.fetch_old_auth_tokens( 3 ))
 			ndb.delete_multi_async ( self.fetch_old_sessions( 30 ))
-			ndb.delete_multi_async ( enki.librestapi.fetch_old_rest_api_connect_tokens( ) )
+			ndb.delete_multi_async ( enki.librestapi.fetch_EnkiModelRestAPIConnectToken_expired())
+			ndb.delete_multi_async ( enki.librestapi.fetch_EnkiModelRestAPIDataStore_expired())
+			enki.librestapi.refresh_EnkiModelRestAPIConnectToken_non_expiring()
 
 
 	def fetch_old_auth_tokens( self, days_old ):

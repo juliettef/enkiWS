@@ -1,3 +1,4 @@
+import datetime
 import webapp2
 import json
 
@@ -177,22 +178,35 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 			app_id = jsonobject.get( 'app_id', '')
 			data_key = jsonobject.get( 'data_key', '')
 			data_payload = jsonobject.get( 'data_payload' )
+
+			# set the expiry time
+			time_to_expiry = jsonobject.get( 'time_expires' )    # default lifetime if unspecified: 24h
+			if ( type( time_to_expiry ) is int ) or time_to_expiry.isdigit():
+				time_to_expiry = int( time_to_expiry )
+				if time_to_expiry == 0: # non-expiring lifetime
+					time_to_expiry = enki.librestapi.DATASTORE_NON_EXPIRING   # 100 years
+			else:
+				time_to_expiry = enki.librestapi.DATASTORE_EXPIRY_DEFAULT
+			time_expires = datetime.datetime.now() + datetime.timedelta( seconds = time_to_expiry )
+
 			read_access = jsonobject.get( 'read_access', '' )
-			if 'ip_addr_verified' in data_payload:  # add IP address of the request to data_payload
-				remote_address = self.request.remote_addr
-				data_payload.update({ 'ip_addr_verified' : remote_address })
 			if user_id and auth_token and app_id and data_key and data_payload:
 				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+					# add optional calculated properties to the data payload
+					if 'calc_ip_addr' in data_payload:    # IP address of the request
+						remote_address = self.request.remote_addr
+						data_payload.update({ 'calc_ip_addr' : remote_address })
 					data_store = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
 					if data_store:  # update
 						data_store.data_payload = data_payload
+						data_store.time_expires = time_expires  # update the expiry time
 						if read_access: # if read_access is not specified, don't update it
 							data_store.read_access = read_access
 					else:   # create new
-						if not read_access: # if read_access is not specified, use the model's default
-							data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_payload = data_payload )
+						if not read_access: # if read_access is not specified, use the default value defined in the model
+							data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_payload = data_payload, time_expires = time_expires )
 						else:
-							data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_payload = data_payload, read_access = read_access )
+							data_store = EnkiModelRestAPIDataStore( user_id = user_id, app_id = app_id, data_key = data_key, data_payload = data_payload, time_expires = time_expires, read_access = read_access )
 					data_store.put()
 					success = True
 					error = ''
