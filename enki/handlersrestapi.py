@@ -196,7 +196,7 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 					if 'calc_ip_addr' in data_payload:    # IP address of the request
 						remote_address = self.request.remote_addr
 						data_payload.update({ 'calc_ip_addr' : remote_address })
-					data_store = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_not_expired( user_id, app_id, data_key )
+					data_store = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
 					if data_store:  # update
 						data_store.data_payload = data_payload
 						data_store.time_expires = time_expires  # update the expiry time
