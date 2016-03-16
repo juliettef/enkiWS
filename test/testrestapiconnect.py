@@ -45,7 +45,8 @@ if not displayname:
 	displayname = DISPLAYNAME_DEFAULT
 code = ''
 code = raw_input( '> Enter code (connection token, format: 5 alphanumeric characters): ' )
-payload = { 'displayname' : displayname, 'code' : code }
+app_id = 'product_a'
+payload = { 'displayname' : displayname, 'code' : code, 'app_id' : app_id }
 r_connect = get_response( ROUTE_CONNECT, payload )
 
 # get user_id and auth_token from connect response
@@ -75,7 +76,6 @@ payload = { 'user_id' : user_id, 'auth_token' : auth_token }
 get_response( ROUTE_FRIENDS, payload )
 
 # HandlerAPIv1DataStoreSet
-app_id = 'product_a'
 data_key = 'settings'
 data_payload = json.loads( '{ "colour":"blue", "size":"0.7", "calc_ip_addr" : "" }' )
 time_expires = '3600'

@@ -14,7 +14,7 @@ import enki.textmessages as MSG
 
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
-from enki.modeltokenverify import EnkiModelTokenVerify
+from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
 from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 
 
@@ -40,6 +40,7 @@ class HandlerAPIv1Connect( webapp2.RequestHandler ):
 		if jsonobject:
 			code = jsonobject.get( 'code', '')
 			displayname = jsonobject.get( 'displayname', '')
+			app_id = jsonobject.get( 'app_id', '')
 			if code and displayname:
 				user_id = enki.libdisplayname.get_user_id_from_display_name( displayname )
 				if user_id:
@@ -47,7 +48,7 @@ class HandlerAPIv1Connect( webapp2.RequestHandler ):
 					if entity:
 						auth_token = enki.librestapi.generate_auth_token()
 						entity.key.delete()     # single use token
-						verification_token = EnkiModelTokenVerify( token = auth_token, user_id = user_id, type = 'apiconnect' )
+						verification_token = EnkiModelRestAPITokenVerify( token = auth_token, user_id = user_id, app_id = app_id, type = 'apiconnect' )
 						verification_token.put()    # persistent authentication token, a user may have several
 						answer.update({ 'user_id' : str( user_id ), 'auth_token' : auth_token })
 						success = True
@@ -70,7 +71,7 @@ class HandlerAPIv1Logout( webapp2.RequestHandler ):
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
 			if user_id and auth_token:
-				if EnkiModelTokenVerify.delete_by_user_id_token( user_id, auth_token ):
+				if EnkiModelRestAPITokenVerify.delete_by_user_id_token( user_id, auth_token ):
 					success = True
 					error = ''
 				else:
@@ -91,7 +92,7 @@ class HandlerAPIv1AuthValidate( webapp2.RequestHandler ):
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
 			if user_id and auth_token:
-				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+				if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					user_displayname = enki.libdisplayname.get_display_name( user_id )
 					if user_displayname:
 						answer.update({ 'user_displayname' : user_displayname })
@@ -118,7 +119,7 @@ class HandlerAPIv1OwnsProducts( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			products = jsonobject.get( 'products', '')
 			if user_id and auth_token:
-				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+				if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					if products:   # check which products in the list are activated by the user and return them
 						list_entities = enki.libstore.fetch_EnkiProductKey_by_activator_products_list( user_id, products )
 					else:    # no product specified, return all products activated by the user
@@ -150,7 +151,7 @@ class HandlerAPIv1Friends( webapp2.RequestHandler ):
 			user_id = int( jsonobject.get( 'user_id', ''))
 			auth_token = jsonobject.get( 'auth_token', '')
 			if user_id and auth_token:
-				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+				if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					friends = enki.libfriends.get_friends_user_id_display_name( user_id )
 					if friends:
 						answer.update({ 'friends' : friends })
@@ -191,7 +192,7 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 
 			read_access = jsonobject.get( 'read_access', '' )
 			if user_id and auth_token and app_id and data_key and data_payload:
-				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+				if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					# add optional calculated properties to the data payload
 					if 'calc_ip_addr' in data_payload:    # IP address of the request
 						remote_address = self.request.remote_addr
@@ -230,7 +231,7 @@ class HandlerAPIv1DataStoreGet( webapp2.RequestHandler ):
 			app_id = jsonobject.get( 'app_id', '')
 			data_key = jsonobject.get( 'data_key', '')
 			if user_id and auth_token and app_id and data_key:
-				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+				if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key_not_expired( user_id, app_id, data_key )
 					if data_store_item:
 						answer.update({ 'data_payload' : data_store_item.data_payload, 'time_expires' : str( data_store_item.time_expires ), 'read_access' : data_store_item.read_access })
@@ -259,7 +260,7 @@ class HandlerAPIv1DataStoreGetList( webapp2.RequestHandler ):
 			data_key = jsonobject.get( 'data_key', '' )
 			read_access = jsonobject.get( 'read_access', '' )
 			if user_id and auth_token and app_id and data_key and ( read_access == 'friends' or read_access == 'public' ):
-				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+				if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					error = 'Not found'
 					if read_access == 'friends':    # returns list of data payloads of the user's friends where data read_access = 'friends'
 						# get the user friends' ids
@@ -304,7 +305,7 @@ class HandlerAPIv1DataStoreDel( webapp2.RequestHandler ):
 			app_id = jsonobject.get( 'app_id', '')
 			data_key = jsonobject.get( 'data_key', '')
 			if user_id and auth_token and app_id and data_key:
-				if EnkiModelTokenVerify.exist_by_user_id_token( user_id, auth_token ):
+				if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 					data_stores = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_key( user_id, app_id, data_key )
 					ndb.delete_multi( data_stores )
 					success = True
