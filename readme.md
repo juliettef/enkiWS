@@ -151,7 +151,7 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         <tr>
             <td><sup>/api/v1/<br>connect</sup></td>
             <td><sup>User connect</sup></td>
-            <td><sup>displayname,<br>code</sup></td>
+            <td><sup>displayname,<br>code,<br>app_id</sup></td>
             <td><sup>{"displayname":"Silvia#2702",<br>"code":"Q354D",<br>"app_id":"product_a"}</sup></td>
             <td><sup>user_id,<br>auth_token,<br>success, error</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"success":true, "error":""}</sup></td>
@@ -174,7 +174,7 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         </tr>
         <tr>
             <td><sup>/api/v1/<br>ownsproducts</sup></td>
-            <td><sup>List products<br>activated by user</sup></td>
+            <td><sup>List products activated by user</sup></td>
             <td><sup>user_id,<br>auth_token</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S"}</sup></td>
             <td><sup>products_owned (list of strings),<br>success, error</sup></td>
@@ -182,7 +182,7 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         </tr>
         <tr>
             <td><sup>/api/v1/<br>ownsproducts</sup></td>
-            <td><sup>List confirming<br>products activated<br>by user</sup></td>
+            <td><sup>List confirming products activated by user</sup></td>
             <td><sup>user_id,<br>auth_token,<br>products (list of strings)</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"products":["product_b","product_c"]}</sup></td>
             <td><sup>products_owned (list of strings),<br>success, error</sup></td>
@@ -198,7 +198,7 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/set</sup></td>
-            <td><sup>Create / update<br>user's data<br>filtered by<br>app id<br>and data type.</sup></td>
+            <td><sup>Create / update user's data filtered by app id and data type</sup></td>
             <td><sup>user_id,<br>auth_token,<br>data_key,<br>data_payload (JSON),<br>time_expires<br>read_access,<br>calc_ip_addr (optional)</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_key":"settings",<br>"data_payload":<br>json.loads("{"colour":"green","size":"0.5"}"),<br>"time_expires":3600<br>"read_access":"friends",<br>"calc_ip_addr":""}</sup></td>
             <td><sup>success, error</sup></td>
@@ -206,7 +206,7 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/get</sup></td>
-            <td><sup>Get user's data<br>filtered by<br>app id<br>and data type</sup></td>
+            <td><sup>Get user's data filtered by app id and data type</sup></td>
             <td><sup>user_id,<br>auth_token,<br>data_key</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_key":"settings"</sup></td>
             <td><sup>data_payload (JSON),<br>time_expires,<br>read_access,<br>server_time,<br>success, error</sup></td>
@@ -214,7 +214,7 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/getlist</sup></td>
-            <td><sup>Get user's<br>friend's data<br>filtered by<br>app id,<br>data type and<br>friends' read_access<br>setting to 'friends'</sup></td>
+            <td><sup>Get user's friend's data filtered by app id, data type and friends' read_access setting to 'friends'</sup></td>
             <td><sup>user_id,<br>auth_token,<br>data_key,<br>read_access (="friends")</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_key":"settings",<br>"read_access":"friends"}</sup></td>
             <td><sup>data_payloads<br>(list of dictionaries<br>(user_id,<br>data_payload (JSON),<br>time_expires)),<br>server_time,<br>success, error</sup></td>
@@ -222,7 +222,7 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/getlist</sup></td>
-            <td><sup>Get data<br>filtered by<br>app id,<br>data type and<br>user's read_access<br>setting to 'public'</sup></td>
+            <td><sup>Get data filtered by app id, data type and user's read_access setting to 'public'</sup></td>
             <td><sup>user_id,<br>auth_token,<br>data_key,<br>read_access (="public")</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_key":"settings",<br>"read_access":"public"}</sup></td>
             <td><sup>data_payloads<br>(list of dictionaries<br>(user_id,<br>data_payload (JSON),<br>time_expires)),<br>server_time,<br>success, error</sup></td>
@@ -230,7 +230,7 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/del</sup></td>
-            <td><sup>Delete user's data<br>filtered by<br>app id<br>and data type</sup></td>
+            <td><sup>Delete user's data filtered by app id and data type</sup></td>
             <td><sup>user_id,<br>auth_token,<br>data_key</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_key":"settings"}</sup></td>
             <td><sup>success, error</sup></td>
