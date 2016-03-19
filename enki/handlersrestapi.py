@@ -180,13 +180,9 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 			data_payload = jsonobject.get( 'data_payload' )
 
 			# set the expiry time
-			time_to_expiry = jsonobject.get( 'time_expires' )    # default lifetime if unspecified: 24h
-			if ( type( time_to_expiry ) is int ) or time_to_expiry.isdigit():
-				time_to_expiry = int( time_to_expiry )
-				if time_to_expiry == 0: # non-expiring lifetime
-					time_to_expiry = enki.librestapi.DATASTORE_NON_EXPIRING   # 100 years
-			else:
-				time_to_expiry = enki.librestapi.DATASTORE_EXPIRY_DEFAULT
+			time_to_expiry = int(jsonobject.get( 'time_expires', enki.librestapi.DATASTORE_EXPIRY_DEFAULT ))  # default lifetime if unspecified: 24h
+			if time_to_expiry == 0: # non-expiring lifetime
+				time_to_expiry = enki.librestapi.DATASTORE_NON_EXPIRING   # 100 years
 			time_expires = datetime.datetime.now() + datetime.timedelta( seconds = time_to_expiry )
 
 			read_access = jsonobject.get( 'read_access', '' )

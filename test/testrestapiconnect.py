@@ -78,7 +78,7 @@ get_response( ROUTE_FRIENDS, payload )
 # HandlerAPIv1DataStoreSet
 data_key = 'settings'
 data_payload = json.loads( '{ "colour":"blue", "size":"0.7", "calc_ip_addr" : "" }' )
-time_expires = '3600'
+time_expires = 3600
 read_access = 'public'
 payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_key' : data_key, 'data_payload' : data_payload, 'time_expires' : time_expires, 'read_access' : read_access }
 get_response( ROUTE_DATASTORESET, payload )

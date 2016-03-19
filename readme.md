@@ -199,8 +199,8 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         <tr>
             <td><sup>/api/v1/<br>datastore/set</sup></td>
             <td><sup>Create / update user's data filtered by app id and data type</sup></td>
-            <td><sup>user_id,<br>auth_token,<br>data_key,<br>data_payload (JSON),<br>time_expires<br>read_access,<br>calc_ip_addr (optional)</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_key":"settings",<br>"data_payload":<br>json.loads("{"colour":"green","size":"0.5"}"),<br>"time_expires":3600<br>"read_access":"friends",<br>"calc_ip_addr":""}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>data_key,<br>data_payload (JSON,<br>inc. optional<br>calc_ip_addr),<br>time_expires (int)<br>read_access</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_key":"settings",<br>"data_payload":<br>"{"colour":"green","size":"0.5",<br>"calc_ip_addr":""}",<br>"time_expires":3600,<br>"read_access":"friends"}</sup></td>
             <td><sup>success, error</sup></td>
             <td><sup>{"success":true,"error":""}</sup></td>
         </tr>
