@@ -14,6 +14,10 @@ DATASTORE_NON_EXPIRING = 3154000000 # 100 years
 DATASTORE_NON_EXPIRING_REFRESH = DATASTORE_NON_EXPIRING / 2
 
 
+def seconds_from_epoch( date_time ):
+	return int(( date_time - datetime.datetime.utcfromtimestamp( 0 )).total_seconds())
+
+
 def generate_connect_code():
 	return webapp2_extras.security.generate_random_string( length = 5, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
 

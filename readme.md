@@ -209,24 +209,24 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
             <td><sup>Get user's data filtered by app id and data type</sup></td>
             <td><sup>user_id,<br>auth_token,<br>data_key</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_key":"settings"</sup></td>
-            <td><sup>data_payload (JSON),<br>time_expires,<br>read_access,<br>server_time,<br>success, error</sup></td>
-            <td><sup>{"data_payload":[<br>{"colour":"green","size":"0.5","calc_ip_addr":"127.0.0.1"}],<br>"time_expires":"2016-03-15 20:45:38.609000",<br>"read_access":"friends"<br>"server_time":"2016-03-15 19:45:39.209000",<br>"success":true,"error":""}</sup></td>
+            <td><sup>data_payload (JSON),<br>time_expires (int),<br>read_access,<br>server_time (int),<br>success, error</sup></td>
+            <td><sup>{"data_payload":[<br>{"colour":"green","size":"0.5","calc_ip_addr":"127.0.0.1"}],<br>"time_expires":1458074738000,<br>"read_access":"friends"<br>"server_time":1458071138,<br>"success":true,"error":""}</sup></td>
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/getlist</sup></td>
             <td><sup>Get user's friend's data filtered by app id, data type and friends' read_access setting to 'friends'</sup></td>
             <td><sup>user_id,<br>auth_token,<br>data_key,<br>read_access (="friends")</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_key":"settings",<br>"read_access":"friends"}</sup></td>
-            <td><sup>data_payloads<br>(list of dictionaries<br>(user_id,<br>data_payload (JSON),<br>time_expires)),<br>server_time,<br>success, error</sup></td>
-            <td><sup>{"data_payloads":[<br>{"user_id":"4677872220372992",<br>"data_payload":{"colour":"blue","size":"0.8","calc_ip_addr":"127.0.0.4"},<br>"time_expires":"2116-03-12 10:12:15.609000"},<br>{"user_id":"6454683010859008",<br>"data_payload":{"colour":"red","size":"0.4","calc_ip_addr":"127.0.0.3"},<br>"time_expires":"2016-03-17 14:08:03.656000"}],<br>"server_time":"2016-03-15 19:45:39.656000",<br>"success":true,"error":""}</sup></td>
+            <td><sup>data_payloads<br>(list of dictionaries<br>(user_id,<br>data_payload (JSON),<br>time_expires (int))),<br>server_time (int),<br>success, error</sup></td>
+            <td><sup>{"data_payloads":[<br>{"user_id":"4677872220372992",<br>"data_payload":{"colour":"blue","size":"0.8","calc_ip_addr":"127.0.0.4"},<br>"time_expires":1457777535},<br>{"user_id":"6454683010859008",<br>"data_payload":{"colour":"red","size":"0.4","calc_ip_addr":"127.0.0.3"},<br>"time_expires":1458223683}],<br>"server_time":1458071139,<br>"success":true,"error":""}</sup></td>
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/getlist</sup></td>
             <td><sup>Get data filtered by app id, data type and user's read_access setting to 'public'</sup></td>
             <td><sup>user_id,<br>auth_token,<br>data_key,<br>read_access (="public")</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_key":"settings",<br>"read_access":"public"}</sup></td>
-            <td><sup>data_payloads<br>(list of dictionaries<br>(user_id,<br>data_payload (JSON),<br>time_expires)),<br>server_time,<br>success, error</sup></td>
-            <td><sup>{"data_payloads":[<br>{"user_id":"4537134732017664",<br>"data_payload":{"colour":"gold","size":"0.3","calc_ip_addr":"127.0.0.5"},<br>"time_expires":"2016-12-12 12:12:12.609000"},<br>{"user_id":"6218562888794112",<br>"data_payload":{"colour":"teal","size":"1.9","calc_ip_addr":"127.0.0.8"},<br>"time_expires":"2116-02-01 18:29:10.209000"},<br>{"user_id":"6368543146770432",<br>"data_payload":{"colour":"black","size":"0.2","calc_ip_addr":"127.0.0.6"},<br>"time_expires":"2016-04-01 17:48:33.656000"}],<br>"server_time":"2016-03-15 19:45:39.656000",<br>"success":true,"error":""}</sup></td>
+            <td><sup>data_payloads<br>(list of dictionaries<br>(user_id,<br>data_payload (JSON),<br>time_expires (int))),<br>server_time (int),<br>success, error</sup></td>
+            <td><sup>{"data_payloads":[<br>{"user_id":"4537134732017664",<br>"data_payload":{"colour":"gold","size":"0.3","calc_ip_addr":"127.0.0.5"},<br>"time_expires":1481544775},<br>{"user_id":"6218562888794112",<br>"data_payload":{"colour":"teal","size":"1.9","calc_ip_addr":"127.0.0.8"},<br>"time_expires":1454350795},<br>{"user_id":"6368543146770432",<br>"data_payload":{"colour":"black","size":"0.2","calc_ip_addr":"127.0.0.6"},<br>"time_expires":1459532935}],<br>"server_time":1458071141,<br>"success":true,"error":""}</sup></td>
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/del</sup></td>
