@@ -6,8 +6,8 @@ URL_LOCAL = 'http://127.0.0.1:8881'
 URL_ONLINE = 'https://enkisoftware-webservices.appspot.com'
 
 # default values
-URL_DEFAULT = URL_ONLINE
-DISPLAYNAME_DEFAULT = ''
+URL_DEFAULT = URL_LOCAL
+DISPLAYNAME_DEFAULT = 'jjj#2929'#'julg#2996'
 
 # routes
 ROUTE_CONNECT = '/api/v1/connect'
@@ -77,14 +77,15 @@ get_response( ROUTE_FRIENDS, payload )
 
 # HandlerAPIv1DataStoreSet
 data_type = 'settings'
+data_id = 's01p12'
 data_payload = json.loads( '{ "colour":"blue", "size":"0.7", "calc_ip_addr" : "" }' )
 time_expires = 3600
 read_access = 'public'
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'data_payload' : data_payload, 'time_expires' : time_expires, 'read_access' : read_access }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'data_id' : data_id, 'data_payload' : data_payload, 'time_expires' : time_expires, 'read_access' : read_access }
 get_response( ROUTE_DATASTORESET, payload )
 
 # HandlerAPIv1DataStoreGet
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'data_id' : data_id }
 get_response( ROUTE_DATASTOREGET, payload )
 
 # HandlerAPIv1DataStoreGetList
@@ -92,7 +93,7 @@ payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_t
 get_response( ROUTE_DATASTOREGETLIST, payload )
 
 # HandlerAPIv1DataStoreDel
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'data_id' : data_id }
 get_response( ROUTE_DATASTOREDEL, payload )
 
 # HandlerAPIv1Logout

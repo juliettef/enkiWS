@@ -69,17 +69,19 @@ def fetch_EnkiModelRestAPIConnectToken_expired():
 	return list
 
 
-def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type( user_id, app_id, data_type ):
-	entity = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
-	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
-	                                                   EnkiModelRestAPIDataStore.data_type == data_type ) ).get( )
-	return entity
-
-
-def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_not_expired( user_id, app_id, data_type ):
+def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id( user_id, app_id, data_type, data_id ):
 	entity = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
 	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
 	                                                   EnkiModelRestAPIDataStore.data_type == data_type,
+	                                                   EnkiModelRestAPIDataStore.data_id == data_id ) ).get( )
+	return entity
+
+
+def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id_not_expired( user_id, app_id, data_type, data_id ):
+	entity = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
+	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
+	                                                   EnkiModelRestAPIDataStore.data_type == data_type,
+	                                                   EnkiModelRestAPIDataStore.data_id == data_id,
 	                                                   EnkiModelRestAPIDataStore.time_expires > datetime.datetime.now() )).get()
 	return entity
 
@@ -101,10 +103,11 @@ def fetch_EnkiModelRestAPIDataStore_by_app_id_data_type_read_access_not_expired(
 	return list
 
 
-def fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type( user_id, app_id, data_type ):
+def fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id( user_id, app_id, data_type, data_id ):
 	list = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
 	                                                 EnkiModelRestAPIDataStore.app_id == app_id,
-	                                                 EnkiModelRestAPIDataStore.data_type == data_type ) ).fetch( keys_only = True )
+	                                                 EnkiModelRestAPIDataStore.data_type == data_type,
+	                                                 EnkiModelRestAPIDataStore.data_id == data_id ) ).fetch( keys_only = True )
 	return list
 
 
