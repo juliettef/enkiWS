@@ -178,15 +178,13 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			data_key = jsonobject.get( 'data_key', '')
 			data_payload = jsonobject.get( 'data_payload' )
-
 			# set the expiry time
 			time_to_expiry = int(jsonobject.get( 'time_expires', enki.librestapi.DATASTORE_EXPIRY_DEFAULT ))  # default lifetime if unspecified: 24h
 			if time_to_expiry == 0: # non-expiring lifetime
 				time_to_expiry = enki.librestapi.DATASTORE_NON_EXPIRING   # 100 years
 			time_expires = datetime.datetime.now() + datetime.timedelta( seconds = time_to_expiry )
-
 			read_access = jsonobject.get( 'read_access', '' )
-			if user_id and auth_token and data_key and data_payload:
+			if user_id and auth_token and data_key and data_payload and time_expires:
 				token_valid = EnkiModelRestAPITokenVerify.get_by_user_id_token( user_id, auth_token )
 				if token_valid:   # user is valid
 					# add optional calculated properties to the data payload
