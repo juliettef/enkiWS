@@ -1,3 +1,4 @@
+import enki.jinjafilters
 import enki.handlersoauth
 import enki.modelforum
 
@@ -30,7 +31,6 @@ def get_forum_default_topics():
 # Steam OAuth always available as it doesn't use client ID nor secret - as of Jan 2016
 HANDLERS = [ enki.handlersoauth.HandlerOAuthSteam ]
 
-
 try:
 	from secrets import secrets
 	KEY_SESSION = secrets.KEY_SESSION
@@ -54,3 +54,12 @@ def get_routes_oauth( ):
 	for handler in HANDLERS:
 		routes_oauth += handler.get_routes( )
 	return routes_oauth
+
+
+config = {}
+config[ 'webapp2_extras.sessions' ] = { 'secret_key': KEY_SESSION }
+config[ 'webapp2_extras.jinja2' ] = { 'template_path': 'templates',
+                                      'environment_args': { 'extensions': [ 'jinja2.ext.i18n' ]},
+                                      'filters': { 'local' : enki.jinjafilters.make_local_url,
+                                                   'joinurl' : enki.jinjafilters.join_url_param_char }
+                                      }
