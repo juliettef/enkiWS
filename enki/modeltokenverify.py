@@ -71,4 +71,4 @@ class EnkiModelTokenVerify( model.Model ):
 
 	@classmethod
 	def delete_token_by_id( cls, token_id ):
-		ndb.Key( EnkiModelTokenVerify, int( token_id )).delete()
+		ndb.Key( cls, int( token_id )).delete()

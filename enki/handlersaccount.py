@@ -5,6 +5,7 @@ import settings
 import enki
 import enki.textmessages as MSG
 from enki.modeltokenverify import EnkiModelTokenVerify
+from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
 
 
 class HandlerLogout( enki.HandlerBase ):
@@ -96,7 +97,7 @@ class HandlerProfile( enki.HandlerBase ):
 				sessions.append({ 'tokenauth_id' : item.key.id(), 'time_created' : item.time_created, 'current' : current })
 
 			sessions_app = []
-			list = EnkiModelTokenVerify.fetch_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
+			list = EnkiModelRestAPITokenVerify.fetch_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
 			for item in list:
 				sessions_app.append({ 'token_id' : item.key.id(), 'time_created' : item.time_created })
 
@@ -120,7 +121,7 @@ class HandlerProfile( enki.HandlerBase ):
 				enki.libuser.delete_session_token_auth( disconnect_session_token )
 				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISCONNECTED_SESSION( ) )
 			elif disconnect_app_token:
-				EnkiModelTokenVerify.delete_token_by_id( disconnect_app_token )
+				EnkiModelRestAPITokenVerify.delete_token_by_id( disconnect_app_token )
 				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISCONNECTED_APP( ) )
 
 			self.redirect( enki.libutil.get_local_url( 'profile' ))
