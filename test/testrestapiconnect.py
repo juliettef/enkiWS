@@ -6,8 +6,8 @@ URL_LOCAL = 'http://127.0.0.1:8881'
 URL_ONLINE = 'https://enkisoftware-webservices.appspot.com'
 
 # default values
-URL_DEFAULT = URL_LOCAL
-DISPLAYNAME_DEFAULT = 'jjj#2929'#'julg#2996'
+URL_DEFAULT = URL_ONLINE
+DISPLAYNAME_DEFAULT = ''
 
 # routes
 ROUTE_CONNECT = '/api/v1/connect'
