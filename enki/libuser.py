@@ -1,3 +1,4 @@
+import webapp2
 import re
 
 from google.appengine.ext import ndb
@@ -9,7 +10,6 @@ from enki.modeltokenauth import EnkiModelTokenAuth
 from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeltokenverify import EnkiModelTokenVerify
 
-PASSWORD_LENGTH_MIN = 3 # passwords must be at least n chars long
 
 ERROR_EMAIL_MISSING = -11
 ERROR_EMAIL_FORMAT_INVALID = -12
@@ -32,7 +32,7 @@ def validate_password( password ):
 	result = enki.libutil.ENKILIB_OK
 	if password == '':
 		result = ERROR_PASSWORD_BLANK
-	elif len( password ) < PASSWORD_LENGTH_MIN:
+	elif len( password ) < webapp2.get_app().config.get( 'enki' ).get( 'user' ).get( 'PASSWORD_LENGTH_MIN' ):
 		result = ERROR_PASSWORD_TOO_SHORT
 	return result
 

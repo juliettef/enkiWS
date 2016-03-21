@@ -57,6 +57,8 @@ def get_routes_oauth( ):
 
 
 config = {}
+config[ 'enki' ] = { 'user' : { 'PASSWORD_LENGTH_MIN' : 4 }
+                     }
 config[ 'webapp2_extras.sessions' ] = { 'secret_key': KEY_SESSION }
 config[ 'webapp2_extras.jinja2' ] = { 'template_path': 'templates',
                                       'environment_args': { 'extensions': [ 'jinja2.ext.i18n' ]},

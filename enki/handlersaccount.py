@@ -226,7 +226,7 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 					error_message = MSG.MISSING_PW()
 				elif result == enki.libuser.ERROR_PASSWORD_TOO_SHORT :
 					length = len( password )
-					error_message = " ".join( [ MSG.PW_TOO_SHORT( length ), MSG.PW_ENSURE_MIN_LENGTH( enki.libuser.PASSWORD_LENGTH_MIN ) ] )
+					error_message = " ".join( [ MSG.PW_TOO_SHORT( length ), MSG.PW_ENSURE_MIN_LENGTH( self.app.config.get( 'enki' ).get( 'user' ).get( 'PASSWORD_LENGTH_MIN' ))])
 				self.render_tmpl( 'registerconfirm.html',
 				                  active_menu = 'register',
 				                  email = email,
@@ -350,7 +350,7 @@ class HandlerPasswordChange( enki.HandlerBase ):
 					elif result == enki.libuser.ERROR_PASSWORD_TOO_SHORT :
 						length = len( password_new )
 						error_passwordnew_message = " ".join( [ MSG.PW_TOO_SHORT( length ), MSG.PW_ENSURE_MIN_LENGTH(
-							enki.libuser.PASSWORD_LENGTH_MIN ) ] )
+							self.app.config.get( 'enki' ).get( 'user' ).get( 'PASSWORD_LENGTH_MIN' ) ) ] )
 			else:
 				error_password_message = MSG.WRONG_PW()
 				backoff_timer = self.get_backoff_timer( email )
@@ -436,7 +436,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 						error_message = MSG.MISSING_PW()
 					elif result == enki.libuser.ERROR_PASSWORD_TOO_SHORT :
 						length = len( password )
-						error_message = " ".join( [ MSG.PW_TOO_SHORT( length ), MSG.PW_ENSURE_MIN_LENGTH( enki.libuser.PASSWORD_LENGTH_MIN ) ] )
+						error_message = " ".join( [ MSG.PW_TOO_SHORT( length ), MSG.PW_ENSURE_MIN_LENGTH( self.app.config.get( 'enki' ).get( 'user' ).get( 'PASSWORD_LENGTH_MIN' ) ) ] )
 					self.render_tmpl( 'passwordrecoverconfirm.html',
 					                  error = error_message )
 			else:
