@@ -230,14 +230,14 @@ class HandlerAPIv1DataStoreGet( webapp2.RequestHandler ):
 				if token_valid:   # user is valid
 					data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id_not_expired( user_id, token_valid.app_id, data_type, data_id )
 					if data_store_item:
-						answer.update({ 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.librestapi.seconds_from_epoch( data_store_item.time_expires ) , 'read_access' : data_store_item.read_access })
+						answer.update({ 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.librestapi.seconds_from_epoch( data_store_item.time_expires ) , 'read_access' : data_store_item.read_access, 'server_time' : int( time.time())})
 						success = True
 						error = ''
 					else:
 						error = 'Not found'
 				else:
 					error = 'Unauthorised'
-		answer.update({ 'server_time' : int( time.time()), 'success' : success, 'error' : error })
+		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
@@ -269,7 +269,7 @@ class HandlerAPIv1DataStoreGetList( webapp2.RequestHandler ):
 								if data_store_item:
 									data_payloads.append({ 'user_id' : str( data_store_item.user_id ), 'data_id' : data_store_item.data_id, 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.librestapi.seconds_from_epoch( data_store_item.time_expires )})
 							if data_payloads:
-								answer.update({ 'data_payloads' : data_payloads })
+								answer.update({ 'data_payloads' : data_payloads, 'server_time' : int( time.time())})
 								success = True
 								error = ''
 					elif read_access == 'public':   # returns all data with read-access public
@@ -278,12 +278,12 @@ class HandlerAPIv1DataStoreGetList( webapp2.RequestHandler ):
 							data_payloads = []
 							for data_store_item in data_store_list:
 								data_payloads.append({ 'user_id' : str( data_store_item.user_id ), 'data_id' : data_store_item.data_id, 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.librestapi.seconds_from_epoch( data_store_item.time_expires )})
-							answer.update({ 'data_payloads' : data_payloads })
+							answer.update({ 'data_payloads' : data_payloads, 'server_time' : int( time.time())})
 							success = True
 							error = ''
 				else:
 					error = 'Unauthorised'
-		answer.update({ 'server_time' : int( time.time()), 'success' : success, 'error' : error })
+		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
 
