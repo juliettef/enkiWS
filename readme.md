@@ -3,15 +3,15 @@
 
 ## enki Web Services for Games on Python Google App Engine
 
-A permissively licensed Python web service for games developers. enkiWS is a library for setting up a website and ancillary services for games on Google App Engine.
+A permissively licensed Python web service for games developers. enkiWS is a library for setting up a website and ancillary services for games on [Google App Engine](https://github.com/juliettef/enkiWS#why-use-google-app-engine).
 
-Online demo *- may be out of sync with the source code -* https://enkisoftware-webservices.appspot.com
+[Online demo](https://enkisoftware-webservices.appspot.com) *(may be out of sync with the source code)* 
 
 
 ## Status
 
 This is a work in progress and not yet ready for production use.  
-__[ NEW in v0.5 ] REST API Friends and data store__
+__[ NEW in v0.6 ] REST API data store updates__
 
 
 ## Functionality
@@ -19,7 +19,7 @@ __[ NEW in v0.5 ] REST API Friends and data store__
 ### Current
 
 * User Accounts - email, display name
-* Login through OAuth & OpenID providers - Valve's Steam, Facebook, Google, Twitter
+* [Login through OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter) - Valve's Steam, Facebook, Google, Twitter
 * Forums
 * Localisation - English & French implemented
 * Online store
@@ -29,7 +29,7 @@ __[ NEW in v0.5 ] REST API Friends and data store__
 * Friends
     * Search by display name and invite
     * Message alert for friend invite
-* REST API
+* [REST API](https://github.com/juliettef/enkiWS#rest-api)
     * Authentication (account and game key)
     * Friends list
     * Data Store   
@@ -96,6 +96,8 @@ Notes:
 ### REST API
 
 #### Overview
+
+**_WARNING: The API is in flux until v1.0_**
 
 The rest api provides a mechanism for developers to create games, apps and websites which interact with users data.
 
