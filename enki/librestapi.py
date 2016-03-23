@@ -55,7 +55,7 @@ def refresh_EnkiModelRestAPIConnectToken_non_expiring():
 def get_EnkiModelRestAPIConnectToken_by_token_user_id_valid_age( token, user_id ):
 	entity = EnkiModelRestAPIConnectToken.query( ndb.AND( EnkiModelRestAPIConnectToken.token == token,
 	                                                      EnkiModelRestAPIConnectToken.user_id == user_id,
-	                                                      EnkiModelRestAPIConnectToken.time_created > ( datetime.datetime.now( ) - datetime.timedelta( minutes = MAX_AGE )))).get()
+	                                                      EnkiModelRestAPIConnectToken.time_created > ( datetime.datetime.now() - datetime.timedelta( minutes = MAX_AGE )))).get()
 	return entity
 
 
@@ -65,7 +65,7 @@ def fetch_EnkiModelRestAPIConnectToken_by_user( user_id ):
 
 
 def fetch_EnkiModelRestAPIConnectToken_expired():
-	list = EnkiModelRestAPIConnectToken.query( EnkiModelRestAPIConnectToken.time_created < ( datetime.datetime.now( ) - datetime.timedelta( minutes = MAX_AGE ))).fetch( keys_only = True )
+	list = EnkiModelRestAPIConnectToken.query( EnkiModelRestAPIConnectToken.time_created < ( datetime.datetime.now() - datetime.timedelta( minutes = MAX_AGE ))).fetch( keys_only = True )
 	return list
 
 
@@ -73,7 +73,7 @@ def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id( user_id, 
 	entity = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
 	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
 	                                                   EnkiModelRestAPIDataStore.data_type == data_type,
-	                                                   EnkiModelRestAPIDataStore.data_id == data_id ) ).get( )
+	                                                   EnkiModelRestAPIDataStore.data_id == data_id )).get()
 	return entity
 
 
@@ -82,16 +82,16 @@ def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id_not_expire
 	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
 	                                                   EnkiModelRestAPIDataStore.data_type == data_type,
 	                                                   EnkiModelRestAPIDataStore.data_id == data_id,
-	                                                   EnkiModelRestAPIDataStore.time_expires > datetime.datetime.now() )).get()
+	                                                   EnkiModelRestAPIDataStore.time_expires > datetime.datetime.now())).get()
 	return entity
 
 
-def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_read_access_not_expired( user_id, app_id, data_type, read_access ):
+def fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_read_access_not_expired( user_id, app_id, data_type, read_access ):
 	entity = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
 	                                                   EnkiModelRestAPIDataStore.app_id == app_id,
 	                                                   EnkiModelRestAPIDataStore.data_type == data_type,
 	                                                   EnkiModelRestAPIDataStore.read_access == read_access,
-	                                                   EnkiModelRestAPIDataStore.time_expires > datetime.datetime.now() )).get()
+	                                                   EnkiModelRestAPIDataStore.time_expires > datetime.datetime.now())).fetch()
 	return entity
 
 
@@ -99,7 +99,7 @@ def fetch_EnkiModelRestAPIDataStore_by_app_id_data_type_read_access_not_expired(
 	list = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.app_id == app_id,
 	                                                 EnkiModelRestAPIDataStore.data_type == data_type,
 	                                                 EnkiModelRestAPIDataStore.read_access == read_access,
-	                                                 EnkiModelRestAPIDataStore.time_expires > datetime.datetime.now() )).fetch()
+	                                                 EnkiModelRestAPIDataStore.time_expires > datetime.datetime.now())).fetch()
 	return list
 
 
@@ -107,7 +107,7 @@ def fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id( user_id
 	list = EnkiModelRestAPIDataStore.query( ndb.AND( EnkiModelRestAPIDataStore.user_id == user_id,
 	                                                 EnkiModelRestAPIDataStore.app_id == app_id,
 	                                                 EnkiModelRestAPIDataStore.data_type == data_type,
-	                                                 EnkiModelRestAPIDataStore.data_id == data_id ) ).fetch( keys_only = True )
+	                                                 EnkiModelRestAPIDataStore.data_id == data_id )).fetch( keys_only = True )
 	return list
 
 

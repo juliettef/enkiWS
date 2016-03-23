@@ -254,30 +254,27 @@ class HandlerAPIv1DataStoreGetList( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '' )
 			data_type = jsonobject.get( 'data_type', '' )
 			read_access = jsonobject.get( 'read_access', '' )
-			if user_id and auth_token and data_type and ( read_access == 'friends' or read_access == 'public' ):
+			if user_id and auth_token and data_type and ( read_access == 'public' or read_access == 'private' or read_access == 'friends' ):
 				token_valid = EnkiModelRestAPITokenVerify.get_by_user_id_token( user_id, auth_token )
 				if token_valid:   # user is valid
 					error = 'Not found'
-					if read_access == 'friends':    # returns list of data payloads of the user's friends where data read_access = 'friends'
-						# get the user friends' ids
-						friends_list = enki.libfriends.get_friends_user_id( user_id )
-						if friends_list:
-							data_payloads = []
-							# get each friends' data
-							for friend_id in friends_list:
-								data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_read_access_not_expired( friend_id, token_valid.app_id, data_type, read_access )
-								if data_store_item:
-									data_payloads.append({ 'user_id' : str( data_store_item.user_id ), 'data_id' : data_store_item.data_id, 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.librestapi.seconds_from_epoch( data_store_item.time_expires )})
-							if data_payloads:
-								answer.update({ 'data_payloads' : data_payloads, 'server_time' : int( time.time())})
-								success = True
-								error = ''
-					elif read_access == 'public':   # returns all data with read-access public
+					data_store_list = []
+					if read_access == 'public':   # returns all data with read-access "public"
 						data_store_list = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_app_id_data_type_read_access_not_expired( token_valid.app_id, data_type, read_access )
-						if data_store_list:
-							data_payloads = []
-							for data_store_item in data_store_list:
-								data_payloads.append({ 'user_id' : str( data_store_item.user_id ), 'data_id' : data_store_item.data_id, 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.librestapi.seconds_from_epoch( data_store_item.time_expires )})
+					else:
+						people_list = []
+						if read_access == 'private':    # returns all user's data with read-access "private"
+							people_list = [ user_id ]
+						elif read_access == 'friends':    # returns list of user's friends' data with friends' read_access "friends"
+							people_list = enki.libfriends.get_friends_user_id( user_id )    # get the user's friends' ids
+						if people_list:
+							for person_id in people_list:   # get each persons' data
+								data_store_list = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_read_access_not_expired( person_id, token_valid.app_id, data_type, read_access )
+					if data_store_list:
+						data_payloads = []
+						for data_store_item in data_store_list:
+							data_payloads.append({ 'user_id' : str( data_store_item.user_id ), 'data_id' : data_store_item.data_id, 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.librestapi.seconds_from_epoch( data_store_item.time_expires )})
+						if data_payloads:
 							answer.update({ 'data_payloads' : data_payloads, 'server_time' : int( time.time())})
 							success = True
 							error = ''

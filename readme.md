@@ -1,7 +1,7 @@
 # enkiWS
 
 
-## enki Web Services for Games on Python Google App Engine
+## Web Services for Games on Python Google App Engine
 
 A permissively licensed Python web service for games developers. enkiWS is a library for setting up a website and ancillary services for games on [Google App Engine](https://github.com/juliettef/enkiWS#why-use-google-app-engine).
 
@@ -223,8 +223,12 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/<br>getlist</sup></td>
-            <td><sup>Get user's friend's data filtered by app id, data type and friends' read_access setting to 'friends'</sup></td>
-            <td><sup>user_id,<br>auth_token,<br>data_type,<br>read_access (="friends")</sup></td>
+            <td><sup>Get list of users' data filtered by app id, data type and read access.<br>
+            If read_access is<br>
+             - "public": return all users public data.<br>
+             - "friends": return user's friends' data that have read_access set to "friends".<br>
+             - "private": return the user's private data.</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>data_type,<br>read_access ("public", "friends", "private")</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_type":"settings",<br>"read_access":"friends"}</sup></td>
             <td><sup>data_payloads<br>(list of dictionaries<br>(user_id, data_id,<br>data_payload (JSON),<br>time_expires (int))),<br>server_time (int),<br>success, error</sup></td>
             <td><sup>
@@ -239,26 +243,6 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
             "data_payload":{"colour":"white","size":"0.9","calc_ip_addr":"127.0.0.3"},<br>
             "time_expires":1458329792}],<br>
             "server_time":1458071139,<br>"success":true,"error":""}
-            </sup></td>
-        </tr>
-        <tr>
-            <td><sup>/api/v1/<br>datastore/<br>getlist</sup></td>
-            <td><sup>Get data filtered by app id, data type and user's read_access setting to 'public'</sup></td>
-            <td><sup>user_id,<br>auth_token,<br>data_type,<br>read_access (="public")</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_type":"settings",<br>"read_access":"public"}</sup></td>
-            <td><sup>data_payloads<br>(list of dictionaries<br>(user_id, data_id,<br>data_payload (JSON),<br>time_expires (int))),<br>server_time (int),<br>success, error</sup></td>
-            <td><sup>
-            {"data_payloads":[<br>
-            {"user_id":"4537134732017664","data_id":"s07",<br>
-            "data_payload":{"colour":"gold","size":"0.3","calc_ip_addr":"127.0.0.5"},<br>
-            "time_expires":1481544775},<br>
-            {"user_id":"6218562888794112","data_id":"s42",<br>
-            "data_payload":{"colour":"teal","size":"1.9","calc_ip_addr":"127.0.0.8"},<br>
-            "time_expires":1454350795},<br>
-            {"user_id":"6368543146770432","data_id":"s07",<br>
-            "data_payload":{"colour":"black","size":"0.2","calc_ip_addr":"127.0.0.6"},<br>
-            "time_expires":1459532935}],<br>
-            "server_time":1458071141,<br>"success":true,"error":""}
             </sup></td>
         </tr>
         <tr>
