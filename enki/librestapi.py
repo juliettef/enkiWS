@@ -13,6 +13,8 @@ DATASTORE_EXPIRY_DEFAULT = 86400    # 24h
 DATASTORE_NON_EXPIRING = 3154000000 # 100 years
 DATASTORE_NON_EXPIRING_REFRESH = DATASTORE_NON_EXPIRING / 2
 
+APP_MAX = 10    # maximum number of apps per user
+APP_MAX_NAME_LENGTH = 32
 
 def seconds_from_epoch( date_time ):
 	return int(( date_time - datetime.datetime.utcfromtimestamp( 0 )).total_seconds())

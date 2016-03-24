@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>{{ _( "Apps" )}}</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+            <div class="well bs-component">
+                <form class="form-horizontal" action="{{ 'apps'|local }}" method="post">
+                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+                    <fieldset>
+
+                        <legend>{{ _( "App registration" ) }}</legend>
+
+                        <div class="form-group {% if error %}has-error{% endif%}">
+                            <label for="app_name" class="col-lg-2 control-label">{{ _( "App name" ) }}</label>
+                             <div class="col-lg-10">
+                                 <input class="form-control" type="text" name="app_name" placeholder="{{ _( "App name" ) }}" maxlength="32" />
+                                 {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
+                                 <p class="text-info">{{ _( "Register an app to use the Rest API. The app name must be alphanum & 32 chars long max. You can register up to 10 apps per user." ) }}</p>
+	                         </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-2">
+                                <button class="btn btn-primary" type="submit">{{ _( "Register my app" ) }}</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+	        {% include "incpageextensions.html" %}
+
+            {% include "incfooter.html" %}
+    	</div>
+    </body>
+</html>

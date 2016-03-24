@@ -14,8 +14,45 @@ import enki.textmessages as MSG
 
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
+from enki.modelapp import EnkiModelApp
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
 from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
+
+
+class HandlerApps( enki.HandlerBase ):
+
+	def get( self ):
+		if self.ensure_is_logged_in():
+			self.render_tmpl( 'apps.html',
+			                  active_menu = 'profile'
+			                  )
+
+	def post( self ):
+		if self.ensure_is_logged_in() and self.ensure_has_display_name():
+			self.check_CSRF()
+			name = self.request.get( 'app_name' )
+			error_message = ''
+			if name:
+				count = EnkiModelApp.count_by_user_id( self.user_id )
+				if len( name ) > enki.librestapi.APP_MAX_NAME_LENGTH :
+					error_message = 'App name is too long, it must be ' +  enki.librestapi.APP_MAX_NAME_LENGTH + ' char max.'
+				elif EnkiModelApp.exist_by_name( name ):
+					error_message = 'App name already exists.'
+				elif EnkiModelApp.count_by_user_id( self.user_id ) >= enki.librestapi.APP_MAX:
+					count = EnkiModelApp.count_by_user_id( self.user_id )
+					error_message = 'You have exceeded the number of apps per user.'
+				else:
+					count = EnkiModelApp.count_by_user_id( self.user_id )
+					secret = enki.librestapi.generate_auth_token()
+					app = EnkiModelApp( user_id = self.user_id, name = name, secret = secret )
+					app.put()
+					self.add_infomessage( 'success', MSG.SUCCESS(), 'App created')
+			else:
+				error_message = 'A name is needed.'
+			self.render_tmpl( 'apps.html',
+			                  active_menu = 'profile',
+			                  error = error_message,
+			                  )
 
 
 class HandlerPageRestAPI( enki.HandlerBase ):
@@ -320,7 +357,8 @@ class ExtensionPageRestAPI( ExtensionPage ):
 class ExtensionRestAPI( Extension ):
 
 	def get_routes( self ):
-		return  [ webapp2.Route( '/restapi', HandlerPageRestAPI, name = 'restapi' ),
+		return  [ webapp2.Route( '/apps', HandlerApps, name = 'apps' ),
+		          webapp2.Route( '/restapi', HandlerPageRestAPI, name = 'restapi' ),
 		          webapp2.Route( '/api/v1/connect', HandlerAPIv1Connect, name = 'apiv1connect' ),
 		          webapp2.Route( '/api/v1/logout', HandlerAPIv1Logout, name = 'apiv1logout' ),
 		          webapp2.Route( '/api/v1/authvalidate', HandlerAPIv1AuthValidate, name = 'apiv1authvalidate' ),
