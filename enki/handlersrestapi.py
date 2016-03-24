@@ -36,26 +36,39 @@ class HandlerApps( enki.HandlerBase ):
 	def post( self ):
 		if self.ensure_is_logged_in():
 			self.check_CSRF()
-			name = self.request.get( 'app_name' )
+			app_secret_set = self.request.get( 'app_secret_set' )
+			app_name = self.request.get( 'app_name' )
 			error_message = ''
 			data = []
 			apps = EnkiModelApp.fetch_by_user_id( self.user_id )
 			for app in apps:
 				data.append([ app.name, str( app.key.id()), app.secret, app.time_created ])
-			if not name:
-				error_message = 'A name is needed.'
-			elif ( len( name ) > enki.librestapi.APP_MAX_NAME_LENGTH ):
-				error_message = 'App name is too long, it must be ' +  enki.librestapi.APP_MAX_NAME_LENGTH + ' char max.'
-			elif EnkiModelApp.exist_by_name( name ):
-				error_message = 'App name already exists.'
-			elif ( EnkiModelApp.count_by_user_id( self.user_id ) >= enki.librestapi.APP_MAX ):
-				error_message = 'You have exceeded the number of apps per user.'
-			else:
+
+			if app_secret_set:
 				secret = enki.librestapi.generate_auth_token()
-				app = EnkiModelApp( user_id = self.user_id, name = name, secret = secret )
+				app = EnkiModelApp.get_by_id( int( app_secret_set ))
+				app.secret = secret
 				app.put()
-				self.add_infomessage( 'success', MSG.SUCCESS(), 'App ' + name + ' created.' )
-				data.append([ name, str( app.key.id()), secret, app.time_created ])
+				self.add_infomessage( 'success', MSG.SUCCESS(), 'A new secret was generated for app ' + app.name +'.' )
+				data = []
+				apps = EnkiModelApp.fetch_by_user_id( self.user_id )
+				for app in apps:
+					data.append([ app.name, str( app.key.id()), app.secret, app.time_created ])
+			else:
+				if not app_name:
+					error_message = 'A name is needed.'
+				elif ( len( app_name ) > enki.librestapi.APP_MAX_NAME_LENGTH ):
+					error_message = 'App name is too long, it must be ' +  enki.librestapi.APP_MAX_NAME_LENGTH + ' char max.'
+				elif EnkiModelApp.exist_by_name( app_name ):
+					error_message = 'App name already exists.'
+				elif ( EnkiModelApp.count_by_user_id( self.user_id ) >= enki.librestapi.APP_MAX ):
+					error_message = 'You have exceeded the number of apps per user.'
+				else:
+					secret = enki.librestapi.generate_auth_token()
+					app = EnkiModelApp( user_id = self.user_id, name = app_name, secret = secret )
+					app.put()
+					self.add_infomessage( 'success', MSG.SUCCESS(), 'App ' + app_name + ' created.' )
+					data.append([ app_name, str( app.key.id()), secret, app.time_created ])
 			self.render_tmpl( 'apps.html',
 			                  active_menu = 'profile',
 			                  error = error_message,

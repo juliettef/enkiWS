@@ -32,7 +32,7 @@
 								<td>{{ loop.index }}</td>
 							    <td>{{ item[ 0 ] }}<br><button class="btn btn-default disabled btn-xs" type="submit" name="app_name_edit" value="{{ item[ 1 ] }}">{{ _( "Edit" )}}</button></td>
 							    <td>{{ item[ 1 ] }}</td>
-							    <td>{{ item[ 2 ] }}<br><button class="btn btn-default disabled btn-xs" type="submit" name="app_secret_set" value="{{ item[ 1 ] }}">{{ _( "Generate new" )}}</button></td>
+							    <td>{{ item[ 2 ] }}<br><button class="btn btn-default btn-xs" type="submit" name="app_secret_set" value="{{ item[ 1 ] }}">{{ _( "Generate new" )}}</button></td>
 								<td>{{ item[ 3 ].strftime( "%d %b %Y<br>%H:%M:%S" ) }}</td>
 							</tr>
 							{% endfor %}
