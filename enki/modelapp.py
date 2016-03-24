@@ -17,3 +17,7 @@ class EnkiModelApp( model.Model ):
 	def count_by_user_id( cls, user_id ):
 		return cls.query( cls.user_id == user_id ).count()
 
+	@classmethod
+	def fetch_by_user_id( cls, user_id ):
+		list = cls.query( cls.user_id == user_id ).order( cls.time_created ).fetch()
+		return list

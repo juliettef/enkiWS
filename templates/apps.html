@@ -12,25 +12,54 @@
             {% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
+            {% if data %}
+                <h3>{{ _( "Apps" ) }}</h3>
+                <form class="form-group" action="{{ 'apps'|local  }}" method="post">
+                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+	                <table class="table table-striped table-hover ">
+		                <thead>
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Id</th>
+							    <th>Secret</th>
+								<th>Created</th>
+							</tr>
+		                </thead>
+						<tbody>
+							{% for item in data %}
+							<tr>
+								<td>{{ loop.index }}</td>
+							    <td>{{ item[ 0 ] }}<br><button class="btn btn-default disabled btn-xs" type="submit" name="app_name_edit" value="{{ item[ 1 ] }}">{{ _( "Edit" )}}</button></td>
+							    <td>{{ item[ 1 ] }}</td>
+							    <td>{{ item[ 2 ] }}<br><button class="btn btn-default disabled btn-xs" type="submit" name="app_secret_set" value="{{ item[ 1 ] }}">{{ _( "Generate new" )}}</button></td>
+								<td>{{ item[ 3 ].strftime( "%d %b %Y<br>%H:%M:%S" ) }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+	                </table>
+                </form>
+            {% endif %}
+
             <div class="well bs-component">
                 <form class="form-horizontal" action="{{ 'apps'|local }}" method="post">
                     <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     <fieldset>
 
-                        <legend>{{ _( "App registration" ) }}</legend>
+                        <legend>{{ _( "Register an app" ) }}</legend>
 
                         <div class="form-group {% if error %}has-error{% endif%}">
                             <label for="app_name" class="col-lg-2 control-label">{{ _( "App name" ) }}</label>
                              <div class="col-lg-10">
-                                 <input class="form-control" type="text" name="app_name" placeholder="{{ _( "App name" ) }}" maxlength="32" />
+                                 <input class="form-control" type="text" name="app_name" placeholder="{{ _( "App name" ) }}" maxlength="{{ app_max_name_length }}" />
                                  {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
-                                 <p class="text-info">{{ _( "Register an app to use the Rest API. The app name must be alphanum & 32 chars long max. You can register up to 10 apps per user." ) }}</p>
+                                 <p class="text-info">{{ _( "Register an app to use the Rest API. You can register <b>up to %(app_max)s apps per user</b>. The app name must be less than %(app_max_name_length)s characters long.", app_max = app_max, app_max_name_length = app_max_name_length ) }}</p>
 	                         </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-2">
-                                <button class="btn btn-primary" type="submit">{{ _( "Register my app" ) }}</button>
+                                <button class="btn btn-primary {% if ( data|length ) >= app_max %}disabled{% endif%}" type="submit">{{ _( "Register" ) }}</button>
                             </div>
                         </div>
                     </fieldset>
