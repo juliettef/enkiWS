@@ -5,6 +5,8 @@ import webapp2_extras.security
 from google.appengine.ext import ndb
 
 from enki.modelrestapiconnecttoken import EnkiModelRestAPIConnectToken
+from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
+from enki.modelapp import EnkiModelApp
 from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 
 
@@ -15,6 +17,7 @@ DATASTORE_NON_EXPIRING_REFRESH = DATASTORE_NON_EXPIRING / 2
 
 APP_MAX = 10    # maximum number of apps per user
 APP_MAX_NAME_LENGTH = 32
+
 
 def seconds_from_epoch( date_time ):
 	return int(( date_time - datetime.datetime.utcfromtimestamp( 0 )).total_seconds())
@@ -39,6 +42,23 @@ def cleanup_and_get_new_connection_token( user_id ):
 		entity.put()
 		return token
 	return None
+
+
+def check_secret( user_id, auth_token, app_secret ):
+	if EnkiModelRestAPITokenVerify.exist_by_user_id_token_app_secret( user_id, auth_token, app_secret ):
+		# the user verify token contains the same secret as was sent in the request
+		return True
+	else:
+		# retrieve the app_id from the verify token and check if the corresponding registered app has a new secret
+		token_verify = EnkiModelRestAPITokenVerify.get_by_user_id_token( user_id, auth_token )
+		if token_verify:
+			app = EnkiModelApp.get_by_id( int( token_verify.app_id ))
+			if app and app.secret == app_secret:
+				# update the user's verify token app_secret
+				token_verify.app_secret = app.secret
+				token_verify.put()
+				return True
+	return False
 
 
 def refresh_EnkiModelRestAPIConnectToken_non_expiring():

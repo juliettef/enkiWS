@@ -33,8 +33,8 @@ class EnkiModelTokenVerify( model.Model ):
 
 	@classmethod
 	def fetch_by_user_id_type( cls, user_id, type ):
-		keys = cls.query( ndb.AND( cls.user_id == user_id, cls.type == type )).order( -cls.time_created ).fetch()
-		return keys
+		list = cls.query( ndb.AND( cls.user_id == user_id, cls.type == type )).order( -cls.time_created ).fetch()
+		return list
 
 	@classmethod	
 	def fetch_keys_by_user_id_type( cls, user_id, type ):

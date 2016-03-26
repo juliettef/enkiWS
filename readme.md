@@ -153,64 +153,64 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         <tr>
             <td><sup>/api/v1/<br>connect</sup></td>
             <td><sup>User connect</sup></td>
-            <td><sup>displayname,<br>code,<br>app_id</sup></td>
-            <td><sup>{"displayname":"Silvia#2702",<br>"code":"Q354D",<br>"app_id":"product_a"}</sup></td>
+            <td><sup>displayname,<br>code,<br>app_id,<br>app_secret</sup></td>
+            <td><sup>{"displayname":"Silvia#2702",<br>"code":"Q354D",<br>"app_id":"5141470990303232",<br>"app_secret":"0ZYWOl..Y9Xq"}</sup></td>
             <td><sup>user_id,<br>auth_token,<br>success, error</sup></td>
             <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"success":true, "error":""}</sup></td>
         </tr>
         <tr>
             <td><sup>/api/v1/<br>logout</sup></td>
             <td><sup>User logout</sup></td>
-            <td><sup>user_id,<br>auth_token</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S"}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_secret</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"app_secret":"0ZYWOl..Y9Xq"}</sup></td>
             <td><sup>success, error</sup></td>
             <td><sup>{"success":true, "error":""}</sup></td>
         </tr>
         <tr>
             <td><sup>/api/v1/<br>authvalidate</sup></td>
             <td><sup>Validate user</sup></td>
-            <td><sup>user_id,<br>auth_token</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S"}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_secret</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"app_secret":"0ZYWOl..Y9Xq"}</sup></td>
             <td><sup>user_displayname,<br>success, error</sup></td>
             <td><sup>{"user_displayname":"Silvia#2702",<br>"success":true,"error":""}</sup></td>
         </tr>
         <tr>
             <td><sup>/api/v1/<br>ownsproducts</sup></td>
             <td><sup>List products activated by user</sup></td>
-            <td><sup>user_id,<br>auth_token</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S"}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_secret</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"app_secret":"0ZYWOl..Y9Xq"}</sup></td>
             <td><sup>products_owned (list of strings),<br>success, error</sup></td>
             <td><sup>{"products_owned":["product_a","product_b"],<br>"success":true,"error":""}</sup></td>
         </tr>
         <tr>
             <td><sup>/api/v1/<br>ownsproducts</sup></td>
             <td><sup>List confirming products activated by user</sup></td>
-            <td><sup>user_id,<br>auth_token,<br>products (list of strings)</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"products":["product_b","product_c"]}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_secret,<br>products (list of strings)</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"app_secret":"0ZYWOl..Y9Xq",<br>"products":["product_b","product_c"]}</sup></td>
             <td><sup>products_owned (list of strings),<br>success, error</sup></td>
             <td><sup>{"products_owned":["product_b"],<br>"success":true,"error":""}</sup></td>
         </tr>
         <tr>
             <td><sup>/api/v1/<br>friends</sup></td>
             <td><sup>List user's friends</sup></td>
-            <td><sup>user_id,<br>auth_token</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S"}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_secret</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"app_secret":"0ZYWOl..Y9Xq"}</sup></td>
             <td><sup>friends user_id<br>and displayname<br>(list of dictionaries of strings),<br>success, error</sup></td>
             <td><sup>{"friends":[<br>{"user_id":"4677872220372992",<br>"displayname":"Toto#2929"},<br>{"user_id":"6454683010859008",<br>"displayname":"Ann#1234"}],<br>"success":true,"error":""}</sup></td>
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/<br>set</sup></td>
             <td><sup>Create / update user's data filtered by app id, data type and data id</sup></td>
-            <td><sup>user_id,<br>auth_token,<br>data_type,<br>data_id,<br>data_payload (JSON,<br>inc. optional<br>calc_ip_addr),<br>time_expires (int)<br>read_access</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_type":"settings",<br>"data_id":"s42",<br>"data_payload":<br>"{"colour":"green","size":"0.5",<br>"calc_ip_addr":""}",<br>"time_expires":3600,<br>"read_access":"friends"}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_secret,<br>data_type,<br>data_id,<br>data_payload (JSON,<br>inc. optional<br>calc_ip_addr),<br>time_expires (int)<br>read_access</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"app_secret":"0ZYWOl..Y9Xq",<br>"data_type":"settings",<br>"data_id":"s42",<br>"data_payload":<br>"{"colour":"green","size":"0.5",<br>"calc_ip_addr":""}",<br>"time_expires":3600,<br>"read_access":"friends"}</sup></td>
             <td><sup>success, error</sup></td>
             <td><sup>{"success":true,"error":""}</sup></td>
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/<br>get</sup></td>
             <td><sup>Get user's data filtered by app id, data type and data id</sup></td>
-            <td><sup>user_id,<br>auth_token,<br>data_type,<br>data_id</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_type":"settings",<br>"data_id":"s42"}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_secret,<br>data_type,<br>data_id</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"app_secret":"0ZYWOl..Y9Xq",<br>"data_type":"settings",<br>"data_id":"s42"}</sup></td>
             <td><sup>data_payload (JSON),<br>time_expires (int),<br>read_access,<br>server_time (int),<br>success, error</sup></td>
             <td><sup>
             {"data_payload":[<br>
@@ -223,13 +223,12 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         </tr>
         <tr>
             <td><sup>/api/v1/<br>datastore/<br>getlist</sup></td>
-            <td><sup>Get list of users' data filtered by app id, data type and read access.<br>
-            If read_access is<br>
+            <td><sup>Get list of users' data filtered by app id, data type and read access. If read_access is<br>
              - "public": return all users public data.<br>
              - "friends": return user's friends' data that have read_access set to "friends".<br>
              - "private": return the user's private data.</sup></td>
-            <td><sup>user_id,<br>auth_token,<br>data_type,<br>read_access ("public", "friends", "private")</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_type":"settings",<br>"read_access":"friends"}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_secret,<br>data_type,<br>read_access ("public", "friends", "private")</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"app_secret":"0ZYWOl..Y9Xq",<br>"data_type":"settings",<br>"read_access":"friends"}</sup></td>
             <td><sup>data_payloads<br>(list of dictionaries<br>(user_id, data_id,<br>data_payload (JSON),<br>time_expires (int))),<br>server_time (int),<br>success, error</sup></td>
             <td><sup>
             {"data_payloads":[<br>
@@ -248,8 +247,8 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
         <tr>
             <td><sup>/api/v1/<br>datastore/<br>del</sup></td>
             <td><sup>Delete user's data filtered by app id, data type and data id</sup></td>
-            <td><sup>user_id,<br>auth_token,<br>data_type,<br>data_id</sup></td>
-            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"data_type":"settings",<br>"data_id":"s42"}</sup></td>
+            <td><sup>user_id,<br>auth_token,<br>app_secret,<br>data_type,<br>data_id</sup></td>
+            <td><sup>{"user_id":"5066549580791808",<br>"auth_token":"kDfFg1..dw3S",<br>"app_secret":"0ZYWOl..Y9Xq",<br>"data_type":"settings",<br>"data_id":"s42"}</sup></td>
             <td><sup>success, error</sup></td>
             <td><sup>{"success":true,"error":""}</sup></td>
         </tr>
@@ -271,9 +270,14 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
             <td><sup>{"success":false,"error":"Invalid request"}</sup></td>
         </tr>
         <tr>
-            <td><sup>Unauthorised</sup></td>
+            <td><sup>Unauthorised app</sup></td>
+            <td><sup>App not registered or invalid secret.<br> - Connect request: app_id/app_secret invalid.<br> - Other requests: app_secret invalid.</sup></td>
+            <td><sup>{"success":false,"error":"Unauthorised app"}</sup></td>
+        </tr>
+        <tr>
+            <td><sup>Unauthorised user</sup></td>
             <td><sup>User could not be authenticated.<br> - Connect request: user_displayname/code invalid.<br> - Other requests: user_id/auth_token invalid.</sup></td>
-            <td><sup>{"success":false,"error":"Unauthorised"}</sup></td>
+            <td><sup>{"success":false,"error":"Unauthorised user"}</sup></td>
         </tr>
         <tr>
             <td><sup>Not Found</sup></td>

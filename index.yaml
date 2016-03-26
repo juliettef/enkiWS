@@ -20,6 +20,17 @@ indexes:
   - name: group
   - name: order
 
+- kind: EnkiModelApp
+  properties:
+  - name: user_id
+  - name: time_created
+
+- kind: EnkiModelApp
+  properties:
+  - name: user_id
+  - name: time_created
+    direction: desc
+
 - kind: EnkiModelDisplayName
   properties:
   - name: current
@@ -70,6 +81,36 @@ indexes:
   - name: token
   - name: user_id
   - name: time_created
+
+- kind: EnkiModelRestAPIDataStore
+  properties:
+  - name: app_id
+  - name: data_id
+  - name: data_type
+  - name: user_id
+  - name: time_expires
+
+- kind: EnkiModelRestAPIDataStore
+  properties:
+  - name: app_id
+  - name: data_type
+  - name: read_access
+  - name: time_expires
+
+- kind: EnkiModelRestAPIDataStore
+  properties:
+  - name: app_id
+  - name: data_type
+  - name: read_access
+  - name: user_id
+  - name: time_expires
+
+- kind: EnkiModelRestAPITokenVerify
+  properties:
+  - name: type
+  - name: user_id
+  - name: time_created
+    direction: desc
 
 - kind: EnkiModelThread
   properties:
