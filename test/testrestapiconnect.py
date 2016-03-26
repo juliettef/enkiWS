@@ -6,8 +6,10 @@ URL_LOCAL = 'http://127.0.0.1:8881'
 URL_ONLINE = 'https://enkisoftware-webservices.appspot.com'
 
 # default values
-URL_DEFAULT = URL_ONLINE
-DISPLAYNAME_DEFAULT = ''
+DEFAULT_URL = URL_LOCAL
+DEFAULT_DISPLAYNAME = ''    # e.g. 'Silvia#2702'
+DEFAULT_APP_ID = ''         # e.g. '5141470990303232'
+DEFAULT_APP_SECRET = ''     # e.g. '0ZYWOlI71zDTRG7GhuLhmh14wxxXa9uCQDSfk9Y9Xq'
 
 # routes
 ROUTE_CONNECT = '/api/v1/connect'
@@ -29,24 +31,16 @@ def get_response( route, payload ):
 	return response
 
 
-# set domain name url
-url = ''
-url = raw_input( '> Enter url (domain name, press enter to use default url ' + URL_DEFAULT + '): ' )
-if not url:
-	url = URL_DEFAULT
+# parameters
+url = DEFAULT_URL
+displayname = DEFAULT_DISPLAYNAME
+app_id = DEFAULT_APP_ID
+app_secret = DEFAULT_APP_SECRET
 
 # HandlerAPIv1Connect
-displayname = ''
-msg_default = ''
-if DISPLAYNAME_DEFAULT:
-	msg_default = ", press enter to use default display name " + DISPLAYNAME_DEFAULT
-displayname = raw_input( "> Enter display name (format: alphanumeric prefix + '#' + 4 digits" + msg_default + "): " )
-if not displayname:
-	displayname = DISPLAYNAME_DEFAULT
 code = ''
 code = raw_input( '> Enter code (connection token, format: 5 alphanumeric characters): ' )
-app_id = 'product_a'
-payload = { 'displayname' : displayname, 'code' : code, 'app_id' : app_id }
+payload = { 'displayname' : displayname, 'code' : code, 'app_id' : app_id, 'app_secret' : app_secret }
 r_connect = get_response( ROUTE_CONNECT, payload )
 
 # get user_id and auth_token from connect response
@@ -59,12 +53,12 @@ else:
 	exit()
 
 # HandlerAPIv1AuthValidate
-payload = { 'user_id' : user_id, 'auth_token' : auth_token }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_secret' : app_secret }
 get_response( ROUTE_VALIDATE, payload )
 
 # HandlerAPIv1OwnsProducts
 products = []
-payload = { 'user_id' : user_id, 'auth_token' : auth_token }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_secret' : app_secret }
 s = raw_input( "\n> Enter list of products to check (format comma separated, e.g. product_a, product_b, product_c. If left blank - press Enter - all activated products are returned.): " )
 if s:
 	products = map( str, s.split( ', ' ))
@@ -72,7 +66,7 @@ if s:
 get_response( ROUTE_PRODUCTS, payload )
 
 # HandlerAPIv1Friends
-payload = { 'user_id' : user_id, 'auth_token' : auth_token }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_secret' : app_secret }
 get_response( ROUTE_FRIENDS, payload )
 
 # HandlerAPIv1DataStoreSet
@@ -81,21 +75,21 @@ data_id = 's01p12'
 data_payload = json.loads( '{ "colour":"blue", "size":"0.7", "calc_ip_addr" : "" }' )
 time_expires = 3600
 read_access = 'public'
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'data_id' : data_id, 'data_payload' : data_payload, 'time_expires' : time_expires, 'read_access' : read_access }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_secret' : app_secret, 'data_type' : data_type, 'data_id' : data_id, 'data_payload' : data_payload, 'time_expires' : time_expires, 'read_access' : read_access }
 get_response( ROUTE_DATASTORESET, payload )
 
 # HandlerAPIv1DataStoreGet
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'data_id' : data_id }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_secret' : app_secret, 'data_type' : data_type, 'data_id' : data_id }
 get_response( ROUTE_DATASTOREGET, payload )
 
 # HandlerAPIv1DataStoreGetList
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'read_access': read_access }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_secret' : app_secret, 'data_type' : data_type, 'read_access': read_access }
 get_response( ROUTE_DATASTOREGETLIST, payload )
 
 # HandlerAPIv1DataStoreDel
-payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'data_type' : data_type, 'data_id' : data_id }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_secret' : app_secret, 'data_type' : data_type, 'data_id' : data_id }
 get_response( ROUTE_DATASTOREDEL, payload )
 
 # HandlerAPIv1Logout
-payload = { 'user_id' : user_id, 'auth_token' : auth_token }
+payload = { 'user_id' : user_id, 'auth_token' : auth_token, 'app_secret' : app_secret }
 get_response( ROUTE_LOGOUT, payload )

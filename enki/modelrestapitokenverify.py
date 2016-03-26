@@ -7,6 +7,7 @@ from enki.modeltokenverify import EnkiModelTokenVerify
 class EnkiModelRestAPITokenVerify( EnkiModelTokenVerify ):
 
 	app_id = model.StringProperty()
+	app_secret = model.StringProperty()
 
 	@classmethod
 	def get_by_user_id_token( cls, user_id, token ):

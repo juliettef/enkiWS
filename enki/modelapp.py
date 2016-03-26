@@ -1,3 +1,4 @@
+from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
 
 
@@ -21,3 +22,10 @@ class EnkiModelApp( model.Model ):
 	def fetch_by_user_id( cls, user_id ):
 		list = cls.query( cls.user_id == user_id ).order( cls.time_created ).fetch()
 		return list
+
+	@classmethod
+	def exist_by_app_id_app_secret( cls, app_id, app_secret ):
+		item = ndb.Key( EnkiModelApp, int( app_id )).get()
+		if item and item.secret == app_secret:
+			return True
+		return False

@@ -102,20 +102,24 @@ class HandlerAPIv1Connect( webapp2.RequestHandler ):
 			code = jsonobject.get( 'code', '')
 			displayname = jsonobject.get( 'displayname', '')
 			app_id = jsonobject.get( 'app_id', '')
-			if code and displayname and app_id:
-				user_id = enki.libdisplayname.get_user_id_from_display_name( displayname )
-				if user_id:
-					entity = enki.librestapi.get_EnkiModelRestAPIConnectToken_by_token_user_id_valid_age( token = code, user_id = user_id )
-					if entity:
-						auth_token = enki.librestapi.generate_auth_token()
-						entity.key.delete()     # single use token
-						verification_token = EnkiModelRestAPITokenVerify( token = auth_token, user_id = user_id, app_id = app_id, type = 'apiconnect' )
-						verification_token.put()    # persistent authentication token, a user may have several
-						answer.update({ 'user_id' : str( user_id ), 'auth_token' : auth_token })
-						success = True
-						error = ''
-					else:
-						error = 'Unauthorised'
+			app_secret = jsonobject.get( 'app_secret', '')
+			if code and displayname and app_id and app_secret:
+				if EnkiModelApp.exist_by_app_id_app_secret( app_id, app_secret ):   # check against registered apps
+					user_id = enki.libdisplayname.get_user_id_from_display_name( displayname )
+					if user_id:
+						entity = enki.librestapi.get_EnkiModelRestAPIConnectToken_by_token_user_id_valid_age( token = code, user_id = user_id )
+						if entity:
+							auth_token = enki.librestapi.generate_auth_token()
+							entity.key.delete()     # single use token
+							verification_token = EnkiModelRestAPITokenVerify( token = auth_token, user_id = user_id, app_id = app_id, app_secret = app_secret, type = 'apiconnect' )
+							verification_token.put()    # persistent authentication token, a user may have several
+							answer.update({ 'user_id' : str( user_id ), 'auth_token' : auth_token })
+							success = True
+							error = ''
+						else:
+							error = 'Unauthorised user'
+				else:
+					error = 'Unauthorised app'
 		answer.update({ 'success' : success, 'error' : error })
 		self.response.headers[ 'Content-Type' ] = 'application/json'
 		self.response.write( json.dumps( answer, separators=(',',':') ))
