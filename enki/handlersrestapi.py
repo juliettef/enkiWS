@@ -23,13 +23,9 @@ class HandlerApps( enki.HandlerBase ):
 
 	def get( self ):
 		if self.ensure_is_logged_in():
-			data = []
-			apps = EnkiModelApp.fetch_by_user_id( self.user_id )
-			for app in apps:
-				data.append( [ app.name, str( app.key.id()), app.secret, app.time_created ])
 			self.render_tmpl( 'apps.html',
 			                  active_menu = 'profile',
-			                  data = data,
+			                  data = self.apps_list(),
 			                  app_max = enki.librestapi.APP_MAX,
 			                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
 
@@ -39,21 +35,15 @@ class HandlerApps( enki.HandlerBase ):
 			app_secret_set = self.request.get( 'app_secret_set' )
 			app_name = self.request.get( 'app_name' )
 			error_message = ''
-			data = []
-			apps = EnkiModelApp.fetch_by_user_id( self.user_id )
-			for app in apps:
-				data.append([ app.name, str( app.key.id()), app.secret, app.time_created ])
-
+			app_new = []
+			app_success = ''
 			if app_secret_set:
 				secret = enki.librestapi.generate_auth_token()
 				app = EnkiModelApp.get_by_id( int( app_secret_set ))
 				app.secret = secret
 				app.put()
-				self.add_infomessage( 'success', MSG.SUCCESS(), 'A new secret was generated for app ' + app.name +'.' )
-				data = []
-				apps = EnkiModelApp.fetch_by_user_id( self.user_id )
-				for app in apps:
-					data.append([ app.name, str( app.key.id()), app.secret, app.time_created ])
+				self.add_infomessage( 'success', MSG.SUCCESS(), 'New secret generated.' )
+				app_success = str( app.key.id())
 			else:
 				if not app_name:
 					error_message = 'A name is needed.'
@@ -67,14 +57,26 @@ class HandlerApps( enki.HandlerBase ):
 					secret = enki.librestapi.generate_auth_token()
 					app = EnkiModelApp( user_id = self.user_id, name = app_name, secret = secret )
 					app.put()
-					self.add_infomessage( 'success', MSG.SUCCESS(), 'App ' + app_name + ' created.' )
-					data.append([ app_name, str( app.key.id()), secret, app.time_created ])
+					app_new = [ app_name, str( app.key.id()), secret, app.time_created ]
+					self.add_infomessage( 'success', MSG.SUCCESS(), 'App created.' )
+					app_success =  str( app.key.id())
+			data = self.apps_list()
+			if app_new:
+				data.append( app_new )
 			self.render_tmpl( 'apps.html',
 			                  active_menu = 'profile',
 			                  error = error_message,
 			                  data = data,
+			                  app_success = app_success,
 			                  app_max = enki.librestapi.APP_MAX,
 			                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
+
+	def apps_list( self ):
+		list = []
+		apps = EnkiModelApp.fetch_by_user_id( self.user_id )
+		for app in apps:
+			list.append([ app.name, str( app.key.id()), app.secret, app.time_created ])
+		return list
 
 
 class HandlerPageRestAPI( enki.HandlerBase ):
