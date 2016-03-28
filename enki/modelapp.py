@@ -25,7 +25,7 @@ class EnkiModelApp( model.Model ):
 
 	@classmethod
 	def exist_by_app_id_app_secret( cls, app_id, app_secret ):
-		item = ndb.Key( EnkiModelApp, int( app_id )).get()
+		item = ndb.Key( cls, int( app_id )).get()
 		if item and item.secret == app_secret:
 			return True
 		return False

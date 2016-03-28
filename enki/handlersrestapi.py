@@ -35,7 +35,7 @@ class HandlerApps( enki.HandlerBase ):
 			app_secret_set = self.request.get( 'app_secret_set' )
 			app_name = self.request.get( 'app_name' )
 			error_message = ''
-			app_new = []
+			data = []
 			app_success = ''
 			if app_secret_set:
 				secret = enki.librestapi.generate_auth_token()
@@ -44,7 +44,9 @@ class HandlerApps( enki.HandlerBase ):
 				app.put()
 				self.add_infomessage( 'success', MSG.SUCCESS(), 'New secret generated.' )
 				app_success = str( app.key.id())
+				data = self.apps_list()
 			else:
+				data = self.apps_list()
 				if not app_name:
 					error_message = 'A name is needed.'
 				elif ( len( app_name ) > enki.librestapi.APP_MAX_NAME_LENGTH ):
@@ -57,12 +59,9 @@ class HandlerApps( enki.HandlerBase ):
 					secret = enki.librestapi.generate_auth_token()
 					app = EnkiModelApp( user_id = self.user_id, name = app_name, secret = secret )
 					app.put()
-					app_new = [ app_name, str( app.key.id()), secret, app.time_created ]
+					data.append([ app_name, str( app.key.id()), secret, app.time_created ])
 					self.add_infomessage( 'success', MSG.SUCCESS(), 'App created.' )
 					app_success =  str( app.key.id())
-			data = self.apps_list()
-			if app_new:
-				data.append( app_new )
 			self.render_tmpl( 'apps.html',
 			                  active_menu = 'profile',
 			                  error = error_message,
