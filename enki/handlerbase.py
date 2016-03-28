@@ -592,7 +592,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			relevant_pages = { '/forums', '/store' }
 			relevant_paths = { '/f/', '/t/', '/p/' }
 			if self.is_logged_in():
-				relevant_pages |= { '/profile', '/displayname', '/emailchange', '/passwordchange', '/friends', '/messages', '/apps' }
+				relevant_pages |= { '/profile', '/displayname', '/emailchange', '/passwordchange', '/friends', '/messages', '/apps', 'appdatastores' }
 				relevant_paths |= { '/u/' }
 			# Choose the redirection
 			if ( ref_path in relevant_pages ) or any( path in ref_path for path in relevant_paths ):

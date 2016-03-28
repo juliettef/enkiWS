@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>{{ _( "User data" )}}</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+            {% if data %}
+                <h3>{{ _( "App data stores" ) }}</h3>
+                <form class="form-group" action="{{ 'appdatastores'|local  }}" method="post">
+                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+	                <table class="table table-striped table-hover ">
+		                <thead>
+							<tr>
+								<th>#</th>
+								<th>App name</th>
+								<th>App id</th>
+							    <th>Datat type</th>
+								<th>Datat id</th>
+								<th>Data</th>
+								<th>Read access</th>
+								<th>Expiry date</th>
+							</tr>
+		                </thead>
+						<tbody>
+							{% for item in data %}
+							<tr>
+								<td>{{ loop.index }}</td>
+							    <td>{{ item[ 0 ] }}</td>
+							    <td>{{ item[ 1 ] }}</td>
+								<td>{{ item[ 2 ] }}</td>
+								<td>{{ item[ 3 ] }}</td>
+								<td>{{ item[ 4 ] }}</td>
+							    <td>{{ item[ 5 ] }}<br><button class="btn btn-default btn-xs" type="submit" name="delete" value="{{ item[ 1 ] }}">{{ _( "delete" )}}</button></td>
+								<td>{{ item[ 6 ].strftime( "%d %b %Y<br>%H:%M:%S" ) }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+	                </table>
+                </form>
+	        {% else %}
+	            <p class="text-info">{{ _( "You do not have data stored by apps" ) }}</p>
+            {% endif %}
+
+
+	        {% include "incpageextensions.html" %}
+
+            {% include "incfooter.html" %}
+    	</div>
+    </body>
+</html>

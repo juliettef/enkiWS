@@ -25,7 +25,7 @@ class HandlerApps( enki.HandlerBase ):
 		if self.ensure_is_logged_in():
 			self.render_tmpl( 'apps.html',
 			                  active_menu = 'profile',
-			                  data = self.apps_list(),
+			                  data = enki.librestapi.apps_list( self.user_id ),
 			                  app_max = enki.librestapi.APP_MAX,
 			                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
 
@@ -44,9 +44,9 @@ class HandlerApps( enki.HandlerBase ):
 				app.put()
 				self.add_infomessage( 'success', MSG.SUCCESS(), 'New secret generated.' )
 				app_success = str( app.key.id())
-				data = self.apps_list()
+				data = enki.librestapi.apps_list( self.user_id )
 			else:
-				data = self.apps_list()
+				data = enki.librestapi.apps_list( self.user_id )
 				if not app_name:
 					error_message = 'A name is needed.'
 				elif ( len( app_name ) > enki.librestapi.APP_MAX_NAME_LENGTH ):
@@ -70,12 +70,14 @@ class HandlerApps( enki.HandlerBase ):
 			                  app_max = enki.librestapi.APP_MAX,
 			                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
 
-	def apps_list( self ):
-		list = []
-		apps = EnkiModelApp.fetch_by_user_id( self.user_id )
-		for app in apps:
-			list.append([ app.name, str( app.key.id()), app.secret, app.time_created ])
-		return list
+
+class HandlerAppDataStores( enki.HandlerBase ):
+
+	def get( self ):
+		if self.ensure_is_logged_in():
+			self.render_tmpl( 'appdatastores.html',
+			                  active_menu = 'profile',
+			                  data = enki.librestapi.user_data_list( self.user_id ), )
 
 
 class HandlerPageRestAPI( enki.HandlerBase ):
@@ -417,6 +419,7 @@ class ExtensionRestAPI( Extension ):
 
 	def get_routes( self ):
 		return  [ webapp2.Route( '/apps', HandlerApps, name = 'apps' ),
+		          webapp2.Route( '/appdatastores', HandlerAppDataStores, name = 'appdatastores' ),
 		          webapp2.Route( '/restapi', HandlerPageRestAPI, name = 'restapi' ),
 		          webapp2.Route( '/api/v1/connect', HandlerAPIv1Connect, name = 'apiv1connect' ),
 		          webapp2.Route( '/api/v1/logout', HandlerAPIv1Logout, name = 'apiv1logout' ),

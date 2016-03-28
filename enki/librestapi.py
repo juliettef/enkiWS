@@ -71,6 +71,26 @@ def refresh_EnkiModelRestAPIConnectToken_non_expiring():
 		ndb.put_multi_async( list )
 
 
+def apps_list( user_id ):
+		list = []
+		apps = EnkiModelApp.fetch_by_user_id( user_id )
+		for app in apps:
+			list.append([ app.name, str( app.key.id()), app.secret, app.time_created ])
+		return list
+
+
+def user_data_list( user_id ):
+	list = []
+	data_stores = fetch_EnkiModelRestAPIDataStore_by_user_id( user_id )
+	for data_store in data_stores:
+		app_name = ''
+		app = EnkiModelApp.get_by_id( int( data_store.app_id ))
+		if app:
+			app_name = app.name
+		list.append([ app_name, data_store.app_id, data_store.data_type, data_store.data_id, data_store.data_payload, data_store.read_access, data_store.time_expires ])
+	return list
+
+
 #=== QUERIES ==================================================================
 
 
@@ -106,6 +126,14 @@ def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id_not_expire
 	                                                   EnkiModelRestAPIDataStore.data_id == data_id,
 	                                                   EnkiModelRestAPIDataStore.time_expires > datetime.datetime.now())).get()
 	return entity
+
+
+def fetch_EnkiModelRestAPIDataStore_by_user_id( user_id ):
+	list = EnkiModelRestAPIDataStore.query( EnkiModelRestAPIDataStore.user_id == user_id ).order( EnkiModelRestAPIDataStore.app_id,
+	                                                                                              EnkiModelRestAPIDataStore.data_type,
+	                                                                                              EnkiModelRestAPIDataStore.data_id,
+	                                                                                              EnkiModelRestAPIDataStore.time_expires ).fetch()
+	return list
 
 
 def fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_read_access_not_expired( user_id, app_id, data_type, read_access ):
