@@ -75,9 +75,11 @@ class HandlerAppDataStores( enki.HandlerBase ):
 
 	def get( self ):
 		if self.ensure_is_logged_in():
+			data_list = enki.librestapi.user_data_list( self.user_id )
 			self.render_tmpl( 'appdatastores.html',
 			                  active_menu = 'profile',
-			                  data = enki.librestapi.user_data_list( self.user_id ), )
+			                  data = data_list,
+			                  apps_list = enki.librestapi.user_apps_list( data_list ), )
 
 
 class HandlerPageRestAPI( enki.HandlerBase ):
