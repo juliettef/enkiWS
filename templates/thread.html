@@ -13,7 +13,7 @@
             {% include "incmessageinfo.html" %}
 
             {% if not_found %}
-                <p class="text-info">{{ not_found|safe }}</p>
+                <p class="text-info">{{ not_found }}</p>
                 <p>
                     <a href="{{ 'forums'|local }}" class="btn btn-primary">{{ _( "Go back to Forums" ) }}</a>
                 </p>
@@ -21,12 +21,12 @@
             {% elif data %}
                 <ul class="breadcrumb navbar-default">
                     <li><a href="{{ data.forums_url }}">{{ _( "Forums" ) }}</a></li>
-                    <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group }}</a></li>
-                    <li><a href="{{ data.forum_url }}">{{ data.forum.title }}</a></li>
-                    <li>{{ data.thread.title }}</li>
+                    <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group|e }}</a></li>
+                    <li><a href="{{ data.forum_url }}">{{ data.forum.title|e }}</a></li>
+                    <li>{{ data.thread.title|e }}</li>
                 </ul>
 
-                <h3>{{ _( "Thread" ) }} - {{ data.thread.title }}</h3>
+                <h3>{{ _( "Thread" ) }} - {{ data.thread.title|e }}</h3>
                 <p>{{ data.thread.num_posts }} {{ _( "Posts" ) }}</p>
 
                 {% for item in data.list %}
@@ -101,7 +101,7 @@
                                         {{ display_name }} - {{ _( "date and time submitted UTC" ) }} - {{ _( "permalink" ) }}
                                     </div>
                                     <div class="panel-body">
-                                        {{ data.markdown( preview )|safe }}
+                                        {{ data.markdown( preview ) }}
                                     </div>
                                 </div>
                                 <hr>

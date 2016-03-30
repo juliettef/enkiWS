@@ -13,16 +13,16 @@
             {% include "incmessageinfo.html" %}
 
             {% if not_found %}
-                <p class="text-info">{{ not_found|safe }}</p>
+                <p class="text-info">{{ not_found }}</p>
                 <p>
                     <a href="{{ 'forums'|local }}" class="btn btn-primary">{{ _( "Go back to Forums" ) }}</a>
                 </p>
             {% elif data %}
                 <ul class="breadcrumb">
                     <li><a href="{{ data.forums_url }}">{{ _( "Forums" ) }}</a></li>
-                    <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group }}</a></li>
-                    <li><a href="{{ data.forum_url }}">{{ data.forum.title }}</a></li>
-                    <li><a href="{{ data.thread_url }}">{{ data.thread.title }}</a></li>
+                    <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group|e }}</a></li>
+                    <li><a href="{{ data.forum_url }}">{{ data.forum.title|e }}</a></li>
+                    <li><a href="{{ data.thread_url }}">{{ data.thread.title|e }}</a></li>
                     <li>post</li>
                 </ul>
 
@@ -37,7 +37,7 @@
 	                    {% if change != 'delete' and data.post.body != deleted_post %}- <a href="{{ data.post_page|joinurl({ 'change':'delete' }) }}">{{ _( "delete" ) }}</a>{% endif %}{% endif %}
                     </div>
                     <div class="panel-body">
-                        {% if data.post.body == deleted_post %}{{ deleted_post_display }}{% else %}{{ data.markdown( data.post.body )|safe }}{% endif %}
+                        {% if data.post.body == deleted_post %}{{ deleted_post_display }}{% else %}{{ data.markdown( data.post.body ) }}{% endif %}
                     </div>
                 </div>
 
@@ -96,7 +96,7 @@
 			                                    {{ display_name }} - {{ _( "date and time submitted UTC" ) }} - {{ _( "permalink" ) }}
 			                                </div>
 			                                <div class="panel-body">
-			                                    {{ data.markdown( preview )|safe }}
+			                                    {{ data.markdown( preview ) }}
 			                                </div>
 			                            </div>
 			                            <hr>

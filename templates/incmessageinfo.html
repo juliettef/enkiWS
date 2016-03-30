@@ -3,7 +3,7 @@
 <div class="alert alert-dismissible alert-{{ message[ 0 ] }}">
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
 	<h4>{{ message[ 1 ]|capitalize() }}</h4>
-	<p>{{ message[ 2 ]|safe }}</p>
+	<p>{{ message[ 2 ] }}</p>
 </div>
 {% endfor %}
 {% endif %}

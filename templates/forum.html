@@ -13,18 +13,18 @@
             {% include "incmessageinfo.html" %}
 
             {% if not_found %}
-                <p class="text-info">{{ not_found|safe }}</p>
+                <p class="text-info">{{ not_found }}</p>
                 <p>
                     <a href="{{ 'forums'|local }}" class="btn btn-primary">{{ _( "Go back to Forums" ) }}</a>
                 </p>
             {% elif data %}
                 <ul class="breadcrumb">
                     <li><a href="{{ data.forums_url }}">{{ _( "Forums" ) }}</a></li>
-                    <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group }}</a></li>
-                    <li>{{ data.forum.title }}</li>
+                    <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group|e }}</a></li>
+                    <li>{{ data.forum.title|e }}</li>
                 </ul>
 
-                <h3>{{ _( "Forum" ) }} - {{ data.forum.title }}</h3>
+                <h3>{{ _( "Forum" ) }} - {{ data.forum.title|e }}</h3>
                 <p>{{ data.forum.num_threads }} {{ _( "Threads" ) }} - {{ data.num_posts }} {{ _( "Posts" ) }}</p>
 
                 {% if data.list %}
@@ -40,7 +40,7 @@
                         <tbody>
                         {% for item in data.list %}
                             <tr>
-                                <td><a href="{{ item.url }}">{{ item.title }}</a></td>
+                                <td><a href="{{ item.url }}">{{ item.title|e }}</a></td>
                                 <td>{% if item.author_data.display_name == deleted_dn %}{{ deleted_dn_display }}{% else %}<a href="{{ item.author_data.user_page }}">{{ item.author_data.display_name}}</a>{% endif %}</td>
                                 <td>{{ item.time_created.strftime( "%a, %d %b %Y %H:%M:%S" )}} UTC</td>
                                 <td>{{ item.num_posts }}</td>
@@ -66,7 +66,7 @@
                                         <div class="form-group {% if error_threadtitle %}has-error{% endif%}">
                                             <label for="thread_title" class="col-lg-1 control-label">{{ _( "Title" ) }}</label>
                                             <div class="col-lg-11">
-                                                <input class="form-control" type="text" name="thread_title" placeholder="{{ _( "Your thread title" ) }}" value = "{{ threadtitle }}"/>
+                                                <input class="form-control" type="text" name="thread_title" placeholder="{{ _( "Your thread title" ) }}" value = "{{ threadtitle|e }}"/>
                                                 {% if error_threadtitle %}<label class="control-label">{{ error_threadtitle }}</label><a href id="bottom"></a>{# <!-- scroll to bottom if there's an error --> #}{% endif%}
                                                 <p class="text-info">{{ ngettext( "Maximum thread title length: %(length)s character.", "Maximum thread title length: %(length)s characters.", maxthreadtitlelength, length = maxthreadtitlelength ) }}</p>
                                             </div>
@@ -93,13 +93,13 @@
                             {% if previewpost and previewthreadtitle %}
                                 <h4 class="text-info">{{ _( "PREVIEW" ) }}</h4>
                                 <hr>
-                                <h3 class="text-info">{{ _( "Thread" ) }} - {{ previewthreadtitle|safe }}</h3>
+                                <h3 class="text-info">{{ _( "Thread" ) }} - {{ previewthreadtitle|e }}</h3>
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
                                         {{ display_name }} - {{ _( "date and time submitted UTC" ) }} - {{ _( "permalink" ) }}
                                     </div>
                                     <div class="panel-body">
-                                        {{ data.markdown( previewpost )|safe }}
+                                        {{ data.markdown( previewpost ) }}
                                     </div>
                                 </div>
                                 <hr>

@@ -6,9 +6,9 @@
                 <div class="panel-heading">
                     <ul class="breadcrumb">
                         <li><a href="{{ data.posts.forums_url }}">{{ _( "Forums" ) }}</a></li>
-                        <li><a href="{{ data.posts.forums_url }}#{{ item.forum_group }}">{{ item.forum_group }}</a></li>
-                        <li><a href="{{ item.forum_url }}">{{ item.forum_title }}</a></li>
-                        <li><a href="{{ item.thread_url }}">{{ item.thread_title }}</a></li>
+                        <li><a href="{{ data.posts.forums_url }}#{{ item.forum_group }}">{{ item.forum_group|e }}</a></li>
+                        <li><a href="{{ item.forum_url }}">{{ item.forum_title|e }}</a></li>
+                        <li><a href="{{ item.thread_url }}">{{ item.thread_title|e }}</a></li>
                         <li><a href="{{ item.post_page }}">{{ _( "Post" ) }}</a></li>
                         - {{ _( "posted" )}} {{ item.time_created.strftime( "%a, %d %b %Y, %H:%M:%S" )}} UTC
                         {% if item.time_updated %}- {% if item.body == deleted_post %}{{ _( "deleted" ) }}{% else %}{{ _( "edited" ) }}{% endif %} {{ item.time_updated.strftime( "%a, %d %b %Y %H:%M:%S" )}} UTC{% endif %}
@@ -18,7 +18,7 @@
                     </ul>
                 </div>
                 <div class="panel-body">
-                    {% if item.body == deleted_post %}{{ deleted_post_display }}{% else %}{{ data.posts.markdown( item.body )|safe }}{% endif %}
+                    {% if item.body == deleted_post %}{{ deleted_post_display }}{% else %}{{ data.posts.markdown( item.body ) }}{% endif %}
                 </div>
             </div>
         {% endfor %}
