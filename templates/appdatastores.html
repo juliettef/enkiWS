@@ -33,7 +33,7 @@
 								<td>{{ loop.index }}</td>
 							    <td>{{ item[ 1 ]|e }}</td>
 							    <td>{{ item[ 0 ]|e }}</td>
-								<td><button class="btn btn-default btn-xs disabled" type="submit" name="delete" value="{{ item[ 0 ] }}">{{ _( "Delete all data" )}}</button></td>
+								<td><button class="btn btn-default btn-xs" type="submit" name="delete" value="{{ item[ 0 ] }}">{{ _( "Delete all data" )}}</button></td>
 							</tr>
 							{% endfor %}
 						</tbody>

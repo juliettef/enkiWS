@@ -30,7 +30,7 @@
 							{% for item in data %}
 							<tr {% if item[ 1 ] == app_success %}class="success"{% endif %}>
 								<td>{{ loop.index }}</td>
-							    <td>{{ item[ 0 ]|e }}<br><button class="btn btn-default disabled btn-xs" type="submit" name="app_name_edit" value="{{ item[ 1 ] }}">{{ _( "Edit" )}}</button></td>
+							    <td>{{ item[ 0 ]|e }}</td>
 							    <td>{{ item[ 1 ]|e }}</td>
 							    <td>{{ item[ 2 ]|e }}<br><button class="btn btn-default btn-xs" type="submit" name="app_secret_set" value="{{ item[ 1 ] }}">{{ _( "Generate new" )}}</button></td>
 								<td>{{ item[ 3 ].strftime( "%d %b %Y<br>%H:%M:%S UTC" ) }}</td>

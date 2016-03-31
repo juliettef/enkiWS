@@ -81,6 +81,19 @@ class HandlerAppDataStores( enki.HandlerBase ):
 			                  data = data_list,
 			                  apps_list = enki.librestapi.user_apps_list( data_list ), )
 
+	def post( self ):
+		if self.ensure_is_logged_in():
+			self.check_CSRF()
+			app_id = self.request.get( 'delete' )
+			if app_id:
+				# TODO: delete user's data from EnkiModelRestAPIDataStore
+				self.add_infomessage( 'success', MSG.SUCCESS(), 'Add data deleted' )
+			data_list = enki.librestapi.user_data_list( self.user_id )
+			self.render_tmpl( 'appdatastores.html',
+			                  active_menu = 'profile',
+			                  data = data_list,
+			                  apps_list = enki.librestapi.user_apps_list( data_list ), )
+
 
 class HandlerPageRestAPI( enki.HandlerBase ):
 
