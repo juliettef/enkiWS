@@ -86,8 +86,8 @@ class HandlerAppDataStores( enki.HandlerBase ):
 			self.check_CSRF()
 			app_id = self.request.get( 'delete' )
 			if app_id:
-				# TODO: delete user's data from EnkiModelRestAPIDataStore
-				self.add_infomessage( 'success', MSG.SUCCESS(), 'Add data deleted' )
+				enki.librestapi.delete_user_app_data( self.user_id , app_id )
+				self.add_infomessage( 'success', MSG.SUCCESS(), 'App data deleted.' )
 			data_list = enki.librestapi.user_data_list( self.user_id )
 			self.render_tmpl( 'appdatastores.html',
 			                  active_menu = 'profile',
