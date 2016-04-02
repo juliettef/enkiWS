@@ -3,6 +3,7 @@ import webapp2
 import json
 
 from google.appengine.ext import ndb
+from webapp2_extras import security
 
 import enki
 import enki.libuser
@@ -76,23 +77,28 @@ class HandlerAppDataStores( enki.HandlerBase ):
 	def get( self ):
 		if self.ensure_is_logged_in():
 			data_list = enki.librestapi.user_data_list( self.user_id )
-			self.render_tmpl( 'appdatastores.html',
-			                  active_menu = 'profile',
-			                  data = data_list,
-			                  apps_list = enki.librestapi.user_apps_list( data_list ), )
+			if not self.post_user_page_data():
+				self.render_tmpl( 'appdatastores.html',
+				                  active_menu = 'profile',
+				                  data = data_list,
+				                  apps_list = enki.librestapi.user_apps_list( data_list ), )
 
 	def post( self ):
-		if self.ensure_is_logged_in():
-			self.check_CSRF()
-			app_id = self.request.get( 'delete' )
-			if app_id:
-				enki.librestapi.delete_user_app_data( self.user_id , app_id )
-				self.add_infomessage( 'success', MSG.SUCCESS(), 'App data deleted.' )
-			data_list = enki.librestapi.user_data_list( self.user_id )
-			self.render_tmpl( 'appdatastores.html',
-			                  active_menu = 'profile',
-			                  data = data_list,
-			                  apps_list = enki.librestapi.user_apps_list( data_list ), )
+		self.check_CSRF()
+		if self.ensure_is_logged_in() and self.ensure_is_reauthenticated():
+			self.handle_post_data( self.request.params )
+
+
+	def handle_post_data( self, params ):
+		app_id = params.get( 'delete' )
+		if app_id:
+			enki.librestapi.delete_user_app_data( self.user_id , app_id )
+			self.add_infomessage( 'success', MSG.SUCCESS(), 'App data deleted.' )
+		data_list = enki.librestapi.user_data_list( self.user_id )
+		self.render_tmpl( 'appdatastores.html',
+		                  active_menu = 'profile',
+		                  data = data_list,
+		                  apps_list = enki.librestapi.user_apps_list( data_list ), )
 
 
 class HandlerPageRestAPI( enki.HandlerBase ):

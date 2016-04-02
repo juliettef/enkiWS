@@ -6,6 +6,7 @@ import enki.modelforum
 ENKI_FORCE_DEBUG = False    # If True, behaves as if it's offline
 ENKI_EMULATE_STORE = True  # If True, use the store emulator
 
+REAUTH_EXPIRY = 5  # minutes
 
 URL_PURCHASE_FASTSPRING = str( 'https://sites.fastspring.com/enkisoftware/product/avoyd' )
 

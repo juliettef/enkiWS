@@ -11,6 +11,8 @@ def WARNING(): return _( "Warning" )
 def LOGGED_OUT(): return _( "You are logged out." )
 def LOGIN_NEEDED(): return _( "Please log in to access the page you requested." )
 def LOGGED_IN(): return _( "You are logged in." )
+def REAUTHENTICATION_NEEDED(): return _( "Please reauthenticate yourself to continue." )
+def REAUTHENTICATED(): return _( "You are reauthenticated." )
 def DISCONNECTED_SESSION( ): return _( "Session disconnected." )
 def DISCONNECTED_APP( ): return _( "Application disconnected." )
 

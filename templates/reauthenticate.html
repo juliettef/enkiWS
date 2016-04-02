@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>{{ _( "Reauthenticate" ) }}</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+            <div class="well bs-component">
+                <form class="form-horizontal" action="{{ 'login'|local }}" method="post">
+                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+                    <fieldset>
+
+                        <legend>{{ _( "Reauthenticate with email and password" ) }}</legend>
+
+                        {% if info %}<p class="text-info">{{ info }}</p>{% endif %}
+
+                        <div class="form-group {% if error %}has-error{% endif%}">
+                            <label for="email" class="col-lg-2 control-label">{{ _( "Email" ) }}</label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="email" placeholder="{{ _( "Email" ) }}" />
+                            </div>
+                        </div>
+
+                        <div class="form-group {% if error %}has-error{% endif%}">
+                            <label for="password" class="col-lg-2 control-label">{{ _( "Password" ) }}</label>
+                             <div class="col-lg-10">
+                                 <input class="form-control" type="password" name="password" placeholder="{{ _( "Password" ) }}" />
+                                 {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-2">
+                                <button class="btn btn-primary" type="submit" name="submittype" value="login">{{ _( "Log in" ) }}</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-2">
+                                <button class="btn btn-default" type="submit" name="submittype" value="register">{{ _( "Sign up" )}}</button>
+                                <button class="btn btn-default" type="submit" name="submittype" value="recoverpass">{{ _( "Forgot password" )}}</button>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+
+            {% if authhandlers %}
+            <div class="well bs-component">
+                <fieldset>
+                    <legend>{{ _( "Reauthenticate with a third party provider" )}}</legend>
+{% for item in authhandlers %}{% set button = item.get_button() %}<div class="row"><div class="col-md-4 col-md-offset-2"><div class="panel panel-default"><div class="panel-body"><a href="{{ button.href }}"><img src="{{ button.src }}" class="img-responsive center-block" alt="{{ button.alt }}"></a></div></div>
+</div></div>{% endfor %}
+                </fieldset>
+            </div>
+            {% endif %}
+
+            {% include "incfooter.html" %}
+        </div>
+    </body>
+</html>

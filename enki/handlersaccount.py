@@ -20,7 +20,7 @@ class HandlerLogin( enki.HandlerBase ):
 
 	def get( self ):
 		email = self.request.get( 'email' )
-		# Get referal path to return the user to the page they wer on after they've logged in
+		# Get referal path to return the user to the page they were on after they've logged in
 		if 'sessionloginrefpath' in self.session:
 			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LOGIN_NEEDED())
 		self.session[ 'sessionrefpath' ] = self.session.pop( 'sessionloginrefpath', self.request.referrer )
@@ -61,6 +61,16 @@ class HandlerLogin( enki.HandlerBase ):
 			self.redirect( enki.libutil.get_local_url( 'register', { 'email': email } ) )
 		else:
 			self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email } ) )
+
+
+class HandlerReauthenticate( enki.HandlerBase ):
+
+	def get( self ):
+		if self.ensure_is_logged_in():
+			self.session[ 'sessionrefpath' ] = self.request.referrer
+			self.render_tmpl( 'reauthenticate.html',
+			                  active_menu = 'login',
+			                  authhandlers = settings.HANDLERS )
 
 
 class HandlerProfile( enki.HandlerBase ):
@@ -653,6 +663,7 @@ class HandlerAccountDeleteConfirm( enki.HandlerBase ):
 
 
 routes_account = [ webapp2.Route( '/login', HandlerLogin, name = 'login' ),
+                   webapp2.Route( '/reauthenticate', HandlerReauthenticate, name = 'reauthenticate' ),
 		           webapp2.Route( '/logout', HandlerLogout, name = 'logout' ),
 				   webapp2.Route( '/profile', HandlerProfile, name = 'profile' ),
 				   webapp2.Route( '/u/<useridnumber>', HandlerProfilePublic, name = 'profilepublic' ),
