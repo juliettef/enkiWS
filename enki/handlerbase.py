@@ -15,7 +15,6 @@ from webapp2_extras import security
 from webapp2_extras import sessions
 from webapp2_extras import sessions_ndb
 
-import settings
 import enki.libdisplayname
 import enki.libforum
 import enki.libfriends
@@ -31,7 +30,6 @@ from enki.modeltokenauth import EnkiModelTokenAuth
 from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modeluser import EnkiModelUser
-from enki.modeluserpagedata import EnkiModelUserPageData
 
 
 ERROR_EMAIL_IN_USE = -13
@@ -136,47 +134,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			self.redirect( enki.libutil.get_local_url( 'login' ))
 			return False
 		return True
-
-
-	def is_reauthenticated( self ):
-		if self.is_logged_in():
-			reauth_time = self.session.get( 'reauth_time' )
-			if reauth_time and datetime.datetime.now() < ( reauth_time + datetime.timedelta( minutes = settings.REAUTH_EXPIRY )):
-				return True
-		return False
-
-
-	def ensure_is_reauthenticated( self ):
-		if not self.is_reauthenticated():
-			self.save_user_page_data()
-			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REAUTHENTICATION_NEEDED())
-			self.redirect( enki.libutil.get_local_url( 'reauthenticate' ))
-			return False
-		return True
-
-
-	def save_user_page_data( self ):
-		data = dict( self.request.params )
-		route =  self.request.path
-		entity = EnkiModelUserPageData.get_by_user_id_route( user_id = self.user_id, route = route )
-		if entity:
-			entity.data = data
-		else:
-			entity = EnkiModelUserPageData( user_id = self.user_id, route = route, data = data )
-		entity.put()
-
-
-	def post_user_page_data( self ):
-	# post saved data if there is some corresponding to the page and the user is reauthenticated
-		if self.is_reauthenticated():
-			route =  self.request.path
-			entity = EnkiModelUserPageData.get_by_user_id_route( user_id = self.user_id, route = route )
-			if entity:
-				post_data = entity.data
-				entity.key.delete()
-				self.handle_post_data( post_data )
-				return True
-		return False
 
 
 	def ensure_has_display_name( self, url = None ):    # user must set their display_name to continue
