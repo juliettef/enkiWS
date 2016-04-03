@@ -71,16 +71,16 @@ class HandlerApps( enki.HandlerBase ):
 			                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
 
 
-class HandlerAppDataStores( enki.HandlerBaseSecure ):
+class HandlerAppDataStores( enki.HandlerBaseReauthenticate ):
 
-	def get_secure( self ):
+	def get_reauthenticated( self ):
 		data_list = enki.librestapi.user_data_list( self.user_id )
 		self.render_tmpl( 'appdatastores.html',
 		                  active_menu = 'profile',
 		                  data = data_list,
 		                  apps_list = enki.librestapi.user_apps_list( data_list ), )
 
-	def post_secure( self, params ):
+	def post_reauthenticated( self, params ):
 		app_id = params.get( 'delete' )
 		if app_id:
 			enki.librestapi.delete_user_app_data( self.user_id , app_id )

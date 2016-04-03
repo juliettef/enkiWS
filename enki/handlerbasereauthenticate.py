@@ -15,28 +15,28 @@ from enki import textmessages as MSG
 from enki.modeluserpagedata import EnkiModelUserPageData
 
 
-class HandlerBaseSecure( enki.HandlerBase ):
+class HandlerBaseReauthenticate( enki.HandlerBase ):
 # Force user reauthentication before posting data
 
-	def get_secure( self ):
+	def get_reauthenticated( self ):
 		if enki.libutil.is_debug():
 			raise ValueError( 'This must be overriden in the derived class.' )
 
 
-	def post_secure( self, params ):
+	def post_reauthenticated( self, params ):
 		if enki.libutil.is_debug():
 			raise ValueError( 'This must be overriden in the derived class.' )
 
 
 	def get( self ):
 		if self.ensure_is_logged_in() and not self.post_user_page_data():
-			self.get_secure()
+			self.get_reauthenticated( )
 
 
 	def post( self ):
 		self.check_CSRF()
 		if self.ensure_is_logged_in() and self.ensure_is_reauthenticated():
-			self.post_secure( self.request.params )
+			self.post_reauthenticated( self.request.params )
 
 
 	def is_reauthenticated( self ):
@@ -75,6 +75,6 @@ class HandlerBaseSecure( enki.HandlerBase ):
 			if entity:
 				post_data = entity.data
 				entity.key.delete()
-				self.post_secure( post_data )
+				self.post_reauthenticated( post_data )
 				return True
 		return False
