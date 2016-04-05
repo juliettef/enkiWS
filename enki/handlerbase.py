@@ -223,6 +223,19 @@ class HandlerBase( webapp2.RequestHandler ):
 		return False
 
 
+	def reauthenticate( self, email, password ):
+	# reauthenticate the user
+		if self.get_backoff_timer( email, True ) == 0:
+			user = enki.libuser.get_EnkiUser( email )
+			if user and user.password:
+				validPassword = enki.authcryptcontext.pwd_context.verify( password, user.password )
+				if validPassword and self.is_logged_in() and self.user_id == user.key.id():
+					self.session[ 'reauth_time' ] = datetime.datetime.now()
+					self.remove_backoff_timer( user.email )
+					return True
+		return False
+
+
 	def log_in_session_token_create( self, user ):
 		# generate authentication token and add it to the db and the session
 		token = security.generate_random_string( entropy = 128 )
@@ -555,7 +568,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		if authId:
 		# modify existing or create user
 			user = self.get_or_create_user_from_authid( authId, email, allow_create = False )
-			if self.is_logged_in() and self.user_id == user.key.id():   # refresh the reauthenticated status
+			if self.is_logged_in() and user and self.user_id == user.key.id():   # refresh the reauthenticated status
 				self.session[ 'reauth_time' ] = datetime.datetime.now()
 				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.REAUTHENTICATED())
 				self.redirect_to_relevant_page()

@@ -13,7 +13,7 @@
             {% include "incmessageinfo.html" %}
 
             <div class="well bs-component">
-                <form class="form-horizontal" action="{{ 'login'|local }}" method="post">
+                <form class="form-horizontal" action="{{ 'reauthenticate'|local }}" method="post">
                     <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     <fieldset>
 
@@ -24,7 +24,7 @@
                         <div class="form-group {% if error %}has-error{% endif%}">
                             <label for="email" class="col-lg-2 control-label">{{ _( "Email" ) }}</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" name="email" placeholder="{{ _( "Email" ) }}" />
+                                <input class="form-control" type="text" name="email" placeholder="{{ _( "Email" ) }}" value = "{{ email }}"/>
                             </div>
                         </div>
 
@@ -38,12 +38,11 @@
 
                         <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-2">
-                                <button class="btn btn-primary" type="submit" name="submittype" value="login">{{ _( "Log in" ) }}</button>
+                                <button class="btn btn-primary" type="submit" name="submittype" value="reauthenticate">{{ _( "Reauthenticate" ) }}</button>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-2">
-                                <button class="btn btn-default" type="submit" name="submittype" value="register">{{ _( "Sign up" )}}</button>
                                 <button class="btn btn-default" type="submit" name="submittype" value="recoverpass">{{ _( "Forgot password" )}}</button>
                             </div>
                         </div>

@@ -43,24 +43,24 @@ class HandlerLogin( enki.HandlerBase ):
 			else:
 				error_message = MSG.WRONG_EMAIL_OR_PW()
 				if enki.libuser.exist_EnkiUser( email ):
-				# if the email exist as part of an Auth account (doesn't have a passwod), silently email them to set a password.
+				# if the email exist as part of an Auth account (doesn't have a password), silently email them to set a password.
 					user = enki.libuser.get_EnkiUser( email )
 					if not user.password:
 						self.add_debugmessage( '''Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.''' )
-						link = enki.libutil.get_local_url( 'passwordrecover', { 'email': email } )
-						self.send_email( email, MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_SUBJECT( ), MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link, email ) )
+						link = enki.libutil.get_local_url( 'passwordrecover', { 'email': email })
+						self.send_email( email, MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_SUBJECT( ), MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link, email ))
 				backoff_timer = self.get_backoff_timer( email )
 				if backoff_timer != 0:
-					error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ) )
+					error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
 				self.render_tmpl( 'login.html',
 				                  active_menu = 'login',
 				                  authhandlers = settings.HANDLERS,
 				                  email = email,
 				                  error = error_message )
 		elif submit_type == 'register':
-			self.redirect( enki.libutil.get_local_url( 'register', { 'email': email } ) )
+			self.redirect( enki.libutil.get_local_url( 'register', { 'email': email }))
 		else:
-			self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email } ) )
+			self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email }))
 
 
 class HandlerReauthenticate( enki.HandlerBase ):
@@ -69,8 +69,38 @@ class HandlerReauthenticate( enki.HandlerBase ):
 		if self.ensure_is_logged_in():
 			self.session[ 'sessionrefpath' ] = self.request.referrer
 			self.render_tmpl( 'reauthenticate.html',
-			                  active_menu = 'login',
+			                  active_menu = 'profile',
+			                  email = self.enki_user.email,
 			                  authhandlers = settings.HANDLERS )
+
+	def post( self ):
+		self.check_CSRF()
+		submit_type = self.request.get( 'submittype' )
+		email = self.request.get( 'email' )
+		if submit_type == 'reauthenticate':
+			password = self.request.get( 'password' )
+			if self.reauthenticate( email, password ):
+				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.REAUTHENTICATED())
+				self.redirect_to_relevant_page()
+			else:
+				error_message = MSG.WRONG_EMAIL_OR_PW()
+				if enki.libuser.exist_EnkiUser( email ):
+				# if the email exist as part of an Auth account (doesn't have a password), silently email them to set a password.
+					user = enki.libuser.get_EnkiUser( email )
+					if not user.password:
+						self.add_debugmessage( '''Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.''' )
+						link = enki.libutil.get_local_url( 'passwordrecover', { 'email': email })
+						self.send_email( email, MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_SUBJECT( ), MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link, email ))
+				backoff_timer = self.get_backoff_timer( email )
+				if backoff_timer != 0:
+					error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
+				self.render_tmpl( 'reauthenticate.html',
+				                  active_menu = 'profile',
+				                  authhandlers = settings.HANDLERS,
+				                  email = email,
+				                  error = error_message )
+		elif submit_type == 'recoverpass':
+			self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email }))
 
 
 class HandlerProfile( enki.HandlerBase ):
