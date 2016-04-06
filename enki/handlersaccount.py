@@ -74,7 +74,7 @@ class HandlerReauthenticate( enki.HandlerBase ):
 			self.session[ 'sessionrefpath' ] = self.request.referrer
 			self.render_tmpl( 'reauthenticate.html',
 			                  active_menu = 'profile',
-			                  authhandlers = settings.HANDLERS if self.enki_user.auth_ids_provider else None,
+			                  authhandlers = self.get_user_auth_providers(),
 			                  email = self.enki_user.email if ( self.enki_user.email and self.enki_user.password ) else None )
 
 	def post( self ):
@@ -94,7 +94,7 @@ class HandlerReauthenticate( enki.HandlerBase ):
 							error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
 						self.render_tmpl( 'reauthenticate.html',
 						                  active_menu = 'profile',
-						                  authhandlers = settings.HANDLERS if self.enki_user.auth_ids_provider else None,
+						                  authhandlers = self.get_user_auth_providers(),
 						                  email = self.enki_user.email,
 						                  error = error_message )
 				elif submit_type == 'recoverpass':
@@ -617,9 +617,7 @@ class HandlerAccountDelete( enki.HandlerBase ):
 	def get( self ):
 		if self.ensure_is_logged_in():
 			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends' )
-			user_display_name = ''
 			current_display_name = ''
-			previous_display_names = ''
 			if enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
 				user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
 				current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
@@ -643,7 +641,6 @@ class HandlerAccountDelete( enki.HandlerBase ):
 		if self.ensure_is_logged_in():
 			self.check_CSRF()
 			submit_type = self.request.get( 'submittype' )
-			error_message = ''
 			if submit_type == 'cancel':
 				self.redirect( enki.libutil.get_local_url( 'profile' ) )
 			elif submit_type == 'delete':

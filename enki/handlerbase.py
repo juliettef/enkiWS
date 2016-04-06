@@ -15,6 +15,9 @@ from webapp2_extras import security
 from webapp2_extras import sessions
 from webapp2_extras import sessions_ndb
 
+import settings
+import enki
+import enki.authcryptcontext
 import enki.libdisplayname
 import enki.libforum
 import enki.libfriends
@@ -538,6 +541,16 @@ class HandlerBase( webapp2.RequestHandler ):
 			return True
 		else:
 			return False
+
+
+	def get_user_auth_providers( self ):
+	# get list of the user's OAuth handlers
+		providers = []
+		for provider in settings.HANDLERS:
+			for user_provider in self.enki_user.auth_ids_provider:
+				if provider.get_provider_name() in user_provider:
+					providers.append( provider )
+		return providers
 
 
 	def has_enough_accounts( self ):
