@@ -74,8 +74,8 @@ class HandlerReauthenticate( enki.HandlerBase ):
 			self.session[ 'sessionrefpath' ] = self.request.referrer
 			self.render_tmpl( 'reauthenticate.html',
 			                  active_menu = 'profile',
-			                  email = self.enki_user.email if ( self.enki_user.email and self.enki_user.password ) else None,
-			                  authhandlers = settings.HANDLERS )
+			                  authhandlers = settings.HANDLERS if self.enki_user.auth_ids_provider else None,
+			                  email = self.enki_user.email if ( self.enki_user.email and self.enki_user.password ) else None )
 
 	def post( self ):
 		if self.ensure_is_logged_in():
@@ -94,7 +94,7 @@ class HandlerReauthenticate( enki.HandlerBase ):
 							error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
 						self.render_tmpl( 'reauthenticate.html',
 						                  active_menu = 'profile',
-						                  authhandlers = settings.HANDLERS,
+						                  authhandlers = settings.HANDLERS if self.enki_user.auth_ids_provider else None,
 						                  email = self.enki_user.email,
 						                  error = error_message )
 				elif submit_type == 'recoverpass':
