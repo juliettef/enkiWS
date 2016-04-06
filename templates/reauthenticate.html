@@ -12,6 +12,7 @@
             {% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
+            {% if email %}
             <div class="well bs-component">
                 <form class="form-horizontal" action="{{ 'reauthenticate'|local }}" method="post">
                     <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
@@ -22,9 +23,9 @@
                         {% if info %}<p class="text-info">{{ info }}</p>{% endif %}
 
                         <div class="form-group {% if error %}has-error{% endif%}">
-                            <label for="email" class="col-lg-2 control-label">{{ _( "Email" ) }}</label>
+                            <label for="email" class="col-lg-2 control-label" for="disabledInput">{{ _( "Email" ) }}</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" name="email" placeholder="{{ _( "Email" ) }}" value = "{{ email }}"/>
+                                <input class="form-control" id="disabledInput" type="text" placeholder="{{ email }}" disabled=""/>
                             </div>
                         </div>
 
@@ -50,6 +51,7 @@
                     </fieldset>
                 </form>
             </div>
+            {% endif %}
 
             {% if authhandlers %}
             <div class="well bs-component">
