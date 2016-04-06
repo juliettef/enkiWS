@@ -19,56 +19,53 @@ from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
 from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 
 
-class HandlerApps( enki.HandlerBase ):
+class HandlerApps( enki.HandlerBaseReauthenticate ):
 
-	def get( self ):
-		if self.ensure_is_logged_in():
-			self.render_tmpl( 'apps.html',
-			                  active_menu = 'profile',
-			                  data = enki.librestapi.apps_list( self.user_id ),
-			                  app_max = enki.librestapi.APP_MAX,
-			                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
+	def get_reauthenticated( self ):
+		self.render_tmpl( 'apps.html',
+		                  active_menu = 'profile',
+		                  data = enki.librestapi.apps_list( self.user_id ),
+		                  app_max = enki.librestapi.APP_MAX,
+		                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
 
-	def post( self ):
-		if self.ensure_is_logged_in():
-			self.check_CSRF()
-			app_secret_set = self.request.get( 'app_secret_set' )
-			app_name = self.request.get( 'app_name' )
-			error_message = ''
-			data = []
-			app_success = ''
-			if app_secret_set:
-				secret = enki.librestapi.generate_auth_token()
-				app = EnkiModelApp.get_by_id( int( app_secret_set ))
-				app.secret = secret
-				app.put()
-				self.add_infomessage( 'success', MSG.SUCCESS(), 'New secret generated.' )
-				app_success = str( app.key.id())
-				data = enki.librestapi.apps_list( self.user_id )
+	def post_reauthenticated( self, params ):
+		app_secret_set = params.get( 'app_secret_set' )
+		app_name = params.get( 'app_name' )
+		error_message = ''
+		data = []
+		app_success = ''
+		if app_secret_set:
+			secret = enki.librestapi.generate_auth_token()
+			app = EnkiModelApp.get_by_id( int( app_secret_set ))
+			app.secret = secret
+			app.put()
+			self.add_infomessage( 'success', MSG.SUCCESS(), 'New secret generated.' )
+			app_success = str( app.key.id())
+			data = enki.librestapi.apps_list( self.user_id )
+		else:
+			data = enki.librestapi.apps_list( self.user_id )
+			if not app_name:
+				error_message = 'A name is needed.'
+			elif ( len( app_name ) > enki.librestapi.APP_MAX_NAME_LENGTH ):
+				error_message = 'App name is too long, it must be ' +  enki.librestapi.APP_MAX_NAME_LENGTH + ' char max.'
+			elif EnkiModelApp.exist_by_name( app_name ):
+				error_message = 'App name already exists.'
+			elif ( EnkiModelApp.count_by_user_id( self.user_id ) >= enki.librestapi.APP_MAX ):
+				error_message = 'You have exceeded the number of apps per user.'
 			else:
-				data = enki.librestapi.apps_list( self.user_id )
-				if not app_name:
-					error_message = 'A name is needed.'
-				elif ( len( app_name ) > enki.librestapi.APP_MAX_NAME_LENGTH ):
-					error_message = 'App name is too long, it must be ' +  enki.librestapi.APP_MAX_NAME_LENGTH + ' char max.'
-				elif EnkiModelApp.exist_by_name( app_name ):
-					error_message = 'App name already exists.'
-				elif ( EnkiModelApp.count_by_user_id( self.user_id ) >= enki.librestapi.APP_MAX ):
-					error_message = 'You have exceeded the number of apps per user.'
-				else:
-					secret = enki.librestapi.generate_auth_token()
-					app = EnkiModelApp( user_id = self.user_id, name = app_name, secret = secret )
-					app.put()
-					data.append([ app_name, str( app.key.id()), secret, app.time_created ])
-					self.add_infomessage( 'success', MSG.SUCCESS(), 'App created.' )
-					app_success =  str( app.key.id())
-			self.render_tmpl( 'apps.html',
-			                  active_menu = 'profile',
-			                  error = error_message,
-			                  data = data,
-			                  app_success = app_success,
-			                  app_max = enki.librestapi.APP_MAX,
-			                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
+				secret = enki.librestapi.generate_auth_token()
+				app = EnkiModelApp( user_id = self.user_id, name = app_name, secret = secret )
+				app.put()
+				data.append([ app_name, str( app.key.id()), secret, app.time_created ])
+				self.add_infomessage( 'success', MSG.SUCCESS(), 'App created.' )
+				app_success =  str( app.key.id())
+		self.render_tmpl( 'apps.html',
+		                  active_menu = 'profile',
+		                  error = error_message,
+		                  data = data,
+		                  app_success = app_success,
+		                  app_max = enki.librestapi.APP_MAX,
+		                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
 
 
 class HandlerAppDataStores( enki.HandlerBaseReauthenticate ):
