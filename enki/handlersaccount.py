@@ -101,68 +101,72 @@ class HandlerReauthenticate( enki.HandlerBase ):
 					self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': self.enki_user.email }))
 
 
-class HandlerProfile( enki.HandlerBase ):
+class HandlerProfile( enki.HandlerBaseReauthenticate ):
 
-	def get( self ):
-		if self.ensure_is_logged_in():
-			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions, sessions_app' )
+	def get_reauthenticated( self ):
+		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions, sessions_app' )
 
-			current_display_name = ''
-			previous_display_names = ''
-			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
-			if user_display_name:
-				current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
-				previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
+		current_display_name = ''
+		previous_display_names = ''
+		user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
+		if user_display_name:
+			current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
+			previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
 
-			email = self.enki_user.email
-			allow_change_pw = True
-			if ( not email or email == 'removed' ) and not self.enki_user.password:
-				allow_change_pw = False
+		email = self.enki_user.email
+		allow_change_pw = True
+		if ( not email or email == 'removed' ) and not self.enki_user.password:
+			allow_change_pw = False
 
-			auth_provider = []
-			for item in self.enki_user.auth_ids_provider:
-				colon = item.find( ':' )
-				auth_provider.append({ 'provider_name': str( item[ :colon ]), 'provider_uid': str( item[ colon+1: ])})
-			enough_accounts = self.has_enough_accounts()
+		auth_provider = []
+		for item in self.enki_user.auth_ids_provider:
+			colon = item.find( ':' )
+			auth_provider.append({ 'provider_name': str( item[ :colon ]), 'provider_uid': str( item[ colon+1: ])})
+		enough_accounts = self.has_enough_accounts()
 
-			sessions = []
-			current_token = self.session.get( 'auth_token' )
-			auth_tokens = enki.libuser.fetch_AuthTokens( self.user_id )
-			for item in auth_tokens:
-				current = False
-				if current_token == item.token:
-					current = True
-				sessions.append({ 'tokenauth_id' : item.key.id(), 'time_created' : item.time_created, 'current' : current })
+		sessions = []
+		current_token = self.session.get( 'auth_token' )
+		auth_tokens = enki.libuser.fetch_AuthTokens( self.user_id )
+		for item in auth_tokens:
+			current = False
+			if current_token == item.token:
+				current = True
+			sessions.append({ 'tokenauth_id' : item.key.id(), 'time_created' : item.time_created, 'current' : current })
 
-			sessions_app = []
-			list = EnkiModelRestAPITokenVerify.fetch_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
-			for item in list:
-				sessions_app.append({ 'token_id' : item.key.id(), 'time_created' : item.time_created })
+		sessions_app = []
+		list = EnkiModelRestAPITokenVerify.fetch_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
+		for item in list:
+			sessions_app.append({ 'token_id' : item.key.id(), 'time_created' : item.time_created })
 
-			data = data( current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions, sessions_app )
-			self.render_tmpl( 'profile.html',
-			                  active_menu = 'profile',
-			                  data = data )
+		data = data( current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions, sessions_app )
+		self.render_tmpl( 'profile.html',
+		                  active_menu = 'profile',
+		                  data = data )
 
 	def post( self ):
-		if self.ensure_is_logged_in():
-			self.check_CSRF()
-			remove_account = self.request.get( 'remove' )
-			disconnect_session_token = self.request.get( 'disconnect' )
-			disconnect_app_token = self.request.get( 'disconnect_app' )
+		remove_account = self.request.get( 'remove' )
+		if remove_account:  # requires reauthentication:
+			enki.HandlerBaseReauthenticate.post( self )
+		else:
+			if self.ensure_is_logged_in():
+				self.check_CSRF()
+				disconnect_session_token = self.request.get( 'disconnect' )
+				disconnect_app_token = self.request.get( 'disconnect_app' )
+				if disconnect_session_token:
+					enki.libuser.delete_session_token_auth( disconnect_session_token )
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_SESSION())
+				elif disconnect_app_token:
+					EnkiModelRestAPITokenVerify.delete_token_by_id( disconnect_app_token )
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_APP())
+				self.redirect( enki.libutil.get_local_url( 'profile' ))
 
-			if remove_account:
-				self.remove_authid( remove_account )
-				provider_name = str( remove_account[ :remove_account.find( ':' )])
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_METHOD_REMOVED( provider_name ))
-			elif disconnect_session_token:
-				enki.libuser.delete_session_token_auth( disconnect_session_token )
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISCONNECTED_SESSION( ) )
-			elif disconnect_app_token:
-				EnkiModelRestAPITokenVerify.delete_token_by_id( disconnect_app_token )
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISCONNECTED_APP( ) )
-
-			self.redirect( enki.libutil.get_local_url( 'profile' ))
+	def post_reauthenticated( self, params ):
+		remove_account = params.get( 'remove' )
+		if remove_account:
+			self.remove_authid( remove_account )
+			provider_name = str( remove_account[ :remove_account.find( ':' )])
+			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_METHOD_REMOVED( provider_name ))
+		self.redirect( enki.libutil.get_local_url( 'profile' ))
 
 
 class HandlerProfilePublic( enki.HandlerBase ):
@@ -531,8 +535,8 @@ class HandlerDisplayName( enki.HandlerBase ):
 			intro_message = ''
 			if not enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( user_id ):
 				# if no displayname exists, auto-generate one
-				auto_generated = enki.libdisplayname.cosmopompe( )[0 ]
-				intro_message = " ".join([ MSG.DISPLAY_NAME_INTRO(), MSG.DISPLAY_NAME_AUTO_GENERATED() ])
+				auto_generated = enki.libdisplayname.cosmopompe()[ 0 ]
+				intro_message = " ".join([ MSG.DISPLAY_NAME_INTRO(), MSG.DISPLAY_NAME_AUTO_GENERATED()])
 			self.render_tmpl( 'displayname.html',
 			                     active_menu = 'profile',
 			                     auto_generated = auto_generated,
@@ -542,45 +546,42 @@ class HandlerDisplayName( enki.HandlerBase ):
 			                     prefix_length_max = enki.libdisplayname.PREFIX_LENGTH_MAX )
 
 
-class HandlerEmailChange( enki.HandlerBase ):
+class HandlerEmailChange( enki.HandlerBaseReauthenticate ):
 # user requests an email change. Current email stored in rollback db
 
-	def get( self ):
-		if self.ensure_is_logged_in():
-			self.render_tmpl( 'emailchange.html',
-			                  active_menu = 'profile', )
+	def get_reauthenticated( self ):
+		self.render_tmpl( 'emailchange.html',
+		                  active_menu = 'profile' )
 
-	def post( self ):
-		if self.ensure_is_logged_in():
-			self.check_CSRF()
-			email = self.request.get( 'email' )
-			old_email_existed = True if ( self.enki_user.email and self.enki_user.email != 'removed' ) else False
-			result = enki.libuser.validate_email( email )
-			error_message = ''
-			if result == enki.libutil.ENKILIB_OK or result == enki.libuser.ERROR_EMAIL_MISSING:
-				result_of_change_request = self.email_change_request( email )
-				if result_of_change_request == 'same':
-					error_message = MSG.CURRENT_EMAIL()
-				elif result_of_change_request == 'cannot_remove':
-					error_message = MSG.CANNOT_DELETE_EMAIL()
-				elif result_of_change_request == 'removed':
-					self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.EMAIL_REMOVED())
-					if old_email_existed:
-						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_ROLLBACK_INFO_EMAIL_SENT())
-					self.redirect( enki.libutil.get_local_url( 'profile' ) )
-				elif result_of_change_request == 'change' or result_of_change_request == enki.handlerbase.ERROR_EMAIL_IN_USE:
-					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_CHANGE_CONFIRM_INFO_EMAIL_SENT( email ))
-					if self.enki_user.email and self.enki_user.email != 'removed':
-						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_CHANGE_UNDO_INFO_EMAIL_SENT())
-					self.redirect( enki.libutil.get_local_url( 'profile' ) )
-					return
-			elif result == enki.libuser.ERROR_EMAIL_FORMAT_INVALID:
-				error_message = MSG.WRONG_EMAIL_FORMAT()
-			if error_message:
-				self.render_tmpl( 'emailchange.html',
-				                  active_menu = 'profile',
-				                  email = email,
-				                  error = error_message )
+	def post_reauthenticated( self, params ):
+		email = params.get( 'email' )
+		old_email_existed = True if ( self.enki_user.email and self.enki_user.email != 'removed' ) else False
+		result = enki.libuser.validate_email( email )
+		error_message = ''
+		if result == enki.libutil.ENKILIB_OK or result == enki.libuser.ERROR_EMAIL_MISSING:
+			result_of_change_request = self.email_change_request( email )
+			if result_of_change_request == 'same':
+				error_message = MSG.CURRENT_EMAIL()
+			elif result_of_change_request == 'cannot_remove':
+				error_message = MSG.CANNOT_DELETE_EMAIL()
+			elif result_of_change_request == 'removed':
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.EMAIL_REMOVED())
+				if old_email_existed:
+					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_ROLLBACK_INFO_EMAIL_SENT())
+				self.redirect( enki.libutil.get_local_url( 'profile' ))
+			elif result_of_change_request == 'change' or result_of_change_request == enki.handlerbase.ERROR_EMAIL_IN_USE:
+				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_CHANGE_CONFIRM_INFO_EMAIL_SENT( email ))
+				if self.enki_user.email and self.enki_user.email != 'removed':
+					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_CHANGE_UNDO_INFO_EMAIL_SENT())
+				self.redirect( enki.libutil.get_local_url( 'profile' ))
+				return
+		elif result == enki.libuser.ERROR_EMAIL_FORMAT_INVALID:
+			error_message = MSG.WRONG_EMAIL_FORMAT()
+		if error_message:
+			self.render_tmpl( 'emailchange.html',
+			                  active_menu = 'profile',
+			                  email = email,
+			                  error = error_message )
 
 
 class HandlerEmailChangeConfirm( enki.HandlerBase ):
