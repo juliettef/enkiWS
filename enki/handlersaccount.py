@@ -487,63 +487,55 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 			self.abort( 404 )
 
 
-class HandlerDisplayName( enki.HandlerBase ):
+class HandlerDisplayName( enki.HandlerBaseReauthenticate ):
 # set/change display name
 
-	def get( self ):
-		if self.ensure_is_logged_in():
-			self.session[ 'sessiondisplaynamerefpath' ] = self.session.pop( 'sessiondisplaynamerefpath', self.request.referrer )
-			self.render_initial_display_name()
+	def get_reauthenticated( self ):
+		self.session[ 'sessiondisplaynamerefpath' ] = self.session.pop( 'sessiondisplaynamerefpath', self.request.referrer )
+		self.session[ 'sessionreauth' ] = self.session[ 'sessiondisplaynamerefpath' ]
+		auto_generated = ''
+		intro_message = ''
+		if not enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
+			# if no displayname exists, auto-generate one
+			auto_generated = enki.libdisplayname.cosmopompe()[ 0 ]
+			intro_message = " ".join([ MSG.DISPLAY_NAME_INTRO(), MSG.DISPLAY_NAME_AUTO_GENERATED()])
+		self.render_tmpl( 'displayname.html',
+		                  active_menu = 'profile',
+		                  auto_generated = auto_generated,
+		                  intro = intro_message,
+		                  data = enki.libdisplayname.get_display_name_data( self.user_id ),
+		                  prefix_length_min = enki.libdisplayname.PREFIX_LENGTH_MIN,
+		                  prefix_length_max = enki.libdisplayname.PREFIX_LENGTH_MAX )
 
-	def post( self ):
-		if self.ensure_is_logged_in():
-			self.check_CSRF()
-			user_id = self.user_id
-			prefix = self.request.get( 'prefix' )
-			result = enki.libdisplayname.make_unique_and_set_display_name( user_id, prefix )
-			error_message = ''
-			if result == enki.libutil.ENKILIB_OK:
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISPLAYNAME_SET())
-				self.redirect_to_relevant_page()
-				return
-			else:
-				if result == enki.libdisplayname.ERROR_DISPLAY_NAME_LENGTH:
-					length = len( prefix )
-					instruction = ''
-					if length < enki.libdisplayname.PREFIX_LENGTH_MIN:
-						instruction = MSG.DISPLAY_NAME_TOO_SHORT_LENGTHEN( enki.libdisplayname.PREFIX_LENGTH_MIN )
-					elif length > enki.libdisplayname.PREFIX_LENGTH_MAX:
-						instruction = MSG.DISPLAY_NAME_TOO_LONG_SHORTEN( enki.libdisplayname.PREFIX_LENGTH_MAX )
-					error_message = " ".join([ MSG.DISPLAY_NAME_WRONG_LENGTH( length ), instruction ])
-				elif result == enki.libdisplayname.ERROR_DISPLAY_NAME_ALNUM:
-					error_message = MSG.DISPLAY_NAME_WRONG_SYMBOLS()
-				elif result == enki.libdisplayname.ERROR_DISPLAY_NAME_IN_USE:
-					error_message = MSG.DISPLAY_NAME_ALREADY_USED()
-				self.render_tmpl( 'displayname.html',
-				                  active_menu = 'profile',
-				                  prefix = prefix,
-				                  data = enki.libdisplayname.get_display_name_data( user_id ),
-				                  prefix_length_min = enki.libdisplayname.PREFIX_LENGTH_MIN,
-				                  prefix_length_max = enki.libdisplayname.PREFIX_LENGTH_MAX,
-				                  error = error_message )
-
-	def render_initial_display_name( self ):
-	# used to render a page for setting up the first display name.
-		if self.ensure_is_logged_in():
-			user_id = self.user_id
-			auto_generated = ''
-			intro_message = ''
-			if not enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( user_id ):
-				# if no displayname exists, auto-generate one
-				auto_generated = enki.libdisplayname.cosmopompe()[ 0 ]
-				intro_message = " ".join([ MSG.DISPLAY_NAME_INTRO(), MSG.DISPLAY_NAME_AUTO_GENERATED()])
+	def post_reauthenticated( self, params ):
+		prefix = params.get( 'prefix' )
+		error_message = ''
+		result = enki.libdisplayname.make_unique_and_set_display_name( self.user_id, prefix )
+		if result == enki.libutil.ENKILIB_OK:
+			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISPLAYNAME_SET())
+			self.session[ 'sessiondisplaynamerefpath' ] = self.session.pop( 'sessionreauth', self.request.referrer )
+			self.redirect_to_relevant_page()
+			return
+		else:
+			if result == enki.libdisplayname.ERROR_DISPLAY_NAME_LENGTH:
+				length = len( prefix )
+				instruction = ''
+				if length < enki.libdisplayname.PREFIX_LENGTH_MIN:
+					instruction = MSG.DISPLAY_NAME_TOO_SHORT_LENGTHEN( enki.libdisplayname.PREFIX_LENGTH_MIN )
+				elif length > enki.libdisplayname.PREFIX_LENGTH_MAX:
+					instruction = MSG.DISPLAY_NAME_TOO_LONG_SHORTEN( enki.libdisplayname.PREFIX_LENGTH_MAX )
+				error_message = " ".join([ MSG.DISPLAY_NAME_WRONG_LENGTH( length ), instruction ])
+			elif result == enki.libdisplayname.ERROR_DISPLAY_NAME_ALNUM:
+				error_message = MSG.DISPLAY_NAME_WRONG_SYMBOLS()
+			elif result == enki.libdisplayname.ERROR_DISPLAY_NAME_IN_USE:
+				error_message = MSG.DISPLAY_NAME_ALREADY_USED()
 			self.render_tmpl( 'displayname.html',
-			                     active_menu = 'profile',
-			                     auto_generated = auto_generated,
-			                     intro = intro_message,
-			                     data = enki.libdisplayname.get_display_name_data( user_id ),
-			                     prefix_length_min = enki.libdisplayname.PREFIX_LENGTH_MIN,
-			                     prefix_length_max = enki.libdisplayname.PREFIX_LENGTH_MAX )
+			                  active_menu = 'profile',
+			                  prefix = prefix,
+			                  data = enki.libdisplayname.get_display_name_data( self.user_id ),
+			                  prefix_length_min = enki.libdisplayname.PREFIX_LENGTH_MIN,
+			                  prefix_length_max = enki.libdisplayname.PREFIX_LENGTH_MAX,
+			                  error = error_message )
 
 
 class HandlerEmailChange( enki.HandlerBaseReauthenticate ):

@@ -105,6 +105,14 @@ indexes:
   - name: user_id
   - name: time_expires
 
+- kind: EnkiModelRestAPIDataStore
+  properties:
+  - name: user_id
+  - name: app_id
+  - name: data_type
+  - name: data_id
+  - name: time_expires
+
 - kind: EnkiModelRestAPITokenVerify
   properties:
   - name: type
