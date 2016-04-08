@@ -39,25 +39,25 @@ class HandlerApps( enki.HandlerBaseReauthenticate ):
 			app = EnkiModelApp.get_by_id( int( app_secret_set ))
 			app.secret = secret
 			app.put()
-			self.add_infomessage( 'success', MSG.SUCCESS(), 'New secret generated.' )
+			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.NEW_SECRET_GENERATED())
 			app_success = str( app.key.id())
 			data = enki.librestapi.apps_list( self.user_id )
 		else:
 			data = enki.librestapi.apps_list( self.user_id )
 			if not app_name:
-				error_message = 'A name is needed.'
+				error_message = MSG.NAME_NEEDED()
 			elif ( len( app_name ) > enki.librestapi.APP_MAX_NAME_LENGTH ):
-				error_message = 'App name is too long, it must be ' +  enki.librestapi.APP_MAX_NAME_LENGTH + ' char max.'
+				error_message = MSG.APP_NAME_TOO_LONG( str( enki.librestapi.APP_MAX_NAME_LENGTH ))
 			elif EnkiModelApp.exist_by_name( app_name ):
-				error_message = 'App name already exists.'
+				error_message = MSG.APP_NAME_ALREADY_EXISTS()
 			elif ( EnkiModelApp.count_by_user_id( self.user_id ) >= enki.librestapi.APP_MAX ):
-				error_message = 'You have exceeded the number of apps per user.'
+				error_message = MSG.APP_EXCEED_ALLOWED()
 			else:
 				secret = enki.librestapi.generate_auth_token()
 				app = EnkiModelApp( user_id = self.user_id, name = app_name, secret = secret )
 				app.put()
 				data.append([ app_name, str( app.key.id()), secret, app.time_created ])
-				self.add_infomessage( 'success', MSG.SUCCESS(), 'App created.' )
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.APP_CREATED())
 				app_success =  str( app.key.id())
 		self.render_tmpl( 'apps.html',
 		                  active_menu = 'profile',
@@ -81,7 +81,7 @@ class HandlerAppDataStores( enki.HandlerBaseReauthenticate ):
 		app_id = params.get( 'delete' )
 		if app_id:
 			enki.librestapi.delete_user_app_data( self.user_id , app_id )
-			self.add_infomessage( 'success', MSG.SUCCESS(), 'App data deleted.' )
+			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.APP_DATA_DELETED())
 		data_list = enki.librestapi.user_data_list( self.user_id )
 		self.render_tmpl( 'appdatastores.html',
 		                  active_menu = 'profile',

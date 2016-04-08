@@ -140,3 +140,10 @@ def LICENCE_TOO_LONG(): return _( "Licence key is too long." )
 
 # Rest API
 def GAME_CONNECTION_TOKEN( token, minutes ): return ngettext( 'Your single-use game connect code is valid for <b>%(minutes)s minute</b>. <h1><b><font face="monospace">%(token)s</font></b></h1>', 'Your single-use game connect code is valid for <b>%(minutes)s minutes</b>. <h1><b><font face="monospace">%(token)s</font></b></h1>', minutes, minutes = minutes, token = token )
+def NAME_NEEDED(): return _( "A name is needed" )
+def APP_CREATED(): return _( "Application created." )
+def APP_NAME_TOO_LONG( length ): return _( "The application name is too long. Please ensure it is maximum %(length)s characters long.", length = length )
+def APP_NAME_ALREADY_EXISTS(): return _( "This application name already exists. Please choose a different name." )
+def APP_EXCEED_ALLOWED(): return _( "You have exceeded the number of applications allowed per user." )
+def NEW_SECRET_GENERATED(): return _( "New secret generated." )
+def APP_DATA_DELETED(): return _( "Application data deleted." )
