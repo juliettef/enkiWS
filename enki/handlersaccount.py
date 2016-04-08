@@ -97,6 +97,8 @@ class HandlerReauthenticate( enki.HandlerBase ):
 						                  authhandlers = self.get_user_auth_providers(),
 						                  email = self.enki_user.email,
 						                  error = error_message )
+				elif submit_type == 'cancel':
+					self.redirect_to_relevant_page()
 				elif submit_type == 'recoverpass':
 					self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': self.enki_user.email }))
 
