@@ -11,7 +11,7 @@ A permissively licensed Python web service for games developers. enkiWS is a lib
 ## Status
 
 This is a work in progress and not yet ready for production use.  
-__[ NEW in v0.6 ] REST API data store updates__
+__[ NEW in v0.7 ] REST API app registration and user datastore viewer; reauthentication checks__
 
 
 ## Functionality
