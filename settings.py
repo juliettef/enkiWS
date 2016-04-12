@@ -41,6 +41,8 @@ try:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthGoogle ]
 	if secrets.CLIENT_ID_FACEBOOK:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthFacebook ]
+	if secrets.CLIENT_ID_GITHUB:
+		HANDLERS += [ enki.handlersoauth.HandlerOAuthGithub ]
 	if secrets.CLIENT_ID_TWITTER:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthTwitter ]
 except ImportError:

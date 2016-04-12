@@ -238,6 +238,80 @@ class HandlerOAuthFacebook( HandlerOAuthOAUTH2 ):
 		loginInfo = self.process_login_info( loginInfoSettings, jdoc )
 		self.provider_authenticated_callback( loginInfo )
 
+#===== FACEBOOK ========================================================================================================
+
+class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
+
+	AUTHCALLBACK = '/githubcallback'
+	AUTHREQUEST = '/githubauthrequest'
+
+	@classmethod
+	def get_routes( cls ):
+		routes = [ webapp2.Route( cls.AUTHREQUEST, handler = 'enki.handlersoauth.HandlerOAuthGithub:auth_request', methods = [ 'GET' ] ),
+		           webapp2.Route( cls.AUTHCALLBACK, handler = 'enki.handlersoauth.HandlerOAuthGithub:auth_callback', methods = [ 'GET' ] ), ]
+		return routes
+
+	@classmethod
+	def get_button( cls ):
+		href = cls.AUTHREQUEST
+		src = '/images/button_login_facebook_46.png'
+		alt = MSG.CONNECT_WITH_GITHUB()
+		return button( href, src, alt )
+
+	@classmethod
+	def get_provider_name( cls ):
+		return 'Github'
+
+	def get_auth_request_client_id( self ):
+		return settings.secrets.CLIENT_ID_GITHUB
+
+	def get_client_secret( self ):
+		return settings.secrets.CLIENT_SECRET_GITHUB
+
+	def get_auth_callback( self ):
+		return self.AUTHCALLBACK
+
+	def auth_endpoint( self ):
+		return 'https://github.com/login/oauth/authorize'
+
+	def token_endpoint( self ):
+		return 'https://github.com/login/oauth/access_token'
+
+	def profile_endpoint( self ):
+		return 'https://api.github.com/user'
+
+	def get_scope( self ):   # get scope (compulsory) to add to params
+		return 'user:email' # https://developers.facebook.com/docs/facebook-login/permissions/v2.2?locale=en_GB#reference
+
+	def process_token_result( self, result ): # select the processing function
+		data = self.process_result_as_query_string( result )
+		if not data: # failed
+			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+			self.redirect_to_relevant_page()
+			return
+		token = data[ 'access_token' ]
+		profile = self.get_profile( token )
+		jdoc = self.process_result_as_JSON( profile )
+
+		emailUrl ='https://api.github.com/user/emails?' + urllib.urlencode({ 'access_token': token })
+		emailDoc = urlfetch.fetch( url = emailUrl )
+		jemails = self.process_result_as_JSON( emailDoc )
+		for item in jemails:
+			if item.get( 'verified', False ):
+				jdoc.update(item)
+				if item.get( 'primary', False ):
+					break # if we have a verified primary we stop and use that
+		if jemails and not jdoc.get('email', None):
+			jdoc.update( jemails[0] )
+
+		jdoc['id'] = str( jdoc['id'] ) # convert id to string
+
+		loginInfoSettings = {   'provider_uid': 'id',
+								'email': 'email',
+								'email_verified': 'verified' }
+		loginInfo = self.process_login_info( loginInfoSettings, jdoc )
+		self.provider_authenticated_callback( loginInfo )
+
 
 #===== STEAM ===========================================================================================================
 
