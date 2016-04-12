@@ -125,7 +125,7 @@ def FRIEND_REMOVED( name ): return _( "%(name)s has been removed from your frien
 # OAuth
 def CONNECT_WITH_GOOGLE(): return _( "Sign in with Google" )
 def CONNECT_WITH_FACEBOOK(): return _( "Login with Facebook" )
-def CONNECT_WITH_GITHUB(): return _( "Login with Github" )
+def CONNECT_WITH_GITHUB(): return _( "Sign in with Github" )
 def CONNECT_WITH_STEAM(): return _( "Sign in through Steam" )
 def CONNECT_WITH_TWITTER(): return _( "Sign in with Twitter" )
 

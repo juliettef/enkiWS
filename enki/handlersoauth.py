@@ -238,7 +238,8 @@ class HandlerOAuthFacebook( HandlerOAuthOAUTH2 ):
 		loginInfo = self.process_login_info( loginInfoSettings, jdoc )
 		self.provider_authenticated_callback( loginInfo )
 
-#===== FACEBOOK ========================================================================================================
+
+#===== GITHUB ==========================================================================================================
 
 class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 
@@ -254,7 +255,7 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		src = '/images/button_login_facebook_46.png'
+		src = ''
 		alt = MSG.CONNECT_WITH_GITHUB()
 		return button( href, src, alt )
 
@@ -281,7 +282,7 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 		return 'https://api.github.com/user'
 
 	def get_scope( self ):   # get scope (compulsory) to add to params
-		return 'user:email' # https://developers.facebook.com/docs/facebook-login/permissions/v2.2?locale=en_GB#reference
+		return 'user:email'
 
 	def process_token_result( self, result ): # select the processing function
 		data = self.process_result_as_query_string( result )
