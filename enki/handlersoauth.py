@@ -17,7 +17,7 @@ import enki
 import enki.textmessages as MSG
 
 
-button = collections.namedtuple( 'button', 'href, src, alt' )
+button = collections.namedtuple( 'button', 'href, icon' )
 
 
 class HandlerOAuthBase( enki.HandlerBase ):
@@ -156,9 +156,8 @@ class HandlerOAuthGoogle( HandlerOAuthOpenIDConnect ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		src = '/images/btn_google_signin_dark_normal_web.png'
-		alt = MSG.CONNECT_WITH_GOOGLE()
-		return button( href, src, alt )
+		icon = 'fa-google'
+		return button( href, icon )
 
 	@classmethod
 	def get_provider_name( cls ):
@@ -193,9 +192,8 @@ class HandlerOAuthFacebook( HandlerOAuthOAUTH2 ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		src = '/images/button_login_facebook_46.png'
-		alt = MSG.CONNECT_WITH_FACEBOOK()
-		return button( href, src, alt )
+		icon = 'fa-facebook'
+		return button( href, icon )
 
 	@classmethod
 	def get_provider_name( cls ):
@@ -255,9 +253,8 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		src = ''
-		alt = MSG.CONNECT_WITH_GITHUB()
-		return button( href, src, alt )
+		icon = 'fa-github'
+		return button( href, icon )
 
 	@classmethod
 	def get_provider_name( cls ):
@@ -330,9 +327,8 @@ class HandlerOAuthSteam( HandlerOAuthBase ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		src = '/images/button_login_steam_sits_large_noborder.png'
-		alt = MSG.CONNECT_WITH_STEAM()
-		return button( href, src, alt )
+		icon = 'fa-steam'
+		return button( href, icon )
 
 	@classmethod
 	def get_provider_name( cls ):
@@ -403,9 +399,8 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		src = '/images/sign-in-with-twitter-link.png'
-		alt = MSG.CONNECT_WITH_TWITTER()
-		return button( href, src, alt )
+		icon = 'fa-twitter'
+		return button( href, icon )
 
 	@classmethod
 	def get_provider_name( cls ):

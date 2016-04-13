@@ -54,12 +54,12 @@
                 </div>
             {% else %}
 	            <div>
-	                <form class="form-horizontal" action="{{ url }}" method="post">
-	                    <div class="col-lg-12">
-	                        <button class="btn btn-primary" type="submit" name = "choice" value="profile">{{ _( "Set up my profile" ) }}</button>
-	                        <button class="btn btn-default" type="submit" name = "choice" value="continue">{{ _( "Continue browsing" ) }}</button>
-	                    </div>
-	                </form>
+                    <form class="form-horizontal" action="{{ url }}" method="post">
+                        <fieldset>
+                        <button class="btn btn-primary" type="submit" name = "choice" value="profile">{{ _( "Set up my profile" ) }}</button>
+                        <button class="btn btn-default" type="submit" name = "choice" value="continue">{{ _( "Continue browsing" ) }}</button>
+                        </fieldset>
+                    </form>
 		        </div>
             {% endif%}
             </div>

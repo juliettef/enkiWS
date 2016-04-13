@@ -3,6 +3,7 @@
 
     <head>
         {% include "inchead.html" %}
+        <link type="text/css" rel="stylesheet" href="/css/oauth.css">
         <title>{{ _( "Log in" ) }}</title>
     </head>
 
@@ -56,11 +57,17 @@
 
                 {% if authhandlers %}
                 <div class="well bs-component">
-                    <fieldset>
+					<fieldset>
                         <legend>{{ _( "Log in with a third party provider" )}}</legend>
-{% for item in authhandlers %}{% set button = item.get_button() %}<div class="row"><div class="col-md-4 col-md-offset-2"><div class="panel panel-default"><div class="panel-body"><a href="{{ button.href }}"><img src="{{ button.src }}" class="img-responsive center-block" alt="{{ button.alt }}"></a></div></div>
-</div></div>{% endfor %}
-                    </fieldset>
+	                    <div class="col-md-4 col-md-offset-4">
+		                    {% for item in authhandlers %}
+                                {% set oauthbutton = item.get_button() %}
+		                        <a href="{{ oauthbutton.href }}" class="btn btn-block btn-oauth btn-{{ item.get_provider_name()|lower }}">
+			                        <i class="i-oauth fa {{ oauthbutton.icon }}"></i> {{ _( "Log in with" )}} {{ item.get_provider_name() }}
+		                        </a>
+		                    {% endfor %}
+	                    </div>
+					</fieldset>
                 </div>
                 {% endif %}
             

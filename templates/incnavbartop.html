@@ -3,11 +3,11 @@
 {# <!-- menu items affected by user status - logged in or out --> #}
 {% set is_logged_in = is_logged_in|default( False ) -%}
 {% if is_logged_in == True %}
-    {% set navigation_bar_top_right = [	( 'logout'|local, 'logout', _( "Log out" ) ),
-										( 'profile'|local, 'profile', _( "Profile and settings" ) )] -%}
+    {% set navigation_bar_top_right = [	( 'profile'|local, 'profile', _( "Profile and settings" )),
+										( 'logout'|local, 'logout', _( "Log out" ))] -%}
 {% else %}
-    {% set navigation_bar_top_right = [	('login'|local, 'login', _( "Log in" ) ),
-										('register'|local, 'register', _( "Sign up" ) )] -%}
+    {% set navigation_bar_top_right = [	('register'|local, 'register', _( "Sign up" )),
+										('login'|local, 'login', _( "Log in" ))] -%}
 {% endif %}
 {# <!-- reference: http://jinja.pocoo.org/docs/dev/tricks/#highlighting-active-menu-items --> #}
 <nav class="navbar navbar-default">

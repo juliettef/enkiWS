@@ -122,13 +122,6 @@ def FRIEND_INVITATION_SENT( name ): return _( "An invitation to join your friend
 def FRIEND_ADDED( name ): return _( "%(name)s has been added to your friends list.", name = name )
 def FRIEND_REMOVED( name ): return _( "%(name)s has been removed from your friends list.", name = name )
 
-# OAuth
-def CONNECT_WITH_GOOGLE(): return _( "Sign in with Google" )
-def CONNECT_WITH_FACEBOOK(): return _( "Login with Facebook" )
-def CONNECT_WITH_GITHUB(): return _( "Sign in with Github" )
-def CONNECT_WITH_STEAM(): return _( "Sign in through Steam" )
-def CONNECT_WITH_TWITTER(): return _( "Sign in with Twitter" )
-
 # Store
 def STORE(): return _( "Store" )
 def PRODUCT_LICENCE_ACTIVATED( product, licence ): return _( "Product %(product)s licence %(licence)s activated.", product = product, licence = licence )
