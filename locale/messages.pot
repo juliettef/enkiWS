@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-04-08 19:47+0100\n"
+"POT-Creation-Date: 2016-04-13 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -516,62 +516,46 @@ msgstr ""
 msgid "%(name)s has been removed from your friends list."
 msgstr ""
 
-#: enki/textmessages.py:126
-msgid "Sign in with Google"
-msgstr ""
-
-#: enki/textmessages.py:127
-msgid "Login with Facebook"
-msgstr ""
-
-#: enki/textmessages.py:128
-msgid "Sign in through Steam"
-msgstr ""
-
-#: enki/textmessages.py:129
-msgid "Sign in with Twitter"
-msgstr ""
-
-#: enki/textmessages.py:132 templates/store.html:6 templates/store.html:15
+#: enki/textmessages.py:126 templates/store.html:6 templates/store.html:15
 #: templates/storeemulatefastspring.html:6
 msgid "Store"
 msgstr ""
 
-#: enki/textmessages.py:133
+#: enki/textmessages.py:127
 #, python-format
 msgid "Product %(product)s licence %(licence)s activated."
 msgstr ""
 
-#: enki/textmessages.py:134
+#: enki/textmessages.py:128
 #, python-format
 msgid "You already activated %(product)s."
 msgstr ""
 
-#: enki/textmessages.py:135
+#: enki/textmessages.py:129
 #, python-format
 msgid ""
 "You already activated %(product)s. Do you want to give your spare licence"
 " key to a friend?"
 msgstr ""
 
-#: enki/textmessages.py:136
+#: enki/textmessages.py:130
 #, python-format
 msgid "Another user already activated %(product)s licence %(licence)s."
 msgstr ""
 
-#: enki/textmessages.py:137
+#: enki/textmessages.py:131
 msgid "Invalid licence key."
 msgstr ""
 
-#: enki/textmessages.py:138
+#: enki/textmessages.py:132
 msgid "A licence key is needed."
 msgstr ""
 
-#: enki/textmessages.py:139
+#: enki/textmessages.py:133
 msgid "Licence key is too long."
 msgstr ""
 
-#: enki/textmessages.py:142
+#: enki/textmessages.py:136
 #, python-format
 msgid ""
 "Your single-use game connect code is valid for <b>%(minutes)s minute</b>."
@@ -582,34 +566,34 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:143
+#: enki/textmessages.py:137
 msgid "A name is needed"
 msgstr ""
 
-#: enki/textmessages.py:144
+#: enki/textmessages.py:138
 msgid "Application created."
 msgstr ""
 
-#: enki/textmessages.py:145
+#: enki/textmessages.py:139
 #, python-format
 msgid ""
 "The application name is too long. Please ensure it is maximum %(length)s "
 "characters long."
 msgstr ""
 
-#: enki/textmessages.py:146
+#: enki/textmessages.py:140
 msgid "This application name already exists. Please choose a different name."
 msgstr ""
 
-#: enki/textmessages.py:147
+#: enki/textmessages.py:141
 msgid "You have exceeded the number of applications allowed per user."
 msgstr ""
 
-#: enki/textmessages.py:148
+#: enki/textmessages.py:142
 msgid "New secret generated."
 msgstr ""
 
-#: enki/textmessages.py:149
+#: enki/textmessages.py:143
 msgid "Application data deleted."
 msgstr ""
 
@@ -703,7 +687,7 @@ msgstr ""
 
 #: templates/accountdelete.html:63 templates/forum.html:86
 #: templates/post.html:58 templates/post.html:84
-#: templates/reauthenticate.html:43 templates/registeroauthconfirm.html:49
+#: templates/reauthenticate.html:44 templates/registeroauthconfirm.html:49
 #: templates/thread.html:89
 msgid "Cancel"
 msgstr ""
@@ -979,16 +963,16 @@ msgstr ""
 msgid "Please log in or create an account to start a new thread."
 msgstr ""
 
-#: templates/forum.html:119 templates/incnavbartop.html:9
-#: templates/login.html:6 templates/login.html:43
+#: templates/forum.html:119 templates/incnavbartop.html:10
+#: templates/login.html:7 templates/login.html:44
 #: templates/passwordrecover.html:39 templates/post.html:120
-#: templates/register.html:39 templates/thread.html:120
+#: templates/register.html:40 templates/thread.html:120
 msgid "Log in"
 msgstr ""
 
-#: templates/forum.html:120 templates/incnavbartop.html:10
-#: templates/login.html:48 templates/passwordrecover.html:40
-#: templates/post.html:121 templates/register.html:6 templates/register.html:34
+#: templates/forum.html:120 templates/incnavbartop.html:9
+#: templates/login.html:49 templates/passwordrecover.html:40
+#: templates/post.html:121 templates/register.html:7 templates/register.html:35
 #: templates/thread.html:121
 msgid "Sign up"
 msgstr ""
@@ -1103,13 +1087,13 @@ msgstr ""
 msgid "Activate"
 msgstr ""
 
-#: templates/incnavbartop.html:6 templates/login.html:69
-#: templates/register.html:60
-msgid "Log out"
+#: templates/incnavbartop.html:6 templates/profile.html:15
+msgid "Profile and settings"
 msgstr ""
 
-#: templates/incnavbartop.html:7 templates/profile.html:15
-msgid "Profile and settings"
+#: templates/incnavbartop.html:7 templates/login.html:76
+#: templates/register.html:67
+msgid "Log out"
 msgstr ""
 
 #: templates/incnavbartop.html:17
@@ -1161,37 +1145,42 @@ msgstr ""
 msgid "delete"
 msgstr ""
 
-#: templates/login.html:22
+#: templates/login.html:23
 msgid "Log in with email and password"
 msgstr ""
 
-#: templates/login.html:27 templates/login.html:29
+#: templates/login.html:28 templates/login.html:30
 #: templates/passwordrecover.html:23 templates/passwordrecover.html:25
-#: templates/reauthenticate.html:26 templates/register.html:25
-#: templates/register.html:27 templates/registerconfirm.html:23
+#: templates/reauthenticate.html:27 templates/register.html:26
+#: templates/register.html:28 templates/registerconfirm.html:23
 #: templates/registeroauthconfirm.html:34
 msgid "Email"
 msgstr ""
 
-#: templates/login.html:34 templates/login.html:36
+#: templates/login.html:35 templates/login.html:37
 #: templates/passwordrecoverconfirm.html:23
-#: templates/passwordrecoverconfirm.html:25 templates/reauthenticate.html:33
-#: templates/reauthenticate.html:35 templates/registerconfirm.html:30
+#: templates/passwordrecoverconfirm.html:25 templates/reauthenticate.html:34
+#: templates/reauthenticate.html:36 templates/registerconfirm.html:30
 #: templates/registerconfirm.html:32
 msgid "Password"
 msgstr ""
 
-#: templates/login.html:49 templates/passwordchange.html:46
+#: templates/login.html:50 templates/passwordchange.html:46
 #: templates/passwordrecover.html:6 templates/passwordrecover.html:20
-#: templates/reauthenticate.html:48 templates/register.html:40
+#: templates/reauthenticate.html:49 templates/register.html:41
 msgid "Forgot password"
 msgstr ""
 
-#: templates/login.html:60
+#: templates/login.html:61
 msgid "Log in with a third party provider"
 msgstr ""
 
-#: templates/login.html:68 templates/register.html:59
+#: templates/login.html:66 templates/reauthenticate.html:66
+#: templates/register.html:57
+msgid "Log in with"
+msgstr ""
+
+#: templates/login.html:75 templates/register.html:66
 msgid "You are currently logged in."
 msgstr ""
 
@@ -1349,23 +1338,23 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: templates/reauthenticate.html:6 templates/reauthenticate.html:42
+#: templates/reauthenticate.html:7 templates/reauthenticate.html:43
 msgid "Reauthenticate"
 msgstr ""
 
-#: templates/reauthenticate.html:21
+#: templates/reauthenticate.html:22
 msgid "Reauthenticate with email and password"
 msgstr ""
 
-#: templates/reauthenticate.html:60
+#: templates/reauthenticate.html:61
 msgid "Reauthenticate with a third party provider"
 msgstr ""
 
-#: templates/register.html:22
+#: templates/register.html:23
 msgid "Create an account using an email and password"
 msgstr ""
 
-#: templates/register.html:51
+#: templates/register.html:52
 msgid "Create an account using a third party provider"
 msgstr ""
 
