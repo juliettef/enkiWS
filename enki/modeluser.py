@@ -9,6 +9,7 @@ class EnkiModelUser( model.Model ):
 
 # if logged in through external provider at least once, otherwise null. Format "provider:userId"
 	auth_ids_provider = model.StringProperty( repeated = True ) # unique
+	auth_ids_provider_blocked = model.StringProperty( repeated = True )
 
 # other
 	time_created = model.DateTimeProperty( auto_now_add = True )

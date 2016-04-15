@@ -103,6 +103,40 @@ class HandlerReauthenticate( enki.HandlerBase ):
 					self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': self.enki_user.email }))
 
 
+class HandlerConnectedAccounts( enki.HandlerBaseReauthenticate ):
+
+	def get_reauthenticated( self ):
+		data = collections.namedtuple( 'data', 'email, allow_change_pw, auth_providers, enough_accounts' )
+
+		email = self.enki_user.email
+		allow_change_pw = True
+		if ( not email or email == 'removed' ) and not self.enki_user.password:
+			allow_change_pw = False
+
+		providers_temp_list = []    # temp list of providers the user uses or blocks
+		for item in self.enki_user.auth_ids_provider_blocked:
+			providers_temp_list.append( item )
+		auth_providers = []
+		for item in self.enki_user.auth_ids_provider:
+			colon = item.find( ':' )
+			provider_name = str( item[ :colon ])
+			auth_providers.append({ 'provider_name': provider_name, 'provider_uid': str( item[ colon+1: ]), 'status': 'allowed'})
+			providers_temp_list.append( provider_name )
+		for item in self.enki_user.auth_ids_provider_blocked:
+			auth_providers.append({ 'provider_name': str( item ), 'provider_uid': 'n/a', 'status': 'blocked'})
+		for item in settings.HANDLERS:
+			provider = item.get_provider_name()
+			if provider not in providers_temp_list:
+				auth_providers.append({ 'provider_name': provider, 'provider_uid': 'n/a', 'status': 'unknown'})
+
+		enough_accounts = self.has_enough_accounts()
+
+		data = data( email, allow_change_pw, auth_providers, enough_accounts )
+		self.render_tmpl( 'connectedaccounts.html',
+		                  active_menu = 'profile',
+		                  data = data )
+
+
 class HandlerProfile( enki.HandlerBaseReauthenticate ):
 
 	def get_reauthenticated( self ):
@@ -686,6 +720,7 @@ class HandlerAccountDeleteConfirm( enki.HandlerBase ):
 routes_account = [ webapp2.Route( '/login', HandlerLogin, name = 'login' ),
                    webapp2.Route( '/reauthenticate', HandlerReauthenticate, name = 'reauthenticate' ),
 		           webapp2.Route( '/logout', HandlerLogout, name = 'logout' ),
+		           webapp2.Route( '/connectedaccounts', HandlerConnectedAccounts, name = 'connectedaccounts' ),
 				   webapp2.Route( '/profile', HandlerProfile, name = 'profile' ),
 				   webapp2.Route( '/u/<useridnumber>', HandlerProfilePublic, name = 'profilepublic' ),
 				   webapp2.Route( '/register', HandlerRegister, name = 'register' ),

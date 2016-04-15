@@ -258,7 +258,7 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 
 	@classmethod
 	def get_provider_name( cls ):
-		return 'Github'
+		return 'GitHub'
 
 	def get_auth_request_client_id( self ):
 		return settings.secrets.CLIENT_ID_GITHUB

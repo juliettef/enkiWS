@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>{{ _( "Connected accounts" ) }}</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+            <h1>{{ _( "Connected accounts" ) }}</h1>
+
+
+            <h2>{{ _( "Email and password" )}}</h2>
+            <p>{% if data.email %}
+                {{ _( "Email: " )}}{{ data.email }}&nbsp;<button class="btn btn-default btn-xs" href="{{ 'emailchange'|local }}">{{ _( "Change email" ) }}</button>
+                {% else %}
+                <a href="{{ 'emailchange'|local }}" class="btn btn-default">{{ _( "Add email" )}}</a>
+                {% endif %}
+            </p>
+            <p>
+                {% if data.allow_change_pw %}<a href="{{ 'passwordchange'|local }}" class="btn btn-default">{{ _( "Change password" )}}</a>{% else %}<a href="#" class="btn btn-default disabled">{{ _( "Change password" )}}</a>{% endif %}
+	        </p>
+
+            {% if data.auth_providers %}
+                <h2>{{ _( "Third party authentication" ) }}</h2>
+                <form class="form-group" action="{{ 'connectedaccounts'|local  }}" method="post">
+                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+	                <table class="table table-striped table-hover ">
+		                <thead>
+							<tr>
+								<th></th>
+								<th>{{ _( "Provider" )}}</th>
+								<th>{{ _( "Unique Id" )}}</th>
+							    <th>{{ _( "Status" )}}</th>
+								<th>{{ _( "Actions" )}}</th>
+							</tr>
+		                </thead>
+						<tbody>
+							{% for item in data.auth_providers %}
+							<tr {% if item.provider_name == app_success %}class="success"{% endif %}>
+								<td><i class="fa fa-{{ item.provider_name|lower }}"></i></td>
+							    <td>{{ item.provider_name }}</td>
+							    <td>{{ item.provider_uid }}</td>
+							    <td>{{ item.status }}</td>
+								<td>{% if data.enough_accounts %}<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Remove" )}}</button>{% endif %}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+	                </table>
+                </form>
+            {% endif %}
+
+            {% include "incpageextensions.html" %}
+
+            {% include "incfooter.html" %}
+        </div>
+    </body>
+</html>
