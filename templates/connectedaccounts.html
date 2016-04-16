@@ -47,7 +47,17 @@
 							    <td>{{ item.provider_name }}</td>
 							    <td>{{ item.provider_uid }}</td>
 							    <td>{{ item.status }}</td>
-								<td>{% if data.enough_accounts %}<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Remove" )}}</button>{% endif %}</td>
+								<td>{% if item.status == 'blocked' %}
+										<button class="btn btn-default btn-xs" type="submit" name="unblock" value="{{ item.provider_name }}">{{ _( "Unblock" )}}</button>
+									{% else %}
+										<button class="btn btn-default btn-xs {% if not data.enough_accounts %}disabled{% endif %}" type="submit" name="block" value="{{ item.provider_name }}">{{ _( "Block" )}}</button>
+									{% endif %}
+									{% if item.status == 'registered' %}
+										<button class="btn btn-default btn-xs {% if not data.enough_accounts %}disabled{% endif %}" type="submit" name="deregister" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Deregister" )}}</button>
+									{% elif item.status == 'unregistered'  %}
+										<button class="btn btn-default btn-xs " type="submit" name="register" value="{{ item.provider_name }}">{{ _( "Register" )}}</button>
+									{% endif %}
+								</td>
 							</tr>
 							{% endfor %}
 						</tbody>

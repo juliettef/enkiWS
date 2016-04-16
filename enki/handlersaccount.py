@@ -113,21 +113,22 @@ class HandlerConnectedAccounts( enki.HandlerBaseReauthenticate ):
 		if ( not email or email == 'removed' ) and not self.enki_user.password:
 			allow_change_pw = False
 
-		providers_temp_list = []    # temp list of providers the user uses or blocks
-		for item in self.enki_user.auth_ids_provider_blocked:
-			providers_temp_list.append( item )
 		auth_providers = []
-		for item in self.enki_user.auth_ids_provider:
+		providers_temp_list = []    # temp list of providers the user registered or blocked
+		for item in self.enki_user.auth_ids_provider:   # registered, unblocked providers
 			colon = item.find( ':' )
 			provider_name = str( item[ :colon ])
-			auth_providers.append({ 'provider_name': provider_name, 'provider_uid': str( item[ colon+1: ]), 'status': 'allowed'})
+			if provider_name not in self.enki_user.auth_ids_provider_blocked:
+				auth_providers.append({ 'provider_name': provider_name, 'provider_uid': str( item[ colon+1: ]), 'status': 'registered'})
+				providers_temp_list.append( provider_name )
+		for item in self.enki_user.auth_ids_provider_blocked:   # blocked providers
+			provider_name = str( item )
+			auth_providers.append({ 'provider_name': provider_name, 'provider_uid': 'n/a', 'status': 'blocked'})
 			providers_temp_list.append( provider_name )
-		for item in self.enki_user.auth_ids_provider_blocked:
-			auth_providers.append({ 'provider_name': str( item ), 'provider_uid': 'n/a', 'status': 'blocked'})
-		for item in settings.HANDLERS:
+		for item in settings.HANDLERS:   # remaning providers
 			provider = item.get_provider_name()
 			if provider not in providers_temp_list:
-				auth_providers.append({ 'provider_name': provider, 'provider_uid': 'n/a', 'status': 'unknown'})
+				auth_providers.append({ 'provider_name': provider, 'provider_uid': 'n/a', 'status': 'unregistered'})
 
 		enough_accounts = self.has_enough_accounts()
 
@@ -135,6 +136,26 @@ class HandlerConnectedAccounts( enki.HandlerBaseReauthenticate ):
 		self.render_tmpl( 'connectedaccounts.html',
 		                  active_menu = 'profile',
 		                  data = data )
+
+	def post_reauthenticated( self, params ):
+		block = params.get( 'block' )
+		unblock = params.get( 'unblock' )
+		# register = params.get( 'register' ) # TODO
+		deregister = params.get( 'deregister' )
+		if block and block not in self.enki_user.auth_ids_provider_blocked:
+			self.enki_user.auth_ids_provider_blocked.append( block )
+			self.enki_user.put()
+			self.add_infomessage( 'success', MSG.SUCCESS( ), 'blocked') #MSG.AUTH_PROVIDER_BLOCKED( block )) # TODO
+		if unblock and unblock in self.enki_user.auth_ids_provider_blocked:
+			self.enki_user.auth_ids_provider_blocked.remove( unblock )
+			self.enki_user.put()
+			self.add_infomessage( 'success', MSG.SUCCESS( ), 'unblocked') #MSG.AUTH_PROVIDER_UNBLOCKED( unblock )) #TODO
+		if deregister:
+			self.remove_authid( deregister )
+			provider_name = str( deregister[ :deregister.find( ':' )])
+			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_METHOD_REMOVED( provider_name ))
+
+		self.redirect( enki.libutil.get_local_url( 'connectedaccounts' ))
 
 
 class HandlerProfile( enki.HandlerBaseReauthenticate ):
