@@ -17,7 +17,7 @@
 
             <h2>{{ _( "Email and password" )}}</h2>
             <p>{% if data.email %}
-                {{ _( "Email: " )}}{{ data.email }}&nbsp;<button class="btn btn-default btn-xs" href="{{ 'emailchange'|local }}">{{ _( "Change email" ) }}</button>
+                {{ _( "Email: " )}}{{ data.email }}&nbsp;<a class="btn btn-default btn-xs" href="{{ 'emailchange'|local }}">{{ _( "Change email" ) }}</a>
                 {% else %}
                 <a href="{{ 'emailchange'|local }}" class="btn btn-default">{{ _( "Add email" )}}</a>
                 {% endif %}
@@ -55,7 +55,7 @@
 									{% if item.status == 'registered' %}
 										<button class="btn btn-default btn-xs {% if not data.enough_accounts %}disabled{% endif %}" type="submit" name="deregister" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Deregister" )}}</button>
 									{% elif item.status == 'unregistered'  %}
-										<button class="btn btn-default btn-xs " type="submit" name="register" value="{{ item.provider_name }}">{{ _( "Register" )}}</button>
+										<button class="btn btn-default btn-xs disabled" type="submit" name="register" value="{{ item.provider_name }}">{{ _( "Register" )}}</button>
 									{% endif %}
 								</td>
 							</tr>

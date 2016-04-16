@@ -20,35 +20,16 @@
             {% else %}
                 <p>{{ _( "Public user profile and forum posts:" )}} <a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
                 <p>{{ _( "User Id:" )}} {{ data.current_display_name.user_id }}</p>
-                <p>{{ _( "Current display name:" )}} {{ data.current_display_name.display_name }}</p>
+                <p>{{ _( "Current display name:" )}} {{ data.current_display_name.display_name }} &nbsp;<a href="{{ 'displayname'|local }}" class="btn btn-default btn-xs">{{ _( "Change display Name" ) }}</a></p>
                 {% if data.previous_display_names %}
                 <p>{{ ngettext( "Past display name:", "Past display names:", data.previous_display_names | count ) }} {{ data.previous_display_names | join(', ') }}</p>
                 {% endif %}
-                <p><a href="{{ 'displayname'|local }}" class="btn btn-default">{{ _( "Change display Name" ) }}</a></p>
             {% endif %}
 
             <h2>{{ _( "Private information and settings" )}}</h2>
-            <p>{{ _( "Email:" )}} {{ data.email }} </p>
-            <p>
-                <a href="{{ 'emailchange'|local }}" class="btn btn-default">{{ _( "Change email" )}}</a>
-                {% if data.allow_change_pw %}<a href="{{ 'passwordchange'|local }}" class="btn btn-default">{{ _( "Change password" )}}</a>{% else %}<a href="#" class="btn btn-default disabled">{{ _( "Change password" )}}</a>{% endif %}
-                <a href="{{ 'accountdelete'|local }}" class="btn btn-default">{{ _( "Delete account" )}}</a>
-	        </p>
-
-            {% if data.auth_provider %}
-                <h3>{{ _( "Linked accounts" ) }}</h3>
-                <form class="form-group" action="{{ 'profile'|local }}" method="post">
-                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-                    {% for item in data.auth_provider %}
-                        <p>
-                            {{ _( "Provider:" ) }} {{ item.provider_name }} | {{ _( "Unique Id:" ) }} {{ item.provider_uid }}
-                            {% if data.enough_accounts %}
-                                &nbsp;<button class="btn btn-default btn-xs" type="submit" name="remove" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Remove" )}}</button>
-                            {% endif %}
-                        </p>
-                    {% endfor %}
-                </form>
-            {% endif %}
+	        <a href="{{ 'connectedaccounts'|local }}" class="btn btn-default">{{ _( "Connected accounts" ) }}</a>
+            <a href="{{ 'accountdelete'|local }}" class="btn btn-default">{{ _( "Delete account" )}}</a>
+	        <a href="{{ 'appdatastores'|local }}" class="btn btn-default">{{ _( "Apps data" ) }}</a>
 
 	        <h2>{{ _( "Sessions" ) }}</h2>
             {% if data.sessions %}
@@ -79,10 +60,6 @@
 	                {% endfor %}
 	            </form>
             {% endif %}
-
-	        <span>
-	            <a href="{{ 'appdatastores'|local }}" class="btn btn-default">{{ _( "Apps data" ) }}</a>
-	        </span>
 
             <h2>{{ _( "Friends" )}}</h2>
             <span>

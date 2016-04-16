@@ -129,7 +129,6 @@ class HandlerConnectedAccounts( enki.HandlerBaseReauthenticate ):
 			provider = item.get_provider_name()
 			if provider not in providers_temp_list:
 				auth_providers.append({ 'provider_name': provider, 'provider_uid': 'n/a', 'status': 'unregistered'})
-
 		enough_accounts = self.has_enough_accounts()
 
 		data = data( email, allow_change_pw, auth_providers, enough_accounts )
@@ -145,85 +144,62 @@ class HandlerConnectedAccounts( enki.HandlerBaseReauthenticate ):
 		if block and block not in self.enki_user.auth_ids_provider_blocked:
 			self.enki_user.auth_ids_provider_blocked.append( block )
 			self.enki_user.put()
-			self.add_infomessage( 'success', MSG.SUCCESS( ), 'blocked') #MSG.AUTH_PROVIDER_BLOCKED( block )) # TODO
+			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_BLOCKED( block ))
 		if unblock and unblock in self.enki_user.auth_ids_provider_blocked:
 			self.enki_user.auth_ids_provider_blocked.remove( unblock )
 			self.enki_user.put()
-			self.add_infomessage( 'success', MSG.SUCCESS( ), 'unblocked') #MSG.AUTH_PROVIDER_UNBLOCKED( unblock )) #TODO
+			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_UNBLOCKED( unblock ))
 		if deregister:
 			self.remove_authid( deregister )
 			provider_name = str( deregister[ :deregister.find( ':' )])
-			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_METHOD_REMOVED( provider_name ))
-
+			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ))
 		self.redirect( enki.libutil.get_local_url( 'connectedaccounts' ))
 
 
 class HandlerProfile( enki.HandlerBaseReauthenticate ):
 
-	def get_reauthenticated( self ):
-		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions, sessions_app' )
+	def get( self ):
+		if self.ensure_is_logged_in():
+			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, sessions, sessions_app' )
 
-		current_display_name = ''
-		previous_display_names = ''
-		user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
-		if user_display_name:
-			current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
-			previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
+			current_display_name = ''
+			previous_display_names = ''
+			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
+			if user_display_name:
+				current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
+				previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
 
-		email = self.enki_user.email
-		allow_change_pw = True
-		if ( not email or email == 'removed' ) and not self.enki_user.password:
-			allow_change_pw = False
+			sessions = []
+			current_token = self.session.get( 'auth_token' )
+			auth_tokens = enki.libuser.fetch_AuthTokens( self.user_id )
+			for item in auth_tokens:
+				current = False
+				if current_token == item.token:
+					current = True
+				sessions.append({ 'tokenauth_id' : item.key.id(), 'time_created' : item.time_created, 'current' : current })
 
-		auth_provider = []
-		for item in self.enki_user.auth_ids_provider:
-			colon = item.find( ':' )
-			auth_provider.append({ 'provider_name': str( item[ :colon ]), 'provider_uid': str( item[ colon+1: ])})
-		enough_accounts = self.has_enough_accounts()
+			sessions_app = []
+			list = EnkiModelRestAPITokenVerify.fetch_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
+			for item in list:
+				sessions_app.append({ 'token_id' : item.key.id(), 'time_created' : item.time_created })
 
-		sessions = []
-		current_token = self.session.get( 'auth_token' )
-		auth_tokens = enki.libuser.fetch_AuthTokens( self.user_id )
-		for item in auth_tokens:
-			current = False
-			if current_token == item.token:
-				current = True
-			sessions.append({ 'tokenauth_id' : item.key.id(), 'time_created' : item.time_created, 'current' : current })
-
-		sessions_app = []
-		list = EnkiModelRestAPITokenVerify.fetch_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
-		for item in list:
-			sessions_app.append({ 'token_id' : item.key.id(), 'time_created' : item.time_created })
-
-		data = data( current_display_name, previous_display_names, email, auth_provider, enough_accounts, allow_change_pw, sessions, sessions_app )
-		self.render_tmpl( 'profile.html',
-		                  active_menu = 'profile',
-		                  data = data )
+			data = data( current_display_name, previous_display_names, sessions, sessions_app )
+			self.render_tmpl( 'profile.html',
+			                  active_menu = 'profile',
+			                  data = data )
 
 	def post( self ):
-		remove_account = self.request.get( 'remove' )
-		if remove_account:  # requires reauthentication:
-			enki.HandlerBaseReauthenticate.post( self )
-		else:
-			if self.ensure_is_logged_in():
-				self.check_CSRF()
-				disconnect_session_token = self.request.get( 'disconnect' )
-				disconnect_app_token = self.request.get( 'disconnect_app' )
-				if disconnect_session_token:
-					enki.libuser.delete_session_token_auth( disconnect_session_token )
-					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_SESSION())
-				elif disconnect_app_token:
-					EnkiModelRestAPITokenVerify.delete_token_by_id( disconnect_app_token )
-					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_APP())
-				self.redirect( enki.libutil.get_local_url( 'profile' ))
-
-	def post_reauthenticated( self, params ):
-		remove_account = params.get( 'remove' )
-		if remove_account:
-			self.remove_authid( remove_account )
-			provider_name = str( remove_account[ :remove_account.find( ':' )])
-			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_METHOD_REMOVED( provider_name ))
-		self.redirect( enki.libutil.get_local_url( 'profile' ))
+		if self.ensure_is_logged_in():
+			self.check_CSRF()
+			disconnect_session_token = self.request.get( 'disconnect' )
+			disconnect_app_token = self.request.get( 'disconnect_app' )
+			if disconnect_session_token:
+				enki.libuser.delete_session_token_auth( disconnect_session_token )
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_SESSION())
+			elif disconnect_app_token:
+				EnkiModelRestAPITokenVerify.delete_token_by_id( disconnect_app_token )
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_APP())
+			self.redirect( enki.libutil.get_local_url( 'profile' ))
 
 
 class HandlerProfilePublic( enki.HandlerBase ):

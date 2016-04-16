@@ -35,7 +35,9 @@ def EMAIL_ROLLBACK_INFO_EMAIL_SENT(): return _( "An email was sent to your previ
 def EMAIL_CHANGE_CONFIRM_INFO_EMAIL_SENT( email ): return _( "If email address %(email)s is available, an email was sent to it. Please check your inbox and follow the instructions in the message to <b>confirm</b> the change.", email = email )
 def EMAIL_CHANGE_UNDO_INFO_EMAIL_SENT(): return _( "An email was sent to your current address in case you want to <b>undo</b> the change." )
 
-def AUTH_METHOD_REMOVED( provider_name ): return _( "%(provider)s authentication method removed.", provider = provider_name )
+def AUTH_PROVIDER_DEREGISTERED( provider_name ): return _( "%(provider)s authentication method is deregistered.", provider = provider_name )
+def AUTH_PROVIDER_BLOCKED( provider_name ): return _( "%(provider)s is blocked.", provider = provider_name )
+def AUTH_PROVIDER_UNBLOCKED( provider_name ): return _( "%(provider)s is unblocked.", provider = provider_name )
 
 def PASSWORD_UPDATED(): return _( "Your password is updated." )
 def PASSWORD_SET(): return _( "Your password is set." )
