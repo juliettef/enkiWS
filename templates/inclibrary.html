@@ -1,5 +1,6 @@
-<div>
+<div class="well">
     <h2>{{ _( "Library" ) }}</h2>
+	{% if extended %}
 	{% if data[ 1 ] %}
 		<h3>{{ ngettext( "Available to activate or give", "Available to activate or give", data[ 1 ]|count ) }}</h3>
 		<form class="form-group" action="{{ 'library'|local  }}" method="post">
@@ -50,4 +51,15 @@
     </form>
 	</div>
 
+	{% else %}
+        {% if data[ 1 ] %}
+            <p>{{ data[ 1 ]|length }} licences available to activate or give</p>
+        {% endif %}
+        {% if data[ 2 ] %}
+            <p>{{ data[ 2 ]|length }} licences available to give</p>
+        {% endif %}
+		{% if data[ 3 ] %}
+            <p>{{ data[ 3 ]|length }} licences activated</p>
+        {% endif %}
+    {% endif %}
 </div>

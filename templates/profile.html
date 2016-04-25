@@ -13,67 +13,111 @@
             {% include "incmessageinfo.html" %}
 
             <h1>{{ _( "Profile and settings" ) }}</h1>
-            <h2>{{ _( "Public information and profile" )}}</h2>
+
+			<div>
+				<form class="form-group" action="{{ 'profile'|local }}" method="post">
+					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+					<fieldset>
+						<div class="form-group}">
+							<div class="col-lg-12" align="right">
+								<button class="btn btn-default btn-xs" type="submit" name="extended"
+								{% if extended %}
+								value=False>{{ _( "Hide details" ) }}
+								{% else %}
+                                value=True>{{ _( "Show details" ) }}
+								{% endif %}
+								</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+	        <div class="well">
+            <h2>{{ _( "Public info" )}}</h2>
+
             {% if not data.current_display_name %}
                 <div><p class="text-info">{{ _( "Your display name is your public Id. You need a display name to post in the forums, invite friends and join games." )}}</p>
                     <a href="{{ 'displayname'|local }}" class="btn btn-info">{{ _( "Set display name" ) }}</a></div>
             {% else %}
-                <p>{{ _( "Public user profile and forum posts:" )}} <a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
-                <p>{{ _( "User Id:" )}} {{ data.current_display_name.user_id }}</p>
-                <p>{{ _( "Current display name:" )}} {{ data.current_display_name.display_name }} &nbsp;<a href="{{ 'displayname'|local }}" class="btn btn-default btn-xs">{{ _( "Change display Name" ) }}</a></p>
-                {% if data.previous_display_names %}
-                <p>{{ ngettext( "Past display name:", "Past display names:", data.previous_display_names | count ) }} {{ data.previous_display_names | join(', ') }}</p>
-                {% endif %}
+		        {% if extended %}
+	                <p>{{ _( "Public user profile and forum posts:" )}} <a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
+	                <p>{{ _( "User Id:" )}} {{ data.current_display_name.user_id }}</p>
+	                <p>{{ _( "Current display name:" )}} {{ data.current_display_name.display_name }} &nbsp;<a href="{{ 'displayname'|local }}" class="btn btn-default btn-xs">{{ _( "Change display Name" ) }}</a></p>
+	                {% if data.previous_display_names %}
+	                    <p>{{ ngettext( "Past display name:", "Past display names:", data.previous_display_names | count ) }} {{ data.previous_display_names | join(', ') }}</p>
+	                {% endif %}
+		        {% else %}
+			        <p><a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
+			        <p>{{ data.current_display_name.display_name }} &nbsp;<a href="{{ 'displayname'|local }}" class="btn btn-default btn-xs">{{ _( "Change display Name" ) }}</a></p>
+		        {% endif %}
             {% endif %}
+	        </div>
 
-            <h2>{{ _( "Private information and settings" )}}</h2>
+	        <div class="well">
+            <h2>{{ _( "Account" )}}</h2>
 	        <a href="{{ 'connectedaccounts'|local }}" class="btn btn-default">{{ _( "Connected accounts" ) }}</a>
             <a href="{{ 'accountdelete'|local }}" class="btn btn-default">{{ _( "Delete account" )}}</a>
 	        <a href="{{ 'appdatastores'|local }}" class="btn btn-default">{{ _( "Apps data" ) }}</a>
+			</div>
 
+	        <div class="well">
 	        <h2>{{ _( "Sessions" ) }}</h2>
-            {% if data.sessions %}
-                <h3>{{ _( "Browsers" ) }}</h3>
-                <form class="form-group" action="{{ 'profile'|local }}" method="post">
-                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-                    {% for session in data.sessions %}
-                        <p>
-                            {{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
-	                        {% if session[ 'current' ] %}
-	                            &nbsp;<button class="btn btn-default disabled btn-xs" }}">{{ _( "Current session" ) }}</button>
-	                        {% else %}
-                                &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect" value="{{ session[ 'tokenauth_id' ] }}">{{ _( "Disconnect" ) }}</button>
-	                        {% endif %}
-                        </p>
-                    {% endfor %}
-                </form>
-            {% endif %}
-            {% if data.sessions_app %}
-	            <h3>{{ _( "Applications" ) }}</h3>
-	            <form class="form-group" action="{{ 'profile'|local }}" method="post">
-	                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-	                {% for session_app in data.sessions_app %}
-	                    <p>
-	                        {{ _( "Connected" ) }} {{ session_app[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
-	                        &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect_app" value="{{ session_app[ 'token_id' ] }}">{{ _( "Disconnect" ) }}</button>
-	                    </p>
-	                {% endfor %}
-	            </form>
-            {% endif %}
+		        {% if extended %}
+		            {% if data.sessions %}
+		                <h3>{{ _( "Browsers" ) }}</h3>
+		                <form class="form-group" action="{{ 'profile'|local }}" method="post">
+		                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+		                    {% for session in data.sessions %}
+		                        <p>
+		                            {{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
+			                        {% if session[ 'current' ] %}
+			                            &nbsp;<button class="btn btn-default disabled btn-xs" }}">{{ _( "Current session" ) }}</button>
+			                        {% else %}
+		                                &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect" value="{{ session[ 'tokenauth_id' ] }}">{{ _( "Disconnect" ) }}</button>
+			                        {% endif %}
+		                        </p>
+		                    {% endfor %}
+		                </form>
+		            {% endif %}
+		            {% if data.sessions_app %}
+			            <h3>{{ _( "Applications" ) }}</h3>
+			            <form class="form-group" action="{{ 'profile'|local }}" method="post">
+			                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+			                {% for session_app in data.sessions_app %}
+			                    <p>
+			                        {{ _( "Connected" ) }} {{ session_app[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
+			                        &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect_app" value="{{ session_app[ 'token_id' ] }}">{{ _( "Disconnect" ) }}</button>
+			                    </p>
+			                {% endfor %}
+			            </form>
+		            {% endif %}
+		        {% else %}
+		            {% if data.sessions %}
+		                <p>{{ data.sessions|length }} connected browsers</p>
+		            {% endif %}
+		            {% if data.sessions_app %}
+		                <p>{{ data.sessions_app|length }} connected apps</p>
+		            {% endif %}
+		        {% endif %}
+	        </div>
 
+	        <div class="well">
             <h2>{{ _( "Friends" )}}</h2>
             <span>
 	            <a href="{{ 'friends'|local }}" class="btn btn-default">{{ _( "Friends" ) }}</a>
 	            <a href="{{ 'messages'|local }}" class="btn btn-default">{{ _( "Messages" ) }}</a>
 	        </span>
-
+			</div>
 
             {% include "incpageextensions.html" %}
 
+			<div class="well">
 	        <h2>{{ _( "Developers" )}}</h2>
             <span>
 	            <a href="{{ 'apps'|local }}" class="btn btn-default">{{ _( "Applications" ) }}</a>
 	        </span>
+			</div>
 
             {% include "incfooter.html" %}
         </div>

@@ -186,11 +186,13 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			data = data( current_display_name, previous_display_names, sessions, sessions_app )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
+			                  extended = True if self.request.get( 'extended' ) == 'True' else False,
 			                  data = data )
 
 	def post( self ):
 		if self.ensure_is_logged_in():
 			self.check_CSRF()
+			extended = 'True' if self.request.get( 'extended' ) == 'True' else 'False'
 			disconnect_session_token = self.request.get( 'disconnect' )
 			disconnect_app_token = self.request.get( 'disconnect_app' )
 			if disconnect_session_token:
@@ -199,7 +201,7 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			elif disconnect_app_token:
 				EnkiModelRestAPITokenVerify.delete_token_by_id( disconnect_app_token )
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_APP())
-			self.redirect( enki.libutil.get_local_url( 'profile' ))
+			self.redirect( enki.libutil.get_local_url( 'profile', { 'extended' : extended }))
 
 
 class HandlerProfilePublic( enki.HandlerBase ):
