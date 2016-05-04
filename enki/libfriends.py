@@ -86,6 +86,12 @@ def exist_EnkiFriends( user_id ):
 	return count > 0
 
 
+def count_EnkiFriends( user_id ):
+	count = EnkiModelFriends.query( ndb.OR( EnkiModelFriends.friends == user_id,
+	                                         EnkiModelFriends.friends == user_id )).count()
+	return count
+
+
 def fetch_EnkiFriends_by_user( user ):
 	list = EnkiModelFriends.query( EnkiModelFriends.friends == user ).fetch()
 	return list

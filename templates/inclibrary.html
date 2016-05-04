@@ -8,7 +8,7 @@
 					<h2>{{ _( "Library" )}}</h2>
                 </div>
 				<div class="col-sm-2" align="right">
-					<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "Show details" ) }}{% endif %}</button>
+					<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
                 </div>
             </div>
         </fieldset>
@@ -73,6 +73,9 @@
         {% endif %}
 		{% if data[ 3 ] %}
             <p>{{ data[ 3 ]|length }} licences activated</p>
+        {% endif %}
+		{% if not data[ 1 ] and not data[ 2 ] and not data[ 3 ] %}
+			<p>0 licences</p>
         {% endif %}
     {% endif %}
 </div>

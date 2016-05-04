@@ -72,11 +72,11 @@ def refresh_EnkiModelRestAPIConnectToken_non_expiring():
 
 
 def apps_list( user_id ):
-		list = []
-		apps = EnkiModelApp.fetch_by_user_id( user_id )
-		for app in apps:
-			list.append([ app.name, str( app.key.id()), app.secret, app.time_created ])
-		return list
+	list = []
+	apps = EnkiModelApp.fetch_by_user_id( user_id )
+	for app in apps:
+		list.append([ app.name, str( app.key.id()), app.secret, app.time_created ])
+	return list
 
 
 def user_data_list( user_id ):

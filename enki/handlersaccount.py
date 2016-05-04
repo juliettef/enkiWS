@@ -7,9 +7,12 @@ import enki.libutil
 import enki.libuser
 import enki.libdisplayname
 import enki.libforum
+import enki.libfriends
+import enki.libmessage
 import enki.textmessages as MSG
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
+from enki.modelapp import EnkiModelApp
 
 
 class HandlerLogout( enki.HandlerBase ):
@@ -160,7 +163,9 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 
 	def get( self ):
 		if self.ensure_is_logged_in():
-			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, sessions, sessions_app' )
+			extended = True if self.request.get( 'extended' ) == 'True' else False
+
+			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, friends, messages, sessions, sessions_app, apps' )
 
 			current_display_name = ''
 			previous_display_names = ''
@@ -183,10 +188,18 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			for item in list:
 				sessions_app.append({ 'token_id' : item.key.id(), 'time_created' : item.time_created })
 
-			data = data( current_display_name, previous_display_names, sessions, sessions_app )
+			friends = 0
+			messages = 0
+			apps = 0
+			if not extended:
+				friends = enki.libfriends.count_EnkiFriends( self.user_id )
+				messages = enki.libmessage.count_EnkiMessage_by_recipient( self.user_id )
+				apps = EnkiModelApp.count_by_user_id( self.user_id )
+
+			data = data( current_display_name, previous_display_names, friends, messages, sessions, sessions_app, apps )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
-			                  extended = True if self.request.get( 'extended' ) == 'True' else False,
+			                  extended = extended,
 			                  data = data )
 
 	def post( self ):

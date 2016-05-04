@@ -48,6 +48,11 @@ def exist_EnkiMessage_by_recipient( user_id ):
 	return count > 0
 
 
+def count_EnkiMessage_by_recipient( user_id ):
+	count = EnkiModelMessage.query( EnkiModelMessage.recipient == user_id ).count()
+	return count
+
+
 def fetch_EnkiMessage_by_recipient( user_id ):
 	list = EnkiModelMessage.query( EnkiModelMessage.recipient == user_id ).fetch()
 	return list

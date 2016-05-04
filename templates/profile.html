@@ -37,7 +37,7 @@
 								<h2>{{ _( "Public info" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "Show details" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
@@ -47,15 +47,15 @@
 	                    <a href="{{ 'displayname'|local }}" class="btn btn-info">{{ _( "Set display name" ) }}</a></div>
 	            {% else %}
 			        {% if extended %}
-		                <p>{{ _( "Public user profile and forum posts:" )}} <a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
-		                <p>{{ _( "User Id:" )}} {{ data.current_display_name.user_id }}</p>
 		                <p>{{ _( "Current display name:" )}} {{ data.current_display_name.display_name }} &nbsp;<a href="{{ 'displayname'|local }}" class="btn btn-default btn-xs">{{ _( "Change display Name" ) }}</a></p>
 		                {% if data.previous_display_names %}
 		                    <p>{{ ngettext( "Past display name:", "Past display names:", data.previous_display_names | count ) }} {{ data.previous_display_names | join(', ') }}</p>
 		                {% endif %}
+		                <p>{{ _( "Public user profile and forum posts:" )}} <a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
+		                <p>{{ _( "User Id:" )}} {{ data.current_display_name.user_id }}</p>
 			        {% else %}
-				        <p><a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
-				        <p>{{ data.current_display_name.display_name }} &nbsp;<a href="{{ 'displayname'|local }}" class="btn btn-default btn-xs">{{ _( "Change display Name" ) }}</a></p>
+				        <p>{{ data.current_display_name.display_name }}</p>
+		                <p><a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
 			        {% endif %}
 	            {% endif %}
 	        </div>
@@ -70,14 +70,24 @@
 								<h2>{{ _( "Account Settings" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "Show details" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
 	            </form>
-		        <a href="{{ 'connectedaccounts'|local }}" class="btn btn-default">{{ _( "Connected accounts" ) }}</a>
-	            <a href="{{ 'accountdelete'|local }}" class="btn btn-default">{{ _( "Delete account" )}}</a>
-		        <a href="{{ 'appdatastores'|local }}" class="btn btn-default">{{ _( "Apps data" ) }}</a>
+		        {% if extended %}
+		            <a href="{{ 'connectedaccounts'|local }}" class="btn btn-default">{{ _( "Connected accounts" ) }}</a>
+	                <a href="{{ 'accountdelete'|local }}" class="btn btn-default">{{ _( "Delete account" )}}</a>
+		            <a href="{{ 'appdatastores'|local }}" class="btn btn-default">{{ _( "Apps data" ) }}</a>
+		        {% else %}
+		            <form class="form-group" action="{{ 'profile'|local }}" method="post">
+						<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+						<input type="hidden" name="anchor" value="account">
+						<fieldset>
+							<button class="btn btn-default" type="submit" name="extended" value=True>{{ _( "Manage" ) }}</button>
+		                </fieldset>
+	                </form>
+		        {% endif %}
 			</div>
 
 	        <div class="well">
@@ -90,7 +100,7 @@
 								<h2>{{ _( "Connected Applications" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "Show details" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
@@ -144,15 +154,20 @@
 								<h2>{{ _( "Friends" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "Show details" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
 	            </form>
-	            <span>
-		            <a href="{{ 'friends'|local }}" class="btn btn-default">{{ _( "Friends" ) }}</a>
-		            <a href="{{ 'messages'|local }}" class="btn btn-default">{{ _( "Messages" ) }}</a>
-		        </span>
+		        {% if extended %}
+		            <span>
+			            <a href="{{ 'friends'|local }}" class="btn btn-default">{{ _( "Friends" ) }}</a>
+			            <a href="{{ 'messages'|local }}" class="btn btn-default">{{ _( "Messages" ) }}</a>
+			        </span>
+		        {% else %}
+		                <p>{{ data.friends }} friends</p>
+		                <p>{{ data.messages }} messages</p>
+		        {% endif %}
 			</div>
 
             {% include "incpageextensions.html" %}
@@ -167,14 +182,18 @@
 								<h2>{{ _( "Developers" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "Show details" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
 	            </form>
-	            <span>
-		            <a href="{{ 'apps'|local }}" class="btn btn-default">{{ _( "Applications" ) }}</a>
-		        </span>
+				{% if extended %}
+		            <span>
+			            <a href="{{ 'apps'|local }}" class="btn btn-default">{{ _( "Applications" ) }}</a>
+			        </span>
+				{% else %}
+		                <p>{{ data.apps }} apps</p>
+		        {% endif %}
 			</div>
 
             {% include "incfooter.html" %}
