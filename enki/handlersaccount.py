@@ -212,9 +212,11 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			if disconnect_session_token:
 				enki.libuser.delete_session_token_auth( disconnect_session_token )
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_SESSION())
+				extended = 'True'
 			elif disconnect_app_token:
 				EnkiModelRestAPITokenVerify.delete_token_by_id( disconnect_app_token )
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_APP())
+				extended = 'True'
 			self.redirect( enki.libutil.get_local_url( 'profile', { 'extended' : extended, '_fragment' : anchor }))
 
 
