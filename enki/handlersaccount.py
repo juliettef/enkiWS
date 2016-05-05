@@ -106,7 +106,7 @@ class HandlerReauthenticate( enki.HandlerBase ):
 					self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': self.enki_user.email }))
 
 
-class HandlerConnectedAccounts( enki.HandlerBaseReauthenticate ):
+class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 
 	def get_reauthenticated( self ):
 		data = collections.namedtuple( 'data', 'email, allow_change_pw, auth_providers, enough_accounts' )
@@ -135,7 +135,7 @@ class HandlerConnectedAccounts( enki.HandlerBaseReauthenticate ):
 		enough_accounts = self.has_enough_accounts()
 
 		data = data( email, allow_change_pw, auth_providers, enough_accounts )
-		self.render_tmpl( 'connectedaccounts.html',
+		self.render_tmpl( 'accountconnect.html',
 		                  active_menu = 'profile',
 		                  data = data )
 
@@ -156,7 +156,7 @@ class HandlerConnectedAccounts( enki.HandlerBaseReauthenticate ):
 			self.remove_authid( deregister )
 			provider_name = str( deregister[ :deregister.find( ':' )])
 			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ))
-		self.redirect( enki.libutil.get_local_url( 'connectedaccounts' ))
+		self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
 
 class HandlerProfile( enki.HandlerBaseReauthenticate ):
@@ -733,7 +733,7 @@ class HandlerAccountDeleteConfirm( enki.HandlerBase ):
 routes_account = [ webapp2.Route( '/login', HandlerLogin, name = 'login' ),
                    webapp2.Route( '/reauthenticate', HandlerReauthenticate, name = 'reauthenticate' ),
 		           webapp2.Route( '/logout', HandlerLogout, name = 'logout' ),
-		           webapp2.Route( '/connectedaccounts', HandlerConnectedAccounts, name = 'connectedaccounts' ),
+		           webapp2.Route( '/accountconnect', HandlerAccountConnect, name = 'accountconnect' ),
 				   webapp2.Route( '/profile', HandlerProfile, name = 'profile' ),
 				   webapp2.Route( '/u/<useridnumber>', HandlerProfilePublic, name = 'profilepublic' ),
 				   webapp2.Route( '/register', HandlerRegister, name = 'register' ),

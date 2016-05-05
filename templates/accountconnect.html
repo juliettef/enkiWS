@@ -28,7 +28,7 @@
 
             {% if data.auth_providers %}
                 <h2>{{ _( "Third party authentication" ) }}</h2>
-                <form class="form-group" action="{{ 'connectedaccounts'|local  }}" method="post">
+                <form class="form-group" action="{{ 'accountconnect'|local  }}" method="post">
                     <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 	                <table class="table table-striped table-hover ">
 		                <thead>

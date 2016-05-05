@@ -623,7 +623,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			relevant_pages = { '/forums', '/store' }
 			relevant_paths = { '/f/', '/t/', '/p/' }
 			if self.is_logged_in():
-				relevant_pages |= { '/profile', '/connectedaccounts', '/displayname', '/emailchange', '/passwordchange', '/friends', '/messages', '/apps', '/appdatastores' }
+				relevant_pages |= { '/profile', '/accountconnect', '/displayname', '/emailchange', '/passwordchange', '/friends', '/messages', '/apps', '/appdatastores' }
 				# note: '/reauthenticate' not included in relevant_pages as users should only be sent there explicitely
 				relevant_paths |= { '/u/' }
 			# Choose the redirection
