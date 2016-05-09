@@ -137,12 +137,13 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 		data = data( email, allow_change_pw, auth_providers, enough_accounts )
 		self.render_tmpl( 'accountconnect.html',
 		                  active_menu = 'profile',
+		                  authhandlers = settings.HANDLERS,
 		                  data = data )
 
 	def post_reauthenticated( self, params ):
 		block = params.get( 'block' )
 		unblock = params.get( 'unblock' )
-		# register = params.get( 'register' ) # TODO
+		register = params.get( 'register' )
 		deregister = params.get( 'deregister' )
 		if block and block not in self.enki_user.auth_ids_provider_blocked:
 			self.enki_user.auth_ids_provider_blocked.append( block )
@@ -156,6 +157,8 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 			self.remove_authid( deregister )
 			provider_name = str( deregister[ :deregister.find( ':' )])
 			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ))
+		if register:    # initiate adding a new authentication method to the account
+			self.session[ 'merge_request' ] = { 'from_user' : self.enki_user.key.id(), 'for_provider' : register }
 		self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
 
