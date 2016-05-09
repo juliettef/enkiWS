@@ -580,30 +580,38 @@ class HandlerBase( webapp2.RequestHandler ):
 
 		if authId:
 		# modify existing or create user
-			user = self.get_or_create_user_from_authid( authId, email, allow_create = False )
-			if self.is_logged_in() and user and self.user_id == user.key.id():   # refresh the reauthenticated status
-				self.session[ 'reauth_time' ] = datetime.datetime.now()
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.REAUTHENTICATED())
-				self.redirect_to_relevant_page()
+			# check if it's a merge request
+			add_auth_login_request = self.session.pop( 'add_auth_login_request', '' )
+			if add_auth_login_request: # TODO: check it's step 1
+				# store the new auth prov + id in the session, and send user to a new handlersaccount AccountAddAuthLoginCallback # TODO
+				self.session[ 'add_auth_login_request' ] = { 'step': 2, 'from_user': self.user_id, 'for_authid': authId }
+				# TODO: redirect
 				return
-			if user:
-				self.log_in_session_token_create( user )
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.LOGGED_IN())
-				self.redirect_to_relevant_page()
 			else:
-				# generate & store a verification token and the auth provider. save the token number in the session.
-				register_token =  EnkiModelTokenVerify.get_by_authid_type( authId, 'register' )
-				if register_token:
-					# if a token already exists, get the token value and update the email
-					token = register_token.token
-					register_token.email = email # update in case the user changed their email or modified their email access permission
+				user = self.get_or_create_user_from_authid( authId, email, allow_create = False )
+				if self.is_logged_in() and user and self.user_id == user.key.id():   # refresh the reauthenticated status
+					self.session[ 'reauth_time' ] = datetime.datetime.now()
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.REAUTHENTICATED())
+					self.redirect_to_relevant_page()
+					return
+				if user:
+					self.log_in_session_token_create( user )
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
+					self.redirect_to_relevant_page()
 				else:
-					# create a new token
-					token = security.generate_random_string( entropy = 256 )
-					register_token = EnkiModelTokenVerify( token = token, email = email, auth_ids_provider = authId, type = 'register' )
-				register_token.put()
-				self.session[ 'tokenregisterauth' ] = token
-				self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
+					# generate & store a verification token and the auth provider. save the token number in the session.
+					register_token =  EnkiModelTokenVerify.get_by_authid_type( authId, 'register' )
+					if register_token:
+						# if a token already exists, get the token value and update the email
+						token = register_token.token
+						register_token.email = email # update in case the user changed their email or modified their email access permission
+					else:
+						# create a new token
+						token = security.generate_random_string( entropy = 256 )
+						register_token = EnkiModelTokenVerify( token = token, email = email, auth_ids_provider = authId, type = 'register' )
+					register_token.put()
+					self.session[ 'tokenregisterauth' ] = token
+					self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
 		else:
 			self.redirect_to_relevant_page()
 

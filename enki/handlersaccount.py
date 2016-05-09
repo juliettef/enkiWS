@@ -148,9 +148,9 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 		if register:  # initiate adding a new authentication method to the account
 			for authhandler in settings.HANDLERS:
 				if register == authhandler.get_provider_name( ):
-					self.session[ 'merge_request' ] = { 'from_user': self.enki_user.key.id( ),
+					self.session[ 'add_auth_login_request' ] = { 'step': 1, 'from_user': self.enki_user.key.id( ),
 					                                    'for_provider': register }
-					self.redirect( authhandler.get_button( ).href )
+					self.redirect( authhandler.get_button().href )
 					break
 		else:
 			if deregister:
