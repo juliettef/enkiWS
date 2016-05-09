@@ -59,9 +59,7 @@
 										{% for authhandler in authhandlers %}
 											{% if item.provider_name == authhandler.get_provider_name() %}
 					                            {% set oauthbutton = authhandler.get_button() %}
-						                        <a href="{{ oauthbutton.href }}" class="btn btn-oauth btn-{{ item.provider_name|lower }} btn-xs">
-							                        <i class="i-oauth fa {{ oauthbutton.icon }}"></i> {{ _( "Add login" )}}
-						                        </a>
+												<button class="btn btn-oauth btn-{{ item.provider_name|lower }} btn-xs" type="submit" name="register" value="{{ item.provider_name }}"><i class="i-oauth fa {{ oauthbutton.icon }}"></i> {{ _( "Register" )}}</button>
 											{% endif %}
 					                    {% endfor %}
 									{% endif %}

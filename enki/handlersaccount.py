@@ -141,25 +141,31 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 		                  data = data )
 
 	def post_reauthenticated( self, params ):
-		block = params.get( 'block' )
-		unblock = params.get( 'unblock' )
 		register = params.get( 'register' )
 		deregister = params.get( 'deregister' )
-		if block and block not in self.enki_user.auth_ids_provider_blocked:
-			self.enki_user.auth_ids_provider_blocked.append( block )
-			self.enki_user.put()
-			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_BLOCKED( block ))
-		if unblock and unblock in self.enki_user.auth_ids_provider_blocked:
-			self.enki_user.auth_ids_provider_blocked.remove( unblock )
-			self.enki_user.put()
-			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_UNBLOCKED( unblock ))
-		if deregister:
-			self.remove_authid( deregister )
-			provider_name = str( deregister[ :deregister.find( ':' )])
-			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ))
-		if register:    # initiate adding a new authentication method to the account
-			self.session[ 'merge_request' ] = { 'from_user' : self.enki_user.key.id(), 'for_provider' : register }
-		self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
+		block = params.get( 'block' )
+		unblock = params.get( 'unblock' )
+		if register:  # initiate adding a new authentication method to the account
+			for authhandler in settings.HANDLERS:
+				if register == authhandler.get_provider_name( ):
+					self.session[ 'merge_request' ] = { 'from_user': self.enki_user.key.id( ),
+					                                    'for_provider': register }
+					self.redirect( authhandler.get_button( ).href )
+					break
+		else:
+			if deregister:
+				self.remove_authid( deregister )
+				provider_name = str( deregister[ :deregister.find( ':' ) ] )
+				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ) )
+			if block and block not in self.enki_user.auth_ids_provider_blocked:
+				self.enki_user.auth_ids_provider_blocked.append( block )
+				self.enki_user.put()
+				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_BLOCKED( block ))
+			if unblock and unblock in self.enki_user.auth_ids_provider_blocked:
+				self.enki_user.auth_ids_provider_blocked.remove( unblock )
+				self.enki_user.put()
+				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_UNBLOCKED( unblock ))
+			self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
 
 class HandlerProfile( enki.HandlerBaseReauthenticate ):
