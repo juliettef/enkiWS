@@ -70,24 +70,14 @@
 								<h2>{{ _( "Account Settings" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs disabled" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
 	            </form>
-		        {% if extended %}
-		            <a href="{{ 'accountconnect'|local }}" class="btn btn-default">{{ _( "Connected accounts" ) }}</a>
-	                <a href="{{ 'accountdelete'|local }}" class="btn btn-default">{{ _( "Delete account" )}}</a>
-		            <a href="{{ 'appdatastores'|local }}" class="btn btn-default">{{ _( "Apps data" ) }}</a>
-		        {% else %}
-		            <form class="form-group" action="{{ 'profile'|local }}" method="post">
-						<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-						<input type="hidden" name="anchor" value="account">
-						<fieldset>
-							<button class="btn btn-default" type="submit" name="extended" value=True>{{ _( "Manage" ) }}</button>
-		                </fieldset>
-	                </form>
-		        {% endif %}
+	            <a href="{{ 'accountconnect'|local }}" class="btn btn-default">{{ _( "Connected accounts" ) }}</a>
+                <a href="{{ 'accountdelete'|local }}" class="btn btn-default">{{ _( "Delete account" )}}</a>
+	            <a href="{{ 'appdatastores'|local }}" class="btn btn-default">{{ _( "Apps data" ) }}</a>
 			</div>
 
 	        <div class="well">

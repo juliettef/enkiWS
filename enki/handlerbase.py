@@ -495,7 +495,7 @@ class HandlerBase( webapp2.RequestHandler ):
 	def set_authid( self, authId, user_id ):
 		# add a new auth Id to an existing account
 		user = ndb.Key( EnkiModelUser, user_id ).get()
-		if user:
+		if user and authId not in user.auth_ids_provider:
 			# add the authId to the account
 			user.auth_ids_provider.append( authId )
 			user.put()
@@ -580,10 +580,12 @@ class HandlerBase( webapp2.RequestHandler ):
 		# modify existing or create user
 			# check if it's a merge request
 			add_auth_login_request = self.session.pop( 'add_auth_login_request', '' )
-			if add_auth_login_request: # TODO: check it's step 1
-				# store the new auth prov + id in the session, and send user to a new handlersaccount AccountAddAuthLoginCallback # TODO
-				self.session[ 'add_auth_login_request' ] = { 'step': 2, 'from_user': self.user_id, 'for_authid': authId }
-				# TODO: redirect
+			if add_auth_login_request:
+				if add_auth_login_request[ 'step' ] == 1 and add_auth_login_request[ 'from_user' ] == self.user_id and add_auth_login_request[ 'for_provider' ] == loginInfo[ 'provider_name' ]:
+					# store the new auth prov + id in the session
+					self.session[ 'add_auth_login_request' ] = { 'step': 2, 'from_user': self.user_id, 'for_authid': authId }
+					self.session.pop( 'reauth_time' )   # force reauthentication
+					self.redirect( enki.libutil.get_local_url( 'loginadd' ))
 				return
 			else:
 				user = self.get_or_create_user_from_authid( authId, email, allow_create = False )

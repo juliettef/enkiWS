@@ -166,6 +166,22 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 			self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
 
+class HandlerLoginAdd( enki.HandlerBaseReauthenticate ):
+
+	def get_reauthenticated( self ):
+		# if there was a request to add an auth login method, process it
+		add_auth_login_request = self.session.pop( 'add_auth_login_request', '' )
+
+		if add_auth_login_request and add_auth_login_request[ 'step' ] == 2 and add_auth_login_request[
+			'from_user' ] == self.user_id:
+			# force the user to reauthenticate and if successful add the new auth id to the user
+			self.set_authid(add_auth_login_request[ 'for_authid' ], self.user_id)
+			self.add_infomessage('success', MSG.SUCCESS(), 'login method added: ' + str(add_auth_login_request[ 'for_authid' ]) + ' to user ' + str( self.user_id))
+		else:
+			pass
+			# redirect to profile?
+
+
 class HandlerProfile( enki.HandlerBaseReauthenticate ):
 
 	def get( self ):
@@ -739,6 +755,7 @@ routes_account = [ webapp2.Route( '/login', HandlerLogin, name = 'login' ),
                    webapp2.Route( '/reauthenticate', HandlerReauthenticate, name = 'reauthenticate' ),
 		           webapp2.Route( '/logout', HandlerLogout, name = 'logout' ),
 		           webapp2.Route( '/accountconnect', HandlerAccountConnect, name = 'accountconnect' ),
+				   webapp2.Route('/loginadd', HandlerLoginAdd, name = 'loginadd'),
 				   webapp2.Route( '/profile', HandlerProfile, name = 'profile' ),
 				   webapp2.Route( '/u/<useridnumber>', HandlerProfilePublic, name = 'profilepublic' ),
 				   webapp2.Route( '/register', HandlerRegister, name = 'register' ),

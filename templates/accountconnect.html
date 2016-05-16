@@ -42,10 +42,10 @@
 		                </thead>
 						<tbody>
 							{% for item in data.auth_providers %}
-							<tr {% if item.provider_name == app_success %}class="success"{% elif item.status == 'blocked' %}class="text-muted"{% endif %}>
+							<tr {% if item.status == 'blocked' %}class="text-muted"{% endif %}>
 								<td><i class="fa fa-{{ item.provider_name|lower }}"></i></td>
 							    <td>{{ item.provider_name }}</td>
-							    <td>{{ item.provider_uid }}
+							    <td>{{ item.provider_uid }}&nbsp;
 								    {% if item.status == 'registered' %}
 										<button class="btn btn-default btn-xs {% if not data.enough_accounts %}disabled{% endif %}" type="submit" name="deregister" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Deregister" )}}</button>
 									{% endif %}
