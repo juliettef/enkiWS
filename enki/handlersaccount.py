@@ -119,19 +119,18 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 		auth_providers = []
 		providers_temp_list = []    # temp list of providers the user registered or blocked
 		for item in self.enki_user.auth_ids_provider:   # registered, unblocked providers
-			colon = item.find( ':' )
-			provider_name = str( item[ :colon ])
+			provider_name, provider_uid = item.partition( ':' )[ ::2 ] # save even list items starting at 0
 			if provider_name not in self.enki_user.auth_ids_provider_blocked:
-				auth_providers.append({ 'provider_name': provider_name, 'provider_uid': str( item[ colon+1: ]), 'status': 'registered'})
+				auth_providers.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid ), 'status': 'registered' })
 				providers_temp_list.append( provider_name )
 		for item in self.enki_user.auth_ids_provider_blocked:   # blocked providers
 			provider_name = str( item )
-			auth_providers.append({ 'provider_name': provider_name, 'provider_uid': 'n/a', 'status': 'blocked'})
+			auth_providers.append({ 'provider_name': provider_name, 'provider_uid': 'n/a', 'status': 'blocked' })
 			providers_temp_list.append( provider_name )
 		for item in settings.HANDLERS:   # remaning providers
 			provider = item.get_provider_name()
 			if provider not in providers_temp_list:
-				auth_providers.append({ 'provider_name': provider, 'provider_uid': 'n/a', 'status': 'unregistered'})
+				auth_providers.append({ 'provider_name': provider, 'provider_uid': 'n/a', 'status': 'unregistered' })
 		enough_accounts = self.has_enough_accounts()
 
 		data = data( email, allow_change_pw, auth_providers, enough_accounts )
@@ -147,24 +146,23 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 		unblock = params.get( 'unblock' )
 		if register:  # initiate adding a new authentication method to the account
 			for authhandler in settings.HANDLERS:
-				if register == authhandler.get_provider_name( ):
-					self.session[ 'add_auth_login_request' ] = { 'step': 1, 'from_user': self.enki_user.key.id( ),
+				if register == authhandler.get_provider_name():
+					self.session[ 'add_auth_login_request' ] = { 'step': 1, 'from_user': self.enki_user.key.id(),
 					                                    'for_provider': register }
 					self.redirect( authhandler.get_button().href )
 					break
 		else:
 			if deregister:
 				self.remove_authid( deregister )
-				provider_name = str( deregister[ :deregister.find( ':' ) ] )
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ) )
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ))
 			if block and block not in self.enki_user.auth_ids_provider_blocked:
 				self.enki_user.auth_ids_provider_blocked.append( block )
 				self.enki_user.put()
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_BLOCKED( block ))
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_BLOCKED( block ))
 			if unblock and unblock in self.enki_user.auth_ids_provider_blocked:
 				self.enki_user.auth_ids_provider_blocked.remove( unblock )
 				self.enki_user.put()
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.AUTH_PROVIDER_UNBLOCKED( unblock ))
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_UNBLOCKED( unblock ))
 			self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
 
@@ -344,14 +342,12 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 		token = self.session.get( 'tokenregisterauth' )
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
 		if tokenEntity:
-			colon = tokenEntity.auth_ids_provider.find( ':' )
-			provider_name = str( tokenEntity.auth_ids_provider[ :colon ])
-			provider_uid = str( tokenEntity.auth_ids_provider[ colon+1: ])
+			provider_name, provider_uid = tokenEntity.partition(':')[ ::2 ]
 			self.render_tmpl( 'registeroauthconfirm.html',
 			                  active_menu = 'register',
 			                  token = tokenEntity,
 			                  provider_name = provider_name,
-			                  provider_uid = provider_uid )
+			                  provider_uid = str( provider_uid ))
 		else:
 			self.abort( 404 )
 
@@ -362,9 +358,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 			token = self.session.get( 'tokenregisterauth' )
 			tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
 			authId = tokenEntity.auth_ids_provider
-			colon = authId.find( ':' )
-			provider_name = str( authId[ :colon ])
-			provider_uid = str( authId[ colon+1: ])
+			provider_name, provider_uid = authId.partition(':')[ ::2 ]
 			auth_email = tokenEntity.email if tokenEntity.email else None
 			if choice == 'create':
 				if auth_email: # if the email is given by the provider, it is verified. Create the account.
@@ -403,7 +397,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 					                  active_menu = 'register',
 					                  token = tokenEntity,
 					                  provider_name = provider_name,
-					                  provider_uid = provider_uid,
+					                  provider_uid = str( provider_uid ),
 					                  error = error_message,
 					                  success = success )
 			elif choice == 'cancel':
@@ -679,8 +673,8 @@ class HandlerAccountDelete( enki.HandlerBase ):
 			password = True if self.enki_user.password else False
 			auth_provider = []
 			for item in self.enki_user.auth_ids_provider:
-				colon = item.find( ':' )
-				auth_provider.append({ 'provider_name': str( item[ :colon ]), 'provider_uid': str( item[ colon+1: ])})
+				provider_name, provider_uid = item.partition( ':' )[ ::2 ]
+				auth_provider.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid )})
 			has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id( ) ) else False
 			has_messages = 'debug c'
 			has_friends = 'debug d'

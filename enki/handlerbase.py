@@ -519,10 +519,8 @@ class HandlerBase( webapp2.RequestHandler ):
 			# no user with the same auth id, but there is a user with the same email: add the auth id to the account
 			user_with_same_email = EnkiModelUser.query( EnkiModelUser.email == email ).get()
 			if user_with_same_email:
-				colon = authId.find( ':' )
-				provider_name = str( authId[ :colon ])
-				provider_uid = str( authId[ colon+1: ])
-				self.send_email( email, MSG.SEND_EMAIL_AUTH_NEW_SUBJECT(), MSG.SEND_EMAIL_AUTH_NEW_BODY( enki.libutil.get_local_url( 'profile' ), provider_name, provider_uid ) )
+				provider_name, provider_uid = authId.partition( ':' )[ ::2 ]
+				self.send_email( email, MSG.SEND_EMAIL_AUTH_NEW_SUBJECT(), MSG.SEND_EMAIL_AUTH_NEW_BODY( enki.libutil.get_local_url( 'profile' ), str( provider_name ), str( provider_uid )))
 				user = self.set_authid( authId, user_with_same_email.key.id())
 		if not user and allow_create:
 			# create a new user
