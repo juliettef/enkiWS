@@ -150,7 +150,7 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 			for authhandler in settings.HANDLERS:
 				if register == authhandler.get_provider_name():
 					token = security.generate_random_string( entropy = 256 )
-					LoginAddToken = EnkiModelTokenVerify( token = token, user_id = self.enki_user.key.id(), auth_ids_provider = register, type = 'loginaddconfirm_1' )
+					LoginAddToken = EnkiModelTokenVerify( token = token, user_id = self.user_id, auth_ids_provider = register, type = 'loginaddconfirm_1' )
 					LoginAddToken.put()
 					self.redirect( authhandler.get_button().href )
 					break
@@ -185,8 +185,6 @@ class HandlerLoginAddConfirm( enki.HandlerBaseReauthenticate ):
 		else:
 			self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
-		# force the user to reauthenticate and if successful add the new auth id from the verify token to the user's account
-		# TODO: delete all user's addlogin tokens
 
 	def post_reauthenticated( self, params ):
 		choice = params.get( 'choice' )
@@ -198,9 +196,7 @@ class HandlerLoginAddConfirm( enki.HandlerBaseReauthenticate ):
 									  'login method added: ' + str( tokenEntity.auth_ids_provider ) +
 									  ' to user ' + str( self.user_id ))
 			tokenEntity.key.delete()
-			self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
-		else:
-			self.redirect_to_relevant_page()
+		self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
 
 class HandlerProfile( enki.HandlerBaseReauthenticate ):

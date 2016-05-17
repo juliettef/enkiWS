@@ -1,3 +1,5 @@
+import datetime
+
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
 
@@ -82,3 +84,8 @@ class EnkiModelTokenVerify( model.Model ):
 	@classmethod
 	def delete_token_by_id( cls, token_id ):
 		ndb.Key( cls, int( token_id )).delete()
+
+	@classmethod
+	def fetch_old_tokens_by_types( cls, days_old, types ):
+		list = cls.query( ndb.AND( cls.type.IN( types ) , cls.time_created <= ( datetime.datetime.now( ) - datetime.timedelta( days = days_old )))).fetch( keys_only = True )
+		return list

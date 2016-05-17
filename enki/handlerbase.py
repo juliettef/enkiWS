@@ -590,10 +590,9 @@ class HandlerBase( webapp2.RequestHandler ):
 					LoginAddToken.auth_ids_provider = auth_id
 					LoginAddToken.type = 'loginaddconfirm_2'
 					LoginAddToken.put()
-					self.session.pop( 'reauth_time' )  # force reauthentication
 					self.redirect( enki.libutil.get_local_url( 'loginaddconfirm' ))
 				else:
-					self.add_infomessage( 'success', MSG.INFORMATION(), 'You can already use this login id' + str( auth_id ))
+					self.add_infomessage( 'success', MSG.INFORMATION(), 'Already registered ' + str( auth_id ))
 					self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 				return
 			else:
@@ -736,11 +735,12 @@ class HandlerBase( webapp2.RequestHandler ):
 		likelyhood = 10 # occurs with a probability of 1%
 		number = random.randint( 1, 1000 )
 		if number < likelyhood:
-			ndb.delete_multi_async ( self.fetch_old_backoff_timers( 3 ))
-			ndb.delete_multi_async ( self.fetch_old_auth_tokens( 3 ))
-			ndb.delete_multi_async ( self.fetch_old_sessions( 30 ))
-			ndb.delete_multi_async ( enki.librestapi.fetch_EnkiModelRestAPIConnectToken_expired())
-			ndb.delete_multi_async ( enki.librestapi.fetch_EnkiModelRestAPIDataStore_expired())
+			ndb.delete_multi_async( self.fetch_old_backoff_timers( 3 ))
+			ndb.delete_multi_async( self.fetch_old_auth_tokens( 3 ))
+			ndb.delete_multi_async( self.fetch_old_sessions( 30 ))
+			ndb.delete_multi_async( enki.librestapi.fetch_EnkiModelRestAPIConnectToken_expired())
+			ndb.delete_multi_async( enki.librestapi.fetch_EnkiModelRestAPIDataStore_expired())
+			ndb.delete_multi_async( EnkiModelTokenVerify.fetch_old_tokens_by_types( 0.007, [ 'loginaddconfirm_1', 'loginaddconfirm_2', 'loginaddconfirm_3' ]))
 			enki.librestapi.refresh_EnkiModelRestAPIConnectToken_non_expiring()
 
 
