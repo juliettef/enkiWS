@@ -82,6 +82,11 @@ def exist_EnkiUser( email ):
 	return count > 0
 
 
+def exist_Auth_Id( auth_id ):
+	count = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == auth_id ).count( 1 )
+	return count > 0
+
+
 def fetch_key_AuthToken_by_user_id_token( user_id, token ):
 	entity = EnkiModelTokenAuth.query( ndb.AND( EnkiModelTokenAuth.user_id == user_id,
 	                                            EnkiModelTokenAuth.token == token )).fetch( keys_only = True )

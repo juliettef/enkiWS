@@ -492,22 +492,26 @@ class HandlerBase( webapp2.RequestHandler ):
 
 
 	@db.transactional
-	def set_authid( self, authId, user_id ):
+	def set_auth_id( self, auth_id, user_id ):
 		# add a new auth Id to an existing account
-		user = ndb.Key( EnkiModelUser, user_id ).get()
-		if user and authId not in user.auth_ids_provider:
-			# add the authId to the account
-			user.auth_ids_provider.append( authId )
-			user.put()
-			return user
+		user_has_same_auth_id = enki.libuser.exist_Auth_Id( auth_id )
+		if not user_has_same_auth_id:
+			user = ndb.Key( EnkiModelUser, user_id ).get()
+			if user:
+				# add the auth_id to the account
+				user.auth_ids_provider.append( auth_id )
+				user.put()
+				return user
+			else:
+				return None
 		else:
 			return None
 
 
 	@db.transactional
-	def get_or_create_user_from_authid( self, authId, email = None, allow_create = False ):
+	def get_or_create_user_from_authid( self, auth_id, email = None, allow_create = False):
 		user = None
-		user_with_same_auth_id = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == authId ).get()
+		user_with_same_auth_id = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == auth_id ).get()
 		if user_with_same_auth_id:
 			# if a user with the same auth id already exists but has a blank email: add the email to the account.
 			# note: if the account has an email, we don't overwrite it.
@@ -519,21 +523,21 @@ class HandlerBase( webapp2.RequestHandler ):
 			# no user with the same auth id, but there is a user with the same email: add the auth id to the account
 			user_with_same_email = EnkiModelUser.query( EnkiModelUser.email == email ).get()
 			if user_with_same_email:
-				provider_name, provider_uid = authId.partition( ':' )[ ::2 ]
+				provider_name, provider_uid = auth_id.partition(':')[ ::2]
 				self.send_email( email, MSG.SEND_EMAIL_AUTH_NEW_SUBJECT(), MSG.SEND_EMAIL_AUTH_NEW_BODY( enki.libutil.get_local_url( 'profile' ), str( provider_name ), str( provider_uid )))
-				user = self.set_authid( authId, user_with_same_email.key.id())
+				user = self.set_auth_id( auth_id, user_with_same_email.key.id( ) )
 		if not user and allow_create:
 			# create a new user
-			user = EnkiModelUser( email = email, auth_ids_provider = [ authId ])
+			user = EnkiModelUser( email = email, auth_ids_provider = [ auth_id])
 			user.put()
 		return user
 
 
 	@db.transactional
-	def remove_authid( self, authid_to_remove ):
+	def remove_auth_id( self, auth_id_to_remove ):
 	# remove an auth Id from a user account
-		if self.has_enough_accounts() and ( authid_to_remove in self.enki_user.auth_ids_provider ):
-			index = self.enki_user.auth_ids_provider.index( authid_to_remove )
+		if self.has_enough_accounts() and ( auth_id_to_remove in self.enki_user.auth_ids_provider):
+			index = self.enki_user.auth_ids_provider.index( auth_id_to_remove)
 			del self.enki_user.auth_ids_provider[ index ]
 			self.enki_user.put()
 			return True
@@ -574,21 +578,26 @@ class HandlerBase( webapp2.RequestHandler ):
 		if loginInfo[ 'email' ] and loginInfo[ 'email_verified' ] == True:
 			email = loginInfo[ 'email' ]
 		# get the authId from the auth provider
-		authId = loginInfo[ 'provider_name' ] + ':' + loginInfo[ 'provider_uid' ]
+		auth_id = loginInfo[ 'provider_name' ] + ':' + loginInfo[ 'provider_uid' ]
 
-		if authId:
+		if auth_id:
 		# modify existing or create user
-			# check if it's a merge request
-			add_auth_login_request = self.session.pop( 'add_auth_login_request', '' )
-			if add_auth_login_request:
-				if add_auth_login_request[ 'step' ] == 1 and add_auth_login_request[ 'from_user' ] == self.user_id and add_auth_login_request[ 'for_provider' ] == loginInfo[ 'provider_name' ]:
+			# check if it's an add login method request
+			LoginAddToken = EnkiModelTokenVerify.get_by_user_id_auth_id_type( user_id = self.user_id, auth_id = loginInfo[ 'provider_name' ], type = 'loginaddconfirm_1' )
+			if LoginAddToken:
+				if not enki.libuser.exist_Auth_Id( auth_id ):
 					# store the new auth prov + id in the session
-					self.session[ 'add_auth_login_request' ] = { 'step': 2, 'from_user': self.user_id, 'for_authid': authId }
-					self.session.pop( 'reauth_time' )   # force reauthentication
-					self.redirect( enki.libutil.get_local_url( 'loginadd' ))
+					LoginAddToken.auth_ids_provider = auth_id
+					LoginAddToken.type = 'loginaddconfirm_2'
+					LoginAddToken.put()
+					self.session.pop( 'reauth_time' )  # force reauthentication
+					self.redirect( enki.libutil.get_local_url( 'loginaddconfirm' ))
+				else:
+					self.add_infomessage( 'success', MSG.INFORMATION(), 'You can already use this login id' + str( auth_id ))
+					self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 				return
 			else:
-				user = self.get_or_create_user_from_authid( authId, email, allow_create = False )
+				user = self.get_or_create_user_from_authid( auth_id, email, allow_create = False )
 				if self.is_logged_in() and user and self.user_id == user.key.id():   # refresh the reauthenticated status
 					self.session[ 'reauth_time' ] = datetime.datetime.now()
 					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.REAUTHENTICATED())
@@ -600,7 +609,7 @@ class HandlerBase( webapp2.RequestHandler ):
 					self.redirect_to_relevant_page()
 				else:
 					# generate & store a verification token and the auth provider. save the token number in the session.
-					register_token =  EnkiModelTokenVerify.get_by_authid_type( authId, 'register' )
+					register_token =  EnkiModelTokenVerify.get_by_auth_id_type( auth_id, 'register' )
 					if register_token:
 						# if a token already exists, get the token value and update the email
 						token = register_token.token
@@ -608,7 +617,7 @@ class HandlerBase( webapp2.RequestHandler ):
 					else:
 						# create a new token
 						token = security.generate_random_string( entropy = 256 )
-						register_token = EnkiModelTokenVerify( token = token, email = email, auth_ids_provider = authId, type = 'register' )
+						register_token = EnkiModelTokenVerify( token = token, email = email, auth_ids_provider = auth_id, type = 'register' )
 					register_token.put()
 					self.session[ 'tokenregisterauth' ] = token
 					self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
@@ -631,7 +640,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			relevant_pages = { '/forums', '/store' }
 			relevant_paths = { '/f/', '/t/', '/p/' }
 			if self.is_logged_in():
-				relevant_pages |= { '/profile', '/accountconnect', '/displayname', '/emailchange', '/passwordchange', '/friends', '/messages', '/apps', '/appdatastores' }
+				relevant_pages |= { '/profile', '/accountconnect', '/displayname', '/emailchange', '/passwordchange', '/friends', '/messages', '/apps', '/appdatastores', '/loginaddconfirm' }
 				# note: '/reauthenticate' not included in relevant_pages as users should only be sent there explicitely
 				relevant_paths |= { '/u/' }
 			# Choose the redirection

@@ -26,9 +26,19 @@ class EnkiModelTokenVerify( model.Model ):
 		entity = cls.query( ndb.AND( cls.user_id == user_id, cls.email == email, cls.type == type )).get()
 		return entity
 
+	@classmethod
+	def get_by_user_id_auth_id_type( cls, user_id, auth_id, type ):
+		entity = cls.query( ndb.AND( cls.user_id == user_id, cls.auth_ids_provider == auth_id, cls.type == type )).get()
+		return entity
+
+	@classmethod
+	def get_by_user_id_type( cls, user_id, type ):
+		entity = cls.query( ndb.AND( cls.user_id == user_id, cls.type == type )).get( )
+		return entity
+
 	@classmethod	
-	def get_by_authid_type( cls, authId, type ):
-		entity = cls.query( ndb.AND( cls.auth_ids_provider == authId, cls.type == type )).get()
+	def get_by_auth_id_type( cls, auth_id, type ):
+		entity = cls.query( ndb.AND( cls.auth_ids_provider == auth_id, cls.type == type )).get()
 		return entity
 
 	@classmethod
