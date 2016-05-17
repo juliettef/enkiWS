@@ -108,7 +108,7 @@ class HandlerReauthenticate( enki.HandlerBase ):
 
 class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 
-	def get_reauthenticated( self ):
+	def get_logged_in( self ):
 		data = collections.namedtuple( 'data', 'email, allow_change_pw, auth_providers, enough_accounts' )
 
 		email = self.enki_user.email
@@ -560,7 +560,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 class HandlerDisplayName( enki.HandlerBaseReauthenticate ):
 # set/change display name
 
-	def get_reauthenticated( self ):
+	def get_logged_in( self ):
 		self.session[ 'sessiondisplaynamerefpath' ] = self.session.pop( 'sessiondisplaynamerefpath', self.request.referrer )
 		self.session[ 'sessionreauth' ] = self.session[ 'sessiondisplaynamerefpath' ]
 		auto_generated = ''
@@ -611,7 +611,7 @@ class HandlerDisplayName( enki.HandlerBaseReauthenticate ):
 class HandlerEmailChange( enki.HandlerBaseReauthenticate ):
 # user requests an email change. Current email stored in rollback db
 
-	def get_reauthenticated( self ):
+	def get_logged_in( self ):
 		self.render_tmpl( 'emailchange.html',
 		                  active_menu = 'profile' )
 

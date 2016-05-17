@@ -21,7 +21,7 @@ from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 
 class HandlerApps( enki.HandlerBaseReauthenticate ):
 
-	def get_reauthenticated( self ):
+	def get_logged_in( self ):
 		self.render_tmpl( 'apps.html',
 		                  active_menu = 'profile',
 		                  data = enki.librestapi.apps_list( self.user_id ),
@@ -70,7 +70,7 @@ class HandlerApps( enki.HandlerBaseReauthenticate ):
 
 class HandlerAppDataStores( enki.HandlerBaseReauthenticate ):
 
-	def get_reauthenticated( self ):
+	def get_logged_in( self ):
 		data_list = enki.librestapi.user_data_list( self.user_id )
 		self.render_tmpl( 'appdatastores.html',
 		                  active_menu = 'profile',

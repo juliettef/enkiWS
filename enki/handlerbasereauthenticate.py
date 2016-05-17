@@ -18,7 +18,7 @@ from enki.modeluserpagedata import EnkiModelUserPageData
 class HandlerBaseReauthenticate( enki.HandlerBase ):
 # Force user reauthentication before posting data
 
-	def get_reauthenticated( self ):
+	def get_logged_in( self ):
 		if enki.libutil.is_debug():
 			raise ValueError( 'This must be overriden in the derived class.' )
 
@@ -30,7 +30,7 @@ class HandlerBaseReauthenticate( enki.HandlerBase ):
 
 	def get( self ):
 		if self.ensure_is_logged_in() and not self.post_user_page_data():
-			self.get_reauthenticated( )
+			self.get_logged_in()
 
 
 	def post( self ):
