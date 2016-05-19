@@ -42,7 +42,7 @@
 		                </thead>
 						<tbody>
 							{% for item in data.auth_providers %}
-							<tr {% if item.status == 'blocked' %}class="text-muted"{% endif %}>
+							<tr>
 								<td><i class="fa fa-{{ item.provider_name|lower }}"></i></td>
 							    <td>{{ item.provider_name }}</td>
 							    <td>{{ item.provider_uid }}&nbsp;
@@ -50,17 +50,12 @@
 										<button class="btn btn-default btn-xs {% if not data.enough_accounts %}disabled{% endif %}" type="submit" name="deregister" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Deregister" )}}</button>
 									{% endif %}
 							    </td>
-								<td>{% if item.status == 'blocked' %}
-										<button class="btn btn-default btn-xs" type="submit" name="unblock" value="{{ item.provider_name }}">{{ _( "Unblock" )}}</button>
-									{% else %}
-										{% for authhandler in authhandlers %}
-											{% if item.provider_name == authhandler.get_provider_name() %}
-					                            {% set oauthbutton = authhandler.get_button() %}
-												<button class="btn btn-oauth btn-{{ item.provider_name|lower }} btn-xs" type="submit" name="register" value="{{ item.provider_name }}"><i class="i-oauth fa {{ oauthbutton.icon }}"></i> {{ _( "Add login" )}}</button>
-											{% endif %}
-					                    {% endfor %}
-										<button class="btn btn-default btn-xs {% if not data.enough_accounts %}disabled{% endif %}" type="submit" name="block" value="{{ item.provider_name }}">{{ _( "Block provider" )}}</button>
-									{% endif %}
+								<td>{% for authhandler in authhandlers %}
+										{% if item.provider_name == authhandler.get_provider_name() %}
+				                            {% set oauthbutton = authhandler.get_button() %}
+											<button class="btn btn-oauth btn-{{ item.provider_name|lower }} btn-xs" type="submit" name="register" value="{{ item.provider_name }}"><i class="i-oauth fa {{ oauthbutton.icon }}"></i> {{ _( "Add login" )}}</button>
+										{% endif %}
+				                    {% endfor %}
 								</td>
 							</tr>
 							{% endfor %}

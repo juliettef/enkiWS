@@ -119,20 +119,15 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 			allow_change_pw = False
 
 		auth_providers = []
-		providers_temp_list = []    # temp list of providers the user registered or blocked
-		for item in self.enki_user.auth_ids_provider:   # registered, unblocked providers
+		providers_temp_list = []    # list of providers the user is registered with
+		for item in self.enki_user.auth_ids_provider:
 			provider_name, provider_uid = item.partition( ':' )[ ::2 ] # save even list items starting at 0
-			if provider_name not in self.enki_user.auth_ids_provider_blocked:
-				auth_providers.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid ), 'status': 'registered' })
-				providers_temp_list.append( provider_name )
-		for item in self.enki_user.auth_ids_provider_blocked:   # blocked providers
-			provider_name = str( item )
-			auth_providers.append({ 'provider_name': provider_name, 'provider_uid': 'n/a', 'status': 'blocked' })
+			auth_providers.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid ), 'status': 'registered' })
 			providers_temp_list.append( provider_name )
 		for item in settings.HANDLERS:   # remaning providers
 			provider = item.get_provider_name()
 			if provider not in providers_temp_list:
-				auth_providers.append({ 'provider_name': provider, 'provider_uid': 'n/a', 'status': 'unregistered' })
+				auth_providers.append({ 'provider_name': provider, 'provider_uid': 'none', 'status': 'unregistered' })
 		enough_accounts = self.has_enough_accounts()
 
 		data = data( email, allow_change_pw, auth_providers, enough_accounts )
@@ -144,8 +139,6 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 	def post_reauthenticated( self, params ):
 		register = params.get( 'register' )
 		deregister = params.get( 'deregister' )
-		block = params.get( 'block' )
-		unblock = params.get( 'unblock' )
 		if register:  # initiate adding a new authentication method to the account
 			for authhandler in settings.HANDLERS:
 				if register == authhandler.get_provider_name():
@@ -154,18 +147,9 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 					LoginAddToken.put()
 					self.redirect( authhandler.get_button().href )
 					break
-		else:
-			if deregister:
-				self.remove_auth_id( deregister)
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ))
-			if block and block not in self.enki_user.auth_ids_provider_blocked:
-				self.enki_user.auth_ids_provider_blocked.append( block )
-				self.enki_user.put()
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_BLOCKED( block ))
-			if unblock and unblock in self.enki_user.auth_ids_provider_blocked:
-				self.enki_user.auth_ids_provider_blocked.remove( unblock )
-				self.enki_user.put()
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_UNBLOCKED( unblock ))
+		elif deregister:
+			self.remove_auth_id( deregister)
+			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ))
 			self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
 
