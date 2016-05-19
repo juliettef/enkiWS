@@ -550,7 +550,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		providers = []
 		for provider in settings.HANDLERS:
 			for user_provider in self.enki_user.auth_ids_provider:
-				if provider.get_provider_name() in user_provider:
+				if ( provider.get_provider_name() in user_provider ) and ( provider not in providers ):
 					providers.append( provider )
 		return providers
 
