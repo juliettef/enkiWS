@@ -76,7 +76,7 @@ Note: if you'd prefer to configure PyCharm CE yourself see the [detailed tutoria
 1. Ensure you have python 2.7 and Google app Engine installed. To check it works, try running the enkiWS website locally.  
 1. Download and install [Pycharm CE](https://www.jetbrains.com/pycharm/download/)  
 1. Start Pycharm and open the project - set the project location to the directory enkiWS was extracted to (the parent folder of the .idea directory).  
-1. A *Load error: undefined path variables*, *GAE_PATH is undefined* warning is displayed. To fix it see the [PyCharm tutorial Method A step 5 onwards](http://www.enkisoftware.com/devlogpost-20141231-1-Python_Google_App_Engine_debugging_with_PyCharm_CE.html#pathvariable).
+1. A *Load error: undefined path variables*, *GAE_PATH is undefined* warning is displayed. To fix it see the [PyCharm tutorial Method A step 3.c. onwards](http://www.enkisoftware.com/devlogpost-20141231-1-Python_Google_App_Engine_debugging_with_PyCharm_CE.html#pathvariable).
 1. Note: if you get a message stating *No Python interpreter configured for the project*, go to File > Settings > Project:enkiWS > Project Interpreter and set the project interpreter to point to the location of *python.exe* on your computer (..\Python27\python.exe).
 1. Restart PyCharm
 1. You can now run / debug the project from PyCharm using one of the configurations provided (e.g. *GAE_config*).  
