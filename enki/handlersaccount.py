@@ -359,7 +359,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 		token = self.session.get( 'tokenregisterauth' )
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
 		if tokenEntity:
-			provider_name, provider_uid = tokenEntity.partition(':')[ ::2 ]
+			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition(':')[ ::2 ]
 			self.render_tmpl( 'registeroauthconfirm.html',
 			                  active_menu = 'register',
 			                  token = tokenEntity,
