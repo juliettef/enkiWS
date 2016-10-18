@@ -350,7 +350,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				token = security.generate_random_string( entropy = 256 )
 				emailToken = EnkiModelTokenVerify( token = token, email = email, type = 'register' )
 				emailToken.put()
-				link = enki.libutil.get_local_url( 'registerconfirm', { 'verifytoken': emailToken.token } )
+				link = enki.libutil.get_local_url( 'registerconfirm', { 'verifytoken': emailToken.token })
 				self.send_email( email, MSG.SEND_EMAIL_REGISTER_CONFIRM_SUBJECT(), MSG.SEND_EMAIL_REGISTER_CONFIRM_BODY( link ))
 				result = enki.libutil.ENKILIB_OK
 		return result
@@ -387,8 +387,8 @@ class HandlerBase( webapp2.RequestHandler ):
 					token = security.generate_random_string( entropy = 256 )
 					emailToken = EnkiModelTokenVerify( token = token, email = email, user_id = userId, type = 'emailchange' )
 					emailToken.put()
-				link = enki.libutil.get_local_url( 'emailchangeconfirm', { 'verifytoken': token } )
-				self.send_email( email, MSG.SEND_EMAIL_EMAIL_CHANGE_CONFIRM_SUBJECT( ), MSG.SEND_EMAIL_EMAIL_CHANGE_CONFIRM_BODY( link, email ))
+				link = enki.libutil.get_local_url( 'emailchangeconfirm', { 'verifytoken': token })
+				self.send_email( email, MSG.SEND_EMAIL_EMAIL_CHANGE_CONFIRM_SUBJECT(), MSG.SEND_EMAIL_EMAIL_CHANGE_CONFIRM_BODY( link, email ))
 				result = 'change'
 		if emailCurrent and emailCurrent != 'removed' and result != 'same':
 			# email the current, verified address in case they want to undo the change (useful if account has been hacked)
@@ -509,7 +509,7 @@ class HandlerBase( webapp2.RequestHandler ):
 
 
 	@db.transactional
-	def get_or_create_user_from_authid( self, auth_id, email = None, allow_create = False):
+	def get_or_create_user_from_authid( self, auth_id, email = None, allow_create = False ):
 		user = None
 		user_with_same_auth_id = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == auth_id ).get()
 		if user_with_same_auth_id:
@@ -521,14 +521,15 @@ class HandlerBase( webapp2.RequestHandler ):
 				user = user_with_same_auth_id
 		elif email:
 			# no user with the same auth id, but there is a user with the same email: add the auth id to the account
+			# Don't add the auth id to the account. Store it and send an email to add the auth id to the account
 			user_with_same_email = EnkiModelUser.query( EnkiModelUser.email == email ).get()
 			if user_with_same_email:
-				provider_name, provider_uid = auth_id.partition(':')[ ::2]
-				self.send_email( email, MSG.SEND_EMAIL_AUTH_NEW_SUBJECT(), MSG.SEND_EMAIL_AUTH_NEW_BODY( enki.libutil.get_local_url( 'profile' ), str( provider_name ), str( provider_uid )))
-				user = self.set_auth_id( auth_id, user_with_same_email.key.id( ) )
+				provider_name, provider_uid = auth_id.partition( ':' )[ ::2 ]
+				self.send_email( email, MSG.SEND_EMAIL_AUTH_NEW_SUBJECT(), MSG.SEND_EMAIL_AUTH_NEW_BODY( enki.libutil.get_local_url( 'accountconnect' ), str( provider_name ), str( provider_uid )))
+				user = self.set_auth_id( auth_id, user_with_same_email.key.id())
 		if not user and allow_create:
 			# create a new user
-			user = EnkiModelUser( email = email, auth_ids_provider = [ auth_id])
+			user = EnkiModelUser( email = email, auth_ids_provider = [ auth_id ])
 			user.put()
 		return user
 
@@ -536,8 +537,8 @@ class HandlerBase( webapp2.RequestHandler ):
 	@db.transactional
 	def remove_auth_id( self, auth_id_to_remove ):
 	# remove an auth Id from a user account
-		if self.has_enough_accounts() and ( auth_id_to_remove in self.enki_user.auth_ids_provider):
-			index = self.enki_user.auth_ids_provider.index( auth_id_to_remove)
+		if self.has_enough_accounts() and ( auth_id_to_remove in self.enki_user.auth_ids_provider ):
+			index = self.enki_user.auth_ids_provider.index( auth_id_to_remove )
 			del self.enki_user.auth_ids_provider[ index ]
 			self.enki_user.put()
 			return True
@@ -581,10 +582,11 @@ class HandlerBase( webapp2.RequestHandler ):
 		auth_id = loginInfo[ 'provider_name' ] + ':' + loginInfo[ 'provider_uid' ]
 
 		if auth_id:
-		# modify existing or create user
+			# Modify existing or create user
 			# check if it's an add login method request
 			LoginAddToken = EnkiModelTokenVerify.get_by_user_id_auth_id_type( user_id = self.user_id, auth_id = loginInfo[ 'provider_name' ], type = 'loginaddconfirm_1' )
 			if LoginAddToken:
+				# Add a login method
 				if not enki.libuser.exist_Auth_Id( auth_id ):
 					# store the new auth prov + id in the session
 					LoginAddToken.auth_ids_provider = auth_id
@@ -597,24 +599,26 @@ class HandlerBase( webapp2.RequestHandler ):
 				return
 			else:
 				user = self.get_or_create_user_from_authid( auth_id, email, allow_create = False )
-				if self.is_logged_in() and user and self.user_id == user.key.id():   # refresh the reauthenticated status
+				if self.is_logged_in() and user and self.user_id == user.key.id():
+					# Refresh the reauthenticated status
 					self.session[ 'reauth_time' ] = datetime.datetime.now()
 					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.REAUTHENTICATED())
 					self.redirect_to_relevant_page()
 					return
 				if user:
+					# Login
 					self.log_in_session_token_create( user )
 					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
 					self.redirect_to_relevant_page()
 				else:
-					# generate & store a verification token and the auth provider. save the token number in the session.
+					# New user
 					register_token =  EnkiModelTokenVerify.get_by_auth_id_type( auth_id, 'register' )
 					if register_token:
-						# if a token already exists, get the token value and update the email
+						# If a token already exists, get the token value and update the email
 						token = register_token.token
 						register_token.email = email # update in case the user changed their email or modified their email access permission
 					else:
-						# create a new token
+						# Create a new token
 						token = security.generate_random_string( entropy = 256 )
 						register_token = EnkiModelTokenVerify( token = token, email = email, auth_ids_provider = auth_id, type = 'register' )
 					register_token.put()

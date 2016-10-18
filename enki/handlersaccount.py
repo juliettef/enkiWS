@@ -354,7 +354,7 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 
 
 class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
-# create or edit user based on auth login info
+	# Create or edit user based on auth login info
 	def get( self ):
 		token = self.session.get( 'tokenregisterauth' )
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
@@ -370,7 +370,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 
 	def post( self ):
 		choice = self.request.get( 'choice' )
-		# step 1
+		# Step 1
 		if choice == 'create' or choice == 'cancel':
 			token = self.session.get( 'tokenregisterauth' )
 			tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
@@ -378,18 +378,19 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 			provider_name, provider_uid = authId.partition(':')[ ::2 ]
 			auth_email = tokenEntity.email if tokenEntity.email else None
 			if choice == 'create':
-				if auth_email: # if the email is given by the provider, it is verified. Create the account.
+				if auth_email:
+					# If the email is given by the provider, it is verified. Get or ceate the account and log the user in.
 					user = self.get_or_create_user_from_authid( authId, auth_email, allow_create = True )
 					if user: # login the user through auth
 						self.log_in_session_token_create( user )
-						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.LOGGED_IN())
+						self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
 					else: # user creation failed (timeout etc.)
 						self.add_infomessage( 'warning', MSG.WARNING(), MSG.AUTH_LOGIN_FAILED( provider_name ))
 					self.redirect_to_relevant_page()
 					tokenEntity.key.delete()
-					tokenEntity.key.delete()
 					self.session.pop( 'tokenregisterauth' )
-				else: # if the email isn't given by the provider, use the manually entered email.
+				else:
+					# If the email isn't given by the provider, use the manually entered email.
 					self.check_CSRF()
 					email = self.request.get( 'email' )
 					user = self.get_or_create_user_from_authid( authId, allow_create = True )
@@ -398,9 +399,8 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 					success = False
 					result = enki.libuser.validate_email( email )
 					if result == enki.libutil.ENKILIB_OK:
-						result = self.email_change_request( email )
-						# send an email for verification. Since it's not verified at this point, create the account without the email.
-						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTER_AUTH_ADD_EMAIL_INFO_EMAIL_SENT( email ) )
+						result = self.email_change_request( email )	# send an email for verification. Since it's not verified at this point, create the account without the email.
+						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTER_AUTH_ADD_EMAIL_INFO_EMAIL_SENT( email ))
 						if result == enki.handlerbase.ERROR_EMAIL_IN_USE:
 							self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
 						success = True
@@ -422,7 +422,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 				self.redirect_to_relevant_page()
 				tokenEntity.key.delete()
 				self.session.pop( 'tokenregisterauth' )
-		# step 2 (those choices will only be presented to the user if they successfully added an email manually).
+		# Step 2 (those choices will only be presented to the user if they successfully added an email manually).
 		elif choice == 'continue':
 			self.redirect_to_relevant_page()
 		elif choice == 'profile':
