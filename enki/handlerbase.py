@@ -508,25 +508,22 @@ class HandlerBase( webapp2.RequestHandler ):
 			return None
 
 
+	def get_user_from_authid( self, auth_id, email = None ):
+		user = self.get_or_create_user_from_authid( auth_id = auth_id, email = email, allow_create = False )
+		return user
+
+
 	@db.transactional
-	def get_or_create_user_from_authid( self, auth_id, email = None, allow_create = False ):
+	def get_or_create_user_from_authid( self, auth_id, email = None, allow_create = True ):
 		user = None
 		user_with_same_auth_id = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == auth_id ).get()
 		if user_with_same_auth_id:
 			# if a user with the same auth id already exists but has a blank email: add the email to the account.
-			# note: if the account has an email, we don't overwrite it.
+			# note: if the account has an email or they've removed their email, we don't overwrite it.
 			if email and user_with_same_auth_id.email == None:
 				user = self.set_email( email, user_with_same_auth_id.key.id())
 			else:
 				user = user_with_same_auth_id
-		elif email:
-			# no user with the same auth id, but there is a user with the same email: add the auth id to the account
-			# Don't add the auth id to the account. Store it and send an email to add the auth id to the account
-			user_with_same_email = EnkiModelUser.query( EnkiModelUser.email == email ).get()
-			if user_with_same_email:
-				provider_name, provider_uid = auth_id.partition( ':' )[ ::2 ]
-				self.send_email( email, MSG.SEND_EMAIL_AUTH_NEW_SUBJECT(), MSG.SEND_EMAIL_AUTH_NEW_BODY( enki.libutil.get_local_url( 'accountconnect' ), str( provider_name ), str( provider_uid )))
-				user = self.set_auth_id( auth_id, user_with_same_email.key.id())
 		if not user and allow_create:
 			# create a new user
 			user = EnkiModelUser( email = email, auth_ids_provider = [ auth_id ])
@@ -598,7 +595,7 @@ class HandlerBase( webapp2.RequestHandler ):
 					self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 				return
 			else:
-				user = self.get_or_create_user_from_authid( auth_id, email, allow_create = False )
+				user = self.get_user_from_authid( auth_id, email )
 				if self.is_logged_in() and user and self.user_id == user.key.id():
 					# Refresh the reauthenticated status
 					self.session[ 'reauth_time' ] = datetime.datetime.now()

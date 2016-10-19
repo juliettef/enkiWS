@@ -380,7 +380,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 			if choice == 'create':
 				if auth_email:
 					# If the email is given by the provider, it is verified. Get or ceate the account and log the user in.
-					user = self.get_or_create_user_from_authid( authId, auth_email, allow_create = True )
+					user = self.get_or_create_user_from_authid( authId, auth_email )
 					if user: # login the user through auth
 						self.log_in_session_token_create( user )
 						self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
@@ -393,7 +393,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 					# If the email isn't given by the provider, use the manually entered email.
 					self.check_CSRF()
 					email = self.request.get( 'email' )
-					user = self.get_or_create_user_from_authid( authId, allow_create = True )
+					user = self.get_or_create_user_from_authid( authId )
 					self.log_in_session_token_create( user )
 					error_message = ''
 					success = False
