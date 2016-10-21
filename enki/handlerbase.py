@@ -591,7 +591,7 @@ class HandlerBase( webapp2.RequestHandler ):
 					LoginAddToken.put()
 					self.redirect( enki.libutil.get_local_url( 'loginaddconfirm' ))
 				else:
-					self.add_infomessage( 'success', MSG.INFORMATION(), 'Already registered ' + str( auth_id ))
+					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.AUTH_PROVIDER_CANNOT_BE_ADDED( str( auth_id )))
 					self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 				return
 			else:
