@@ -82,6 +82,11 @@ def exist_EnkiUser( email ):
 	return count > 0
 
 
+def get_EnkiUser_by_auth_id( auth_id ):
+	entity = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == auth_id ).get()
+	return entity
+
+
 def exist_Auth_Id( auth_id ):
 	count = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == auth_id ).count( 1 )
 	return count > 0

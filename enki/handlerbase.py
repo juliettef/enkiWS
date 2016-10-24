@@ -516,7 +516,7 @@ class HandlerBase( webapp2.RequestHandler ):
 	@db.transactional
 	def get_or_create_user_from_authid( self, auth_id, email = None, allow_create = True ):
 		user = None
-		user_with_same_auth_id = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == auth_id ).get()
+		user_with_same_auth_id = enki.libuser.get_EnkiUser_by_auth_id( auth_id )
 		if user_with_same_auth_id:
 			# if a user with the same auth id already exists but has a blank email: add the email to the account.
 			# note: if the account has an email or they've removed their email, we don't overwrite it.
@@ -594,15 +594,16 @@ class HandlerBase( webapp2.RequestHandler ):
 					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.AUTH_PROVIDER_CANNOT_BE_ADDED( str( auth_id )))
 					self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 				return
-			else:
+			else: # TODO
 				user = self.get_user_from_authid( auth_id, email )
-				if self.is_logged_in() and user and self.user_id == user.key.id():
-					# Refresh the reauthenticated status
-					self.session[ 'reauth_time' ] = datetime.datetime.now()
-					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.REAUTHENTICATED())
-					self.redirect_to_relevant_page()
-					return
 				if user:
+					# Existing user
+					if self.is_logged_in() and self.user_id == user.key.id():
+						# Refresh the reauthenticated status
+						self.session[ 'reauth_time' ] = datetime.datetime.now()
+						self.add_infomessage( 'success', MSG.SUCCESS(), MSG.REAUTHENTICATED())
+						self.redirect_to_relevant_page()
+						return
 					# Login
 					self.log_in_session_token_create( user )
 					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
@@ -620,6 +621,7 @@ class HandlerBase( webapp2.RequestHandler ):
 						register_token = EnkiModelTokenVerify( token = token, email = email, auth_ids_provider = auth_id, type = 'register' )
 					register_token.put()
 					self.session[ 'tokenregisterauth' ] = token
+					# TODO: add a function to test if the email exists, and if so direct them to a page 'oauthwithexistingemail'
 					self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
 		else:
 			self.redirect_to_relevant_page()
