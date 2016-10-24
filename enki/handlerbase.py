@@ -621,8 +621,10 @@ class HandlerBase( webapp2.RequestHandler ):
 						register_token = EnkiModelTokenVerify( token = token, email = email, auth_ids_provider = auth_id, type = 'register' )
 					register_token.put()
 					self.session[ 'tokenregisterauth' ] = token
-					# TODO: add a function to test if the email exists, and if so direct them to a page 'oauthwithexistingemail'
-					self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
+					if enki.libuser.exist_EnkiUser( email ):
+						self.redirect( enki.libutil.get_local_url( 'registeroauthwithexistingemail' ))
+					else:
+						self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
 		else:
 			self.redirect_to_relevant_page()
 
