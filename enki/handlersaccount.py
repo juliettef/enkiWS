@@ -429,6 +429,33 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 			self.redirect( url )
 
 
+class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
+	# Create or edit user based on auth login info when the verified email already belongs to another user TODO: edit
+	def get( self ): # TODO: implement
+		token = self.session.get( 'tokenregisterauth' )
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
+		if tokenEntity:
+			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
+			provider_email = tokenEntity.email
+			email_user_has_pw = enki.libuser.user_has_password_by_email( provider_email )
+			user_providers = enki.libuser.get_user_auth_providers_by_email(provider_email)
+			self.render_tmpl( 'registeroauthwithexistingemail.html',
+			                  active_menu = 'register',
+			                  token = tokenEntity,
+							  email = provider_email,
+							  email_user_has_pw = email_user_has_pw,
+			                  provider_name = provider_name,
+			                  provider_uid = str( provider_uid ),
+							  authhandlers = user_providers,
+							  )
+		else:
+			self.abort( 404 )
+
+	def post( self ): # TODO: implement
+		pass
+
+
+
 class HandlerPasswordChange( enki.HandlerBase ):
 # change password - logged in user
 
@@ -760,6 +787,7 @@ routes_account = [ webapp2.Route( '/login', HandlerLogin, name = 'login' ),
 				   webapp2.Route( '/register', HandlerRegister, name = 'register' ),
 				   webapp2.Route( '/rc/<verifytoken>', HandlerRegisterConfirm, name = 'registerconfirm' ),
 				   webapp2.Route( '/registeroauthconfirm', HandlerRegisterOAuthConfirm, name = 'registeroauthconfirm' ),
+				   webapp2.Route( '/registeroauthwithexistingemail', HandlerRegisterOAuthWithExistingEmail, name = 'registeroauthwithexistingemail' ),
 				   webapp2.Route( '/passwordchange', HandlerPasswordChange, name = 'passwordchange' ),
 				   webapp2.Route( '/passwordrecover', HandlerPasswordRecover, name = 'passwordrecover' ),
 				   webapp2.Route( '/pc/<verifytoken>', HandlerPasswordRecoverConfirm, name = 'passwordrecoverconfirm' ),

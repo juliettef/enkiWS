@@ -594,10 +594,10 @@ class HandlerBase( webapp2.RequestHandler ):
 					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.AUTH_PROVIDER_CANNOT_BE_ADDED( str( auth_id )))
 					self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 				return
-			else: # TODO
+			else:
 				user = self.get_user_from_authid( auth_id, email )
 				if user:
-					# Existing user
+					# Existing authentication method / user
 					if self.is_logged_in() and self.user_id == user.key.id():
 						# Refresh the reauthenticated status
 						self.session[ 'reauth_time' ] = datetime.datetime.now()
@@ -609,7 +609,7 @@ class HandlerBase( webapp2.RequestHandler ):
 					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
 					self.redirect_to_relevant_page()
 				else:
-					# New user
+					# New authentication method
 					register_token =  EnkiModelTokenVerify.get_by_auth_id_type( auth_id, 'register' )
 					if register_token:
 						# If a token already exists, get the token value and update the email
