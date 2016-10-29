@@ -437,6 +437,7 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 		if tokenEntity:
 			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
 			provider_email = tokenEntity.email
+			# only display the email/pw login if the user has a password
 			email_user_has_pw = enki.libuser.user_has_password_by_email( provider_email )
 			user_providers = enki.libuser.get_user_auth_providers_by_email(provider_email)
 			self.render_tmpl( 'registeroauthwithexistingemail.html',
@@ -452,8 +453,33 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 			self.abort( 404 )
 
 	def post( self ): # TODO: implement
-		pass
-
+		self.cleanup_item()
+		self.log_out()
+		self.check_CSRF()
+		token = self.session.get('tokenregisterauth')
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type(token, 'register')
+		if tokenEntity:
+			email = tokenEntity.email
+			tokenEntity.key.delete()
+		# Log in with email and password"
+		submit_type = self.request.get( 'submittype' )
+		if submit_type == 'login':
+			password = self.request.get( 'password' )
+			if self.log_in_with_email( email, password ):
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
+				self.redirect_to_relevant_page()
+			else:
+				error_message = MSG.WRONG_EMAIL_OR_PW()
+				backoff_timer = self.get_backoff_timer( email )
+				if backoff_timer != 0:
+					error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
+				self.render_tmpl( 'login.html',
+				                  active_menu = 'login',
+				                  authhandlers = settings.HANDLERS,
+				                  email = email,
+				                  error = error_message )
+		elif submit_type == 'recoverpass':
+			self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email }))
 
 
 class HandlerPasswordChange( enki.HandlerBase ):

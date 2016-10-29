@@ -20,7 +20,7 @@
 						<br>[1] abandon login using {{ provider_name }} and use an authentication method you've used before?</p>
 					{% if email_user_has_pw %}
 					<div class="well bs-component">
-						<form class="form-horizontal" action="{{ 'login'|local }}" method="post">
+						<form class="form-horizontal" action="{{ 'registeroauthwithexistingemail'|local }}" method="post">
 							<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 							<fieldset>
 
@@ -82,8 +82,7 @@
 
 				<div><p class="text-info">[3] Create a new account using {{ provider_name }} as a login method (will need  email address different from {{ email }})</p></div>
 
-				redirect to http://localhost:8881/registeroauthconfirm
-
+				redirect to <a href="http://localhost:8881/registeroauthconfirm">REGISTER</a> but remove the email from the token
 
             </div>
 
