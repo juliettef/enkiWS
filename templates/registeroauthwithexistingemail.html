@@ -82,7 +82,10 @@
 
 				<div><p class="text-info">[3] Create a new account using {{ provider_name }} as a login method (will need  email address different from {{ email }})</p></div>
 
-				redirect to <a href="http://localhost:8881/registeroauthconfirm">REGISTER</a> but remove the email from the token
+				<form class="form-group" action="{{ 'registeroauthwithexistingemail'|local  }}" method="post">
+					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+					<button class="btn btn-default" type="submit" name="submittype" value="register">{{ _( "Sign up" )}}</button>
+				</form>
 
             </div>
 

@@ -441,7 +441,7 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 			email_user_has_pw = enki.libuser.user_has_password_by_email( provider_email )
 			user_providers = enki.libuser.get_user_auth_providers_by_email(provider_email)
 			self.render_tmpl( 'registeroauthwithexistingemail.html',
-			                  active_menu = 'register',
+			                  active_menu = 'login',
 			                  token = tokenEntity,
 							  email = provider_email,
 							  email_user_has_pw = email_user_has_pw,
@@ -459,27 +459,42 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 		token = self.session.get('tokenregisterauth')
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type(token, 'register')
 		if tokenEntity:
-			email = tokenEntity.email
-			tokenEntity.key.delete()
-		# Log in with email and password"
-		submit_type = self.request.get( 'submittype' )
-		if submit_type == 'login':
-			password = self.request.get( 'password' )
-			if self.log_in_with_email( email, password ):
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
-				self.redirect_to_relevant_page()
+			submit_type = self.request.get( 'submittype' )
+			# Log in with email and password
+			if submit_type == 'login':
+				email = tokenEntity.email
+				tokenEntity.key.delete()
+				password = self.request.get( 'password' )
+				if self.log_in_with_email( email, password ):
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
+					self.redirect_to_relevant_page()
+				else:
+					error_message = MSG.WRONG_EMAIL_OR_PW()
+					backoff_timer = self.get_backoff_timer( email )
+					if backoff_timer != 0:
+						error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
+					self.render_tmpl( 'login.html',
+									  active_menu = 'login',
+									  authhandlers = settings.HANDLERS,
+									  email = email,
+									  error = error_message )
+			elif submit_type == 'recoverpass':
+				email = tokenEntity.email
+				tokenEntity.key.delete()
+				self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email }))
+			# Create a new account using the OAuth provider but without the email
+			elif submit_type == 'register':
+				tokenEntity.email = ''
+				tokenEntity.put()
+				self.add_infomessage( 'info', MSG.INFORMATION() , MSG.LOGGED_IN()) # TODO: set message
+				self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
 			else:
-				error_message = MSG.WRONG_EMAIL_OR_PW()
-				backoff_timer = self.get_backoff_timer( email )
-				if backoff_timer != 0:
-					error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
-				self.render_tmpl( 'login.html',
-				                  active_menu = 'login',
-				                  authhandlers = settings.HANDLERS,
-				                  email = email,
-				                  error = error_message )
-		elif submit_type == 'recoverpass':
-			self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email }))
+				tokenEntity.key.delete()
+				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LOGGED_IN()) # TODO: set message
+				self.redirect( enki.libutil.get_local_url( 'home' ))
+		else:
+			self.abort(404)
+
 
 
 class HandlerPasswordChange( enki.HandlerBase ):
