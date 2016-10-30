@@ -431,15 +431,25 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 
 class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 	# Create or edit user based on auth login info when the verified email already belongs to another user TODO: edit
-	def get( self ): # TODO: implement
+	def get( self ):
 		token = self.session.get( 'tokenregisterauth' )
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
 		if tokenEntity:
 			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
 			provider_email = tokenEntity.email
+			provider_authhandler = ''
+			for item in settings.HANDLERS:
+				if item.get_provider_name() == provider_name:
+					provider_authhandler = item
 			# only display the email/pw login if the user has a password
 			email_user_has_pw = enki.libuser.user_has_password_by_email( provider_email )
-			user_providers = enki.libuser.get_user_auth_providers_by_email(provider_email)
+			# list of email user's auth providers
+			email_user_providers = []
+			user = enki.libuser.get_EnkiUser( provider_email )
+			for item in settings.HANDLERS:
+				for user_provider in user.auth_ids_provider:
+					if ( item.get_provider_name() in user_provider ) and ( item not in email_user_providers ):
+						email_user_providers.append( item )
 			self.render_tmpl( 'registeroauthwithexistingemail.html',
 			                  active_menu = 'login',
 			                  token = tokenEntity,
@@ -447,12 +457,14 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 							  email_user_has_pw = email_user_has_pw,
 			                  provider_name = provider_name,
 			                  provider_uid = str( provider_uid ),
-							  authhandlers = user_providers,
+							  provider_authhandler = provider_authhandler,
+							  authhandlers = email_user_providers,
 							  )
 		else:
 			self.abort( 404 )
 
 	def post( self ): # TODO: implement
+		# TODO: problem with same provider, different authID
 		self.cleanup_item()
 		self.log_out()
 		self.check_CSRF()
