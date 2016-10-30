@@ -404,28 +404,6 @@ msgstr ""
 "réinitialiser votre mot de passe et en entrer un nouveau : %(link)s "
 "(cliquez ou copiez-collez le lien dans votre navigateur)."
 
-#: enki/textmessages.py:84
-msgid "New authentication"
-msgstr "Nouvelle méthode d'authentification"
-
-#: enki/textmessages.py:85
-#, python-format
-msgid ""
-"A new authentication method has been added: you can now log in using "
-"%(provname)s. (If you do not remember logging in using %(provname)s, your"
-" %(provname)s account - Id %(provuid)s may have been be compromised. In "
-"addition, you should log in to your account profile and remove the "
-"%(provname)s authentication method. %(link)s (click or copy and paste in "
-"your browser)"
-msgstr ""
-"Vous avez ajouté une nouvelle méthode d'authentification à votre compte :"
-" vous pouvez désormais vous connecter en utilisant %(provname)s. (Si vous"
-" ne vous souvenez pas vous être connecté.e par l'intermédiaire de "
-"%(provname)s, il se peut que votre compte %(provname)s, code "
-"d'identification %(provuid)s, soit compromis). Vous pouvez retirer la "
-"nouvelle méthode d'identification en suivant ce lien : %(link)s (cliquez "
-"ou copiez-collez le lien dans votre navigateur)."
-
 #: enki/textmessages.py:86
 msgid "Account deletion"
 msgstr "Suppression de votre compte"

@@ -339,21 +339,6 @@ msgid ""
 "browser)"
 msgstr ""
 
-#: enki/textmessages.py:84
-msgid "New authentication"
-msgstr ""
-
-#: enki/textmessages.py:85
-#, python-format
-msgid ""
-"A new authentication method has been added: you can now log in using "
-"%(provname)s. (If you do not remember logging in using %(provname)s, your"
-" %(provname)s account - Id %(provuid)s may have been be compromised. In "
-"addition, you should log in to your account profile and remove the "
-"%(provname)s authentication method. %(link)s (click or copy and paste in "
-"your browser)"
-msgstr ""
-
 #: enki/textmessages.py:86
 msgid "Account deletion"
 msgstr ""
