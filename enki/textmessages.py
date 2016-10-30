@@ -83,8 +83,6 @@ def SEND_EMAIL_EMAIL_CHANGE_UNDO_SUBJECT(): return _( "Undo change email" )
 def SEND_EMAIL_EMAIL_CHANGE_UNDO_BODY( link, email ): return _( "A request to change the email address linked to your account was made. Follow this link to cancel the change and ensure the current address %(email)s remains linked to your account: %(link)s (click or copy and paste in your browser)", email = email, link = link )
 def SEND_EMAIL_PASSWORD_RESET_SUBJECT(): return _( "Password reset" )
 def SEND_EMAIL_PASSWORD_RESET_BODY( link ): return _( "A request to reset your password was made. Follow this link to reset your password and set a new one: %(link)s (click or copy and paste in your browser)", link = link )
-def SEND_EMAIL_AUTH_NEW_SUBJECT(): return _( "New authentication" ) # TODO
-def SEND_EMAIL_AUTH_NEW_BODY( link, provider_name, provider_uid ): return _( "A new authentication method has been added: you can now log in using %(provname)s. (If you do not remember logging in using %(provname)s, your %(provname)s account - Id %(provuid)s may have been be compromised. In addition, you should log in to your account profile and remove the %(provname)s authentication method. %(link)s (click or copy and paste in your browser)", link = link, provname = provider_name, provuid = provider_uid ) # TODO
 def SEND_EMAIL_ACCOUT_DELETE_SUBJECT(): return _( "Account deletion" )
 def SEND_EMAIL_ACCOUT_DELETE_BODY( link ): return _( "A request to delete your account was made. Follow this link to confirm deletion - WARNING: this cannot be undone! - %(link)s (click or copy and paste in your browser)", link = link )
 def SEND_EMAIL_ACCOUT_POSTS_DELETE_SUBJECT(): return _( "Account and forum posts deletion" )
