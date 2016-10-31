@@ -438,18 +438,20 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
 			provider_email = tokenEntity.email
 			provider_authhandler = ''
-			for item in settings.HANDLERS:
-				if item.get_provider_name() == provider_name:
-					provider_authhandler = item
+			for handler in settings.HANDLERS:
+				if handler.get_provider_name() == provider_name:
+					provider_authhandler = handler
 			# only display the email/pw login if the user has a password
 			email_user_has_pw = enki.libuser.user_has_password_by_email( provider_email )
 			# list of email user's auth providers
-			email_user_providers = []
+			authhandlers = []
 			user = enki.libuser.get_EnkiUser( provider_email )
-			for item in settings.HANDLERS:
-				for user_provider in user.auth_ids_provider:
-					if ( item.get_provider_name() in user_provider ) and ( item not in email_user_providers ):
-						email_user_providers.append( item )
+			for user_provider_uid in user.auth_ids_provider:
+				for handler in settings.HANDLERS:
+					if ( handler.get_provider_name() in user_provider_uid ) and ( handler not in authhandlers ):
+						prov_name, prov_uid = user_provider_uid.partition( ':' )[ ::2 ]
+						authhandlers.append({ 'handler' : handler,  'uid' : str( prov_uid ) })
+						break
 			self.render_tmpl( 'registeroauthwithexistingemail.html',
 			                  active_menu = 'login',
 			                  token = tokenEntity,
@@ -458,7 +460,7 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 			                  provider_name = provider_name,
 			                  provider_uid = str( provider_uid ),
 							  provider_authhandler = provider_authhandler,
-							  authhandlers = email_user_providers,
+							  authhandlers = authhandlers,
 							  )
 		else:
 			self.abort( 404 )

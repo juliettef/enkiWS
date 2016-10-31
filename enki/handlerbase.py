@@ -545,12 +545,13 @@ class HandlerBase( webapp2.RequestHandler ):
 
 	def get_user_auth_providers( self ):
 	# get list of the user's OAuth handlers
-		providers = []
-		for provider in settings.HANDLERS:
-			for user_provider in self.enki_user.auth_ids_provider:
-				if ( provider.get_provider_name() in user_provider ) and ( provider not in providers ):
-					providers.append( provider )
-		return providers
+		user_auth_providers = []
+		for user_provider in self.enki_user.auth_ids_provider:
+			for auth_provider in settings.HANDLERS:
+				if ( auth_provider.get_provider_name() in user_provider ) and ( auth_provider not in user_auth_providers ):
+					user_auth_providers.append( auth_provider )
+					break
+		return user_auth_providers
 
 
 	def has_enough_accounts( self ):
