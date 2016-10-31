@@ -39,8 +39,6 @@ ERROR_EMAIL_IN_USE = -13
 ERROR_EMAIL_NOT_EXIST = -14
 ERROR_USER_NOT_CREATED = -31
 
-LOCALES = [ 'en_US', 'en_EN', 'fr_FR' ]
-
 
 class HandlerBase( webapp2.RequestHandler ):
 
@@ -53,13 +51,15 @@ class HandlerBase( webapp2.RequestHandler ):
 
 	def dispatch( self ): # https://webapp-improved.appspot.com/api/webapp2_extras/sessions.html
 		self.session_store = sessions.get_store( request = self.request )
-		locale = self.request.GET.get( 'locale' )
+
+		if 'locale' in self.request.route_kwargs:
+			locale = self.request.route_kwargs.pop('locale')
+		else:
+			locale = self.session.get('locale')
 		if locale ==  'en_US': # default locale
 			locale = ''
-		elif locale not in LOCALES:
-			locale = self.session.get( 'locale' )
-			if locale not in LOCALES:
-				locale = ''
+		elif locale not in settings.LOCALES:
+			locale = ''
 		i18n.get_i18n().set_locale( locale )
 		self.session[ 'locale' ] = locale
 		try:
@@ -640,6 +640,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		ref = self.session.pop( 'sessionrefpath', ref_d )
 		if ref and ref != home_page:
 			ref_path = urlparse.urlparse( ref ).path
+			ref_path = enki.libutil.strip_current_locale_from_path( ref_path )
 			# Create the list of pages the user can be sent to (relevant pages)
 			relevant_pages = { '/forums', '/store' }
 			relevant_paths = { '/f/', '/t/', '/p/' }

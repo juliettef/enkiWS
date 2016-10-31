@@ -16,9 +16,9 @@
 			<div class="btn-group">
 				<a href="#" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ _( "Languages" ) }} <span class="caret"></span></a>
 				<ul class="dropdown-menu">
-                    <li><a href="{{ request_url|joinurl({ 'locale':'en_US' }) }}">en-US (default)</a></li>
-					<li><a href="{{ request_url|joinurl({ 'locale':'en_EN' }) }}">en-EN</a></li>
-					<li><a href="{{ request_url|joinurl({ 'locale':'fr_FR' }) }}">fr-FR</a></li>
+                    <li><a href="{{ request_url|changelocale( 'en_US' ) }}">en-US (default)</a></li>
+					<li><a href="{{ request_url|changelocale( 'en_EN' ) }}">en-EN</a></li>
+					<li><a href="{{ request_url|changelocale( 'fr_FR' ) }}">fr-FR</a></li>
 				</ul>
 			</div>
 		</div>

@@ -10,6 +10,8 @@ REAUTH_EXPIRY = 5  # minutes
 
 URL_PURCHASE_FASTSPRING = str( 'https://sites.fastspring.com/enkisoftware/product/avoyd' )
 
+LOCALES = [ 'en_US', 'en_EN', 'fr_FR' ]
+
 
 product_displayname = { 'product_a' : 'Product A',
                         'product_b' : 'Product B',
@@ -66,5 +68,6 @@ config[ 'webapp2_extras.sessions' ] = { 'secret_key': KEY_SESSION }
 config[ 'webapp2_extras.jinja2' ] = { 'template_path': 'templates',
                                       'environment_args': { 'extensions': [ 'jinja2.ext.i18n' ]},
                                       'filters': { 'local' : enki.jinjafilters.make_local_url,
-                                                   'joinurl' : enki.jinjafilters.join_url_param_char }
+                                                   'joinurl' : enki.jinjafilters.join_url_param_char,
+												   'changelocale' : enki.jinjafilters.change_locale_url }
                                       }

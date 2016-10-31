@@ -24,19 +24,12 @@ class HandlerOAuthBase( enki.HandlerBase ):
 
 	def auth_callback( self ):
 		self.auth_check_CSRF()
-		# set referral and locale
+		# set referral
 		ref_d = self.session.get( 'sessionrefpath', self.request.referrer )
 		ref = self.session.get( 'sessionloginrefpath', ref_d )
 		if not ref:
 			ref = enki.libutil.get_local_url( ) # home
 		self.session[ 'sessionloginrefpath' ] = ref
-		locale = ''
-		parameters = urlparse.parse_qs( urlparse.urlparse( ref ).query )
-		if 'locale' in parameters:
-			locale_param = parameters[ 'locale' ][ 0 ]
-			if locale_param in enki.handlerbase.LOCALES:
-				locale = locale_param
-		webapp2_extras.i18n.get_i18n().set_locale( locale )
 		self.auth_callback_provider()
 
 	def process_login_info( self, loginInfoSettings, result ):
@@ -218,7 +211,7 @@ class HandlerOAuthFacebook( HandlerOAuthOAUTH2 ):
 		return 'https://graph.facebook.com/me'
 
 	def get_scope( self ):   # get scope (compulsory) to add to params
-		return 'public_profile email' # https://developers.facebook.com/docs/facebook-login/permissions/v2.2?locale=en_GB#reference
+		return 'public_profile email' # https://developers.facebook.com/docs/facebook-login/permissions/v2.2#reference
 
 	def process_token_result( self, result ): # select the processing function
 		data = self.process_result_as_query_string( result )
