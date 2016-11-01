@@ -18,8 +18,11 @@ def DISCONNECTED_APP( ): return _( "Application disconnected." )
 
 def REGISTRATION_ABORT(): return _( "Sign up aborted." )
 def REGISTRATION_INFO_EMAIL_SENT( email ): return _( "If email address %(email)s is available, a registration email was sent to it. Please check your inbox and follow the instructions in the email to <b>confirm your registration</b>.", email = email )
+def REGISTRATION_INFO_EMAIL_CANNOT_USE( email ): return _( "Please provide an email address different from <b>%(email)s</b>", email = email )
+
 def ACCOUNT_CREATED(): return _( "Your account is created." )
 
+def LOGIN_FAILED(): return _( "Login failed, please try again." )
 def AUTH_LOGIN_FAILED( provider_name ): return _( "Login with %(provider)s failed, please try again.", provider = provider_name )
 def REGISTER_AUTH_ADD_EMAIL_INFO_EMAIL_SENT( email ): return _( "If email address %(email)s is available, an email was sent to it. Please check your inbox and follow the instructions in the email to <b>add it to your account</b>.", email = email )
 

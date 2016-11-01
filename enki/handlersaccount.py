@@ -503,13 +503,14 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 				self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email }))
 			# Create a new account using the OAuth provider but without the email
 			elif submit_type == 'register':
+				email = tokenEntity.email
 				tokenEntity.email = ''
 				tokenEntity.put()
-				self.add_infomessage( 'info', MSG.INFORMATION() , MSG.LOGGED_IN()) # TODO: set message
+				self.add_infomessage( 'info', MSG.INFORMATION() , MSG.REGISTRATION_INFO_EMAIL_CANNOT_USE( email ))
 				self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
 			else:
 				tokenEntity.key.delete()
-				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LOGGED_IN()) # TODO: set message
+				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LOGIN_FAILED())
 				self.redirect( enki.libutil.get_local_url( 'home' ))
 		else:
 			self.abort(404)
