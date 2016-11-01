@@ -92,26 +92,39 @@ class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 
 class HandlerOAuthOpenIDConnect( HandlerOAuthOAUTH2 ):
 
-	def fetch_discovery_doc( self ):
+	@webapp2.cached_property
+	def discovery_doc( self ):
 		url = self.get_discovery_URL()
 		result = urlfetch.fetch( url )
 		jdoc = json.loads( result.content )
 		return jdoc
 
 	def auth_endpoint( self ):
-		jdoc = self.fetch_discovery_doc( )
+		jdoc = self.discovery_doc
 		return jdoc[ 'authorization_endpoint' ]
 
 	def token_endpoint( self ):
-		jdoc = self.fetch_discovery_doc( )
+		jdoc = self.discovery_doc
 		return jdoc[ 'token_endpoint' ]
 
 	def get_scope( self ):   # get scope (compulsory) to add to params
 		return 'openid email'
 
+
+	def validate_token_doc( self, tokenDoc ):
+		# validate jwt according to http://openid.net/specs/openid-connect-basic-1_0.html#IDTokenValidation
+		if tokenDoc.get( 'iss') != self.discovery_doc.get( 'issuer' ):
+			return False
+		if tokenDoc.get( 'aud' ) != self.get_auth_request_client_id( ):
+			return False
+		if 'azp' in tokenDoc and tokenDoc['azp'] != self.get_auth_request_client_id():
+			return False
+		# ToDo validate exp and iat times.
+		return True
+
 	def process_token_result( self, result ): # select the processing function
 		jdoc = self.process_result_as_JSON( result )
-		if 'error' in jdoc:  # failed
+		if 'error' in jdoc or 'id_token' not in jdoc:  # failed
 			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
 			self.redirect_to_relevant_page()
 			return
@@ -125,6 +138,12 @@ class HandlerOAuthOpenIDConnect( HandlerOAuthOAUTH2 ):
 			jwtencoded = jwtencoded.encode( 'ascii' )
 		jwtencoded = jwtencoded + b'=' * ( 4 - len( jwtencoded ) % 4 )
 		jwt = json.loads( base64.urlsafe_b64decode( jwtencoded ).decode( 'utf-8' ))
+
+		if not self.validate_token_doc( jwt ):
+			self.add_infomessage('info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+			self.redirect_to_relevant_page()
+			return
+
 
 		loginInfoSettings = {   'provider_uid': 'sub',
 								'email': 'email',
