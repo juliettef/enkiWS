@@ -430,7 +430,14 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 
 
 class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
-	# Create or edit user based on auth login info when the verified email already belongs to another user TODO: edit
+	# When logging in with an auth provider that has a verified email, if the email belongs to an existing account
+	# but the account doesn't include the auth provider, suggest two actions to the user:
+	# - A. Log in to the existing account; or
+	# - B. Create a new account using the auth provider, but with a different email.
+	# - Note case A: if the provider used for login is also registered with the account (with a different user Id),
+	# add a message to inform the user that they should log out of the provider's account or use a different browser.
+	# - Note case C. not implemented: Add the new auth provider to the existing email account. Unnecessary as the user
+	# can do it from their profile page once they've logged in.
 	def get( self ):
 		token = self.session.get( 'tokenregisterauth' )
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
@@ -449,8 +456,7 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 			for user_provider_uid in user.auth_ids_provider:
 				for handler in settings.HANDLERS:
 					if ( handler.get_provider_name() in user_provider_uid ) and ( handler not in authhandlers ):
-						prov_name, prov_uid = user_provider_uid.partition( ':' )[ ::2 ]
-						authhandlers.append({ 'handler' : handler,  'uid' : str( prov_uid ) })
+						authhandlers.append( handler )
 						break
 			self.render_tmpl( 'registeroauthwithexistingemail.html',
 			                  active_menu = 'login',
@@ -465,8 +471,7 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 		else:
 			self.abort( 404 )
 
-	def post( self ): # TODO: implement
-		# TODO: problem with same provider, different authID
+	def post( self ):
 		self.cleanup_item()
 		self.log_out()
 		self.check_CSRF()
