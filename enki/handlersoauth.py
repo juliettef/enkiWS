@@ -51,6 +51,20 @@ class HandlerOAuthBase( enki.HandlerBase ):
 	def process_result_as_query_string( self, result ):
 		return dict( urlparse.parse_qsl( result.content ))
 
+	def urlfetch_safe(self, *args, **kwargs ):
+		haveError = False
+		try:
+			result = urlfetch.fetch( *args, **kwargs )
+			if result.status_code != 200:
+				haveError = True
+		except:
+			haveError = True
+
+		if haveError:
+			self.add_infomessage('info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+			self.redirect_to_relevant_page()
+			return
+		return result
 
 class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 
@@ -78,16 +92,19 @@ class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 				   }
 		urlParams = urllib.urlencode( params )
 		url = self.token_endpoint()
-		result = urlfetch.fetch( url = url,
-								 payload = urlParams,
-								 method = urlfetch.POST,
-								 headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
-								)
+
+		result = self.urlfetch_safe( url = url,
+									 payload = urlParams,
+									 method = urlfetch.POST,
+									 headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
+									)
+
 		self.process_token_result( result )
 
 	def get_profile( self, token ):
 		fullUrl = self.profile_endpoint() + '?' + urllib.urlencode({ 'access_token': token })
-		return urlfetch.fetch( url = fullUrl )
+		profile = self.urlfetch_safe( url = fullUrl )
+		return profile
 
 
 class HandlerOAuthOpenIDConnect( HandlerOAuthOAUTH2 ):
@@ -95,7 +112,7 @@ class HandlerOAuthOpenIDConnect( HandlerOAuthOAUTH2 ):
 	@webapp2.cached_property
 	def discovery_doc( self ):
 		url = self.get_discovery_URL()
-		result = urlfetch.fetch( url )
+		result = self.urlfetch_safe( url )
 		jdoc = json.loads( result.content )
 		return jdoc
 
@@ -309,7 +326,7 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 		jdoc = self.process_result_as_JSON( profile )
 
 		emailUrl ='https://api.github.com/user/emails?' + urllib.urlencode({ 'access_token': token })
-		emailDoc = urlfetch.fetch( url = emailUrl )
+		emailDoc = self.urlfetch_safe( url = emailUrl )
 		jemails = self.process_result_as_JSON( emailDoc )
 		for item in jemails:
 			if item.get( 'verified', False ):
@@ -390,7 +407,7 @@ class HandlerOAuthSteam( HandlerOAuthBase ):
 
 		urlParams = urllib.urlencode( params )
 		fullURL = 'https://steamcommunity.com/openid/login'
-		result = urlfetch.fetch( url = fullURL, payload = urlParams, method = urlfetch.POST )
+		result = self.urlfetch_safe( url = fullURL, payload = urlParams, method = urlfetch.POST )
 		if 'ns:http://specs.openid.net/auth/2.0\nis_valid:true\n' in result.content: # only if is_valid do we trust the loginInfo
 			self.provider_authenticated_callback( loginInfo )
 
@@ -462,7 +479,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 		oauth_signature = self.auth_sign( normalised_url, params )
 		params.append(( 'oauth_signature', oauth_signature ))
 		url_params = urllib.urlencode( params )
-		result = urlfetch.fetch( url = normalised_url, payload = url_params, method = urlfetch.POST )
+		result = self.urlfetch_safe( url = normalised_url, payload = url_params, method = urlfetch.POST )
 		response = self.process_result_as_query_string( result )
 		# STEP 2
 		if response.get( 'oauth_callback_confirmed' ) != 'true' :
@@ -491,7 +508,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 		params.append(( 'oauth_signature', oauth_signature ))
 		params.append(( 'oauth_verifier', oauth_verifier ))
 		url_params = urllib.urlencode( params )
-		result = urlfetch.fetch( url = normalised_url, payload = url_params, method = urlfetch.POST )
+		result = self.urlfetch_safe( url = normalised_url, payload = url_params, method = urlfetch.POST )
 		response = self.process_result_as_query_string( result )
 		oauth_token = response.get( 'oauth_token' )
 		user_id = response.get( 'user_id')
