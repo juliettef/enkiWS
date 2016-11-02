@@ -119,7 +119,12 @@ class HandlerOAuthOpenIDConnect( HandlerOAuthOAUTH2 ):
 			return False
 		if 'azp' in tokenDoc and tokenDoc['azp'] != self.get_auth_request_client_id():
 			return False
-		# ToDo validate exp and iat times.
+		exp = tokenDoc.get( 'exp' )
+		currtime = int( time.time() )
+		# use a 120 second margin for expiry
+		if not isinstance( exp, ( int, long ) ) or int( exp ) + 120 < currtime:
+			return False
+		# ToDo could check iat
 		return True
 
 	def process_token_result( self, result ): # select the processing function
