@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-03 14:29+0000\n"
+"POT-Creation-Date: 2016-11-03 14:57+0000\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -234,7 +234,7 @@ msgstr[1] "Veuillez vous assurer que la longueur de votre mot de passe excède %
 
 #: enki/textmessages.py:68
 msgid "This is your current email."
-msgstr ""
+msgstr "Ceci est votre adresse de courrier électronique actuelle."
 
 #: enki/textmessages.py:69
 msgid "You cannot delete your email address: you need an email address to connect to your account."
@@ -1151,15 +1151,15 @@ msgstr "Vous êtes actuellement connecté.e."
 
 #: templates/loginaddconfirm.html:6
 msgid "Confirm addition of a login method"
-msgstr ""
+msgstr "Confirmer "
 
 #: templates/loginaddconfirm.html:20
 msgid "Add a new login method"
-msgstr ""
+msgstr "Ajouter une nouvelle méthode d'authentification"
 
 #: templates/loginaddconfirm.html:21
 msgid "You have requested the addition of a new authentication method to your account:"
-msgstr ""
+msgstr "Vous avez demandé l'addition d'une nouvelle méthode d'authentification à votre compte :"
 
 #: templates/loginaddconfirm.html:23 templates/registeroauthconfirm.html:26
 msgid "Provider:"
@@ -1172,7 +1172,7 @@ msgstr "Votre identifiant chez %(providername)s :"
 
 #: templates/loginaddconfirm.html:29
 msgid "Yes, add login method"
-msgstr ""
+msgstr "Oui, ajouter la nouvelle méthode de connexion"
 
 #: templates/messages.html:16 templates/profile.html:156
 msgid "Messages"
@@ -1402,7 +1402,7 @@ msgstr "Utiliser une méthode d'authentification déjà enregistrée. Une fois c
 
 #: templates/registeroauthwithexistingemail.html:70
 msgid "You may need to log out or use a different browser"
-msgstr ""
+msgstr "Vous devrez peut-être vous déconnecter ou utiliser un navigateur différent"
 
 #: templates/registeroauthwithexistingemail.html:81
 #, python-format
