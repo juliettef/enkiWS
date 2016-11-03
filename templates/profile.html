@@ -156,8 +156,8 @@
 			            <a href="{{ 'messages'|local }}" class="btn btn-default">{{ _( "Messages" ) }}</a>
 			        </span>
 		        {% else %}
-		                <p>{{ data.friends }} friends</p>
-		                <p>{{ data.messages }} messages</p>
+		                <p>{{ data.friends }} {{ ngettext( "friend", "friends", data.sessions | count ) }}</p>
+		                <p>{{ data.messages }} {{ ngettext( "message", "messages", data.sessions | count ) }}</p>
 		        {% endif %}
 			</div>
 
@@ -183,7 +183,7 @@
 			            <a href="{{ 'apps'|local }}" class="btn btn-default">{{ _( "Applications" ) }}</a>
 			        </span>
 				{% else %}
-		                <p>{{ data.apps }} apps</p>
+		                <p>{{ data.apps }} {{ ngettext( "application", "applications", data.sessions | count ) }}</p>
 		        {% endif %}
 			</div>
 

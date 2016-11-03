@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-03 14:57+0000\n"
+"POT-Creation-Date: 2016-11-03 18:12+0000\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -1305,9 +1305,27 @@ msgid_plural "browser sessions"
 msgstr[0] "session navigateur"
 msgstr[1] "sessions navigateur"
 
+#: templates/profile.html:159
+msgid "friend"
+msgid_plural "friends"
+msgstr[0] "ami.e"
+msgstr[1] "ami.e.s"
+
+#: templates/profile.html:160
+msgid "message"
+msgid_plural "messages"
+msgstr[0] "message"
+msgstr[1] "messages"
+
 #: templates/profile.html:173
 msgid "Developers"
 msgstr "Développeur.se.s"
+
+#: templates/profile.html:186
+msgid "application"
+msgid_plural "applications"
+msgstr[0] "application"
+msgstr[1] "applications"
 
 #: templates/profilepublic.html:6 templates/profilepublic.html:20
 msgid "User"
