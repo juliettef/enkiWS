@@ -19,7 +19,7 @@
 
             <h2>{{ _( "Email and password" )}}</h2>
             <p>{% if data.email %}
-                {{ _( "Email: " )}}{{ data.email }}&nbsp;<a class="btn btn-default btn-xs" href="{{ 'emailchange'|local }}">{{ _( "Change email" ) }}</a>
+                {{ _( "Email:" )}} {{ data.email }}&nbsp;<a class="btn btn-default btn-xs" href="{{ 'emailchange'|local }}">{{ _( "Change email" ) }}</a>
                 {% else %}
                 <a href="{{ 'emailchange'|local }}" class="btn btn-default">{{ _( "Add email" )}}</a>
                 {% endif %}
@@ -37,8 +37,8 @@
 							<tr>
 								<th></th>
 								<th>{{ _( "Provider" )}}</th>
-								<th>{{ _( "Unique Id" )}}</th>
-								<th>{{ _( "Actions" )}}</th>
+								<th>{{ _( "User identifier" )}}</th>
+								<th></th>
 							</tr>
 		                </thead>
 						<tbody>
@@ -48,7 +48,7 @@
 							    <td>{{ item.provider_name }}</td>
 							    <td>{{ item.provider_uid }}&nbsp;
 								    {% if item.status == 'registered' %}
-										<button class="btn btn-default btn-xs {% if not data.enough_accounts %}disabled{% endif %}" type="submit" name="deregister" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Deregister" )}}</button>
+										<button class="btn btn-default btn-xs {% if not data.enough_accounts %}disabled{% endif %}" type="submit" name="deregister" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Remove" )}}</button>
 									{% endif %}
 							    </td>
 								<td>{% for authhandler in authhandlers %}

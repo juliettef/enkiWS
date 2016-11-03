@@ -15,12 +15,12 @@
             {% include "incmessageinfo.html" %}
 
             <div>
-				<h1>Log in or create a new account</h1>
+				<h1>{{ _( "Log in or create a new account" )}}</h1>
 
 				<div>
 					<div>
-						<h2>Log in to an existing account</h2>
-						<p>Use an authentication method you've used before. Once logged in, you'll be able to add {{ provider_name }} as a login method from your profile page.</p>
+						<h2>{{ _( "Log in to an existing account" )}}</h2>
+						<p>{{ _( "Use an authentication method you've used before. Once logged in, you'll be able to add %(providername)s as a login method from your profile page.", providername = provider_name )}}</p>
 					</div>
 
 					{% if email_user_has_pw %}
@@ -78,8 +78,8 @@
 
 				{% if provider_authhandler %}
 				<div>
-					<h2>Create a new account using {{ provider_name }} as a login method</h2>
-					<p class="">Warning: you will need an email address different from {{ email }}.</p>
+					<h2>{{ _( "Create a new account using %(providername)s as a login method", providername = provider_name )}}</h2>
+					<p>{{ _( "Warning: you will need an email address different from %(email)s.", email = email )}}</p>
 				</div>
 
 				<div class="well bs-component">
@@ -89,7 +89,7 @@
 							<form class="form-group" action="{{ 'registeroauthwithexistingemail'|local  }}" method="post">
 								<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 								<button class="btn btn-block btn-oauth btn-{{ provider_authhandler.get_provider_name()|lower }}" type="submit" name="submittype" value="register">
-									<i class="i-oauth fa {{ provider_authhandler.get_button().icon }}"></i> {{ _( "Log in with" )}} {{ provider_name }}<br><small>User identifier {{ provider_uid }}</small></button>
+									<i class="i-oauth fa {{ provider_authhandler.get_button().icon }}"></i> {{ _( "Log in with" )}} {{ provider_name }}<br><small>{{ _( "User identifier" )}} {{ provider_uid }}</small></button>
 							</form>
 						</div>
 					</fieldset>
