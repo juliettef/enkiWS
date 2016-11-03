@@ -21,7 +21,7 @@
 					<fieldset>
 						<div class="form-group">
 							<div class="col-sm-12" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "Show details" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
@@ -38,7 +38,7 @@
 								<h2>{{ _( "Public info" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
@@ -71,7 +71,7 @@
 								<h2>{{ _( "Account Settings" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs disabled" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs disabled" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
@@ -91,7 +91,7 @@
 								<h2>{{ _( "Connected Applications" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
@@ -127,7 +127,7 @@
 		            {% endif %}
 		        {% else %}
 		            {% if data.sessions %}
-		                <p>{{ data.sessions|length }} browser sessions</p>
+		                <p>{{ data.sessions|length }} {{ ngettext( "browser session", "browser sessions", data.sessions | count ) }}</p>
 		            {% endif %}
 		            {% if data.sessions_app %}
 		                <p>{{ data.sessions_app|length }} apps</p>
@@ -145,7 +145,7 @@
 								<h2>{{ _( "Friends" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>
@@ -173,7 +173,7 @@
 								<h2>{{ _( "Developers" )}}</h2>
 	                        </div>
 							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide details" ) }}{% else %}True>{{ _( "More" ) }}{% endif %}</button>
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
 	                        </div>
 	                    </div>
 	                </fieldset>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-04-13 15:51+0100\n"
+"POT-Creation-Date: 2016-11-03 14:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,617 +63,609 @@ msgstr ""
 
 #: enki/textmessages.py:20
 #, python-format
-msgid ""
-"If email address %(email)s is available, a registration email was sent to"
-" it. Please check your inbox and follow the instructions in the email to "
-"<b>confirm your registration</b>."
+msgid "If email address %(email)s is available, a registration email was sent to it. Please check your inbox and follow the instructions in the email to <b>confirm your registration</b>."
 msgstr ""
 
 #: enki/textmessages.py:21
-msgid "Your account is created."
+#, python-format
+msgid "Please provide an email address different from <b>%(email)s</b>"
 msgstr ""
 
 #: enki/textmessages.py:23
+msgid "Your account is created."
+msgstr ""
+
+#: enki/textmessages.py:25
+msgid "Login failed, please try again."
+msgstr ""
+
+#: enki/textmessages.py:26
 #, python-format
 msgid "Login with %(provider)s failed, please try again."
 msgstr ""
 
-#: enki/textmessages.py:24
-#, python-format
-msgid ""
-"If email address %(email)s is available, an email was sent to it. Please "
-"check your inbox and follow the instructions in the email to <b>add it to"
-" your account</b>."
-msgstr ""
-
-#: enki/textmessages.py:26
-msgid "Your account is deleted."
-msgstr ""
-
 #: enki/textmessages.py:27
 #, python-format
-msgid ""
-"An email was sent to your email address %(email)s. Please check your "
-"inbox and follow the instructions in the email to delete your account."
-msgstr ""
-
-#: enki/textmessages.py:28
-msgid "Your account and forum posts are deleted"
+msgid "If email address %(email)s is available, an email was sent to it. Please check your inbox and follow the instructions in the email to <b>add it to your account</b>."
 msgstr ""
 
 #: enki/textmessages.py:29
+msgid "Your account is deleted."
+msgstr ""
+
+#: enki/textmessages.py:30
 #, python-format
-msgid ""
-"An email was sent to your email address %(email)s. Please check your "
-"inbox and follow the instructions in the email to delete your account and"
-" forum posts."
+msgid "An email was sent to your email address %(email)s. Please check your inbox and follow the instructions in the email to delete your account."
 msgstr ""
 
 #: enki/textmessages.py:31
-msgid "Your email address is set."
+msgid "Your account and forum posts are deleted"
 msgstr ""
 
 #: enki/textmessages.py:32
-msgid "Your email is removed."
-msgstr ""
-
-#: enki/textmessages.py:33
-msgid "Your email address is restored."
+#, python-format
+msgid "An email was sent to your email address %(email)s. Please check your inbox and follow the instructions in the email to delete your account and forum posts."
 msgstr ""
 
 #: enki/textmessages.py:34
-msgid ""
-"An email was sent to your previous address in case you want to "
-"<b>undo</b> the change."
+msgid "Your email address is set."
 msgstr ""
 
 #: enki/textmessages.py:35
-#, python-format
-msgid ""
-"If email address %(email)s is available, an email was sent to it. Please "
-"check your inbox and follow the instructions in the message to "
-"<b>confirm</b> the change."
+msgid "Your email is removed."
 msgstr ""
 
 #: enki/textmessages.py:36
-msgid ""
-"An email was sent to your current address in case you want to <b>undo</b>"
-" the change."
+msgid "Your email address is restored."
+msgstr ""
+
+#: enki/textmessages.py:37
+msgid "An email was sent to your previous address in case you want to <b>undo</b> the change."
 msgstr ""
 
 #: enki/textmessages.py:38
 #, python-format
-msgid "%(provider)s authentication method removed."
+msgid "If email address %(email)s is available, an email was sent to it. Please check your inbox and follow the instructions in the message to <b>confirm</b> the change."
 msgstr ""
 
-#: enki/textmessages.py:40
-msgid "Your password is updated."
+#: enki/textmessages.py:39
+msgid "An email was sent to your current address in case you want to <b>undo</b> the change."
 msgstr ""
 
 #: enki/textmessages.py:41
-msgid "Your password is set."
+#, python-format
+msgid "Authentication method %(provider)s is added."
 msgstr ""
 
 #: enki/textmessages.py:42
 #, python-format
-msgid ""
-"If email address %(email)s matches an existing account, an email was sent"
-" to it. Please check your inbox and follow the instructions in the email "
-"to reset you password."
+msgid "Authentication method %(provider)s cannot be added to your account. It is already registered to another user."
 msgstr ""
 
-#: enki/textmessages.py:44
-msgid "Please set your display name to continue."
+#: enki/textmessages.py:43
+#, python-format
+msgid "Authentication method %(provider)s is removed."
 msgstr ""
 
 #: enki/textmessages.py:45
-msgid "Your display name is set."
+msgid "Your password is updated."
+msgstr ""
+
+#: enki/textmessages.py:46
+msgid "Your password is set."
 msgstr ""
 
 #: enki/textmessages.py:47
-msgid "Your thread is published."
-msgstr ""
-
-#: enki/textmessages.py:48
-msgid "Your post is published."
+#, python-format
+msgid "If email address %(email)s matches an existing account, an email was sent to it. Please check your inbox and follow the instructions in the email to reset you password."
 msgstr ""
 
 #: enki/textmessages.py:49
-msgid "Your post is modified."
+msgid "Please set your display name to continue."
 msgstr ""
 
 #: enki/textmessages.py:50
-msgid "Your post is deleted."
+msgid "Your display name is set."
+msgstr ""
+
+#: enki/textmessages.py:52
+msgid "Your thread is published."
 msgstr ""
 
 #: enki/textmessages.py:53
-msgid "Wrong email or password."
+msgid "Your post is published."
 msgstr ""
 
 #: enki/textmessages.py:54
-msgid "Invalid password."
+msgid "Your post is modified."
 msgstr ""
 
 #: enki/textmessages.py:55
+msgid "Your post is deleted."
+msgstr ""
+
+#: enki/textmessages.py:58
+msgid "Wrong email or password."
+msgstr ""
+
+#: enki/textmessages.py:59
+msgid "Invalid password."
+msgstr ""
+
+#: enki/textmessages.py:60
 #, python-format
 msgid "Timeout. Please wait %(timeout)s before you try again."
 msgstr ""
 
-#: enki/textmessages.py:56
+#: enki/textmessages.py:61
 msgid "Invalid email address format."
 msgstr ""
 
-#: enki/textmessages.py:57
+#: enki/textmessages.py:62
 msgid "An email address is needed."
 msgstr ""
 
-#: enki/textmessages.py:58
+#: enki/textmessages.py:63
 msgid "A password is needed."
 msgstr ""
 
-#: enki/textmessages.py:59
+#: enki/textmessages.py:64
 msgid "Please enter your new password."
 msgstr ""
 
-#: enki/textmessages.py:60
+#: enki/textmessages.py:65
 msgid "User creation failed, please retry."
 msgstr ""
 
-#: enki/textmessages.py:61
+#: enki/textmessages.py:66
 #, python-format
 msgid "Your password is %(length)s character long: it is too short."
 msgid_plural "Your password is %(length)s characters long: it is too short."
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:62
+#: enki/textmessages.py:67
 #, python-format
 msgid "Please ensure your password is at least %(length)s character long."
 msgid_plural "Please ensure your password is at least %(length)s characters long."
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:63
+#: enki/textmessages.py:68
 msgid "This is your current email."
 msgstr ""
 
-#: enki/textmessages.py:64
-msgid ""
-"You cannot delete your email address: you need an email address to "
-"connect to your account."
+#: enki/textmessages.py:69
+msgid "You cannot delete your email address: you need an email address to connect to your account."
 msgstr ""
 
-#: enki/textmessages.py:66
+#: enki/textmessages.py:71
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:67
+#: enki/textmessages.py:72
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:68
+#: enki/textmessages.py:73
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:69
+#: enki/textmessages.py:74
 msgid "day"
 msgid_plural "days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:72
+#: enki/textmessages.py:77
 msgid "Attempt to log in with your email"
 msgstr ""
 
-#: enki/textmessages.py:73
-#, python-format
-msgid ""
-"An attempt was made to log in to your account using this email address. "
-"If you'd like to use your email to log in, you need to set a password for"
-" it: %(link)s (click or copy and paste in your browser)"
-msgstr ""
-
-#: enki/textmessages.py:74
-msgid "Attempt to register with your email"
-msgstr ""
-
-#: enki/textmessages.py:75
-#, python-format
-msgid ""
-"An attempt was made to sign up to your account. If you've forgotten your "
-"password, you can reset it: %(link)s (click or copy and paste in your "
-"browser)"
-msgstr ""
-
-#: enki/textmessages.py:76 templates/registerconfirm.html:6
-msgid "Registration confirmation"
-msgstr ""
-
-#: enki/textmessages.py:77
-#, python-format
-msgid ""
-"Follow this link to confirm your registration: %(link)s (click or copy "
-"and paste in your browser)"
-msgstr ""
-
 #: enki/textmessages.py:78
-msgid "Confirm new email"
+#, python-format
+msgid "An attempt was made to log in to your account using this email address. If you'd like to use your email to log in, you need to set a password for it: %(link)s (click or copy and paste in your browser)"
 msgstr ""
 
 #: enki/textmessages.py:79
-#, python-format
-msgid ""
-"A request to change the email address linked to your account was made. "
-"Follow this link to confirm the change to address %(email)s: %(link)s "
-"(click or copy and paste in your browser)"
+msgid "Attempt to register with your email"
 msgstr ""
 
 #: enki/textmessages.py:80
-msgid "Undo change email"
+#, python-format
+msgid "An attempt was made to sign up to your account. If you've forgotten your password, you can reset it: %(link)s (click or copy and paste in your browser)"
 msgstr ""
 
-#: enki/textmessages.py:81
-#, python-format
-msgid ""
-"A request to change the email address linked to your account was made. "
-"Follow this link to cancel the change and ensure the current address "
-"%(email)s remains linked to your account: %(link)s (click or copy and "
-"paste in your browser)"
+#: enki/textmessages.py:81 templates/registerconfirm.html:6
+msgid "Registration confirmation"
 msgstr ""
 
 #: enki/textmessages.py:82
-msgid "Password reset"
+#, python-format
+msgid "Follow this link to confirm your registration: %(link)s (click or copy and paste in your browser)"
 msgstr ""
 
 #: enki/textmessages.py:83
+msgid "Confirm new email"
+msgstr ""
+
+#: enki/textmessages.py:84
 #, python-format
-msgid ""
-"A request to reset your password was made. Follow this link to reset your"
-" password and set a new one: %(link)s (click or copy and paste in your "
-"browser)"
+msgid "A request to change the email address linked to your account was made. Follow this link to confirm the change to address %(email)s: %(link)s (click or copy and paste in your browser)"
+msgstr ""
+
+#: enki/textmessages.py:85
+msgid "Undo change email"
 msgstr ""
 
 #: enki/textmessages.py:86
-msgid "Account deletion"
+#, python-format
+msgid "A request to change the email address linked to your account was made. Follow this link to cancel the change and ensure the current address %(email)s remains linked to your account: %(link)s (click or copy and paste in your browser)"
 msgstr ""
 
 #: enki/textmessages.py:87
-#, python-format
-msgid ""
-"A request to delete your account was made. Follow this link to confirm "
-"deletion - WARNING: this cannot be undone! - %(link)s (click or copy and "
-"paste in your browser)"
+msgid "Password reset"
 msgstr ""
 
 #: enki/textmessages.py:88
-msgid "Account and forum posts deletion"
+#, python-format
+msgid "A request to reset your password was made. Follow this link to reset your password and set a new one: %(link)s (click or copy and paste in your browser)"
 msgstr ""
 
 #: enki/textmessages.py:89
+msgid "Account deletion"
+msgstr ""
+
+#: enki/textmessages.py:90
 #, python-format
-msgid ""
-"A request to delete your account and your forum posts was made. Follow "
-"this link to confirm deletion - WARNING: this cannot be undone! - "
-"%(link)s (click or copy and paste in your browser)"
+msgid "A request to delete your account was made. Follow this link to confirm deletion - WARNING: this cannot be undone! - %(link)s (click or copy and paste in your browser)"
+msgstr ""
+
+#: enki/textmessages.py:91
+msgid "Account and forum posts deletion"
 msgstr ""
 
 #: enki/textmessages.py:92
-msgid "[Deleted user]"
-msgstr ""
-
-#: enki/textmessages.py:93
-msgid ""
-"Your display name is your public Id. You must have a display name to post"
-" in the forums, invite friends and join games."
-msgstr ""
-
-#: enki/textmessages.py:94
-msgid "(The display name above was randomly generated, feel free to change it.)"
+#, python-format
+msgid "A request to delete your account and your forum posts was made. Follow this link to confirm deletion - WARNING: this cannot be undone! - %(link)s (click or copy and paste in your browser)"
 msgstr ""
 
 #: enki/textmessages.py:95
-msgid "The name you have chosen is already in use. Please enter a new name."
+msgid "[Deleted user]"
 msgstr ""
 
 #: enki/textmessages.py:96
-msgid ""
-"Your name contains forbidden symbols. Please ensure it contains only "
-"letters or digits."
+msgid "Your display name is your public Id. You must have a display name to post in the forums, invite friends and join games."
 msgstr ""
 
 #: enki/textmessages.py:97
+msgid "(The display name above was randomly generated, feel free to change it.)"
+msgstr ""
+
+#: enki/textmessages.py:98
+msgid "The name you have chosen is already in use. Please enter a new name."
+msgstr ""
+
+#: enki/textmessages.py:99
+msgid "Your name contains forbidden symbols. Please ensure it contains only letters or digits."
+msgstr ""
+
+#: enki/textmessages.py:100
 #, python-format
 msgid "Your name is %(length)s character long."
 msgid_plural "Your name is %(length)s characters long."
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:98
+#: enki/textmessages.py:101
 #, python-format
 msgid "It is too short. Please ensure it is at least %(length)s character long."
 msgid_plural "It is too short. Please ensure it is at least %(length)s characters long."
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:99
+#: enki/textmessages.py:102
 #, python-format
 msgid "It is too long. Please ensure it is maximum %(length)s character long."
 msgid_plural "It is too long. Please ensure it is maximum %(length)s characters long."
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:102 templates/forum.html:22 templates/forums.html:6
-#: templates/forums.html:29 templates/incuserposts.html:8
-#: templates/post.html:22 templates/thread.html:23
+#: enki/textmessages.py:105 templates/forum.html:23 templates/forums.html:6
+#: templates/forums.html:30 templates/incuserposts.html:8
+#: templates/post.html:23 templates/thread.html:24
 msgid "Forums"
 msgstr ""
 
-#: enki/textmessages.py:103
+#: enki/textmessages.py:106
 msgid "[Deleted post]"
 msgstr ""
 
-#: enki/textmessages.py:104
+#: enki/textmessages.py:107
 msgid "The user you requested does not exist or was deleted."
 msgstr ""
 
-#: enki/textmessages.py:105
+#: enki/textmessages.py:108
 msgid "The forum you requested does not exist or was deleted."
 msgstr ""
 
-#: enki/textmessages.py:106
+#: enki/textmessages.py:109
 msgid "The post or thread you requested does not exist or was deleted."
 msgstr ""
 
-#: enki/textmessages.py:107
+#: enki/textmessages.py:110
 msgid "The post you requested does not exist or was deleted."
 msgstr ""
 
-#: enki/textmessages.py:108
+#: enki/textmessages.py:111
 msgid "Your thread needs a title."
 msgstr ""
 
-#: enki/textmessages.py:109
+#: enki/textmessages.py:112
 msgid "Your post needs to contain some text."
 msgstr ""
 
-#: enki/textmessages.py:110
+#: enki/textmessages.py:113
 #, python-format
 msgid "Your thread title is too long by %(exceed)s character."
 msgid_plural "Your thread title is too long by %(exceed)s characters."
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:111
+#: enki/textmessages.py:114
 #, python-format
 msgid "Your post is too long by %(exceed)s character."
 msgid_plural "Your post is too long by %(exceed)s characters."
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:112
+#: enki/textmessages.py:115
 msgid "Thread submission failed. Please try again."
 msgstr ""
 
-#: enki/textmessages.py:113
+#: enki/textmessages.py:116
 msgid "Post submission failed. Please try again."
 msgstr ""
 
-#: enki/textmessages.py:114
+#: enki/textmessages.py:117
 msgid "Post modification failed. Please try again."
 msgstr ""
 
-#: enki/textmessages.py:115
+#: enki/textmessages.py:118
 msgid "Post deletion failed. Please try again."
 msgstr ""
 
-#: enki/textmessages.py:118
+#: enki/textmessages.py:121
 msgid "The display name you entered is invalid."
 msgstr ""
 
-#: enki/textmessages.py:119
-msgid ""
-"The display name you entered does not exist or the user is already in "
-"your friends list."
+#: enki/textmessages.py:122
+msgid "The display name you entered does not exist or the user is already in your friends list."
 msgstr ""
 
-#: enki/textmessages.py:120
+#: enki/textmessages.py:123
 msgid "A display name is needed"
 msgstr ""
 
-#: enki/textmessages.py:121
+#: enki/textmessages.py:124
 #, python-format
 msgid "An invitation to join your friends list has been sent to %(name)s."
 msgstr ""
 
-#: enki/textmessages.py:122
+#: enki/textmessages.py:125
 #, python-format
 msgid "%(name)s has been added to your friends list."
 msgstr ""
 
-#: enki/textmessages.py:123
+#: enki/textmessages.py:126
 #, python-format
 msgid "%(name)s has been removed from your friends list."
 msgstr ""
 
-#: enki/textmessages.py:126 templates/store.html:6 templates/store.html:15
+#: enki/textmessages.py:129 templates/store.html:6 templates/store.html:16
 #: templates/storeemulatefastspring.html:6
 msgid "Store"
 msgstr ""
 
-#: enki/textmessages.py:127
+#: enki/textmessages.py:130
 #, python-format
 msgid "Product %(product)s licence %(licence)s activated."
 msgstr ""
 
-#: enki/textmessages.py:128
+#: enki/textmessages.py:131
 #, python-format
 msgid "You already activated %(product)s."
 msgstr ""
 
-#: enki/textmessages.py:129
+#: enki/textmessages.py:132
 #, python-format
-msgid ""
-"You already activated %(product)s. Do you want to give your spare licence"
-" key to a friend?"
+msgid "You already activated %(product)s. Do you want to give your spare licence key to a friend?"
 msgstr ""
 
-#: enki/textmessages.py:130
+#: enki/textmessages.py:133
 #, python-format
 msgid "Another user already activated %(product)s licence %(licence)s."
 msgstr ""
 
-#: enki/textmessages.py:131
+#: enki/textmessages.py:134
 msgid "Invalid licence key."
 msgstr ""
 
-#: enki/textmessages.py:132
+#: enki/textmessages.py:135
 msgid "A licence key is needed."
 msgstr ""
 
-#: enki/textmessages.py:133
-msgid "Licence key is too long."
-msgstr ""
-
 #: enki/textmessages.py:136
-#, python-format
-msgid ""
-"Your single-use game connect code is valid for <b>%(minutes)s minute</b>."
-" <h1><b><font face=\"monospace\">%(token)s</font></b></h1>"
-msgid_plural ""
-"Your single-use game connect code is valid for <b>%(minutes)s "
-"minutes</b>. <h1><b><font face=\"monospace\">%(token)s</font></b></h1>"
-msgstr[0] ""
-msgstr[1] ""
-
-#: enki/textmessages.py:137
-msgid "A name is needed"
-msgstr ""
-
-#: enki/textmessages.py:138
-msgid "Application created."
+msgid "Licence key is too long."
 msgstr ""
 
 #: enki/textmessages.py:139
 #, python-format
-msgid ""
-"The application name is too long. Please ensure it is maximum %(length)s "
-"characters long."
-msgstr ""
+msgid "Your single-use game connect code is valid for <b>%(minutes)s minute</b>. <h1><b><font face=\"monospace\">%(token)s</font></b></h1>"
+msgid_plural "Your single-use game connect code is valid for <b>%(minutes)s minutes</b>. <h1><b><font face=\"monospace\">%(token)s</font></b></h1>"
+msgstr[0] ""
+msgstr[1] ""
 
 #: enki/textmessages.py:140
-msgid "This application name already exists. Please choose a different name."
+msgid "A name is needed"
 msgstr ""
 
 #: enki/textmessages.py:141
-msgid "You have exceeded the number of applications allowed per user."
+msgid "Application created."
 msgstr ""
 
 #: enki/textmessages.py:142
-msgid "New secret generated."
+#, python-format
+msgid "The application name is too long. Please ensure it is maximum %(length)s characters long."
 msgstr ""
 
 #: enki/textmessages.py:143
+msgid "This application name already exists. Please choose a different name."
+msgstr ""
+
+#: enki/textmessages.py:144
+msgid "You have exceeded the number of applications allowed per user."
+msgstr ""
+
+#: enki/textmessages.py:145
+msgid "New secret generated."
+msgstr ""
+
+#: enki/textmessages.py:146
 msgid "Application data deleted."
 msgstr ""
 
-#: templates/accountdelete.html:6 templates/profile.html:35
+#: templates/accountconnect.html:7 templates/accountconnect.html:17
+#: templates/profile.html:79
+msgid "Connected accounts"
+msgstr ""
+
+#: templates/accountconnect.html:20
+msgid "Email and password"
+msgstr ""
+
+#: templates/accountconnect.html:22
+msgid "Email:"
+msgstr ""
+
+#: templates/accountconnect.html:22 templates/emailchange.html:6
+#: templates/emailchange.html:21 templates/emailchange.html:33
+msgid "Change email"
+msgstr ""
+
+#: templates/accountconnect.html:24
+msgid "Add email"
+msgstr ""
+
+#: templates/accountconnect.html:28 templates/passwordchange.html:6
+#: templates/passwordchange.html:21
+msgid "Change password"
+msgstr ""
+
+#: templates/accountconnect.html:32
+msgid "Third party authentication"
+msgstr ""
+
+#: templates/accountconnect.html:39
+msgid "Provider"
+msgstr ""
+
+#: templates/accountconnect.html:40
+#: templates/registeroauthwithexistingemail.html:92
+msgid "User identifier"
+msgstr ""
+
+#: templates/accountconnect.html:51 templates/friends.html:26
+msgid "Remove"
+msgstr ""
+
+#: templates/accountconnect.html:57
+msgid "Add login"
+msgstr ""
+
+#: templates/accountdelete.html:6 templates/profile.html:80
 msgid "Delete account"
 msgstr ""
 
-#: templates/accountdelete.html:18
+#: templates/accountdelete.html:19
 msgid "Account deletion information"
 msgstr ""
 
-#: templates/accountdelete.html:20
+#: templates/accountdelete.html:21
 msgid "What happens to your data when you delete your account:"
 msgstr ""
 
-#: templates/accountdelete.html:22
+#: templates/accountdelete.html:23
 msgid "Your <b>private information is deleted</b>:"
 msgstr ""
 
-#: templates/accountdelete.html:24
+#: templates/accountdelete.html:25
 msgid "Your email address:"
 msgstr ""
 
-#: templates/accountdelete.html:25
+#: templates/accountdelete.html:26
 msgid "Your <em>password</em>"
 msgstr ""
 
-#: templates/accountdelete.html:26
+#: templates/accountdelete.html:27
 msgid "Your third party authentication provider(s) and unique identifier(s):"
 msgstr ""
 
-#: templates/accountdelete.html:31
+#: templates/accountdelete.html:32
 msgid "Your <b>public information is anonymised</b>:"
-msgstr ""
-
-#: templates/accountdelete.html:33
-#, python-format
-msgid ""
-"Your display name <em>%(display_name)s</em> is replaced with "
-"<em>%(deleted_dn)s</em> throughout."
 msgstr ""
 
 #: templates/accountdelete.html:34
 #, python-format
-msgid ""
-"Your old display name <em>%(previous_display_names)s</em> is removed from"
-" your <a href='%(user_page_url)s'>user page</a>."
-msgid_plural ""
-"Your old display names <em>%(previous_display_names)s</em> are removed "
-"from your <a href='%(user_page_url)s'>user page</a>."
-msgstr[0] ""
-msgstr[1] ""
+msgid "Your display name <em>%(display_name)s</em> is replaced with <em>%(deleted_dn)s</em> throughout."
+msgstr ""
 
 #: templates/accountdelete.html:35
 #, python-format
-msgid ""
-"<em><a href='%(user_page_url)s'>Forum threads and posts</a></em> you "
-"published remain visible but the author is anonymous "
-"<em>%(deleted_dn)s</em>."
-msgstr ""
+msgid "Your old display name <em>%(previous_display_names)s</em> is removed from your <a href='%(user_page_url)s'>user page</a>."
+msgid_plural "Your old display names <em>%(previous_display_names)s</em> are removed from your <a href='%(user_page_url)s'>user page</a>."
+msgstr[0] ""
+msgstr[1] ""
 
 #: templates/accountdelete.html:36
-msgid ""
-"<b>Warning</b>: once your account is deleted, you will be <b>unable to "
-"edit or delete your posts</b>."
+#, python-format
+msgid "<em><a href='%(user_page_url)s'>Forum threads and posts</a></em> you published remain visible but the author is anonymous <em>%(deleted_dn)s</em>."
 msgstr ""
 
 #: templates/accountdelete.html:37
-#, python-format
-msgid ""
-"You can <a href='%(user_page_url)s'>Manually edit or delete individual "
-"posts from your user page</a> or check the option below to delete all "
-"your posts."
+msgid "<b>Warning</b>: once your account is deleted, you will be <b>unable to edit or delete your posts</b>."
 msgstr ""
 
-#: templates/accountdelete.html:51
+#: templates/accountdelete.html:38
+#, python-format
+msgid "You can <a href='%(user_page_url)s'>Manually edit or delete individual posts from your user page</a> or check the option below to delete all your posts."
+msgstr ""
+
+#: templates/accountdelete.html:52
 msgid "Delete my account"
 msgstr ""
 
-#: templates/accountdelete.html:54
+#: templates/accountdelete.html:55
 msgid "You are about to delete your account, are you sure? This cannot be undone."
 msgstr ""
 
-#: templates/accountdelete.html:58
+#: templates/accountdelete.html:59
 msgid "Delete all my forum posts permanently"
 msgstr ""
 
-#: templates/accountdelete.html:62
+#: templates/accountdelete.html:63
 msgid "Yes, delete my account"
 msgstr ""
 
-#: templates/accountdelete.html:63 templates/forum.html:86
-#: templates/post.html:58 templates/post.html:84
-#: templates/reauthenticate.html:44 templates/registeroauthconfirm.html:49
-#: templates/thread.html:89
+#: templates/accountdelete.html:64 templates/forum.html:87
+#: templates/loginaddconfirm.html:30 templates/post.html:59
+#: templates/post.html:85 templates/reauthenticate.html:45
+#: templates/registeroauthconfirm.html:51 templates/thread.html:90
 msgid "Cancel"
 msgstr ""
 
@@ -681,333 +673,304 @@ msgstr ""
 msgid "User data"
 msgstr ""
 
-#: templates/appdatastores.html:16
+#: templates/appdatastores.html:17
 msgid "Application data stores"
 msgstr ""
 
-#: templates/appdatastores.html:20 templates/apps.html:6 templates/apps.html:16
-#: templates/profile.html:71 templates/profile.html:98
+#: templates/appdatastores.html:21 templates/apps.html:6 templates/apps.html:17
+#: templates/profile.html:183
 msgid "Applications"
 msgstr ""
 
-#: templates/appdatastores.html:25 templates/apps.html:23
+#: templates/appdatastores.html:26 templates/apps.html:24
 msgid "Name"
 msgstr ""
 
-#: templates/appdatastores.html:26 templates/apps.html:24
+#: templates/appdatastores.html:27 templates/apps.html:25
 msgid "Id"
 msgstr ""
 
-#: templates/appdatastores.html:36
+#: templates/appdatastores.html:37
 msgid "Delete all data"
 msgstr ""
 
-#: templates/appdatastores.html:42 templates/appdatastores.html:52
+#: templates/appdatastores.html:43 templates/appdatastores.html:53
 msgid "Data"
 msgstr ""
 
-#: templates/appdatastores.html:48
+#: templates/appdatastores.html:49
 msgid "Application"
 msgstr ""
 
-#: templates/appdatastores.html:49
+#: templates/appdatastores.html:50
 msgid "Application Id"
 msgstr ""
 
-#: templates/appdatastores.html:50
+#: templates/appdatastores.html:51
 msgid "Data type"
 msgstr ""
 
-#: templates/appdatastores.html:51
+#: templates/appdatastores.html:52
 msgid "Datat id"
 msgstr ""
 
-#: templates/appdatastores.html:53
+#: templates/appdatastores.html:54
 msgid "Read access"
 msgstr ""
 
-#: templates/appdatastores.html:54
+#: templates/appdatastores.html:55
 msgid "Expiry date"
 msgstr ""
 
-#: templates/appdatastores.html:76
+#: templates/appdatastores.html:77
 msgid "You do not have data stored by applications."
 msgstr ""
 
-#: templates/apps.html:25
+#: templates/apps.html:26
 msgid "Secret"
 msgstr ""
 
-#: templates/apps.html:26
+#: templates/apps.html:27
 msgid "Created"
 msgstr ""
 
-#: templates/apps.html:35
+#: templates/apps.html:36
 msgid "Generate new"
 msgstr ""
 
-#: templates/apps.html:49
+#: templates/apps.html:50
 msgid "Register an application"
 msgstr ""
 
-#: templates/apps.html:52 templates/apps.html:54
+#: templates/apps.html:53 templates/apps.html:55
 msgid "Application name"
 msgstr ""
 
-#: templates/apps.html:56
+#: templates/apps.html:57
 #, python-format
-msgid ""
-"Register an application to use the REST API. You can register up to "
-"<b>%(app_max)s</b> applications per user. The application name must be "
-"less than %(app_max_name_length)s characters long."
+msgid "Register an application to use the REST API. You can register up to <b>%(app_max)s</b> applications per user. The application name must be less than %(app_max_name_length)s characters long."
 msgstr ""
 
-#: templates/apps.html:62
+#: templates/apps.html:63
 msgid "Register"
 msgstr ""
 
-#: templates/displayname.html:6 templates/displayname.html:39
-#: templates/displayname.html:41 templates/friends.html:42
+#: templates/displayname.html:6 templates/displayname.html:40
+#: templates/displayname.html:42 templates/friends.html:43
 msgid "Display name"
 msgstr ""
 
-#: templates/displayname.html:17 templates/profile.html:23
+#: templates/displayname.html:18 templates/profile.html:51
 msgid "Current display name:"
 msgstr ""
 
-#: templates/displayname.html:21 templates/profile.html:25
-#: templates/profilepublic.html:21
+#: templates/displayname.html:22 templates/profile.html:53
+#: templates/profilepublic.html:22
 msgid "Past display name:"
 msgid_plural "Past display names:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/displayname.html:31 templates/forum.html:112
-#: templates/post.html:108 templates/profile.html:19 templates/thread.html:113
+#: templates/displayname.html:32 templates/forum.html:113
+#: templates/post.html:109 templates/profile.html:48 templates/thread.html:114
 msgid "Set display name"
 msgstr ""
 
-#: templates/displayname.html:33 templates/profile.html:27
+#: templates/displayname.html:34 templates/profile.html:51
 msgid "Change display Name"
 msgstr ""
 
-#: templates/displayname.html:46
+#: templates/displayname.html:47
 #, python-format
-msgid ""
-"Your name must be <b>between %(lengthmin)s and %(lengthmax)s character "
-"long</b>."
-msgid_plural ""
-"Your name must be <b>between %(lengthmin)s and %(lengthmax)s characters "
-"long</b>."
+msgid "Your name must be <b>between %(lengthmin)s and %(lengthmax)s character long</b>."
+msgid_plural "Your name must be <b>between %(lengthmin)s and %(lengthmax)s characters long</b>."
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/displayname.html:47
-msgid ""
-"It must be <b>alphanumeric</b>: only digits and letters - upper case, "
-"lower case and accented characters - are allowed."
-msgstr ""
-
 #: templates/displayname.html:48
-msgid ""
-"<b>Not allowed:</b> spaces, punctuation and symbols such as ?, !, ', #, "
-"*, _, -, + etc."
+msgid "It must be <b>alphanumeric</b>: only digits and letters - upper case, lower case and accented characters - are allowed."
 msgstr ""
 
-#: templates/displayname.html:51
-msgid ""
-"Your display name doesn't have to be unique. A random number will "
-"automatically be attached to it to ensure it is, e.g. Silvia becomes "
-"Silvia#2702."
+#: templates/displayname.html:49
+msgid "<b>Not allowed:</b> spaces, punctuation and symbols such as ?, !, ', #, *, _, -, + etc."
 msgstr ""
 
 #: templates/displayname.html:52
-msgid ""
-"Once saved, your display name <b>cannot be deleted</b>, but you can add a"
-" new name to use instead. <b>Current and old display name(s) are "
-"public</b> and visible on the user page."
+msgid "Your display name doesn't have to be unique. A random number will automatically be attached to it to ensure it is, e.g. Silvia becomes Silvia#2702."
 msgstr ""
 
-#: templates/displayname.html:58
+#: templates/displayname.html:53
+msgid "Once saved, your display name <b>cannot be deleted</b>, but you can add a new name to use instead. <b>Current and old display name(s) are public</b> and visible on the user page."
+msgstr ""
+
+#: templates/displayname.html:59
 msgid "Save my new display name"
 msgstr ""
 
-#: templates/emailchange.html:6 templates/emailchange.html:20
-#: templates/emailchange.html:32 templates/profile.html:33
-msgid "Change email"
-msgstr ""
-
-#: templates/emailchange.html:23 templates/emailchange.html:25
+#: templates/emailchange.html:24 templates/emailchange.html:26
 msgid "New email"
 msgstr ""
 
-#: templates/forum.html:6 templates/forum.html:27
+#: templates/forum.html:6 templates/forum.html:28
 msgid "Forum"
 msgstr ""
 
-#: templates/forum.html:18 templates/post.html:18 templates/thread.html:18
+#: templates/forum.html:19 templates/post.html:19 templates/thread.html:19
 msgid "Go back to Forums"
 msgstr ""
 
-#: templates/forum.html:28 templates/forums.html:36
+#: templates/forum.html:29 templates/forums.html:37
 msgid "Threads"
 msgstr ""
 
-#: templates/forum.html:28 templates/forums.html:37
-#: templates/incuserposts.html:3 templates/thread.html:30
+#: templates/forum.html:29 templates/forums.html:38
+#: templates/incuserposts.html:3 templates/thread.html:31
 msgid "Posts"
 msgstr ""
 
-#: templates/forum.html:34
+#: templates/forum.html:35
 msgid "Thread title"
 msgstr ""
 
-#: templates/forum.html:35
+#: templates/forum.html:36
 msgid "Started by"
 msgstr ""
 
-#: templates/forum.html:36
+#: templates/forum.html:37
 msgid "Date"
 msgstr ""
 
-#: templates/forum.html:37
+#: templates/forum.html:38
 msgid "# posts"
 msgstr ""
 
-#: templates/forum.html:56 templates/forum.html:65
+#: templates/forum.html:57 templates/forum.html:66
 msgid "Create a new thread"
 msgstr ""
 
-#: templates/forum.html:67 templates/forums.html:34
+#: templates/forum.html:68 templates/forums.html:35
 msgid "Title"
 msgstr ""
 
-#: templates/forum.html:69
+#: templates/forum.html:70
 msgid "Your thread title"
 msgstr ""
 
-#: templates/forum.html:71
+#: templates/forum.html:72
 #, python-format
 msgid "Maximum thread title length: %(length)s character."
 msgid_plural "Maximum thread title length: %(length)s characters."
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/forum.html:75 templates/incuserposts.html:12 templates/post.html:6
-#: templates/post.html:29 templates/post.html:73 templates/thread.html:78
+#: templates/forum.html:76 templates/incuserposts.html:12 templates/post.html:6
+#: templates/post.html:30 templates/post.html:74 templates/thread.html:79
 msgid "Post"
 msgstr ""
 
-#: templates/forum.html:77 templates/post.html:75 templates/thread.html:80
+#: templates/forum.html:78 templates/post.html:76 templates/thread.html:81
 msgid "Your text"
 msgstr ""
 
-#: templates/forum.html:79 templates/post.html:77 templates/thread.html:82
+#: templates/forum.html:80 templates/post.html:78 templates/thread.html:83
 #, python-format
 msgid "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting."
 msgstr ""
 
-#: templates/forum.html:79 templates/post.html:77 templates/thread.html:82
+#: templates/forum.html:80 templates/post.html:78 templates/thread.html:83
 #, python-format
 msgid "Maximum post length: %(length)s character."
 msgid_plural "Maximum post length: %(length)s characters."
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/forum.html:84 templates/post.html:82 templates/thread.html:87
+#: templates/forum.html:85 templates/post.html:83 templates/thread.html:88
 msgid "Preview"
 msgstr ""
 
-#: templates/forum.html:85
+#: templates/forum.html:86
 msgid "Submit new thread"
 msgstr ""
 
-#: templates/forum.html:94 templates/post.html:92 templates/thread.html:97
+#: templates/forum.html:95 templates/post.html:93 templates/thread.html:98
 msgid "PREVIEW"
 msgstr ""
 
-#: templates/forum.html:96 templates/thread.html:6 templates/thread.html:29
+#: templates/forum.html:97 templates/thread.html:6 templates/thread.html:30
 msgid "Thread"
 msgstr ""
 
-#: templates/forum.html:99 templates/post.html:96 templates/thread.html:101
-msgid "date and time submitted UTC"
-msgstr ""
-
-#: templates/forum.html:99 templates/incuserposts.html:15
-#: templates/post.html:35 templates/post.html:96 templates/thread.html:38
-#: templates/thread.html:101
+#: templates/forum.html:100 templates/incuserposts.html:15
+#: templates/post.html:36 templates/post.html:97 templates/thread.html:39
+#: templates/thread.html:102
 msgid "permalink"
 msgstr ""
 
-#: templates/forum.html:111
+#: templates/forum.html:100 templates/post.html:97 templates/thread.html:102
+msgid "date and time submitted UTC"
+msgstr ""
+
+#: templates/forum.html:112
 msgid "Please set up your display name to start a new thread."
 msgstr ""
 
-#: templates/forum.html:118
+#: templates/forum.html:119
 msgid "Please log in or create an account to start a new thread."
 msgstr ""
 
-#: templates/forum.html:119 templates/incnavbartop.html:10
-#: templates/login.html:7 templates/login.html:44
-#: templates/passwordrecover.html:39 templates/post.html:120
-#: templates/register.html:40 templates/thread.html:120
+#: templates/forum.html:120 templates/incnavbartop.html:10
+#: templates/login.html:7 templates/login.html:45
+#: templates/passwordrecover.html:40 templates/post.html:121
+#: templates/register.html:41 templates/registeroauthwithexistingemail.html:51
+#: templates/thread.html:121
 msgid "Log in"
 msgstr ""
 
-#: templates/forum.html:120 templates/incnavbartop.html:9
-#: templates/login.html:49 templates/passwordrecover.html:40
-#: templates/post.html:121 templates/register.html:7 templates/register.html:35
-#: templates/thread.html:121
+#: templates/forum.html:121 templates/incnavbartop.html:9
+#: templates/login.html:50 templates/passwordrecover.html:41
+#: templates/post.html:122 templates/register.html:7 templates/register.html:36
+#: templates/thread.html:122
 msgid "Sign up"
 msgstr ""
 
-#: templates/forums.html:31
+#: templates/forums.html:32
 msgid "total thread views"
 msgstr ""
 
-#: templates/forums.html:35
+#: templates/forums.html:36
 msgid "Description"
 msgstr ""
 
-#: templates/friends.html:15 templates/profile.html:87
-#: templates/profile.html:89
+#: templates/friends.html:16 templates/profile.html:145
+#: templates/profile.html:155
 msgid "Friends"
 msgstr ""
 
-#: templates/friends.html:25 templates/profile.html:46
-msgid "Remove"
-msgstr ""
-
-#: templates/friends.html:39
+#: templates/friends.html:40
 msgid "Invite someone to join your friends list"
 msgstr ""
 
-#: templates/friends.html:44
+#: templates/friends.html:45
 msgid "display name"
 msgstr ""
 
-#: templates/friends.html:46
-msgid ""
-"Enter the display name of the person you would like to add to your "
-"friends. The display name is a string of 3 to 12 alphanumeric characters "
-"(prefix), followed by '#' and 4 digits (suffix). You can enter the full "
-"display name or just the prefix. The search is case insensitive."
+#: templates/friends.html:47
+msgid "Enter the display name of the person you would like to add to your friends. The display name is a string of 3 to 12 alphanumeric characters (prefix), followed by '#' and 4 digits (suffix). You can enter the full display name or just the prefix. The search is case insensitive."
 msgstr ""
 
-#: templates/friends.html:52
+#: templates/friends.html:53
 msgid "Search"
 msgstr ""
 
-#: templates/friends.html:64
+#: templates/friends.html:65
 msgid "User found"
 msgstr ""
 
-#: templates/friends.html:67 templates/friends.html:74
+#: templates/friends.html:68 templates/friends.html:75
 msgid "Invite"
 msgstr ""
 
-#: templates/friends.html:71
+#: templates/friends.html:72
 msgid "Users with a similar prefix"
 msgstr ""
 
@@ -1015,7 +978,7 @@ msgstr ""
 msgid "enkiWS"
 msgstr ""
 
-#: templates/home.html:15 templates/incnavbartop.html:2
+#: templates/home.html:16 templates/incnavbartop.html:2
 msgid "Home"
 msgstr ""
 
@@ -1023,61 +986,72 @@ msgstr ""
 msgid "made with enkiWS - source code on GitHub"
 msgstr ""
 
-#: templates/inclibrary.html:2
+#: templates/inclibrary.html:8
 msgid "Library"
 msgstr ""
 
-#: templates/inclibrary.html:4
+#: templates/inclibrary.html:11 templates/increstapi.html:11
+#: templates/profile.html:24 templates/profile.html:41
+#: templates/profile.html:74 templates/profile.html:94
+#: templates/profile.html:148 templates/profile.html:176
+msgid "Hide"
+msgstr ""
+
+#: templates/inclibrary.html:11 templates/increstapi.html:11
+#: templates/profile.html:24 templates/profile.html:41
+#: templates/profile.html:74 templates/profile.html:94
+#: templates/profile.html:148 templates/profile.html:176
+msgid "Show"
+msgstr ""
+
+#: templates/inclibrary.html:18
 msgid "Available to activate or give"
 msgid_plural "Available to activate or give"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/inclibrary.html:9
+#: templates/inclibrary.html:23
 msgid "Activate licence"
 msgstr ""
 
-#: templates/inclibrary.html:15
+#: templates/inclibrary.html:29
 msgid "Available to give"
 msgid_plural "Available to give"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/inclibrary.html:21
+#: templates/inclibrary.html:35
 msgid "Activated"
 msgid_plural "Activated"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/inclibrary.html:32
+#: templates/inclibrary.html:46
 msgid "Activate a licence"
 msgstr ""
 
-#: templates/inclibrary.html:35
+#: templates/inclibrary.html:49
 msgid "Licence key"
 msgstr ""
 
-#: templates/inclibrary.html:37
+#: templates/inclibrary.html:51
 msgid "XXXXX-XXXXX-XXXXX"
 msgstr ""
 
-#: templates/inclibrary.html:39
-msgid ""
-"The licence key is a string of 15 alphanumeric characters, with or "
-"without dashes, e.g. 9CNJ5FLYH87HRZ1 and 9CNJ5-FLYH8-7HRZ1 are equally "
-"valid."
+#: templates/inclibrary.html:53
+msgid "The licence key is a string of 15 alphanumeric characters, with or without dashes, e.g. 9CNJ5FLYH87HRZ1 and 9CNJ5-FLYH8-7HRZ1 are equally valid."
 msgstr ""
 
-#: templates/inclibrary.html:45
+#: templates/inclibrary.html:59
 msgid "Activate"
 msgstr ""
 
-#: templates/incnavbartop.html:6 templates/profile.html:15
+#: templates/incnavbartop.html:6 templates/profile.html:16
 msgid "Profile and settings"
 msgstr ""
 
-#: templates/incnavbartop.html:7 templates/login.html:76
-#: templates/register.html:67
+#: templates/incnavbartop.html:7 templates/login.html:77
+#: templates/register.html:68
 msgid "Log out"
 msgstr ""
 
@@ -1097,155 +1071,178 @@ msgstr ""
 msgid "Products"
 msgstr ""
 
-#: templates/increstapi.html:2
+#: templates/increstapi.html:8
 msgid "Connect code"
 msgstr ""
 
-#: templates/increstapi.html:6
+#: templates/increstapi.html:19
 msgid "Generate"
 msgstr ""
 
-#: templates/incuserposts.html:13 templates/post.html:33
-#: templates/thread.html:36
+#: templates/incuserposts.html:13 templates/post.html:34
+#: templates/thread.html:37
 msgid "posted"
 msgstr ""
 
-#: templates/incuserposts.html:14 templates/post.html:34
-#: templates/thread.html:37
+#: templates/incuserposts.html:14 templates/post.html:35
+#: templates/thread.html:38
 msgid "deleted"
 msgstr ""
 
-#: templates/incuserposts.html:14 templates/post.html:34
-#: templates/thread.html:37
+#: templates/incuserposts.html:14 templates/post.html:35
+#: templates/thread.html:38
 msgid "edited"
 msgstr ""
 
-#: templates/incuserposts.html:16 templates/post.html:36
-#: templates/thread.html:39
+#: templates/incuserposts.html:16 templates/post.html:37
+#: templates/thread.html:40
 msgid "edit"
 msgstr ""
 
-#: templates/incuserposts.html:17 templates/post.html:37
-#: templates/thread.html:40
+#: templates/incuserposts.html:17 templates/post.html:38
+#: templates/thread.html:41
 msgid "delete"
 msgstr ""
 
-#: templates/login.html:23
+#: templates/login.html:24 templates/registeroauthwithexistingemail.html:32
 msgid "Log in with email and password"
 msgstr ""
 
-#: templates/login.html:28 templates/login.html:30
-#: templates/passwordrecover.html:23 templates/passwordrecover.html:25
-#: templates/reauthenticate.html:27 templates/register.html:26
-#: templates/register.html:28 templates/registerconfirm.html:23
-#: templates/registeroauthconfirm.html:34
+#: templates/login.html:29 templates/login.html:31
+#: templates/passwordrecover.html:24 templates/passwordrecover.html:26
+#: templates/reauthenticate.html:28 templates/register.html:27
+#: templates/register.html:29 templates/registerconfirm.html:24
+#: templates/registeroauthconfirm.html:36
+#: templates/registeroauthwithexistingemail.html:35
 msgid "Email"
 msgstr ""
 
-#: templates/login.html:35 templates/login.html:37
-#: templates/passwordrecoverconfirm.html:23
-#: templates/passwordrecoverconfirm.html:25 templates/reauthenticate.html:34
-#: templates/reauthenticate.html:36 templates/registerconfirm.html:30
-#: templates/registerconfirm.html:32
+#: templates/login.html:36 templates/login.html:38
+#: templates/passwordrecoverconfirm.html:24
+#: templates/passwordrecoverconfirm.html:26 templates/reauthenticate.html:35
+#: templates/reauthenticate.html:37 templates/registerconfirm.html:31
+#: templates/registerconfirm.html:33
+#: templates/registeroauthwithexistingemail.html:42
+#: templates/registeroauthwithexistingemail.html:44
 msgid "Password"
 msgstr ""
 
-#: templates/login.html:50 templates/passwordchange.html:46
-#: templates/passwordrecover.html:6 templates/passwordrecover.html:20
-#: templates/reauthenticate.html:49 templates/register.html:41
+#: templates/login.html:51 templates/passwordchange.html:47
+#: templates/passwordrecover.html:6 templates/passwordrecover.html:21
+#: templates/reauthenticate.html:50 templates/register.html:42
+#: templates/registeroauthwithexistingemail.html:52
 msgid "Forgot password"
 msgstr ""
 
-#: templates/login.html:61
+#: templates/login.html:62 templates/registeroauthwithexistingemail.html:64
 msgid "Log in with a third party provider"
 msgstr ""
 
-#: templates/login.html:66 templates/reauthenticate.html:66
-#: templates/register.html:57
+#: templates/login.html:67 templates/reauthenticate.html:67
+#: templates/register.html:58 templates/registeroauthwithexistingemail.html:69
+#: templates/registeroauthwithexistingemail.html:92
 msgid "Log in with"
 msgstr ""
 
-#: templates/login.html:75 templates/register.html:66
+#: templates/login.html:76 templates/register.html:67
 msgid "You are currently logged in."
 msgstr ""
 
-#: templates/messages.html:15 templates/profile.html:90
+#: templates/loginaddconfirm.html:6
+msgid "Confirm addition of a login method"
+msgstr ""
+
+#: templates/loginaddconfirm.html:20
+msgid "Add a new login method"
+msgstr ""
+
+#: templates/loginaddconfirm.html:21
+msgid "You have requested the addition of a new authentication method to your account:"
+msgstr ""
+
+#: templates/loginaddconfirm.html:23 templates/registeroauthconfirm.html:26
+msgid "Provider:"
+msgstr ""
+
+#: templates/loginaddconfirm.html:24 templates/registeroauthconfirm.html:27
+#, python-format
+msgid "Your unique identifier at %(providername)s:"
+msgstr ""
+
+#: templates/loginaddconfirm.html:29
+msgid "Yes, add login method"
+msgstr ""
+
+#: templates/messages.html:16 templates/profile.html:156
 msgid "Messages"
 msgstr ""
 
-#: templates/messages.html:23
+#: templates/messages.html:24
 msgid "Friend requests"
 msgstr ""
 
-#: templates/messages.html:27
+#: templates/messages.html:28
 msgid "Accept"
 msgstr ""
 
-#: templates/messages.html:28
+#: templates/messages.html:29
 msgid "Decline"
 msgstr ""
 
-#: templates/messages.html:37
+#: templates/messages.html:38
 msgid "You do not have any messages."
 msgstr ""
 
-#: templates/passwordchange.html:6 templates/passwordchange.html:20
-#: templates/profile.html:34
-msgid "Change password"
-msgstr ""
-
-#: templates/passwordchange.html:23 templates/passwordchange.html:25
+#: templates/passwordchange.html:24 templates/passwordchange.html:26
 msgid "Current password"
 msgstr ""
 
-#: templates/passwordchange.html:31 templates/passwordchange.html:33
+#: templates/passwordchange.html:32 templates/passwordchange.html:34
 msgid "New password"
 msgstr ""
 
-#: templates/passwordchange.html:40
+#: templates/passwordchange.html:41
 msgid "Save my new password"
 msgstr ""
 
-#: templates/passwordrecover.html:32
+#: templates/passwordrecover.html:33
 msgid "Set a new password - an email will be sent"
 msgstr ""
 
 #: templates/passwordrecoverconfirm.html:6
-#: templates/passwordrecoverconfirm.html:20
+#: templates/passwordrecoverconfirm.html:21
 msgid "Set password"
 msgstr ""
 
-#: templates/passwordrecoverconfirm.html:32
+#: templates/passwordrecoverconfirm.html:33
 msgid "Save my password"
 msgstr ""
 
-#: templates/post.html:52
+#: templates/post.html:53
 msgid "Delete post"
 msgstr ""
 
-#: templates/post.html:56
-msgid ""
-"You are about to delete the contents of your post, are you sure? This "
-"cannot be undone."
+#: templates/post.html:57
+msgid "You are about to delete the contents of your post, are you sure? This cannot be undone."
 msgstr ""
 
-#: templates/post.html:57
+#: templates/post.html:58
 msgid "Delete"
 msgstr ""
 
-#: templates/post.html:71
+#: templates/post.html:72
 msgid "Edit post"
 msgstr ""
 
-#: templates/post.html:83
+#: templates/post.html:84
 msgid "Submit modified post"
 msgstr ""
 
-#: templates/post.html:107
+#: templates/post.html:108
 msgid "Please set up your display name to modify your post."
 msgstr ""
 
-#: templates/post.html:119
+#: templates/post.html:120
 msgid "Please log in to modify your post."
 msgstr ""
 
@@ -1253,101 +1250,93 @@ msgstr ""
 msgid "Profile"
 msgstr ""
 
-#: templates/profile.html:16
-msgid "Public information and profile"
+#: templates/profile.html:38
+msgid "Public info"
 msgstr ""
 
-#: templates/profile.html:18
-msgid ""
-"Your display name is your public Id. You need a display name to post in "
-"the forums, invite friends and join games."
-msgstr ""
-
-#: templates/profile.html:21
-msgid "Public user profile and forum posts:"
-msgstr ""
-
-#: templates/profile.html:22
-msgid "User Id:"
-msgstr ""
-
-#: templates/profile.html:30
-msgid "Private information and settings"
-msgstr ""
-
-#: templates/profile.html:31
-msgid "Email:"
-msgstr ""
-
-#: templates/profile.html:39
-msgid "Linked accounts"
-msgstr ""
-
-#: templates/profile.html:44 templates/registeroauthconfirm.html:24
-msgid "Provider:"
-msgstr ""
-
-#: templates/profile.html:44
-msgid "Unique Id:"
-msgstr ""
-
-#: templates/profile.html:53
-msgid "Sessions"
+#: templates/profile.html:47
+msgid "Your display name is your public Id. You need a display name to post in the forums, invite friends and join games."
 msgstr ""
 
 #: templates/profile.html:55
-msgid "Browsers"
+msgid "Public user profile and forum posts:"
 msgstr ""
 
-#: templates/profile.html:60 templates/profile.html:76
-msgid "Connected"
+#: templates/profile.html:56
+msgid "User Id:"
 msgstr ""
 
-#: templates/profile.html:62
-msgid "Current session"
+#: templates/profile.html:71
+msgid "Account Settings"
 msgstr ""
 
-#: templates/profile.html:64 templates/profile.html:77
-msgid "Disconnect"
-msgstr ""
-
-#: templates/profile.html:84
+#: templates/profile.html:81
 msgid "Apps data"
 msgstr ""
 
-#: templates/profile.html:96
+#: templates/profile.html:91
+msgid "Connected Applications"
+msgstr ""
+
+#: templates/profile.html:101
+msgid "Browser sessions"
+msgstr ""
+
+#: templates/profile.html:106 templates/profile.html:122
+msgid "Connected"
+msgstr ""
+
+#: templates/profile.html:108
+msgid "Current session"
+msgstr ""
+
+#: templates/profile.html:110 templates/profile.html:123
+msgid "Disconnect"
+msgstr ""
+
+#: templates/profile.html:117
+msgid "Apps"
+msgstr ""
+
+#: templates/profile.html:130
+msgid "browser session"
+msgid_plural "browser sessions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/profile.html:173
 msgid "Developers"
 msgstr ""
 
-#: templates/profilepublic.html:6 templates/profilepublic.html:19
+#: templates/profilepublic.html:6 templates/profilepublic.html:20
 msgid "User"
 msgstr ""
 
-#: templates/reauthenticate.html:7 templates/reauthenticate.html:43
+#: templates/reauthenticate.html:7 templates/reauthenticate.html:44
 msgid "Reauthenticate"
 msgstr ""
 
-#: templates/reauthenticate.html:22
+#: templates/reauthenticate.html:23
 msgid "Reauthenticate with email and password"
 msgstr ""
 
-#: templates/reauthenticate.html:61
+#: templates/reauthenticate.html:62
 msgid "Reauthenticate with a third party provider"
 msgstr ""
 
-#: templates/register.html:23
+#: templates/register.html:24
 msgid "Create an account using an email and password"
 msgstr ""
 
-#: templates/register.html:52
+#: templates/register.html:53 templates/registeroauthwithexistingemail.html:87
 msgid "Create an account using a third party provider"
 msgstr ""
 
-#: templates/registerconfirm.html:20
+#: templates/registerconfirm.html:21
 msgid "Confirm your registration using email and password"
 msgstr ""
 
-#: templates/registerconfirm.html:39
+#: templates/registerconfirm.html:40
 msgid "Save my password and create my account"
 msgstr ""
 
@@ -1355,124 +1344,144 @@ msgstr ""
 msgid "Confirm account creation using a third party provider"
 msgstr ""
 
-#: templates/registeroauthconfirm.html:20
+#: templates/registeroauthconfirm.html:22
 msgid "Confirm your registration"
 msgstr ""
 
-#: templates/registeroauthconfirm.html:20
+#: templates/registeroauthconfirm.html:22
 msgid "Set your email and confirm your registration"
 msgstr ""
 
-#: templates/registeroauthconfirm.html:22
+#: templates/registeroauthconfirm.html:24
 msgid "You are about to create a new account using"
 msgstr ""
 
-#: templates/registeroauthconfirm.html:25
-#, python-format
-msgid "Your unique identifier at %(providername)s:"
-msgstr ""
-
-#: templates/registeroauthconfirm.html:26
+#: templates/registeroauthconfirm.html:28
 #, python-format
 msgid "Email associated with your %(providername)s account:"
 msgstr ""
 
-#: templates/registeroauthconfirm.html:33
+#: templates/registeroauthconfirm.html:35
 msgid "Please enter your email address"
 msgstr ""
 
-#: templates/registeroauthconfirm.html:42
+#: templates/registeroauthconfirm.html:44
 #, python-format
-msgid ""
-"The information above will be stored in your account so we can uniquely "
-"identify you.<br> You can change your email address once registered.<br> "
-"We do not retrieve any other information from %(providername)s."
+msgid "The information above will be stored in your account so we can uniquely identify you.<br> You can change your email address once registered.<br> We do not retrieve any other information from %(providername)s."
 msgstr ""
 
-#: templates/registeroauthconfirm.html:48
+#: templates/registeroauthconfirm.html:50
 msgid "Yes, create account"
 msgstr ""
 
-#: templates/registeroauthconfirm.html:59
+#: templates/registeroauthconfirm.html:61
 msgid "Set up my profile"
 msgstr ""
 
-#: templates/registeroauthconfirm.html:60
+#: templates/registeroauthconfirm.html:62
 msgid "Continue browsing"
 msgstr ""
 
-#: templates/store.html:21
+#: templates/registeroauthwithexistingemail.html:7
+msgid "Authentication with existing email"
+msgstr ""
+
+#: templates/registeroauthwithexistingemail.html:18
+msgid "Log in or create a new account"
+msgstr ""
+
+#: templates/registeroauthwithexistingemail.html:22
+msgid "Log in to an existing account"
+msgstr ""
+
+#: templates/registeroauthwithexistingemail.html:23
+#, python-format
+msgid "Use an authentication method you've used before. Once logged in, you'll be able to add %(providername)s as a login method from your profile page."
+msgstr ""
+
+#: templates/registeroauthwithexistingemail.html:70
+msgid "You may need to log out or use a different browser"
+msgstr ""
+
+#: templates/registeroauthwithexistingemail.html:81
+#, python-format
+msgid "Create a new account using %(providername)s as a login method"
+msgstr ""
+
+#: templates/registeroauthwithexistingemail.html:82
+#, python-format
+msgid "Warning: you will need an email address different from %(email)s."
+msgstr ""
+
+#: templates/store.html:22
 msgid "Purchase"
 msgstr ""
 
-#: templates/storeemulatefastspring.html:21
+#: templates/storeemulatefastspring.html:22
 msgid "Store Emulator - FastSpring"
 msgstr ""
 
-#: templates/storeemulatefastspring.html:23
-msgid ""
-"This form enables you to emulate purchases. You have been redirected to "
-"the store emulator because either the third-party FastSpring store is not"
-" set up, you are in debug mode or use of the emulator has been forced."
+#: templates/storeemulatefastspring.html:24
+msgid "This form enables you to emulate purchases. You have been redirected to the store emulator because either the third-party FastSpring store is not set up, you are in debug mode or use of the emulator has been forced."
 msgstr ""
 
-#: templates/storeemulatefastspring.html:24
+#: templates/storeemulatefastspring.html:25
 msgid "The emulator creates product licence records of order_type 'emulated'."
 msgstr ""
 
-#: templates/storeemulatefastspring.html:27
+#: templates/storeemulatefastspring.html:28
 msgid "Product (editable for testing purposes)"
 msgstr ""
 
-#: templates/storeemulatefastspring.html:39
+#: templates/storeemulatefastspring.html:40
 msgid "Purchase Price"
 msgstr ""
 
-#: templates/storeemulatefastspring.html:46
+#: templates/storeemulatefastspring.html:47
 msgid "Purchaser Email"
 msgstr ""
 
-#: templates/storeemulatefastspring.html:53
+#: templates/storeemulatefastspring.html:54
 msgid "Quantity"
 msgstr ""
 
-#: templates/storeemulatefastspring.html:61
+#: templates/storeemulatefastspring.html:62
 msgid "Emulate a purchase"
 msgstr ""
 
-#: templates/thread.html:50
+#: templates/thread.html:51
 msgid "First"
 msgstr ""
 
-#: templates/thread.html:51
+#: templates/thread.html:52
 msgid "Previous"
 msgstr ""
 
-#: templates/thread.html:59
+#: templates/thread.html:60
 msgid "Next"
 msgstr ""
 
-#: templates/thread.html:60
+#: templates/thread.html:61
 msgid "Last"
 msgstr ""
 
-#: templates/thread.html:67
+#: templates/thread.html:68
 msgid "Reply"
 msgstr ""
 
-#: templates/thread.html:76
+#: templates/thread.html:77
 msgid "Reply "
 msgstr ""
 
-#: templates/thread.html:88
+#: templates/thread.html:89
 msgid "Submit new post"
 msgstr ""
 
-#: templates/thread.html:112
+#: templates/thread.html:113
 msgid "Please set up your display name to post an answer."
 msgstr ""
 
-#: templates/thread.html:119
+#: templates/thread.html:120
 msgid "Please log in or create an account to post an answer."
 msgstr ""
 

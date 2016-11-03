@@ -40,7 +40,7 @@ def EMAIL_CHANGE_UNDO_INFO_EMAIL_SENT(): return _( "An email was sent to your cu
 
 def AUTH_PROVIDER_ADDED( provider ): return _( "Authentication method %(provider)s is added.", provider = provider )
 def AUTH_PROVIDER_CANNOT_BE_ADDED( provider ): return _( "Authentication method %(provider)s cannot be added to your account. It is already registered to another user.", provider = provider )
-def AUTH_PROVIDER_DEREGISTERED( provider_name ): return _( "Authentication method %(provider)s is deregistered.", provider = provider_name )
+def AUTH_PROVIDER_REMOVED( provider_name ): return _("Authentication method %(provider)s is removed.", provider = provider_name)
 
 def PASSWORD_UPDATED(): return _( "Your password is updated." )
 def PASSWORD_SET(): return _( "Your password is set." )

@@ -149,7 +149,7 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 					break
 		elif deregister:
 			self.remove_auth_id( deregister)
-			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ))
+			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_REMOVED( deregister ))
 			self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
 
