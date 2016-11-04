@@ -761,59 +761,56 @@ class HandlerEmailRollback( enki.HandlerBase ):
 			self.abort( 404 )
 
 
-class HandlerAccountDelete( enki.HandlerBase ):
+class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 # delete user account
 
-	def get( self ):
-		if self.ensure_is_logged_in():
-			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends' )
-			current_display_name = ''
-			if enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
-				user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
-				current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
-			previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
-			email = self.enki_user.email
-			password = True if self.enki_user.password else False
-			auth_provider = []
-			for item in self.enki_user.auth_ids_provider:
-				provider_name, provider_uid = item.partition( ':' )[ ::2 ]
-				auth_provider.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid )})
-			has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id( ) ) else False
-			has_messages = 'debug c'
-			has_friends = 'debug d'
-			data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends )
-			self.render_tmpl( 'accountdelete.html',
-			                  active_menu = 'profile',
-			                  data = data,
-			                  is_active = True if enki.HandlerBase.account_is_active( self.enki_user.key.id( ) ) else False )
+	def get_logged_in( self ):
+		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends' )
+		current_display_name = ''
+		if enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
+			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
+			current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
+		previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
+		email = self.enki_user.email
+		password = True if self.enki_user.password else False
+		auth_provider = []
+		for item in self.enki_user.auth_ids_provider:
+			provider_name, provider_uid = item.partition( ':' )[ ::2 ]
+			auth_provider.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid )})
+		has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
+		has_messages = 'debug c'
+		has_friends = 'debug d'
+		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends )
+		self.render_tmpl( 'accountdelete.html',
+						  active_menu = 'profile',
+						  data = data,
+						  is_active = True if enki.HandlerBase.account_is_active( self.enki_user.key.id()) else False )
 
-	def post( self ):
-		if self.ensure_is_logged_in():
-			self.check_CSRF()
-			submit_type = self.request.get( 'submittype' )
-			if submit_type == 'cancel':
-				self.redirect( enki.libutil.get_local_url( 'profile' ) )
-			elif submit_type == 'delete':
-				delete_posts = False
-				if enki.HandlerBase.account_is_active( self.enki_user.key.id( ) ):
-					has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id( ) ) else False
-					if has_posts and self.request.get( 'deleteposts' ) == 'on':
-						delete_posts = True
-				if self.enki_user.email and self.enki_user.email != 'removed':
-					# if the user has an email, send a confirmation email
-					self.account_deletion_request( delete_posts )
-					if delete_posts:
-						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.ACCOUNT_AND_POSTS_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
-					else:
-						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.ACCOUNT_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
+	def post_reauthenticated( self, params ):
+		submit_type = params.get( 'submittype' )
+		if submit_type == 'cancel':
+			self.redirect( enki.libutil.get_local_url( 'profile' ))
+		elif submit_type == 'delete':
+			delete_posts = False
+			if enki.HandlerBase.account_is_active( self.enki_user.key.id()):
+				has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
+				if has_posts and params.get( 'deleteposts' ) == 'on':
+					delete_posts = True
+			if self.enki_user.email and self.enki_user.email != 'removed':
+				# if the user has an email, send a confirmation email
+				self.account_deletion_request( delete_posts )
+				if delete_posts:
+					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.ACCOUNT_AND_POSTS_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
 				else:
-					# otherwise just delete the account
-					self.delete_account( delete_posts )
-					if delete_posts:
-						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.ACCOUNT_AND_POSTS_DELETED())
-					else:
-						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.ACCOUNT_DELETED())
-				self.redirect( enki.libutil.get_local_url( ) )
+					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.ACCOUNT_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
+			else:
+				# otherwise just delete the account
+				self.delete_account( delete_posts )
+				if delete_posts:
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_AND_POSTS_DELETED())
+				else:
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_DELETED())
+			self.redirect( enki.libutil.get_local_url())
 
 
 class HandlerAccountDeleteConfirm( enki.HandlerBase ):
@@ -830,10 +827,10 @@ class HandlerAccountDeleteConfirm( enki.HandlerBase ):
 		if tokenExists:
 			result = self.delete_account( delete_posts, token )
 			if delete_posts:
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.ACCOUNT_AND_POSTS_DELETED())
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_AND_POSTS_DELETED())
 			else:
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.ACCOUNT_DELETED())
-			self.redirect( enki.libutil.get_local_url( ) )
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_DELETED())
+			self.redirect( enki.libutil.get_local_url())
 		else:
 			self.abort( 404 )
 
