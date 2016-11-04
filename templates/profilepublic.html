@@ -14,7 +14,7 @@
             {% include "incmessageinfo.html" %}
 
 	        {% if display_name_data %}
-	            {% if display_name_data.entity == deleted_dn %}
+	            {% if display_name_data.entity.display_name == deleted_dn %}
 	                <h3>{{ deleted_dn_display }}</h3>
 	            {% else %}
 	                <h3>{{ _( "User" ) }} {{ display_name_data.entity.display_name }}</h3>
