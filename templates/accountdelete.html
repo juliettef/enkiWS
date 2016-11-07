@@ -33,6 +33,8 @@
 									<ul>
 										{% if data.current_display_name %}<li><p>{{ _( "Your display name <em>%(display_name)s</em> is replaced with <em>%(deleted_dn)s</em> throughout.", display_name = data.current_display_name.display_name, deleted_dn = deleted_dn_display ) }}</p></li>{% endif %}
 										{% if data.previous_display_names %}<li><p>{{ ngettext( "Your old display name <em>%(previous_display_names)s</em> is removed from your <a href='%(user_page_url)s'>user page</a>.", "Your old display names <em>%(previous_display_names)s</em> are removed from your <a href='%(user_page_url)s'>user page</a>.", data.previous_display_names|count, previous_display_names =  data.previous_display_names|join(', '), user_page_url = data.current_display_name.user_page ) }}</p></li>{% endif %}
+										{% if data.has_messages %}<li><p>{{ _( "Your friend invitations are deleted." )}}</p></li>{% endif %}
+										{% if data.has_friends %}<li><p>{{ _( "Your friends are removed." )}}</p></li>{% endif %}
 										{% if data.has_posts %}<li><p>{{ _( "<em><a href='%(user_page_url)s'>Forum threads and posts</a></em> you published remain visible but the author is anonymous <em>%(deleted_dn)s</em>.", user_page_url = data.current_display_name.user_page, deleted_dn = deleted_dn_display ) }}</p></li>{% endif %}
 										{% if data.has_posts %}<p class="text-warning">{{ _( "<b>Warning</b>: once your account is deleted, you will be <b>unable to edit or delete your posts</b>." ) }}</p>
 										<p>{{ _( "You can <a href='%(user_page_url)s'>Manually edit or delete individual posts from your user page</a> or check the option below to delete all your posts.", user_page_url = data.current_display_name.user_page ) }}</p>

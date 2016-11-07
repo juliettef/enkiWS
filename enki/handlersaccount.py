@@ -778,8 +778,8 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 			provider_name, provider_uid = item.partition( ':' )[ ::2 ]
 			auth_provider.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid )})
 		has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
-		has_messages = 'debug c'
-		has_friends = 'debug d'
+		has_messages = True if enki.libmessage.exist_sent_or_received_message( self.user_id ) else False
+		has_friends = True if enki.libfriends.exist_EnkiFriends( self.user_id ) else False
 		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends )
 		self.render_tmpl( 'accountdelete.html',
 						  active_menu = 'profile',
