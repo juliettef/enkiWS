@@ -85,3 +85,9 @@ def exist_sent_or_received_message( user_id ):
 	count = EnkiModelMessage.query( ndb.OR( EnkiModelMessage.sender == user_id,
 	                                        EnkiModelMessage.recipient == user_id )).count( 1 )
 	return count > 0
+
+
+def fetch_keys_sent_or_received_message( user_id ):
+	list = EnkiModelMessage.query( ndb.OR( EnkiModelMessage.sender == user_id,
+	                                        EnkiModelMessage.recipient == user_id )).fetch( keys_only = True )
+	return list
