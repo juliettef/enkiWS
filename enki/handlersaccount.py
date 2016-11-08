@@ -786,7 +786,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 		self.render_tmpl( 'accountdelete.html',
 						  active_menu = 'profile',
 						  data = data,
-						  is_active = True if enki.HandlerBase.account_is_active( self.enki_user.key.id()) else False )
+						  is_active = True if ( enki.HandlerBase.account_is_active( self.enki_user.key.id()) or email ) else False )
 
 	def post_reauthenticated( self, params ):
 		submit_type = params.get( 'submittype' )
