@@ -42,6 +42,14 @@
 										{% endif %}
 									</ul>
 								{% endif %}
+								{% if data.has_product_purchased_unactivated or data.has_product_activated %}<li><p>{{ _( "Your <b>product keys</b>:" ) }}</p></li>
+									<ul>
+										{% if data.has_product_purchased_unactivated %}<li><p>{{ _( "Your purchased, unactivated product keys remain valid. You can <a href='%(profile_library_url)s'>retrieve the keys from your library</a>.", profile_library_url = 'profile'|local + '?extended=True#library' )}}
+										<br><span class="text-warning">{{ _( "Warning: once your account is deleted, you won't be able to view the product keys on our system. Make sure you back them up." )}}</span></p></li>{% endif %}
+										{% if data.has_product_activated %}<li><p>{{ _( "Your activated product keys are no longer available." )}}
+										<br><span class="text-warning">{{ _( "Warning: your activated product keys cannot be transferred. Once your account is deleted, you won't be able tu use them anymore." )}}</span></p></li>{% endif %}
+									</ul>
+								{% endif %}
 							</ul>
 						</div>
 				</fieldset>

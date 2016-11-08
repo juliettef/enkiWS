@@ -662,7 +662,8 @@ class HandlerBase( webapp2.RequestHandler ):
 		has_friends = True if enki.libfriends.fetch_EnkiFriends_by_user( user_id ) else False
 		has_messages = True if enki.libmessage.exist_sent_or_received_message( user_id ) else False
 		has_forum_posts = True if enki.libforum.fetch_EnkiPost_by_author( user_id ) else False
-		if has_friends or has_messages or has_forum_posts:
+		has_product = True if enki.libstore.exist_EnkiProductKey_by_purchaser_or_activator( user_id ) else False
+		if has_friends or has_messages or has_forum_posts or has_product:
 			result = True
 		return result
 

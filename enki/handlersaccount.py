@@ -765,7 +765,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 # delete user account
 
 	def get_logged_in( self ):
-		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends' )
+		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated' )
 		current_display_name = ''
 		if enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
 			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
@@ -780,7 +780,9 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 		has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
 		has_messages = True if enki.libmessage.exist_sent_or_received_message( self.user_id ) else False
 		has_friends = True if enki.libfriends.exist_EnkiFriends( self.user_id ) else False
-		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends )
+		has_product_purchased_unactivated = True if enki.libstore.exist_EnkiProductKey_by_purchaser_not_activated( self.user_id ) else False
+		has_product_activated = True if enki.libstore.exist_EnkiProductKey_by_activator( self.user_id ) else False
+		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated )
 		self.render_tmpl( 'accountdelete.html',
 						  active_menu = 'profile',
 						  data = data,
