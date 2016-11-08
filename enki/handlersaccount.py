@@ -771,7 +771,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
 			current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
 		previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
-		email = self.enki_user.email
+		email = self.enki_user.email if ( self.enki_user.email and self.enki_user.email != 'removed' ) else ''
 		password = True if self.enki_user.password else False
 		auth_provider = []
 		for item in self.enki_user.auth_ids_provider:
