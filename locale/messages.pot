@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-03 18:12+0000\n"
+"POT-Creation-Date: 2016-11-09 16:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -633,36 +633,66 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: templates/accountdelete.html:36
-#, python-format
-msgid "<em><a href='%(user_page_url)s'>Forum threads and posts</a></em> you published remain visible but the author is anonymous <em>%(deleted_dn)s</em>."
+msgid "Your <em>friend invitations</em> are deleted."
 msgstr ""
 
 #: templates/accountdelete.html:37
-msgid "<b>Warning</b>: once your account is deleted, you will be <b>unable to edit or delete your posts</b>."
+#, python-format
+msgid "Your <em>friends</em> keep a link to your anonymised <a href='%(user_page_url)s'>public page</a> in their friends list.<br>If you prefer to remove the links, <a href='%(friends_page_url)s'>remove your friends manually</a> before deleting your account."
 msgstr ""
 
 #: templates/accountdelete.html:38
 #, python-format
-msgid "You can <a href='%(user_page_url)s'>Manually edit or delete individual posts from your user page</a> or check the option below to delete all your posts."
+msgid "Your <em>Forum threads and posts</em> remain visible with the author set to <em>%(deleted_dn)s</em>.<br>You can <a href='%(user_page_url)s'>edit or delete individual posts from your user page</a> before deleting your account. Alternatively, check the option below to delete all your posts."
 msgstr ""
 
-#: templates/accountdelete.html:52
+#: templates/accountdelete.html:39
+msgid "Warning: once your account is deleted, you will be <b>unable to edit nor delete your posts</b>."
+msgstr ""
+
+#: templates/accountdelete.html:43
+msgid "Your <b>licence keys</b>:"
+msgstr ""
+
+#: templates/accountdelete.html:45
+#, python-format
+msgid "Your <em>unactivated licence keys</em> remain valid. You can <a href='%(profile_library_url)s'>retrieve the keys from your library</a>."
+msgstr ""
+
+#: templates/accountdelete.html:46
+msgid "Warning: once your account is deleted, you won't be able to view the licence keys on our system. <b>Make sure you back them up</b>."
+msgstr ""
+
+#: templates/accountdelete.html:47
+msgid "Your <em>activated licence keys</em> are no longer available."
+msgstr ""
+
+#: templates/accountdelete.html:48
+msgid "Warning: activated licence keys cannot be transferred. Once your account is deleted, <b>you won't be able tu use them anymore</b>."
+msgstr ""
+
+#: templates/accountdelete.html:61 templates/accountdelete.html:76
 msgid "Delete my account"
 msgstr ""
 
-#: templates/accountdelete.html:55
-msgid "You are about to delete your account, are you sure? This cannot be undone."
-msgstr ""
-
-#: templates/accountdelete.html:59
+#: templates/accountdelete.html:67
 msgid "Delete all my forum posts permanently"
 msgstr ""
 
-#: templates/accountdelete.html:63
-msgid "Yes, delete my account"
+#: templates/accountdelete.html:72
+#, python-format
+msgid "You will receive an email at address %(email)s. Your account will be deleted once you've confirmed through the link in the email."
 msgstr ""
 
-#: templates/accountdelete.html:64 templates/forum.html:87
+#: templates/accountdelete.html:73
+msgid "Send me an email to delete my account"
+msgstr ""
+
+#: templates/accountdelete.html:75
+msgid "Warning: deleting your account cannot be undone."
+msgstr ""
+
+#: templates/accountdelete.html:78 templates/forum.html:87
 #: templates/loginaddconfirm.html:30 templates/post.html:59
 #: templates/post.html:85 templates/reauthenticate.html:45
 #: templates/registeroauthconfirm.html:51 templates/thread.html:90

@@ -34,20 +34,18 @@
 										{% if data.current_display_name %}<li><p>{{ _( "Your display name <em>%(display_name)s</em> is replaced with <em>%(deleted_dn)s</em> throughout.", display_name = data.current_display_name.display_name, deleted_dn = deleted_dn_display ) }}</p></li>{% endif %}
 										{% if data.previous_display_names %}<li><p>{{ ngettext( "Your old display name <em>%(previous_display_names)s</em> is removed from your <a href='%(user_page_url)s'>user page</a>.", "Your old display names <em>%(previous_display_names)s</em> are removed from your <a href='%(user_page_url)s'>user page</a>.", data.previous_display_names|count, previous_display_names =  data.previous_display_names|join(', '), user_page_url = data.current_display_name.user_page ) }}</p></li>{% endif %}
 										{% if data.has_messages %}<li><p>{{ _( "Your <em>friend invitations</em> are deleted." )}}</p></li>{% endif %}
-										{% if data.has_friends %}<li><p>{{ _( "Your <em>friends</em> keep a link to your anonymised <a href='%(user_page_url)s'>public page</a> in their friends list.
-										<br>If you prefer to remove the links, <a href='%(friends_page_url)s'>remove your friends manually</a> before deleting your account.", user_page_url = data.current_display_name.user_page, friends_page_url = 'friends'|local )}}</p></li>{% endif %}
-										{% if data.has_posts %}<li><p>{{ _( "Your <em>Forum threads and posts</em> remain visible with the author set to <em>%(deleted_dn)s</em>.
-										<br>You can <a href='%(user_page_url)s'>edit or delete individual posts from your user page</a> before deleting your account. Alternatively, check the option below to delete all your posts.", user_page_url = data.current_display_name.user_page, deleted_dn = deleted_dn_display ) }}
-										<br><span class="text-warning">{{ _( "<b>Warning</b>: once your account is deleted, you will be <b>unable to edit or delete your posts</b>." ) }}</span></p></li>
+										{% if data.has_friends %}<li><p>{{ _( "Your <em>friends</em> keep a link to your anonymised <a href='%(user_page_url)s'>public page</a> in their friends list.<br>If you prefer to remove the links, <a href='%(friends_page_url)s'>remove your friends manually</a> before deleting your account.", user_page_url = data.current_display_name.user_page, friends_page_url = 'friends'|local )}}</p></li>{% endif %}
+										{% if data.has_posts %}<li><p>{{ _( "Your <em>Forum threads and posts</em> remain visible with the author set to <em>%(deleted_dn)s</em>.<br>You can <a href='%(user_page_url)s'>edit or delete individual posts from your user page</a> before deleting your account. Alternatively, check the option below to delete all your posts.", user_page_url = data.current_display_name.user_page, deleted_dn = deleted_dn_display ) }}
+										<br><span class="text-warning">{{ _( "Warning: once your account is deleted, you will be <b>unable to edit nor delete your posts</b>." ) }}</span></p></li>
 										{% endif %}
 									</ul>
 								{% endif %}
-								{% if data.has_product_purchased_unactivated or data.has_product_activated %}<li><p>{{ _( "Your <b>product keys</b>:" ) }}</p></li>
+								{% if data.has_product_purchased_unactivated or data.has_product_activated %}<li><p>{{ _( "Your <b>licence keys</b>:" ) }}</p></li>
 									<ul>
-										{% if data.has_product_purchased_unactivated %}<li><p>{{ _( "Your purchased, unactivated product keys remain valid. You can <a href='%(profile_library_url)s'>retrieve the keys from your library</a>.", profile_library_url = 'profile'|local + '?extended=True#library' )}}
-										<br><span class="text-warning">{{ _( "Warning: once your account is deleted, you won't be able to view the product keys on our system. Make sure you back them up." )}}</span></p></li>{% endif %}
-										{% if data.has_product_activated %}<li><p>{{ _( "Your activated product keys are no longer available." )}}
-										<br><span class="text-warning">{{ _( "Warning: your activated product keys cannot be transferred. Once your account is deleted, you won't be able tu use them anymore." )}}</span></p></li>{% endif %}
+										{% if data.has_product_purchased_unactivated %}<li><p>{{ _( "Your <em>unactivated licence keys</em> remain valid. You can <a href='%(profile_library_url)s'>retrieve the keys from your library</a>.", profile_library_url = 'profile'|local + '?extended=True#library' )}}
+										<br><span class="text-warning">{{ _( "Warning: once your account is deleted, you won't be able to view the licence keys on our system. <b>Make sure you back them up</b>." )}}</span></p></li>{% endif %}
+										{% if data.has_product_activated %}<li><p>{{ _( "Your <em>activated licence keys</em> are no longer available." )}}
+										<br><span class="text-warning">{{ _( "Warning: activated licence keys cannot be transferred. Once your account is deleted, <b>you won't be able tu use them anymore</b>." )}}</span></p></li>{% endif %}
 									</ul>
 								{% endif %}
 							</ul>
