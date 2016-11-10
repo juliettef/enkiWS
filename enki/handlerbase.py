@@ -33,6 +33,7 @@ from enki.modeltokenauth import EnkiModelTokenAuth
 from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modeluser import EnkiModelUser
+from enki.modelapp import EnkiModelApp
 
 
 ERROR_EMAIL_IN_USE = -13
@@ -663,7 +664,9 @@ class HandlerBase( webapp2.RequestHandler ):
 		has_messages = True if enki.libmessage.exist_sent_or_received_message( user_id ) else False
 		has_forum_posts = True if enki.libforum.fetch_EnkiPost_by_author( user_id ) else False
 		has_product = True if enki.libstore.exist_EnkiProductKey_by_purchaser_or_activator( user_id ) else False
-		if has_friends or has_messages or has_forum_posts or has_product:
+		has_apps = True if EnkiModelApp.exist_by_user_id( user_id ) else False
+		has_apps_data = True if enki.librestapi.exist_EnkiModelRestAPIDataStore_by_user_id( user_id ) else False
+		if has_friends or has_messages or has_forum_posts or has_product or has_apps or has_apps_data:
 			result = True
 		return result
 
@@ -732,12 +735,14 @@ class HandlerBase( webapp2.RequestHandler ):
 					enki.libdisplayname.set_display_name( user_to_delete.key.id(), enki.libdisplayname.DELETED_PREFIX, enki.libdisplayname.DELETED_SUFFIX )
 			# delete user's sent and received messages
 			ndb.delete_multi( enki.libmessage.fetch_keys_sent_or_received_message( user_to_delete.key.id()))
+			# TODO delete user's apps and apps data
 			# delete user's posts if required
 			if delete_posts:
 				enki.libforum.delete_user_posts( user_to_delete.key.id())
 		# log the deleted user out
 		if self.enki_user == user_to_delete.key.id():
 			self.log_out()
+			# TODO delete user's apps sessions
 		enki.libuser.revoke_user_authentications( user_to_delete.key.id())
 
 

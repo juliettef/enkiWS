@@ -15,6 +15,11 @@ class EnkiModelApp( model.Model ):
 		return count > 0
 
 	@classmethod
+	def exist_by_user_id( cls, user_id ):
+		count = cls.query( cls.user_id == user_id ).count( 1 )
+		return count > 0
+
+	@classmethod
 	def count_by_user_id( cls, user_id ):
 		return cls.query( cls.user_id == user_id ).count()
 
