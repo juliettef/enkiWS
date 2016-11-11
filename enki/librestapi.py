@@ -143,11 +143,6 @@ def get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id_not_expire
 	return entity
 
 
-def exist_EnkiModelRestAPIDataStore_by_user_id( user_id ):
-	count = EnkiModelRestAPIDataStore.query( EnkiModelRestAPIDataStore.user_id == user_id ).count( 1 )
-	return count > 0
-
-
 def fetch_EnkiModelRestAPIDataStore_by_user_id( user_id ):
 	list = EnkiModelRestAPIDataStore.query( EnkiModelRestAPIDataStore.user_id == user_id ).order( EnkiModelRestAPIDataStore.app_id,
 	                                                                                              EnkiModelRestAPIDataStore.data_type,

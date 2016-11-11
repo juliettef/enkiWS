@@ -11,7 +11,6 @@ import enki.libdisplayname
 import enki.libforum
 import enki.libfriends
 import enki.libmessage
-import enki.librestapi
 import enki.textmessages as MSG
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
@@ -766,7 +765,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 # delete user account
 
 	def get_logged_in( self ):
-		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated, has_apps, has_apps_data' )
+		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated' )
 		current_display_name = ''
 		if enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
 			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
@@ -783,9 +782,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 		has_friends = True if enki.libfriends.exist_EnkiFriends( self.user_id ) else False
 		has_product_purchased_unactivated = True if enki.libstore.exist_EnkiProductKey_by_purchaser_not_activated( self.user_id ) else False
 		has_product_activated = True if enki.libstore.exist_EnkiProductKey_by_activator( self.user_id ) else False
-		has_apps = True if EnkiModelApp.count_by_user_id( self.user_id ) else False
-		has_apps_data = True if enki.librestapi.exist_EnkiModelRestAPIDataStore_by_user_id( self.user_id ) else False
-		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated, has_apps, has_apps_data )
+		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated )
 		self.render_tmpl( 'accountdelete.html',
 						  active_menu = 'profile',
 						  data = data,
