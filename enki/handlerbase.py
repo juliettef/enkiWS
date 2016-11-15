@@ -742,9 +742,9 @@ class HandlerBase( webapp2.RequestHandler ):
 
 
 	def cleanup_item( self ):
-		likelyhood = 10 # occurs with a probability of 1%
+		likelihood = 10 # occurs with a probability of 1%
 		number = random.randint( 1, 1000 )
-		if number < likelyhood:
+		if number < likelihood:
 			ndb.delete_multi_async( self.fetch_old_backoff_timers( 3 ))
 			ndb.delete_multi_async( self.fetch_old_auth_tokens( 3 ))
 			ndb.delete_multi_async( self.fetch_old_sessions( 3 ))

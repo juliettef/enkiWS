@@ -62,9 +62,9 @@ def check_secret( user_id, auth_token, app_secret ):
 
 
 def refresh_EnkiModelRestAPIConnectToken_non_expiring():
-	likelyhood = 10 # occurs with a probability of 1%
+	likelihood = 10 # occurs with a probability of 1%
 	number = random.randint( 1, 1000 )
-	if number < likelyhood:
+	if number < likelihood:
 		list = fetch_EnkiModelRestAPIDataStore_non_expiring()
 		for item in list:
 			item.time_expires = datetime.datetime.now() + datetime.timedelta( seconds = DATASTORE_NON_EXPIRING )
