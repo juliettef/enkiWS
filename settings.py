@@ -48,6 +48,7 @@ try:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthTwitter ]
 except ImportError:
 	KEY_SESSION = 'See example_secrets.txt'
+	URL_PURCHASE_FASTSPRING = ''
 	SECRET_FASTSPRING = ''
 	SECRETS_EXIST = False
 	pass
