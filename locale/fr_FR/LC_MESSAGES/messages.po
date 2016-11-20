@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-03 18:12+0000\n"
+"POT-Creation-Date: 2016-11-09 16:39+0000\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -607,7 +607,7 @@ msgstr "Vos <b>données privées sont supprimées</b> :"
 
 #: templates/accountdelete.html:25
 msgid "Your email address:"
-msgstr "Votre adresse de courrier électronique:"
+msgstr "Votre adresse de courrier électronique :"
 
 #: templates/accountdelete.html:26
 msgid "Your <em>password</em>"
@@ -634,36 +634,66 @@ msgstr[0] "Votre ancien nom d'affichage <em>%(previous_display_names)s</em> est 
 msgstr[1] "Vos anciens noms d'affichage <em>%(previous_display_names)s</em> sont supprimés de votre <a href='%(user_page_url)s'>page utilisateur.trice</a>."
 
 #: templates/accountdelete.html:36
-#, python-format
-msgid "<em><a href='%(user_page_url)s'>Forum threads and posts</a></em> you published remain visible but the author is anonymous <em>%(deleted_dn)s</em>."
-msgstr "Forum: <em><a href='%(user_page_url)s'>les sujets et messages</a></em> que vous avez publiés demeurent visibles mais sont anonymisés. L'auteur est <em>%(deleted_dn)s</em>."
+msgid "Your <em>friend invitations</em> are deleted."
+msgstr "Les demandes d'ajout à votre liste d'ami.e.s sont supprimées."
 
 #: templates/accountdelete.html:37
-msgid "<b>Warning</b>: once your account is deleted, you will be <b>unable to edit or delete your posts</b>."
-msgstr "<b>Attention</b>: après avoir supprimé votre compte, <b>vous ne pourrez plus éditer ou supprimer vos messages de forum</b>."
+#, python-format
+msgid "Your <em>friends</em> keep a link to your anonymised <a href='%(user_page_url)s'>public page</a> in their friends list.<br>If you prefer to remove the links, <a href='%(friends_page_url)s'>remove your friends manually</a> before deleting your account."
+msgstr "Vos <em>ami.e.s</em> conservent un lien vers votre <a href='%(user_page_url)s'>page publique</a> anonymisées dans leur liste d'ami.e.s.<br>Si vous préférez que ces liens soient supprimés, <a href='%(friends_page_url)s'>retirez vos ami.e.s de votre liste</a> avant de supprimer votre compte."
 
 #: templates/accountdelete.html:38
 #, python-format
-msgid "You can <a href='%(user_page_url)s'>Manually edit or delete individual posts from your user page</a> or check the option below to delete all your posts."
-msgstr "Vous pouvez <a href='%(user_page_url)s'>éditer ou supprimer des messages de forum individuellement à partir de votre page utilisateur.trice</a> ou cocher l'option ci-dessous pour effacer tous vos messages."
+msgid "Your <em>Forum threads and posts</em> remain visible with the author set to <em>%(deleted_dn)s</em>.<br>You can <a href='%(user_page_url)s'>edit or delete individual posts from your user page</a> before deleting your account. Alternatively, check the option below to delete all your posts."
+msgstr "Vos <em>messages de forum</em> demeurent visibles mais leur auteur devient <em>%(deleted_dn)s</em>. Vous pouvez <a href='%(user_page_url)s'>éditer ou supprimer des messages de forum individuellement à partir de votre page utilisateur.trice</a> ou cocher l'option ci-dessous pour effacer tous vos messages."
 
-#: templates/accountdelete.html:52
+#: templates/accountdelete.html:39
+msgid "Warning: once your account is deleted, you will be <b>unable to edit nor delete your posts</b>."
+msgstr "Attention: après avoir supprimé votre compte, <b>vous ne pourrez plus éditer ni supprimer vos messages de forum</b>."
+
+#: templates/accountdelete.html:43
+msgid "Your <b>licence keys</b>:"
+msgstr "Vos <b>clés de licence</b>:"
+
+#: templates/accountdelete.html:45
+#, python-format
+msgid "Your <em>unactivated licence keys</em> remain valid. You can <a href='%(profile_library_url)s'>retrieve the keys from your library</a>."
+msgstr "Vos <em>clés de licence non activées</em> demeurent valides. Vous en trouverez la liste dans votre <a href='%(profile_library_url)s'>bibliothèque</a>."
+
+#: templates/accountdelete.html:46
+msgid "Warning: once your account is deleted, you won't be able to view the licence keys on our system. <b>Make sure you back them up</b>."
+msgstr "Attention: après avoir supprimé votre compte, vous ne pourrez plus accéder à vos clés sur notre sytème. <b>Assurez-vous de sauvegarder vos clés</b>."
+
+#: templates/accountdelete.html:47
+msgid "Your <em>activated licence keys</em> are no longer available."
+msgstr "Vos <em>clés de licence activées</em> ne sont plus disponibles."
+
+#: templates/accountdelete.html:48
+msgid "Warning: activated licence keys cannot be transferred. Once your account is deleted, <b>you won't be able tu use them anymore</b>."
+msgstr "Attention: les clés de licence activées ne peuvent pas être transferrées. Après avoir supprimé votre compte, <b>vous ne pourrez plus les utiliser</b>."
+
+#: templates/accountdelete.html:61 templates/accountdelete.html:76
 msgid "Delete my account"
 msgstr "Supprimer mon compte"
 
-#: templates/accountdelete.html:55
-msgid "You are about to delete your account, are you sure? This cannot be undone."
-msgstr "Vous êtes sur le point de supprimer votre compte. Cette action est irréversible."
-
-#: templates/accountdelete.html:59
+#: templates/accountdelete.html:67
 msgid "Delete all my forum posts permanently"
 msgstr "Supprimer définitivement tous mes messages de forum."
 
-#: templates/accountdelete.html:63
-msgid "Yes, delete my account"
-msgstr "Oui, supprimer mon compte"
+#: templates/accountdelete.html:72
+#, python-format
+msgid "You will receive an email at address %(email)s. Your account will be deleted once you've confirmed through the link in the email."
+msgstr "Vous recevrez un message de courrier électronique à l'adresse %(email)s. Votre compte ne sera supprimé que lorsque vous l'aurez confirmé en suivant le lien contenu dans le message."
 
-#: templates/accountdelete.html:64 templates/forum.html:87
+#: templates/accountdelete.html:73
+msgid "Send me an email to delete my account"
+msgstr "Envoyez-moi un message de courrier électronique pour supprimer mon compte"
+
+#: templates/accountdelete.html:75
+msgid "Warning: deleting your account cannot be undone."
+msgstr "Attention: supprimer votre compte est irréversible."
+
+#: templates/accountdelete.html:78 templates/forum.html:87
 #: templates/loginaddconfirm.html:30 templates/post.html:59
 #: templates/post.html:85 templates/reauthenticate.html:45
 #: templates/registeroauthconfirm.html:51 templates/thread.html:90
@@ -672,7 +702,7 @@ msgstr "Annuler"
 
 #: templates/appdatastores.html:6
 msgid "User data"
-msgstr "Données utilisatuer"
+msgstr "Données utilisateur"
 
 #: templates/appdatastores.html:17
 msgid "Application data stores"

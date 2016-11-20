@@ -765,26 +765,28 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 # delete user account
 
 	def get_logged_in( self ):
-		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends' )
+		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated' )
 		current_display_name = ''
 		if enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
 			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
 			current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
 		previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
-		email = self.enki_user.email
+		email = self.enki_user.email if ( self.enki_user.email and self.enki_user.email != 'removed' ) else ''
 		password = True if self.enki_user.password else False
 		auth_provider = []
 		for item in self.enki_user.auth_ids_provider:
 			provider_name, provider_uid = item.partition( ':' )[ ::2 ]
 			auth_provider.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid )})
 		has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
-		has_messages = 'debug c'
-		has_friends = 'debug d'
-		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends )
+		has_messages = True if enki.libmessage.exist_sent_or_received_message( self.user_id ) else False
+		has_friends = True if enki.libfriends.exist_EnkiFriends( self.user_id ) else False
+		has_product_purchased_unactivated = True if enki.libstore.exist_EnkiProductKey_by_purchaser_not_activated( self.user_id ) else False
+		has_product_activated = True if enki.libstore.exist_EnkiProductKey_by_activator( self.user_id ) else False
+		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated )
 		self.render_tmpl( 'accountdelete.html',
 						  active_menu = 'profile',
 						  data = data,
-						  is_active = True if enki.HandlerBase.account_is_active( self.enki_user.key.id()) else False )
+						  is_active = True if ( enki.HandlerBase.account_is_active( self.enki_user.key.id()) or email ) else False )
 
 	def post_reauthenticated( self, params ):
 		submit_type = params.get( 'submittype' )

@@ -8,8 +8,6 @@ ENKI_EMULATE_STORE = True  # If True, use the store emulator
 
 REAUTH_EXPIRY = 5  # minutes
 
-URL_PURCHASE_FASTSPRING = str( 'https://sites.fastspring.com/enkisoftware/product/avoyd' )
-
 LOCALES = [ 'en_US', 'en_EN', 'fr_FR' ]
 
 
@@ -37,6 +35,7 @@ HANDLERS = [ enki.handlersoauth.HandlerOAuthSteam ]
 try:
 	from secrets import secrets
 	KEY_SESSION = secrets.KEY_SESSION
+	URL_PURCHASE_FASTSPRING = secrets.URL_PURCHASE_FASTSPRING
 	SECRET_FASTSPRING = secrets.SECRET_FASTSPRING
 	SECRETS_EXIST = True
 	if secrets.CLIENT_ID_GOOGLE:
@@ -50,6 +49,7 @@ try:
 	SECRET_API_KEY_MAILGUN = secrets.SECRET_API_KEY_MAILGUN
 except ImportError:
 	KEY_SESSION = 'See example_secrets.txt'
+	URL_PURCHASE_FASTSPRING = ''
 	SECRET_FASTSPRING = ''
 	SECRET_API_KEY_MAILGUN = ''
 	SECRETS_EXIST = False

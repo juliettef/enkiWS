@@ -694,7 +694,8 @@ class HandlerBase( webapp2.RequestHandler ):
 		has_friends = True if enki.libfriends.fetch_EnkiFriends_by_user( user_id ) else False
 		has_messages = True if enki.libmessage.exist_sent_or_received_message( user_id ) else False
 		has_forum_posts = True if enki.libforum.fetch_EnkiPost_by_author( user_id ) else False
-		if has_friends or has_messages or has_forum_posts:
+		has_product = True if enki.libstore.exist_EnkiProductKey_by_purchaser_or_activator( user_id ) else False
+		if has_friends or has_messages or has_forum_posts or has_product:
 			result = True
 		return result
 
@@ -726,54 +727,56 @@ class HandlerBase( webapp2.RequestHandler ):
 		token_to_save = 'accountdelete'
 		if not token:
 			# there is no token if the user has no email address: they are deleted immediately. They must be logged in.
-			user = self.enki_user
+			user_to_delete = self.enki_user
 		else:
 			# a user has followed a accountdelete token link. The user account associated with the token will be deleted
 			tokenEntity = EnkiModelTokenVerify.get_by_token( token )
-			user = EnkiModelUser.get_by_id( tokenEntity.user_id )
+			user_to_delete = EnkiModelUser.get_by_id( tokenEntity.user_id )
 			# delete all user related tokens except any verify token related to account deletion that's not yet been used
 			if tokenEntity.type == token_to_save:
 				token_to_save = 'accountandpostsdelete'
-		verify_tokens_to_delete = EnkiModelTokenVerify.fetch_keys_by_user_id_except_type( user.key.id( ), token_to_save )
+		verify_tokens_to_delete = EnkiModelTokenVerify.fetch_keys_by_user_id_except_type( user_to_delete.key.id(), token_to_save )
 		if verify_tokens_to_delete:
 			ndb.delete_multi( verify_tokens_to_delete )
-		email_rollback_tokens_to_delete = enki.libuser.fetch_keys_RollbackToken( user.key.id())
+		email_rollback_tokens_to_delete = enki.libuser.fetch_keys_RollbackToken( user_to_delete.key.id())
 		if email_rollback_tokens_to_delete:
 			ndb.delete_multi( email_rollback_tokens_to_delete )
 		# Delete the user account and log them out.
-		if not HandlerBase.account_is_active( user.key.id()):
+		if not HandlerBase.account_is_active( user_to_delete.key.id()):
 			# delete user if the account is inactive
-			display_names = enki.libdisplayname.fetch_EnkiUserDisplayName_by_user_id( user.key.id())
+			display_names = enki.libdisplayname.fetch_EnkiUserDisplayName_by_user_id( user_to_delete.key.id())
 			if display_names:
 				ndb.delete_multi( display_names )
-			user.key.delete()
+			user_to_delete.key.delete()
 		else:
 			# anonymise the user
-			if user.email:
-				user.email = None
-			if user.password:
-				user.password = None
-			if user.auth_ids_provider:
-				user.auth_ids_provider = []
-			user.put()
+			if user_to_delete.email:
+				user_to_delete.email = None
+			if user_to_delete.password:
+				user_to_delete.password = None
+			if user_to_delete.auth_ids_provider:
+				user_to_delete.auth_ids_provider = []
+			user_to_delete.put()
 			# keep all historical display_names. Add a new current display_name '[deleted]' (unless it's already been deleted)
-			display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( user.key.id())
+			display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( user_to_delete.key.id())
 			if display_name:
 				if display_name.prefix != enki.libdisplayname.DELETED_PREFIX or display_name.suffix != enki.libdisplayname.DELETED_SUFFIX:
-					enki.libdisplayname.set_display_name( user.key.id(), enki.libdisplayname.DELETED_PREFIX, enki.libdisplayname.DELETED_SUFFIX )
-		# delete user's posts if required
-		if delete_posts:
-			enki.libforum.delete_user_posts( user.key.id())
+					enki.libdisplayname.set_display_name( user_to_delete.key.id(), enki.libdisplayname.DELETED_PREFIX, enki.libdisplayname.DELETED_SUFFIX )
+			# delete user's sent and received messages
+			ndb.delete_multi( enki.libmessage.fetch_keys_sent_or_received_message( user_to_delete.key.id()))
+			# delete user's posts if required
+			if delete_posts:
+				enki.libforum.delete_user_posts( user_to_delete.key.id())
 		# log the deleted user out
-		if self.enki_user == user.key.id():
+		if self.enki_user == user_to_delete.key.id():
 			self.log_out()
-		enki.libuser.revoke_user_authentications( user.key.id())
+		enki.libuser.revoke_user_authentications( user_to_delete.key.id())
 
 
 	def cleanup_item( self ):
-		likelyhood = 10 # occurs with a probability of 1%
+		likelihood = 10 # occurs with a probability of 1%
 		number = random.randint( 1, 1000 )
-		if number < likelyhood:
+		if number < likelihood:
 			ndb.delete_multi_async( self.fetch_old_backoff_timers( 3 ))
 			ndb.delete_multi_async( self.fetch_old_auth_tokens( 3 ))
 			ndb.delete_multi_async( self.fetch_old_sessions( 3 ))

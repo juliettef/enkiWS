@@ -24,7 +24,7 @@
                     <h3>{{ _( "Friend requests" )}}</h3>
 		            {% for item in data %}
 		                {% if item.type == 'friend_request' %}
-	                    <p><a href="{{ item.sender.user_page }}">{{ item.sender.display_name }}</a>
+	                    <p><a href="{{ item.sender.user_page }}">{% if item.sender.display_name == deleted_dn %}{{ deleted_dn_display }}{% else %}{{ item.sender.display_name }}{% endif %}</a>
 	                        &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="accept" value="{{ item.message_id }}">{{ _( "Accept" )}}</button>
 		                    &nbsp;<button class="btn btn-default btn-xs" type="submit" name="decline" value="{{ item.message_id }}">{{ _( "Decline" )}}</button>
 	                    </p>

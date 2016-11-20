@@ -60,3 +60,20 @@ def fetch_EnkiProductKey_by_activator_products_list( user_id, products_list ):
 	                                           EnkiModelProductKey.product_name.IN( products_list )
 	                                           )).fetch()
 	return list
+
+
+def exist_EnkiProductKey_by_purchaser_or_activator( user_id ):
+	count = EnkiModelProductKey.query( ndb.OR( EnkiModelProductKey.purchaser_user_id == user_id,
+											   EnkiModelProductKey.activated_by_user == user_id )).count( 1 )
+	return count > 0
+
+
+def exist_EnkiProductKey_by_activator( user_id ):
+	count = EnkiModelProductKey.query( EnkiModelProductKey.activated_by_user == user_id ).count( 1 )
+	return count > 0
+
+
+def exist_EnkiProductKey_by_purchaser_not_activated( user_id ):
+	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.purchaser_user_id == user_id,
+												EnkiModelProductKey.activated_by_user == None )).count( 1 )
+	return count > 0
