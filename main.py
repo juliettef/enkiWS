@@ -7,7 +7,6 @@ import enki
 import enki.libutil
 import enki.textmessages as MSG
 
-
 class HandlerMain( enki.HandlerBase ):
 
 	def get(self):
@@ -25,7 +24,8 @@ enki.ExtensionLibrary.set_extensions([ enki.ExtensionStore(),
 
 routes = [ webapp2.Route( '/', HandlerMain, name = 'home' ) ]
 routes += enki.routes_account \
-          + enki.ExtensionLibrary.get_routes()
+		  + enki.routes_infomessage \
+		  + enki.ExtensionLibrary.get_routes()
 
 routes_copy = copy.deepcopy( routes )
 locale_routes = [ webapp2_extras.routes.PathPrefixRoute('/<locale:[a-z]{2}_[A-Z]{2}>',  [ webapp2_extras.routes.NamePrefixRoute('locale-', routes ) ] ) ]

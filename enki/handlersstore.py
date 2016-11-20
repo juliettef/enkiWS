@@ -19,6 +19,10 @@ from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 
 
+
+import enki.libenkiDL
+
+
 class HandlerStore( enki.HandlerBase ):
 
 	def get( self ):
@@ -28,14 +32,33 @@ class HandlerStore( enki.HandlerBase ):
 
 	def post( self ):
 		url = settings.URL_PURCHASE_FASTSPRING
-		if not settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_EMULATE_STORE:
-			url = enki.libutil.get_local_url( 'storeemulatefastspring' )
-		if self.is_logged_in():
-			purchaser_user_id = self.enki_user.key.id()
-			token = security.generate_random_string( entropy = 256 )
-			token_purchase = EnkiModelTokenVerify( token = token, user_id = purchaser_user_id, type = 'purchasebyuser' )
-			token_purchase.put()
-			url = enki.libutil.get_local_url( 'storeemulatefastspring', { 'referrer': token_purchase.token })
+
+		# ------
+		# Requires enkiDL
+		if self.request.get( 'download' ):
+			if settings.URL_ENKIDL:
+				item_to_download = 'product_a'
+				url_fetcher = enki.libenkiDL.URLFetcher()
+				url_fetcher.get_download_URL( settings.URL_ENKIDL, settings.SECRET_ENKIDL, item_to_download )
+				if url_fetcher.error:
+					self.response.status_int = 500
+					self.add_infomessage( 'warning', MSG.WARNING(), 'Error fetching URL' )
+					self.redirect('store')
+				url = url_fetcher.download_url
+			else:
+				self.add_infomessage( 'warning', MSG.WARNING(), 'Download unavailable' )
+				self.redirect( 'store' )
+		# -------
+
+		else:
+			if not settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_EMULATE_STORE:
+				url = enki.libutil.get_local_url( 'storeemulatefastspring' )
+			if self.is_logged_in():
+				purchaser_user_id = self.enki_user.key.id()
+				token = security.generate_random_string( entropy = 256 )
+				token_purchase = EnkiModelTokenVerify( token = token, user_id = purchaser_user_id, type = 'purchasebyuser' )
+				token_purchase.put()
+				url = enki.libutil.get_local_url( 'storeemulatefastspring', { 'referrer': token_purchase.token })
 		self.redirect( url )
 
 

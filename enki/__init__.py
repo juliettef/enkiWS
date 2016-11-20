@@ -6,4 +6,5 @@ from handlersforums import ExtensionForums
 from handlersstore import ExtensionStore
 from handlersrestapi import ExtensionRestAPI
 from handlersfriends import ExtensionFriends
+from handlersinfomessage import routes_infomessage
 import jinjafilters

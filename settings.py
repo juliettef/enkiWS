@@ -37,6 +37,8 @@ try:
 	KEY_SESSION = secrets.KEY_SESSION
 	URL_PURCHASE_FASTSPRING = secrets.URL_PURCHASE_FASTSPRING
 	SECRET_FASTSPRING = secrets.SECRET_FASTSPRING
+	URL_ENKIDL = secrets.URL_ENKIDL
+	SECRET_ENKIDL = secrets.SECRET_ENKIDL
 	SECRETS_EXIST = True
 	if secrets.CLIENT_ID_GOOGLE:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthGoogle ]
@@ -50,6 +52,8 @@ except ImportError:
 	KEY_SESSION = 'See example_secrets.txt'
 	URL_PURCHASE_FASTSPRING = ''
 	SECRET_FASTSPRING = ''
+	URL_ENKIDL = ''
+	SECRET_ENKIDL = ''
 	SECRETS_EXIST = False
 	pass
 
