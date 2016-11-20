@@ -39,6 +39,7 @@ try:
 	SECRET_FASTSPRING = secrets.SECRET_FASTSPRING
 	URL_ENKIDL = secrets.URL_ENKIDL
 	SECRET_ENKIDL = secrets.SECRET_ENKIDL
+	SECRET_API_KEY_MAILGUN = secrets.SECRET_API_KEY_MAILGUN
 	SECRETS_EXIST = True
 	if secrets.CLIENT_ID_GOOGLE:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthGoogle ]
@@ -54,6 +55,7 @@ except ImportError:
 	SECRET_FASTSPRING = ''
 	URL_ENKIDL = ''
 	SECRET_ENKIDL = ''
+	SECRET_API_KEY_MAILGUN = ''
 	SECRETS_EXIST = False
 	pass
 

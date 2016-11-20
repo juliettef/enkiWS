@@ -3,11 +3,14 @@ import random
 import re
 import urlparse
 import webapp2
+import urllib
+import base64
 
 from google.appengine.api import app_identity
 from google.appengine.api import mail
 from google.appengine.ext import db
 from google.appengine.ext import ndb
+from google.appengine.api import urlfetch
 from jinja2.runtime import TemplateNotFound
 from webapp2_extras import i18n
 from webapp2_extras import jinja2
@@ -313,30 +316,59 @@ class HandlerBase( webapp2.RequestHandler ):
 	# message_type values: 'success', 'info', 'warning', 'danger'
 		self.session[ 'infomessage' ] = self.session.pop( 'infomessage', [] ) + [[ message_type, message_header, message_body ]]
 
+	def debug_output_email( self, email_address, email_subject, email_body ):
+		# display email on page to enable debugging
+		result = '<p><b>Sent email</b></p>' + \
+				 '<p><b>To:</b> ' + email_address + '</p>' + \
+				 '<p><b>Subject:</b> ' + email_subject + '</p>' + \
+				 '<p><b>Body:</b> ' + email_body + '</p>'
+		# parse email body for links to list them below as hyperlinks for convenience
+		hyperlinks = re.findall(r'https?://\S+', email_body)
+		if hyperlinks:
+			result += '<p><b>Hyperlinks:</b></p><ul>'
+			for link in hyperlinks:
+				hyperlink = '<li><p><a href="{!s}">{!s}</a></p></li>'.format(link, link)
+				result += hyperlink
+			result += '</ul>'
+		self.add_debugmessage(result)
+
 
 	def send_email( self, email_address, email_subject, email_body ):
-	# Sends an email and displays a message in the browser. If running locally an additional message is displayed in the browser.
-		email_sender = "Company no reply <noreply@" + app_identity.get_application_id() + ".appspotmail.com>"
 		if enki.libutil.is_debug():
-			# display email on page to enable debugging
-			result = '<p><b>Sent email</b></p>' +\
-						'<p><b>From:</b> ' + email_sender.replace ( '<', '&lt;' ).replace( '>', '&gt;' ) + '</p>' +\
-						'<p><b>To:</b> ' + email_address + '</p>' +\
-						'<p><b>Subject:</b> ' + email_subject + '</p>' +\
-						'<p><b>Body:</b> ' + email_body + '</p>'
-			# parse email body for links to list them below as hyperlinks for convenience
-			hyperlinks = re.findall( r'https?://\S+', email_body )
-			if hyperlinks:
-				result += '<p><b>Hyperlinks:</b></p><ul>'
-				for link in hyperlinks:
-					hyperlink = '<li><p><a href="{!s}">{!s}</a></p></li>'.format( link, link )
-					result += hyperlink
-				result += '</ul>'
-			self.add_debugmessage( result )
-		else:
-			mail.send_mail( sender = email_sender, to = email_address, subject = email_subject, body = email_body )
-			result = ''
-		return result
+			self.debug_output_email( email_address, email_subject, email_body )
+			return
+		# Sends an email and displays a message in the browser. If running locally an additional message is displayed in the browser.
+		if settings.SECRET_API_KEY_MAILGUN:
+			# use mailgun to send, this has higher limits than Google App Engine send_mail
+
+			headers = {'Authorization':
+						   'Basic ' + base64.b64encode( 'api:' + settings.SECRET_API_KEY_MAILGUN ) }
+			url_mailgun = settings.secrets.URL_API_MAILGUN
+			data = {
+				'from': settings.secrets.NOREPLY_SEND_MAILGUN,
+				'to': email_address,
+				'subject': email_subject,
+				'text': email_body
+			}
+			form_data = urllib.urlencode( data )
+
+			send_success = True
+			try:
+				result = urlfetch.fetch(
+					url=url_mailgun,
+					payload=form_data,
+					method=urlfetch.POST,
+					headers=headers)
+				if result.status_code != 200:
+					send_success = False
+			except:
+				send_success = False
+			if send_success:
+				return
+		# we use app engine email if either we failed to send with mailgun or have no mailgun account
+		email_sender = "Company no reply <noreply@" + app_identity.get_application_id() + ".appspotmail.com>"
+		mail.send_mail( sender = email_sender, to = email_address, subject = email_subject, body = email_body )
+		return
 
 
 	def email_set_request( self, email ):
