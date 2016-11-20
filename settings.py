@@ -47,9 +47,11 @@ try:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthGithub ]
 	if secrets.CLIENT_ID_TWITTER:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthTwitter ]
+	SECRET_API_KEY_MAILGUN = secrets.SECRET_API_KEY_MAILGUN
 except ImportError:
 	KEY_SESSION = 'See example_secrets.txt'
 	SECRET_FASTSPRING = ''
+	SECRET_API_KEY_MAILGUN = ''
 	SECRETS_EXIST = False
 	pass
 
