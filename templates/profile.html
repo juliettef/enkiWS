@@ -163,30 +163,6 @@
 
             {% include "incpageextensions.html" %}
 
-			<div class="well">
-		        <form class="form-group" action="{{ 'profile'|local }}" method="post">
-					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-					<input type="hidden" name="anchor" value="developers"><a href id="developers"></a>
-					<fieldset>
-						<div class="form-group row">
-							<div class="col-sm-10">
-								<h2>{{ _( "Developers" )}}</h2>
-	                        </div>
-							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
-	                        </div>
-	                    </div>
-	                </fieldset>
-	            </form>
-				{% if extended %}
-		            <span>
-			            <a href="{{ 'apps'|local }}" class="btn btn-default">{{ _( "Applications" ) }}</a>
-			        </span>
-				{% else %}
-		                <p>{{ data.apps }} {{ ngettext( "application", "applications", data.sessions | count ) }}</p>
-		        {% endif %}
-			</div>
-
             {% include "incfooter.html" %}
         </div>
     </body>

@@ -1,6 +1,7 @@
 import datetime, time
 import webapp2
 import json
+import google.appengine.api.users
 
 from google.appengine.ext import ndb
 
@@ -22,51 +23,58 @@ from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 class HandlerApps( enki.HandlerBaseReauthenticate ):
 
 	def get_logged_in( self ):
-		self.render_tmpl( 'apps.html',
+		if  google.appengine.api.users.is_current_user_admin():
+			self.render_tmpl( 'apps.html',
 		                  active_menu = 'profile',
 		                  data = enki.librestapi.apps_list( self.user_id ),
 		                  app_max = enki.librestapi.APP_MAX,
 		                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
+		else:
+			self.add_infomessage( 'warning', MSG.WARNING(), MSG.USER_ADMIN_RIGHTS_REQUIRED())
+			self.redirect_to_relevant_page()
 
 	def post_reauthenticated( self, params ):
-		app_secret_set = params.get( 'app_secret_set' )
-		app_name = params.get( 'app_name' )
-		error_message = ''
-		data = []
-		app_success = ''
-		if app_secret_set:
-			secret = enki.librestapi.generate_auth_token()
-			app = EnkiModelApp.get_by_id( int( app_secret_set ))
-			app.secret = secret
-			app.put()
-			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.NEW_SECRET_GENERATED())
-			app_success = str( app.key.id())
-			data = enki.librestapi.apps_list( self.user_id )
-		else:
-			data = enki.librestapi.apps_list( self.user_id )
-			if not app_name:
-				error_message = MSG.NAME_NEEDED()
-			elif ( len( app_name ) > enki.librestapi.APP_MAX_NAME_LENGTH ):
-				error_message = MSG.APP_NAME_TOO_LONG( str( enki.librestapi.APP_MAX_NAME_LENGTH ))
-			elif EnkiModelApp.exist_by_name( app_name ):
-				error_message = MSG.APP_NAME_ALREADY_EXISTS()
-			elif ( EnkiModelApp.count_by_user_id( self.user_id ) >= enki.librestapi.APP_MAX ):
-				error_message = MSG.APP_EXCEED_ALLOWED()
-			else:
+		if  google.appengine.api.users.is_current_user_admin():
+			app_secret_set = params.get( 'app_secret_set' )
+			app_name = params.get( 'app_name' )
+			error_message = ''
+			data = []
+			app_success = ''
+			if app_secret_set:
 				secret = enki.librestapi.generate_auth_token()
-				app = EnkiModelApp( user_id = self.user_id, name = app_name, secret = secret )
+				app = EnkiModelApp.get_by_id( int( app_secret_set ))
+				app.secret = secret
 				app.put()
-				data.append([ app_name, str( app.key.id()), secret, app.time_created ])
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.APP_CREATED())
-				app_success =  str( app.key.id())
-		self.render_tmpl( 'apps.html',
-		                  active_menu = 'profile',
-		                  error = error_message,
-		                  data = data,
-		                  app_success = app_success,
-		                  app_max = enki.librestapi.APP_MAX,
-		                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
-
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.NEW_SECRET_GENERATED())
+				app_success = str( app.key.id())
+				data = enki.librestapi.apps_list( self.user_id )
+			else:
+				data = enki.librestapi.apps_list( self.user_id )
+				if not app_name:
+					error_message = MSG.NAME_NEEDED()
+				elif ( len( app_name ) > enki.librestapi.APP_MAX_NAME_LENGTH ):
+					error_message = MSG.APP_NAME_TOO_LONG( str( enki.librestapi.APP_MAX_NAME_LENGTH ))
+				elif EnkiModelApp.exist_by_name( app_name ):
+					error_message = MSG.APP_NAME_ALREADY_EXISTS()
+				elif ( EnkiModelApp.count_by_user_id( self.user_id ) >= enki.librestapi.APP_MAX ):
+					error_message = MSG.APP_EXCEED_ALLOWED()
+				else:
+					secret = enki.librestapi.generate_auth_token()
+					app = EnkiModelApp( user_id = self.user_id, name = app_name, secret = secret )
+					app.put()
+					data.append([ app_name, str( app.key.id()), secret, app.time_created ])
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.APP_CREATED())
+					app_success =  str( app.key.id())
+			self.render_tmpl( 'apps.html',
+							  active_menu = 'profile',
+							  error = error_message,
+							  data = data,
+							  app_success = app_success,
+							  app_max = enki.librestapi.APP_MAX,
+							  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
+		else:
+			self.add_infomessage( 'warning', MSG.WARNING(), MSG.USER_ADMIN_RIGHTS_REQUIRED())
+			self.redirect_to_relevant_page()
 
 class HandlerAppDataStores( enki.HandlerBaseReauthenticate ):
 
@@ -427,7 +435,7 @@ class ExtensionPageRestAPI( ExtensionPage ):
 class ExtensionRestAPI( Extension ):
 
 	def get_routes( self ):
-		return  [ webapp2.Route( '/apps', HandlerApps, name = 'apps' ),
+		return  [ webapp2.Route( '/admin/apps', HandlerApps, name = 'apps' ),
 		          webapp2.Route( '/appdatastores', HandlerAppDataStores, name = 'appdatastores' ),
 		          webapp2.Route( '/restapi', HandlerPageRestAPI, name = 'restapi' ),
 		          webapp2.Route( '/api/v1/connect', HandlerAPIv1Connect, name = 'apiv1connect' ),

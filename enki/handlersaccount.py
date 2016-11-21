@@ -14,7 +14,6 @@ import enki.libmessage
 import enki.textmessages as MSG
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
-from enki.modelapp import EnkiModelApp
 
 
 class HandlerLogout( enki.HandlerBase ):
@@ -187,7 +186,7 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 		if self.ensure_is_logged_in():
 			extended = True if self.request.get( 'extended' ) == 'True' else False
 
-			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, friends, messages, sessions, sessions_app, apps' )
+			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, friends, messages, sessions, sessions_app' )
 
 			current_display_name = ''
 			previous_display_names = ''
@@ -216,9 +215,8 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			if not extended:
 				friends = enki.libfriends.count_EnkiFriends( self.user_id )
 				messages = enki.libmessage.count_EnkiMessage_by_recipient( self.user_id )
-				apps = EnkiModelApp.count_by_user_id( self.user_id )
 
-			data = data( current_display_name, previous_display_names, friends, messages, sessions, sessions_app, apps )
+			data = data( current_display_name, previous_display_names, friends, messages, sessions, sessions_app )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
 			                  extended = extended,
