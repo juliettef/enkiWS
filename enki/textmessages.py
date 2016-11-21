@@ -73,6 +73,8 @@ def UNIT_MINUTE( nr ): return ngettext( "minute", "minutes", nr )
 def UNIT_HOUR( nr ): return ngettext( "hour", "hours", nr )
 def UNIT_DAY( nr ): return ngettext( "day", "days", nr )
 
+def USER_ADMIN_RIGHTS_REQUIRED(): return _( "You must have Admin rights to perform this action." )
+
 # emails
 def SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_SUBJECT(): return _( "Attempt to log in with your email" )
 def SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link, email ): return _( "An attempt was made to log in to your account using this email address. If you'd like to use your email to log in, you need to set a password for it: %(link)s (click or copy and paste in your browser)", link = link, email = email )
@@ -144,3 +146,4 @@ def APP_NAME_ALREADY_EXISTS(): return _( "This application name already exists. 
 def APP_EXCEED_ALLOWED(): return _( "You have exceeded the number of applications allowed per user." )
 def NEW_SECRET_GENERATED(): return _( "New secret generated." )
 def APP_DATA_DELETED(): return _( "Application data deleted." )
+
