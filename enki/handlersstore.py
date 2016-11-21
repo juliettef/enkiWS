@@ -45,6 +45,8 @@ class HandlerStore( enki.HandlerBase ):
 					self.add_infomessage( 'warning', MSG.WARNING(), 'Error fetching URL' )
 					self.redirect('store')
 				url = url_fetcher.download_url
+				ref_url = enki.libutil.get_local_url( 'store' )
+				self.session[ 'sessionrefpath' ] = ref_url
 			else:
 				self.add_infomessage( 'warning', MSG.WARNING(), 'Download unavailable' )
 				self.redirect( 'store' )

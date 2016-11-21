@@ -1,17 +1,23 @@
 import webapp2
+import re
 
 import enki
 import enki.textmessages as MSG
 
 
-# ------
-# Requires enkiDL
-class HandlerEnkiDLError( enki.HandlerBase ):
+class HandlerInfoMessage( enki.HandlerBase ):
 
 	def get( self ):
-		self.add_infomessage( 'warning', MSG.WARNING(), 'Error retrieving download' )
+		# retrieve message code, must be 2 lower case letters
+		message = self.request.get( 'm' )
+		if message and re.search('[a-z]{2}', message):
+			if message == 'dl':
+				# enkiDL error
+				self.add_infomessage( 'warning', MSG.WARNING(), 'Error retrieving download' )
+		self.render_tmpl( 'infomessage.html',
+						  active_menu = 'home' )
+
+	def post( self ):
 		self.redirect_to_relevant_page()
-# -------
 
-
-routes_infomessage = [ webapp2.Route( '/enkidlerror', HandlerEnkiDLError, name = 'enkidlerror' )]
+routes_infomessage = [ webapp2.Route( '/infomessage', HandlerInfoMessage, name = 'infomessage' )]
