@@ -8,8 +8,8 @@ class URLFetcher():
 		self.error = 0
 		self.download_url = ''
 
-	def get_download_URL( self, enkiDL_URL, secret, item_to_download ):
-		form_fields = { 'item' : item_to_download, 'secret' : secret }
+	def get_download_URL( self, enkiDL_URL, secret, item_to_download, ip_addr ):
+		form_fields = { 'item' : item_to_download, 'secret' : secret, 'ip_addr' : ip_addr }
 		form_data = urllib.urlencode( form_fields )
 		try:
 			result = urlfetch.fetch( url = enkiDL_URL, payload = form_data, method = urlfetch.POST )

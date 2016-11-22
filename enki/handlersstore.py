@@ -38,7 +38,7 @@ class HandlerStore( enki.HandlerBase ):
 			if settings.URL_ENKIDL:
 				item_to_download = 'product_a'
 				url_fetcher = enki.libenkiDL.URLFetcher()
-				url_fetcher.get_download_URL( settings.URL_ENKIDL, settings.SECRET_ENKIDL, item_to_download )
+				url_fetcher.get_download_URL( settings.URL_ENKIDL, settings.SECRET_ENKIDL, item_to_download, self.request.remote_addr )
 				if url_fetcher.error:
 					self.response.status_int = 500
 					self.add_infomessage( 'warning', MSG.WARNING(), MSG.DOWNLOAD_ERROR())
