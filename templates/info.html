@@ -3,7 +3,7 @@
 
     <head>
         {% include "inchead.html" %}
-        <title>{{ _( "Information message" )}}</title>
+        <title>{{ _( "Information" )}}</title>
     </head>
 
     <body>
@@ -13,7 +13,7 @@
             {% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
-			<form class="form-horizontal" action="{{ 'infomessage' }}" method="post" id="mainform">
+			<form class="form-horizontal" action="{{ 'info' }}" method="post" id="mainform">
 				<button class="btn btn-primary" type="submit" name="submittype" value="back">{{ _( "Back" ) }}</button>
 			</form>
 

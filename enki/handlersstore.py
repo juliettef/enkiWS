@@ -19,7 +19,6 @@ from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 
 
-
 import enki.libenkiDL
 
 
@@ -36,20 +35,22 @@ class HandlerStore( enki.HandlerBase ):
 		# ------
 		# Requires enkiDL
 		if self.request.get( 'download' ):
+			ref_url = enki.libutil.get_local_url('store')
+			self.session[ 'sessionrefpath' ] = ref_url
 			if settings.URL_ENKIDL:
 				item_to_download = 'product_a'
 				url_fetcher = enki.libenkiDL.URLFetcher()
 				url_fetcher.get_download_URL( settings.URL_ENKIDL, settings.SECRET_ENKIDL, item_to_download )
 				if url_fetcher.error:
 					self.response.status_int = 500
-					self.add_infomessage( 'warning', MSG.WARNING(), 'Error fetching URL' )
-					self.redirect('store')
+					self.add_infomessage( 'warning', MSG.WARNING(), MSG.DOWNLOAD_ERROR())
+					self.redirect( 'info' )
+					return
 				url = url_fetcher.download_url
-				ref_url = enki.libutil.get_local_url( 'store' )
-				self.session[ 'sessionrefpath' ] = ref_url
 			else:
-				self.add_infomessage( 'warning', MSG.WARNING(), 'Download unavailable' )
-				self.redirect( 'store' )
+				self.add_infomessage( 'warning', MSG.WARNING(), MSG.DOWNLOAD_ERROR())
+				self.redirect( 'info' )
+				return
 		# -------
 
 		else:

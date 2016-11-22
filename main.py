@@ -24,7 +24,7 @@ enki.ExtensionLibrary.set_extensions([ enki.ExtensionStore(),
 
 routes = [ webapp2.Route( '/', HandlerMain, name = 'home' ) ]
 routes += enki.routes_account \
-		  + enki.routes_infomessage \
+		  + enki.routes_info \
 		  + enki.ExtensionLibrary.get_routes()
 
 routes_copy = copy.deepcopy( routes )

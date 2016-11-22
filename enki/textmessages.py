@@ -137,6 +137,9 @@ def LICENCE_INVALID(): return _( "Invalid licence key." )
 def LICENCE_MISSING(): return _( "A licence key is needed." )
 def LICENCE_TOO_LONG(): return _( "Licence key is too long." )
 
+# Download
+def DOWNLOAD_ERROR(): return _( "Download error" )
+
 # Rest API
 def GAME_CONNECTION_TOKEN( token, minutes ): return ngettext( 'Your single-use game connect code is valid for <b>%(minutes)s minute</b>. <h1><b><font face="monospace">%(token)s</font></b></h1>', 'Your single-use game connect code is valid for <b>%(minutes)s minutes</b>. <h1><b><font face="monospace">%(token)s</font></b></h1>', minutes, minutes = minutes, token = token )
 def NAME_NEEDED(): return _( "A name is needed" )
