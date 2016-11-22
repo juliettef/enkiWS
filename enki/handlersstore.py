@@ -11,15 +11,13 @@ import enki
 import enki.libutil
 import enki.libstore
 import enki.libuser
+import enki.libenkiDL
 import enki.textmessages as MSG
 
 from enki.modelproductkey import EnkiModelProductKey
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
-
-
-import enki.libenkiDL
 
 
 class HandlerStore( enki.HandlerBase ):
