@@ -54,7 +54,7 @@
                 {% if is_logged_in %}
                     {% if not show_input %}
 						<form class="form-horizontal" action="{{ 'forum'|local({ 'forum': data.forum_selected, '_fragment':'bottom' }) }}" method="post" id="mainform">
-							<button class="btn btn-primary" type="submit" name="submittype" value="input" >{{ _( "Create a new thread" ) }}</button>
+							<button class="btn btn-primary" type="submit" name="submittype" value="input">{{ _( "Create a new thread" ) }}</button>
 						</form>
                     {% else %}
                         {% if display_name %}
@@ -77,7 +77,7 @@
                                             <div class="col-lg-11">
                                                 <textarea class="form-control" rows="6" id="textArea" name="post_body" placeholder="{{ _( "Your text" ) }}">{{ postbody }}</textarea>
                                                 {% if error_postbody %}<label class="control-label">{{ error_postbody }}</label><a href id="bottom"></a>{# <!-- scroll to bottom if there's an error --> #}{% endif%}
-                                                <p class="text-info">{{ _( "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting.", url = "http://daringfireball.net/projects/markdown/syntax" ) }} {{ ngettext( "Maximum post length: %(length)s character.", "Maximum post length: %(length)s characters.", maxpostlength, length = maxpostlength ) }}</p>
+                                                <p class="text-info">{{ _( "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting.", url = "https://daringfireball.net/projects/markdown/syntax" ) }} {{ ngettext( "Maximum post length: %(length)s character.", "Maximum post length: %(length)s characters.", maxpostlength, length = maxpostlength ) }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group">

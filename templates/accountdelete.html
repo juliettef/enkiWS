@@ -22,7 +22,7 @@
 							<ul class="text-info">
 								{% if data.email or data.auth_provider %}<li><p>{{ _( "Your <b>private information is deleted</b>:" ) }}</p></li>
 									<ul>
-										{% if data.email and data.email != 'removed' %}<li><p>{{ _( "Your email address:" ) }} <em>{{ data.email }}</em></p></li>{% endif %}
+										{% if data.email %}<li><p>{{ _( "Your email address:" ) }} <em>{{ data.email }}</em></p></li>{% endif %}
 										{% if data.password %}<li><p>{{ _( "Your <em>password</em>" ) }}</p></li>{% endif %}
 										{% if data.auth_provider %}<li><p>{{ _( "Your third party authentication provider(s) and unique identifier(s):" ) }}</p>
 											<ul>{% for item in data.auth_provider %}<li><p><em>{{ item.provider_name }}</em> | <em>{{ item.provider_uid }}</em></p></li>{% endfor %}</ul>
@@ -33,10 +33,19 @@
 									<ul>
 										{% if data.current_display_name %}<li><p>{{ _( "Your display name <em>%(display_name)s</em> is replaced with <em>%(deleted_dn)s</em> throughout.", display_name = data.current_display_name.display_name, deleted_dn = deleted_dn_display ) }}</p></li>{% endif %}
 										{% if data.previous_display_names %}<li><p>{{ ngettext( "Your old display name <em>%(previous_display_names)s</em> is removed from your <a href='%(user_page_url)s'>user page</a>.", "Your old display names <em>%(previous_display_names)s</em> are removed from your <a href='%(user_page_url)s'>user page</a>.", data.previous_display_names|count, previous_display_names =  data.previous_display_names|join(', '), user_page_url = data.current_display_name.user_page ) }}</p></li>{% endif %}
-										{% if data.has_posts %}<li><p>{{ _( "<em><a href='%(user_page_url)s'>Forum threads and posts</a></em> you published remain visible but the author is anonymous <em>%(deleted_dn)s</em>.", user_page_url = data.current_display_name.user_page, deleted_dn = deleted_dn_display ) }}</p></li>{% endif %}
-										{% if data.has_posts %}<p class="text-warning">{{ _( "<b>Warning</b>: once your account is deleted, you will be <b>unable to edit or delete your posts</b>." ) }}</p>
-										<p>{{ _( "You can <a href='%(user_page_url)s'>Manually edit or delete individual posts from your user page</a> or check the option below to delete all your posts.", user_page_url = data.current_display_name.user_page ) }}</p>
+										{% if data.has_messages %}<li><p>{{ _( "Your <em>friend invitations</em> are deleted." )}}</p></li>{% endif %}
+										{% if data.has_friends %}<li><p>{{ _( "Your <em>friends</em> keep a link to your anonymised <a href='%(user_page_url)s'>public page</a> in their friends list.<br>If you prefer to remove the links, <a href='%(friends_page_url)s'>remove your friends manually</a> before deleting your account.", user_page_url = data.current_display_name.user_page, friends_page_url = 'friends'|local )}}</p></li>{% endif %}
+										{% if data.has_posts %}<li><p>{{ _( "Your <em>Forum threads and posts</em> remain visible with the author set to <em>%(deleted_dn)s</em>.<br>You can <a href='%(user_page_url)s'>edit or delete individual posts from your user page</a> before deleting your account. Alternatively, check the option below to delete all your posts.", user_page_url = data.current_display_name.user_page, deleted_dn = deleted_dn_display ) }}
+										<br><span class="text-warning">{{ _( "Warning: once your account is deleted, you will be <b>unable to edit nor delete your posts</b>." ) }}</span></p></li>
 										{% endif %}
+									</ul>
+								{% endif %}
+								{% if data.has_product_purchased_unactivated or data.has_product_activated %}<li><p>{{ _( "Your <b>licence keys</b>:" ) }}</p></li>
+									<ul>
+										{% if data.has_product_purchased_unactivated %}<li><p>{{ _( "Your <em>unactivated licence keys</em> remain valid. You can <a href='%(profile_library_url)s'>retrieve the keys from your library</a>.", profile_library_url = 'profile'|local + '?extended=True#library' )}}
+										<br><span class="text-warning">{{ _( "Warning: once your account is deleted, you won't be able to view the licence keys on our system. <b>Make sure you back them up</b>." )}}</span></p></li>{% endif %}
+										{% if data.has_product_activated %}<li><p>{{ _( "Your <em>activated licence keys</em> are no longer available." )}}
+										<br><span class="text-warning">{{ _( "Warning: activated licence keys cannot be transferred. Once your account is deleted, <b>you won't be able tu use them anymore</b>." )}}</span></p></li>{% endif %}
 									</ul>
 								{% endif %}
 							</ul>
@@ -52,15 +61,20 @@
 						<legend>{{ _( "Delete my account" ) }}</legend>
 						<div class="form-group}">
 							<div class="col-lg-12">
-                                <p class="text-warning">{{ _( "You are about to delete your account, are you sure? This cannot be undone." ) }}</p>
-								{% if data.has_posts %}
+                                {% if data.has_posts %}
 									<div class="checkbox">
 										<label>
 											<input type="checkbox" name="deleteposts"><p class="text-primary">{{ _( "Delete all my forum posts permanently" ) }}</p>
 										</label>
 									</div>
 								{% endif %}
-                                <button class="btn btn-primary" type="submit" name="submittype" value="delete">{{ _( "Yes, delete my account" ) }}</button>
+								{% if data.email %}
+								<p class="text-warning">{{ _( "You will receive an email at address %(email)s. Your account will be deleted once you've confirmed through the link in the email.", email = data.email ) }}</p>
+                                <button class="btn btn-primary" type="submit" name="submittype" value="delete">{{ _( "Send me an email to delete my account" ) }}</button>
+								{% else %}
+								<p class="text-warning">{{ _( "Warning: deleting your account cannot be undone." ) }}</p>
+                                <button class="btn btn-primary" type="submit" name="submittype" value="delete">{{ _( "Delete my account" ) }}</button>
+								{% endif %}
                                 <button class="btn btn-default" type="submit" name="submittype" value="cancel">{{ _( "Cancel" ) }}</button>
                             </div>
                         </div>

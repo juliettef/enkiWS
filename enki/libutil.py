@@ -34,19 +34,37 @@ def make_local_url( locale, route_name, parameters ):
 # example input: make_local_url( 'fr_FR' , 'login', { 'key1':'value1', 'key2':'value2', '_fragment':'top' })
 # example output: http://www.mysite.com/login?locale=fr_FR&key1=value1&key2=value2#top
 	temp_params = {} # modify a temporary dict so as not to modify parameters as this affects the jinja template
+	url = ''
 	for key, value in parameters.items():
 		# parameters cleanup: remove parameters with blank values and UTF-8 encode the remaining values.
 		if value:
 			temp_params[ key ] = value.encode('utf-8')
 	if locale:
 		# add locale parameter to the parameters dictionnary
-		temp_params[ 'locale' ] = locale.encode('utf-8')
-	url = webapp2.uri_for( route_name, _full = True, **temp_params )
+		# temp_params[ 'locale' ] = locale.encode('utf-8')
+		url = webapp2.uri_for( 'locale-' + route_name, locale = locale.encode('utf-8'), _full = True, **temp_params )
+	else:
+		url = webapp2.uri_for( route_name, _full = True, **temp_params )
 	return url
 
 
 def get_local_url( route_name = 'home', parameters = {} ):
 	return make_local_url( webapp2_extras.i18n.get_i18n().locale, route_name, parameters )
+
+
+def strip_locale_from_path( path, localetostrip ):
+	output_path = path
+	if not localetostrip:
+		localetostrip = 'en_US'
+	llength = len(localetostrip)
+	if output_path[1:llength + 1] == localetostrip:
+		output_path = output_path[llength + 1:]
+	return output_path
+
+
+def strip_current_locale_from_path( path ):
+	dirstrip = webapp2_extras.i18n.get_i18n().locale
+	return strip_locale_from_path( path , dirstrip )
 
 
 def is_debug():

@@ -14,7 +14,6 @@ import enki.libmessage
 import enki.textmessages as MSG
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
-from enki.modelapp import EnkiModelApp
 
 
 class HandlerLogout( enki.HandlerBase ):
@@ -149,7 +148,7 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 					break
 		elif deregister:
 			self.remove_auth_id( deregister)
-			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_DEREGISTERED( deregister ))
+			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_REMOVED( deregister ))
 			self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
 
@@ -176,9 +175,7 @@ class HandlerLoginAddConfirm( enki.HandlerBaseReauthenticate ):
 			tokenEntity = EnkiModelTokenVerify.get_by_user_id_auth_id_type( user_id = self.user_id, auth_id = choice, type = 'loginaddconfirm_3' )
 			if tokenEntity:
 				self.set_auth_id( tokenEntity.auth_ids_provider, self.user_id )
-				self.add_infomessage( 'success', MSG.SUCCESS(),
-									  'login method added: ' + str( tokenEntity.auth_ids_provider ) +
-									  ' to user ' + str( self.user_id ))
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_ADDED( str( tokenEntity.auth_ids_provider )))
 			tokenEntity.key.delete()
 		self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
@@ -189,7 +186,7 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 		if self.ensure_is_logged_in():
 			extended = True if self.request.get( 'extended' ) == 'True' else False
 
-			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, friends, messages, sessions, sessions_app, apps' )
+			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, friends, messages, sessions, sessions_app' )
 
 			current_display_name = ''
 			previous_display_names = ''
@@ -218,9 +215,8 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			if not extended:
 				friends = enki.libfriends.count_EnkiFriends( self.user_id )
 				messages = enki.libmessage.count_EnkiMessage_by_recipient( self.user_id )
-				apps = EnkiModelApp.count_by_user_id( self.user_id )
 
-			data = data( current_display_name, previous_display_names, friends, messages, sessions, sessions_app, apps )
+			data = data( current_display_name, previous_display_names, friends, messages, sessions, sessions_app )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
 			                  extended = extended,
@@ -354,12 +350,12 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 
 
 class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
-# create or edit user based on auth login info
+	# Create or edit user based on auth login info
 	def get( self ):
 		token = self.session.get( 'tokenregisterauth' )
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
 		if tokenEntity:
-			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition(':')[ ::2 ]
+			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
 			self.render_tmpl( 'registeroauthconfirm.html',
 			                  active_menu = 'register',
 			                  token = tokenEntity,
@@ -370,37 +366,37 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 
 	def post( self ):
 		choice = self.request.get( 'choice' )
-		# step 1
+		# Step 1
 		if choice == 'create' or choice == 'cancel':
 			token = self.session.get( 'tokenregisterauth' )
 			tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
 			authId = tokenEntity.auth_ids_provider
-			provider_name, provider_uid = authId.partition(':')[ ::2 ]
+			provider_name, provider_uid = authId.partition( ':' )[ ::2 ]
 			auth_email = tokenEntity.email if tokenEntity.email else None
 			if choice == 'create':
-				if auth_email: # if the email is given by the provider, it is verified. Create the account.
-					user = self.get_or_create_user_from_authid( authId, auth_email, allow_create = True )
+				if auth_email:
+					# If the email is given by the provider, it is verified. Get or ceate the account and log the user in.
+					user = self.get_or_create_user_from_authid( authId, auth_email )
 					if user: # login the user through auth
 						self.log_in_session_token_create( user )
-						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.LOGGED_IN())
+						self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
 					else: # user creation failed (timeout etc.)
 						self.add_infomessage( 'warning', MSG.WARNING(), MSG.AUTH_LOGIN_FAILED( provider_name ))
 					self.redirect_to_relevant_page()
 					tokenEntity.key.delete()
-					tokenEntity.key.delete()
 					self.session.pop( 'tokenregisterauth' )
-				else: # if the email isn't given by the provider, use the manually entered email.
+				else:
+					# If the email isn't given by the provider, use the manually entered email.
 					self.check_CSRF()
 					email = self.request.get( 'email' )
-					user = self.get_or_create_user_from_authid( authId, allow_create = True )
+					user = self.get_or_create_user_from_authid( authId )
 					self.log_in_session_token_create( user )
 					error_message = ''
 					success = False
 					result = enki.libuser.validate_email( email )
 					if result == enki.libutil.ENKILIB_OK:
-						result = self.email_change_request( email )
-						# send an email for verification. Since it's not verified at this point, create the account without the email.
-						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTER_AUTH_ADD_EMAIL_INFO_EMAIL_SENT( email ) )
+						result = self.email_change_request( email )	# send an email for verification. Since it's not verified at this point, create the account without the email.
+						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTER_AUTH_ADD_EMAIL_INFO_EMAIL_SENT( email ))
 						if result == enki.handlerbase.ERROR_EMAIL_IN_USE:
 							self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
 						success = True
@@ -422,13 +418,101 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 				self.redirect_to_relevant_page()
 				tokenEntity.key.delete()
 				self.session.pop( 'tokenregisterauth' )
-		# step 2 (those choices will only be presented to the user if they successfully added an email manually).
+		# Step 2 (those choices will only be presented to the user if they successfully added an email manually).
 		elif choice == 'continue':
 			self.redirect_to_relevant_page()
 		elif choice == 'profile':
 			url = enki.libutil.get_local_url( 'profile' )
 			self.session[ 'sessionrefpath' ] = url
 			self.redirect( url )
+
+
+class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
+	# When logging in with an auth provider that has a verified email, if the email belongs to an existing account
+	# but the account doesn't include the auth provider, suggest two actions to the user:
+	# - A. Log in to the existing account; or
+	# - B. Create a new account using the auth provider, but with a different email.
+	# - Note case A: if the provider used for login is also registered with the account (with a different user Id),
+	# add a message to inform the user that they should log out of the provider's account or use a different browser.
+	# - Note case C. not implemented: Add the new auth provider to the existing email account. Unnecessary as the user
+	# can do it from their profile page once they've logged in.
+	def get( self ):
+		token = self.session.get( 'tokenregisterauth' )
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
+		if tokenEntity:
+			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
+			provider_email = tokenEntity.email
+			provider_authhandler = ''
+			for handler in settings.HANDLERS:
+				if handler.get_provider_name() == provider_name:
+					provider_authhandler = handler
+			# only display the email/pw login if the user has a password
+			email_user_has_pw = enki.libuser.user_has_password_by_email( provider_email )
+			# list of email user's auth providers
+			authhandlers = []
+			user = enki.libuser.get_EnkiUser( provider_email )
+			for user_provider_uid in user.auth_ids_provider:
+				for handler in settings.HANDLERS:
+					if ( handler.get_provider_name() in user_provider_uid ) and ( handler not in authhandlers ):
+						authhandlers.append( handler )
+						break
+			self.render_tmpl( 'registeroauthwithexistingemail.html',
+			                  active_menu = 'login',
+			                  token = tokenEntity,
+							  email = provider_email,
+							  email_user_has_pw = email_user_has_pw,
+			                  provider_name = provider_name,
+			                  provider_uid = str( provider_uid ),
+							  provider_authhandler = provider_authhandler,
+							  authhandlers = authhandlers,
+							  )
+		else:
+			self.abort( 404 )
+
+	def post( self ):
+		self.cleanup_item()
+		self.log_out()
+		self.check_CSRF()
+		token = self.session.get('tokenregisterauth')
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type(token, 'register')
+		if tokenEntity:
+			submit_type = self.request.get( 'submittype' )
+			# Log in with email and password
+			if submit_type == 'login':
+				email = tokenEntity.email
+				tokenEntity.key.delete()
+				password = self.request.get( 'password' )
+				if self.log_in_with_email( email, password ):
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
+					self.redirect_to_relevant_page()
+				else:
+					error_message = MSG.WRONG_EMAIL_OR_PW()
+					backoff_timer = self.get_backoff_timer( email )
+					if backoff_timer != 0:
+						error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
+					self.render_tmpl( 'login.html',
+									  active_menu = 'login',
+									  authhandlers = settings.HANDLERS,
+									  email = email,
+									  error = error_message )
+			elif submit_type == 'recoverpass':
+				email = tokenEntity.email
+				tokenEntity.key.delete()
+				self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email }))
+			# Create a new account using the OAuth provider but without the email
+			elif submit_type == 'register':
+				email = tokenEntity.email
+				tokenEntity.email = ''
+				tokenEntity.put()
+				self.add_infomessage( 'info', MSG.INFORMATION() , MSG.REGISTRATION_INFO_EMAIL_CANNOT_USE( email ))
+				self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
+			else:
+				tokenEntity.key.delete()
+				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LOGIN_FAILED())
+				self.redirect( enki.libutil.get_local_url( 'home' ))
+		else:
+			self.abort(404)
+
 
 
 class HandlerPasswordChange( enki.HandlerBase ):
@@ -675,59 +759,58 @@ class HandlerEmailRollback( enki.HandlerBase ):
 			self.abort( 404 )
 
 
-class HandlerAccountDelete( enki.HandlerBase ):
+class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 # delete user account
 
-	def get( self ):
-		if self.ensure_is_logged_in():
-			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends' )
-			current_display_name = ''
-			if enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
-				user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
-				current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
-			previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
-			email = self.enki_user.email
-			password = True if self.enki_user.password else False
-			auth_provider = []
-			for item in self.enki_user.auth_ids_provider:
-				provider_name, provider_uid = item.partition( ':' )[ ::2 ]
-				auth_provider.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid )})
-			has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id( ) ) else False
-			has_messages = 'debug c'
-			has_friends = 'debug d'
-			data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends )
-			self.render_tmpl( 'accountdelete.html',
-			                  active_menu = 'profile',
-			                  data = data,
-			                  is_active = True if enki.HandlerBase.account_is_active( self.enki_user.key.id( ) ) else False )
+	def get_logged_in( self ):
+		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated' )
+		current_display_name = ''
+		if enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
+			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
+			current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
+		previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
+		email = self.enki_user.email if ( self.enki_user.email and self.enki_user.email != 'removed' ) else ''
+		password = True if self.enki_user.password else False
+		auth_provider = []
+		for item in self.enki_user.auth_ids_provider:
+			provider_name, provider_uid = item.partition( ':' )[ ::2 ]
+			auth_provider.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid )})
+		has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
+		has_messages = True if enki.libmessage.exist_sent_or_received_message( self.user_id ) else False
+		has_friends = True if enki.libfriends.exist_EnkiFriends( self.user_id ) else False
+		has_product_purchased_unactivated = True if enki.libstore.exist_EnkiProductKey_by_purchaser_not_activated( self.user_id ) else False
+		has_product_activated = True if enki.libstore.exist_EnkiProductKey_by_activator( self.user_id ) else False
+		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated )
+		self.render_tmpl( 'accountdelete.html',
+						  active_menu = 'profile',
+						  data = data,
+						  is_active = True if ( enki.HandlerBase.account_is_active( self.enki_user.key.id()) or email ) else False )
 
-	def post( self ):
-		if self.ensure_is_logged_in():
-			self.check_CSRF()
-			submit_type = self.request.get( 'submittype' )
-			if submit_type == 'cancel':
-				self.redirect( enki.libutil.get_local_url( 'profile' ) )
-			elif submit_type == 'delete':
-				delete_posts = False
-				if enki.HandlerBase.account_is_active( self.enki_user.key.id( ) ):
-					has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id( ) ) else False
-					if has_posts and self.request.get( 'deleteposts' ) == 'on':
-						delete_posts = True
-				if self.enki_user.email and self.enki_user.email != 'removed':
-					# if the user has an email, send a confirmation email
-					self.account_deletion_request( delete_posts )
-					if delete_posts:
-						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.ACCOUNT_AND_POSTS_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
-					else:
-						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.ACCOUNT_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
+	def post_reauthenticated( self, params ):
+		submit_type = params.get( 'submittype' )
+		if submit_type == 'cancel':
+			self.redirect( enki.libutil.get_local_url( 'profile' ))
+		elif submit_type == 'delete':
+			delete_posts = False
+			if enki.HandlerBase.account_is_active( self.enki_user.key.id()):
+				has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
+				if has_posts and params.get( 'deleteposts' ) == 'on':
+					delete_posts = True
+			if self.enki_user.email and self.enki_user.email != 'removed':
+				# if the user has an email, send a confirmation email
+				self.account_deletion_request( delete_posts )
+				if delete_posts:
+					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.ACCOUNT_AND_POSTS_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
 				else:
-					# otherwise just delete the account
-					self.delete_account( delete_posts )
-					if delete_posts:
-						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.ACCOUNT_AND_POSTS_DELETED())
-					else:
-						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.ACCOUNT_DELETED())
-				self.redirect( enki.libutil.get_local_url( ) )
+					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.ACCOUNT_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
+			else:
+				# otherwise just delete the account
+				self.delete_account( delete_posts )
+				if delete_posts:
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_AND_POSTS_DELETED())
+				else:
+					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_DELETED())
+			self.redirect( enki.libutil.get_local_url())
 
 
 class HandlerAccountDeleteConfirm( enki.HandlerBase ):
@@ -744,10 +827,10 @@ class HandlerAccountDeleteConfirm( enki.HandlerBase ):
 		if tokenExists:
 			result = self.delete_account( delete_posts, token )
 			if delete_posts:
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.ACCOUNT_AND_POSTS_DELETED())
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_AND_POSTS_DELETED())
 			else:
-				self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.ACCOUNT_DELETED())
-			self.redirect( enki.libutil.get_local_url( ) )
+				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_DELETED())
+			self.redirect( enki.libutil.get_local_url())
 		else:
 			self.abort( 404 )
 
@@ -762,6 +845,7 @@ routes_account = [ webapp2.Route( '/login', HandlerLogin, name = 'login' ),
 				   webapp2.Route( '/register', HandlerRegister, name = 'register' ),
 				   webapp2.Route( '/rc/<verifytoken>', HandlerRegisterConfirm, name = 'registerconfirm' ),
 				   webapp2.Route( '/registeroauthconfirm', HandlerRegisterOAuthConfirm, name = 'registeroauthconfirm' ),
+				   webapp2.Route( '/registeroauthwithexistingemail', HandlerRegisterOAuthWithExistingEmail, name = 'registeroauthwithexistingemail' ),
 				   webapp2.Route( '/passwordchange', HandlerPasswordChange, name = 'passwordchange' ),
 				   webapp2.Route( '/passwordrecover', HandlerPasswordRecover, name = 'passwordrecover' ),
 				   webapp2.Route( '/pc/<verifytoken>', HandlerPasswordRecoverConfirm, name = 'passwordrecoverconfirm' ),

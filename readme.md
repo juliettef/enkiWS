@@ -23,7 +23,7 @@ __[ NEW in v0.7 ] REST API app registration and user datastore viewer; reauthent
 * Forums
 * Localisation - English & French implemented
 * Online store
-    * Payment provider [FastSpring](http://www.fastspring.com/)  
+    * Payment provider [FastSpring](https://www.fastspring.com/)  
     * Licence key generation and activation
     * Store emulator
 * Friends
@@ -49,7 +49,7 @@ __[ NEW in v0.7 ] REST API app registration and user datastore viewer; reauthent
 * User roles
 * Issues reporting and tracking
 * Static blogging tool integration
-* Integration [presskit() for GAE](http://www.enkisoftware.com/devlogpost-20140123-1-Presskit_for_Google_App_Engine.html), 
+* Integration [presskit() for GAE](https://www.enkisoftware.com/devlogpost-20140123-1-Presskit_for_Google_App_Engine.html), 
 [distribute()](https://dodistribute.com/), 
 [Promoter](https://www.promoterapp.com/)
 
@@ -71,12 +71,12 @@ You can run enkiWS on your machine using the Google App Engine Launcher:
 ### Debugging enkiWS locally using PyCharm CE
 
 A *.idea* directory is included in the project. It is preconfigured to enable the use of the free Pycharm Community Edition as an IDE for debugging python GAE code, with one modification to make manually. 
-Note: if you'd prefer to configure PyCharm CE yourself see the [detailed tutorial](http://www.enkisoftware.com/devlogpost-20141231-1-Python_Google_App_Engine_debugging_with_PyCharm_CE.html). Otherwise follow the simplified instructions below:
+Note: if you'd prefer to configure PyCharm CE yourself see the [detailed tutorial](https://www.enkisoftware.com/devlogpost-20141231-1-Python_Google_App_Engine_debugging_with_PyCharm_CE.html). Otherwise follow the simplified instructions below:
 
 1. Ensure you have python 2.7 and Google app Engine installed. To check it works, try running the enkiWS website locally.  
 1. Download and install [Pycharm CE](https://www.jetbrains.com/pycharm/download/)  
 1. Start Pycharm and open the project - set the project location to the directory enkiWS was extracted to (the parent folder of the .idea directory).  
-1. A *Load error: undefined path variables*, *GAE_PATH is undefined* warning is displayed. To fix it see the [PyCharm tutorial Method A step 3.c. onwards](http://www.enkisoftware.com/devlogpost-20141231-1-Python_Google_App_Engine_debugging_with_PyCharm_CE.html#pathvariable).
+1. A *Load error: undefined path variables*, *GAE_PATH is undefined* warning is displayed. To fix it see the [PyCharm tutorial Method A step 3.c. onwards](https://www.enkisoftware.com/devlogpost-20141231-1-Python_Google_App_Engine_debugging_with_PyCharm_CE.html#pathvariable).
 1. Note: if you get a message stating *No Python interpreter configured for the project*, go to File > Settings > Project:enkiWS > Project Interpreter and set the project interpreter to point to the location of *python.exe* on your computer (..\Python27\python.exe).
 1. Restart PyCharm
 1. You can now run / debug the project from PyCharm using one of the configurations provided (e.g. *GAE_config*).  
@@ -292,9 +292,9 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
 
 ### Why use Google App Engine?
 
-Small games developers like ourselves typically have very irregular backend requirements - website and service traffic are typically relatively low, but spike when there's a new release or if some content goes viral. Google App Engine (GAE) provides a low cost scalable solution for this scenario. For more information see our article on [Implementing a static website in Google App Engine](http://www.enkisoftware.com/devlogpost-20130823-1-Implementing_a_static_website_in_Google_App_Engine.html) or [Wolfire's article on GAE for indie developers](http://blog.wolfire.com/2009/03/google-app-engine-for-indie-developers/) as well as [Wolfire's article on hosting the Humble Indie Bundle](http://blog.wolfire.com/2010/06/Hosting-the-Humble-Indie-Bundle-on-App-Engine).
+Small games developers like ourselves typically have very irregular backend requirements - website and service traffic are typically relatively low, but spike when there's a new release or if some content goes viral. Google App Engine (GAE) provides a low cost scalable solution for this scenario. For more information see our article on [Implementing a static website in Google App Engine](https://www.enkisoftware.com/devlogpost-20130823-1-Implementing_a_static_website_in_Google_App_Engine.html) or [Wolfire's article on GAE for indie developers](http://blog.wolfire.com/2009/03/google-app-engine-for-indie-developers/) as well as [Wolfire's article on hosting the Humble Indie Bundle](http://blog.wolfire.com/2010/06/Hosting-the-Humble-Indie-Bundle-on-App-Engine).
 
-Note that if you don't want to use Google App Engine, you can use [the open source AppScale](http://www.appscale.com/) environment to run this code on other platforms.
+Note that if you don't want to use Google App Engine, you can use [the open source AppScale](https://www.appscale.com/) environment to run this code on other platforms.
 
 ### Why Python?
 
@@ -306,9 +306,9 @@ According to the [EU legislation on cookies](http://ec.europa.eu/ipg/basics/lega
 
 ## Credits
 
-Developed by [Juliette Foucaut](http://www.enkisoftware.com/about.html#juliette) - [@juliettef](https://github.com/juliettef)  
-Architecture and OAuth implementation - [Doug Binks](http://www.enkisoftware.com/about.html#doug) - [@dougbinks](https://github.com/dougbinks)  
-Testing - [Andy Binks](http://www.enkisoftware.com/about.html#andy)  
+Implementation - [Juliette Foucaut](https://www.enkisoftware.com/about.html#juliette) - [@juliettef](https://github.com/juliettef)  
+Architecture and implementation - [Doug Binks](https://www.enkisoftware.com/about.html#doug) - [@dougbinks](https://github.com/dougbinks)  
+Testing - [Andy Binks](https://www.enkisoftware.com/about.html#andy)  
 Testing - Sven Bentlage - [@sbe-dev](https://github.com/sbe-dev)  
 Localisation - Charlotte Foucaut - [@charlf](https://github.com/charlf)
 

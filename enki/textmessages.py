@@ -18,8 +18,11 @@ def DISCONNECTED_APP( ): return _( "Application disconnected." )
 
 def REGISTRATION_ABORT(): return _( "Sign up aborted." )
 def REGISTRATION_INFO_EMAIL_SENT( email ): return _( "If email address %(email)s is available, a registration email was sent to it. Please check your inbox and follow the instructions in the email to <b>confirm your registration</b>.", email = email )
+def REGISTRATION_INFO_EMAIL_CANNOT_USE( email ): return _( "Please provide an email address different from <b>%(email)s</b>", email = email )
+
 def ACCOUNT_CREATED(): return _( "Your account is created." )
 
+def LOGIN_FAILED(): return _( "Login failed, please try again." )
 def AUTH_LOGIN_FAILED( provider_name ): return _( "Login with %(provider)s failed, please try again.", provider = provider_name )
 def REGISTER_AUTH_ADD_EMAIL_INFO_EMAIL_SENT( email ): return _( "If email address %(email)s is available, an email was sent to it. Please check your inbox and follow the instructions in the email to <b>add it to your account</b>.", email = email )
 
@@ -35,7 +38,9 @@ def EMAIL_ROLLBACK_INFO_EMAIL_SENT(): return _( "An email was sent to your previ
 def EMAIL_CHANGE_CONFIRM_INFO_EMAIL_SENT( email ): return _( "If email address %(email)s is available, an email was sent to it. Please check your inbox and follow the instructions in the message to <b>confirm</b> the change.", email = email )
 def EMAIL_CHANGE_UNDO_INFO_EMAIL_SENT(): return _( "An email was sent to your current address in case you want to <b>undo</b> the change." )
 
-def AUTH_PROVIDER_DEREGISTERED( provider_name ): return _( "%(provider)s authentication method is deregistered.", provider = provider_name )
+def AUTH_PROVIDER_ADDED( provider ): return _( "Authentication method %(provider)s is added.", provider = provider )
+def AUTH_PROVIDER_CANNOT_BE_ADDED( provider ): return _( "Authentication method %(provider)s cannot be added to your account. It is already registered to another user.", provider = provider )
+def AUTH_PROVIDER_REMOVED( provider_name ): return _("Authentication method %(provider)s is removed.", provider = provider_name)
 
 def PASSWORD_UPDATED(): return _( "Your password is updated." )
 def PASSWORD_SET(): return _( "Your password is set." )
@@ -68,6 +73,8 @@ def UNIT_MINUTE( nr ): return ngettext( "minute", "minutes", nr )
 def UNIT_HOUR( nr ): return ngettext( "hour", "hours", nr )
 def UNIT_DAY( nr ): return ngettext( "day", "days", nr )
 
+def USER_ADMIN_RIGHTS_REQUIRED(): return _( "You must have Admin rights to perform this action." )
+
 # emails
 def SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_SUBJECT(): return _( "Attempt to log in with your email" )
 def SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link, email ): return _( "An attempt was made to log in to your account using this email address. If you'd like to use your email to log in, you need to set a password for it: %(link)s (click or copy and paste in your browser)", link = link, email = email )
@@ -81,8 +88,6 @@ def SEND_EMAIL_EMAIL_CHANGE_UNDO_SUBJECT(): return _( "Undo change email" )
 def SEND_EMAIL_EMAIL_CHANGE_UNDO_BODY( link, email ): return _( "A request to change the email address linked to your account was made. Follow this link to cancel the change and ensure the current address %(email)s remains linked to your account: %(link)s (click or copy and paste in your browser)", email = email, link = link )
 def SEND_EMAIL_PASSWORD_RESET_SUBJECT(): return _( "Password reset" )
 def SEND_EMAIL_PASSWORD_RESET_BODY( link ): return _( "A request to reset your password was made. Follow this link to reset your password and set a new one: %(link)s (click or copy and paste in your browser)", link = link )
-def SEND_EMAIL_AUTH_NEW_SUBJECT(): return _( "New authentication" )
-def SEND_EMAIL_AUTH_NEW_BODY( link, provider_name, provider_uid ): return _( "A new authentication method has been added: you can now log in using %(provname)s. (If you do not remember logging in using %(provname)s, your %(provname)s account - Id %(provuid)s may have been be compromised. In addition, you should log in to your account profile and remove the %(provname)s authentication method. %(link)s (click or copy and paste in your browser)", link = link, provname = provider_name, provuid = provider_uid )
 def SEND_EMAIL_ACCOUT_DELETE_SUBJECT(): return _( "Account deletion" )
 def SEND_EMAIL_ACCOUT_DELETE_BODY( link ): return _( "A request to delete your account was made. Follow this link to confirm deletion - WARNING: this cannot be undone! - %(link)s (click or copy and paste in your browser)", link = link )
 def SEND_EMAIL_ACCOUT_POSTS_DELETE_SUBJECT(): return _( "Account and forum posts deletion" )
@@ -132,6 +137,9 @@ def LICENCE_INVALID(): return _( "Invalid licence key." )
 def LICENCE_MISSING(): return _( "A licence key is needed." )
 def LICENCE_TOO_LONG(): return _( "Licence key is too long." )
 
+# Download
+def DOWNLOAD_ERROR(): return _( "Download error" )
+
 # Rest API
 def GAME_CONNECTION_TOKEN( token, minutes ): return ngettext( 'Your single-use game connect code is valid for <b>%(minutes)s minute</b>. <h1><b><font face="monospace">%(token)s</font></b></h1>', 'Your single-use game connect code is valid for <b>%(minutes)s minutes</b>. <h1><b><font face="monospace">%(token)s</font></b></h1>', minutes, minutes = minutes, token = token )
 def NAME_NEEDED(): return _( "A name is needed" )
@@ -141,3 +149,4 @@ def APP_NAME_ALREADY_EXISTS(): return _( "This application name already exists. 
 def APP_EXCEED_ALLOWED(): return _( "You have exceeded the number of applications allowed per user." )
 def NEW_SECRET_GENERATED(): return _( "New secret generated." )
 def APP_DATA_DELETED(): return _( "Application data deleted." )
+

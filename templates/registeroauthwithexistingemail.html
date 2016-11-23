@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+		<link type="text/css" rel="stylesheet" href="/css/oauth.css">
+        <title>{{ _( "Authentication with existing email" ) }}</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incbanner.html" %}
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+            <div>
+				<h1>{{ _( "Log in or create a new account" )}}</h1>
+
+				<div>
+					<div>
+						<h2>{{ _( "Log in to an existing account" )}}</h2>
+						<p>{{ _( "Use an authentication method you've used before. Once logged in, you'll be able to add %(providername)s as a login method from your profile page.", providername = provider_name )}}</p>
+					</div>
+
+					{% if email_user_has_pw %}
+					<div class="well bs-component">
+						<form class="form-horizontal" action="{{ 'registeroauthwithexistingemail'|local }}" method="post">
+							<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+							<fieldset>
+
+								<legend>{{ _( "Log in with email and password" ) }}</legend>
+
+								<div class="form-group">
+									<label for="email" class="col-lg-2 control-label" for="disabledInput">{{ _( "Email" ) }}</label>
+									<div class="col-lg-10">
+										<input class="form-control" id="disabledInput" type="text" placeholder="{{ email }}" disabled=""/>
+									</div>
+								</div>
+
+								<div class="form-group {% if error %}has-error{% endif%}">
+									<label for="password" class="col-lg-2 control-label">{{ _( "Password" ) }}</label>
+									 <div class="col-lg-10">
+										 <input class="form-control" type="password" name="password" placeholder="{{ _( "Password" ) }}" />
+										 {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-lg-10 col-lg-offset-2">
+										<button class="btn btn-primary" type="submit" name="submittype" value="login">{{ _( "Log in" ) }}</button>
+										<button class="btn btn-default" type="submit" name="submittype" value="recoverpass">{{ _( "Forgot password" )}}</button>
+									</div>
+								</div>
+
+							</fieldset>
+						</form>
+					</div>
+					{% endif %}
+
+					{% if authhandlers %}
+					<div class="well bs-component">
+						<fieldset>
+							<legend>{{ _( "Log in with a third party provider" )}}</legend>
+							<div class="col-md-6 col-md-offset-3">
+								{% for handler in authhandlers %}
+									{% set oauthbutton = handler.get_button() %}
+									<a href="{{ oauthbutton.href }}" class="btn btn-block btn-oauth btn-{{ handler.get_provider_name()|lower }}">
+										<i class="i-oauth fa {{ oauthbutton.icon }}"></i> {{ _( "Log in with" )}} {{ handler.get_provider_name() }}
+										{% if handler.get_provider_name() == provider_name %}<br><small>{{ _( "You may need to log out or use a different browser" )}}</small>{% endif %}
+									</a>
+								{% endfor %}
+							</div>
+						</fieldset>
+					</div>
+					{% endif %}
+				</div>
+
+				{% if provider_authhandler %}
+				<div>
+					<h2>{{ _( "Create a new account using %(providername)s as a login method", providername = provider_name )}}</h2>
+					<p>{{ _( "Warning: you will need an email address different from %(email)s.", email = email )}}</p>
+				</div>
+
+				<div class="well bs-component">
+					<fieldset>
+						<legend>{{ _( "Create an account using a third party provider" )}}</legend>
+						<div class="col-md-6 col-md-offset-3">
+							<form class="form-group" action="{{ 'registeroauthwithexistingemail'|local  }}" method="post">
+								<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+								<button class="btn btn-block btn-oauth btn-{{ provider_authhandler.get_provider_name()|lower }}" type="submit" name="submittype" value="register">
+									<i class="i-oauth fa {{ provider_authhandler.get_button().icon }}"></i> {{ _( "Log in with" )}} {{ provider_name }}<br><small>{{ _( "User identifier" )}} {{ provider_uid }}</small></button>
+							</form>
+						</div>
+					</fieldset>
+				</div>
+				{% endif %}
+
+            </div>
+
+            {% include "incfooter.html" %}
+        </div>
+    </body>
+</html>

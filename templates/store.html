@@ -19,10 +19,21 @@
                 <h1>{{ product_displayname[ 'product_a' ] }}</h1>
 	            <form class="form-group" action="{{ 'store'|local }}" method="post">
 	                <p>
-                       <button class="btn btn-success btn-lg" type="submit" name="buy" value="{{ product }}">{{ _( "Purchase" )}}</button>
+                       <button class="btn btn-info btn-lg" type="submit" name="buy" value="{{ product }}">{{ _( "Purchase" )}}</button>
 	                </p>
                 </form>
             </div>
+
+			{# <!-- requires enkiDL --> #}
+			<div class="jumbotron">
+                <h1>{{ product_displayname[ 'product_a' ] }}</h1>
+	            <form class="form-group" action="{{ 'store'|local }}" method="post">
+	                <p>
+                       <button class="btn btn-info btn-lg" type="submit" name="download" value="product_a">{{ _( "Download" )}}</button>
+	                </p>
+                </form>
+            </div>
+			{# <!-- END requires enkiDL --> #}
 
 	        {% include "incpageextensions.html" %}
 

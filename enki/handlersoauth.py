@@ -24,19 +24,12 @@ class HandlerOAuthBase( enki.HandlerBase ):
 
 	def auth_callback( self ):
 		self.auth_check_CSRF()
-		# set referral and locale
+		# set referral
 		ref_d = self.session.get( 'sessionrefpath', self.request.referrer )
 		ref = self.session.get( 'sessionloginrefpath', ref_d )
 		if not ref:
 			ref = enki.libutil.get_local_url( ) # home
 		self.session[ 'sessionloginrefpath' ] = ref
-		locale = ''
-		parameters = urlparse.parse_qs( urlparse.urlparse( ref ).query )
-		if 'locale' in parameters:
-			locale_param = parameters[ 'locale' ][ 0 ]
-			if locale_param in enki.handlerbase.LOCALES:
-				locale = locale_param
-		webapp2_extras.i18n.get_i18n().set_locale( locale )
 		self.auth_callback_provider()
 
 	def process_login_info( self, loginInfoSettings, result ):
@@ -58,6 +51,20 @@ class HandlerOAuthBase( enki.HandlerBase ):
 	def process_result_as_query_string( self, result ):
 		return dict( urlparse.parse_qsl( result.content ))
 
+	def urlfetch_safe(self, *args, **kwargs ):
+		haveError = False
+		try:
+			result = urlfetch.fetch( *args, **kwargs )
+			if result.status_code != 200:
+				haveError = True
+		except:
+			haveError = True
+
+		if haveError:
+			self.add_infomessage('info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+			self.redirect_to_relevant_page()
+			return
+		return result
 
 class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 
@@ -85,40 +92,61 @@ class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 				   }
 		urlParams = urllib.urlencode( params )
 		url = self.token_endpoint()
-		result = urlfetch.fetch( url = url,
-								 payload = urlParams,
-								 method = urlfetch.POST,
-								 headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
-								)
+
+		result = self.urlfetch_safe( url = url,
+									 payload = urlParams,
+									 method = urlfetch.POST,
+									 headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
+									)
+
 		self.process_token_result( result )
 
 	def get_profile( self, token ):
 		fullUrl = self.profile_endpoint() + '?' + urllib.urlencode({ 'access_token': token })
-		return urlfetch.fetch( url = fullUrl )
+		profile = self.urlfetch_safe( url = fullUrl )
+		return profile
 
 
 class HandlerOAuthOpenIDConnect( HandlerOAuthOAUTH2 ):
 
-	def fetch_discovery_doc( self ):
+	@webapp2.cached_property
+	def discovery_doc( self ):
 		url = self.get_discovery_URL()
-		result = urlfetch.fetch( url )
+		result = self.urlfetch_safe( url )
 		jdoc = json.loads( result.content )
 		return jdoc
 
 	def auth_endpoint( self ):
-		jdoc = self.fetch_discovery_doc( )
+		jdoc = self.discovery_doc
 		return jdoc[ 'authorization_endpoint' ]
 
 	def token_endpoint( self ):
-		jdoc = self.fetch_discovery_doc( )
+		jdoc = self.discovery_doc
 		return jdoc[ 'token_endpoint' ]
 
 	def get_scope( self ):   # get scope (compulsory) to add to params
 		return 'openid email'
 
+
+	def validate_token_doc( self, tokenDoc ):
+		# validate jwt according to http://openid.net/specs/openid-connect-basic-1_0.html#IDTokenValidation
+		if tokenDoc.get( 'iss') != self.discovery_doc.get( 'issuer' ):
+			return False
+		if tokenDoc.get( 'aud' ) != self.get_auth_request_client_id( ):
+			return False
+		if 'azp' in tokenDoc and tokenDoc['azp'] != self.get_auth_request_client_id():
+			return False
+		exp = tokenDoc.get( 'exp' )
+		currtime = int( time.time() )
+		# use a 120 second margin for expiry
+		if not isinstance( exp, ( int, long ) ) or int( exp ) + 120 < currtime:
+			return False
+		# ToDo could check iat
+		return True
+
 	def process_token_result( self, result ): # select the processing function
 		jdoc = self.process_result_as_JSON( result )
-		if 'error' in jdoc:  # failed
+		if 'error' in jdoc or 'id_token' not in jdoc:  # failed
 			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
 			self.redirect_to_relevant_page()
 			return
@@ -132,6 +160,12 @@ class HandlerOAuthOpenIDConnect( HandlerOAuthOAUTH2 ):
 			jwtencoded = jwtencoded.encode( 'ascii' )
 		jwtencoded = jwtencoded + b'=' * ( 4 - len( jwtencoded ) % 4 )
 		jwt = json.loads( base64.urlsafe_b64decode( jwtencoded ).decode( 'utf-8' ))
+
+		if not self.validate_token_doc( jwt ):
+			self.add_infomessage('info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+			self.redirect_to_relevant_page()
+			return
+
 
 		loginInfoSettings = {   'provider_uid': 'sub',
 								'email': 'email',
@@ -218,7 +252,7 @@ class HandlerOAuthFacebook( HandlerOAuthOAUTH2 ):
 		return 'https://graph.facebook.com/me'
 
 	def get_scope( self ):   # get scope (compulsory) to add to params
-		return 'public_profile email' # https://developers.facebook.com/docs/facebook-login/permissions/v2.2?locale=en_GB#reference
+		return 'public_profile email' # https://developers.facebook.com/docs/facebook-login/permissions/v2.2#reference
 
 	def process_token_result( self, result ): # select the processing function
 		data = self.process_result_as_query_string( result )
@@ -292,7 +326,7 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 		jdoc = self.process_result_as_JSON( profile )
 
 		emailUrl ='https://api.github.com/user/emails?' + urllib.urlencode({ 'access_token': token })
-		emailDoc = urlfetch.fetch( url = emailUrl )
+		emailDoc = self.urlfetch_safe( url = emailUrl )
 		jemails = self.process_result_as_JSON( emailDoc )
 		for item in jemails:
 			if item.get( 'verified', False ):
@@ -373,7 +407,7 @@ class HandlerOAuthSteam( HandlerOAuthBase ):
 
 		urlParams = urllib.urlencode( params )
 		fullURL = 'https://steamcommunity.com/openid/login'
-		result = urlfetch.fetch( url = fullURL, payload = urlParams, method = urlfetch.POST )
+		result = self.urlfetch_safe( url = fullURL, payload = urlParams, method = urlfetch.POST )
 		if 'ns:http://specs.openid.net/auth/2.0\nis_valid:true\n' in result.content: # only if is_valid do we trust the loginInfo
 			self.provider_authenticated_callback( loginInfo )
 
@@ -445,7 +479,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 		oauth_signature = self.auth_sign( normalised_url, params )
 		params.append(( 'oauth_signature', oauth_signature ))
 		url_params = urllib.urlencode( params )
-		result = urlfetch.fetch( url = normalised_url, payload = url_params, method = urlfetch.POST )
+		result = self.urlfetch_safe( url = normalised_url, payload = url_params, method = urlfetch.POST )
 		response = self.process_result_as_query_string( result )
 		# STEP 2
 		if response.get( 'oauth_callback_confirmed' ) != 'true' :
@@ -474,7 +508,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 		params.append(( 'oauth_signature', oauth_signature ))
 		params.append(( 'oauth_verifier', oauth_verifier ))
 		url_params = urllib.urlencode( params )
-		result = urlfetch.fetch( url = normalised_url, payload = url_params, method = urlfetch.POST )
+		result = self.urlfetch_safe( url = normalised_url, payload = url_params, method = urlfetch.POST )
 		response = self.process_result_as_query_string( result )
 		oauth_token = response.get( 'oauth_token' )
 		user_id = response.get( 'user_id')

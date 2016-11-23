@@ -27,6 +27,11 @@ handlers:
   static_files: static/\1
   upload: static/(.*\.(png))
 
+- url: /admin/.*
+  script: main.app
+  secure: always
+  login: admin
+
 - url: /.*
   script: main.app
   secure: always

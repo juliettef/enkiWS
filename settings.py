@@ -8,7 +8,7 @@ ENKI_EMULATE_STORE = True  # If True, use the store emulator
 
 REAUTH_EXPIRY = 5  # minutes
 
-URL_PURCHASE_FASTSPRING = str( 'https://sites.fastspring.com/enkisoftware/product/avoyd' )
+LOCALES = [ 'en_US', 'en_EN', 'fr_FR' ]
 
 
 product_displayname = { 'product_a' : 'Product A',
@@ -35,7 +35,11 @@ HANDLERS = [ enki.handlersoauth.HandlerOAuthSteam ]
 try:
 	from secrets import secrets
 	KEY_SESSION = secrets.KEY_SESSION
+	URL_PURCHASE_FASTSPRING = secrets.URL_PURCHASE_FASTSPRING
 	SECRET_FASTSPRING = secrets.SECRET_FASTSPRING
+	URLS_ENKIDL = secrets.URLS_ENKIDL
+	SECRET_ENKIDL = secrets.SECRET_ENKIDL
+	SECRET_API_KEY_MAILGUN = secrets.SECRET_API_KEY_MAILGUN
 	SECRETS_EXIST = True
 	if secrets.CLIENT_ID_GOOGLE:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthGoogle ]
@@ -47,7 +51,11 @@ try:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthTwitter ]
 except ImportError:
 	KEY_SESSION = 'See example_secrets.txt'
+	URL_PURCHASE_FASTSPRING = ''
 	SECRET_FASTSPRING = ''
+	URLS_ENKIDL = ''
+	SECRET_ENKIDL = ''
+	SECRET_API_KEY_MAILGUN = ''
 	SECRETS_EXIST = False
 	pass
 
@@ -66,5 +74,6 @@ config[ 'webapp2_extras.sessions' ] = { 'secret_key': KEY_SESSION }
 config[ 'webapp2_extras.jinja2' ] = { 'template_path': 'templates',
                                       'environment_args': { 'extensions': [ 'jinja2.ext.i18n' ]},
                                       'filters': { 'local' : enki.jinjafilters.make_local_url,
-                                                   'joinurl' : enki.jinjafilters.join_url_param_char }
+                                                   'joinurl' : enki.jinjafilters.join_url_param_char,
+												   'changelocale' : enki.jinjafilters.change_locale_url }
                                       }

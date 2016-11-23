@@ -22,7 +22,7 @@
                 <fieldset>
 
                 {% for item in data %}
-                    <p><a href="{{ item.user_page }}">{{ item.display_name }}</a>
+                    <p><a href="{{ item.user_page }}">{% if item.display_name == deleted_dn %}{{ deleted_dn_display }}{% else %}{{ item.display_name }}{% endif %}</a>
                         &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="remove" value="{{ item.user_id }}">{{ _( "Remove" )}}</button>
                     </p>
                 {% endfor %}

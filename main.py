@@ -1,10 +1,11 @@
 import webapp2
+import webapp2_extras.routes
+import copy
 
 import settings
 import enki
 import enki.libutil
 import enki.textmessages as MSG
-
 
 class HandlerMain( enki.HandlerBase ):
 
@@ -23,8 +24,11 @@ enki.ExtensionLibrary.set_extensions([ enki.ExtensionStore(),
 
 routes = [ webapp2.Route( '/', HandlerMain, name = 'home' ) ]
 routes += enki.routes_account \
-          + settings.get_routes_oauth() \
-          + enki.ExtensionLibrary.get_routes()
+		  + enki.routes_info \
+		  + enki.ExtensionLibrary.get_routes()
 
+routes_copy = copy.deepcopy( routes )
+locale_routes = [ webapp2_extras.routes.PathPrefixRoute('/<locale:[a-z]{2}_[A-Z]{2}>',  [ webapp2_extras.routes.NamePrefixRoute('locale-', routes ) ] ) ]
+locale_routes += routes_copy + settings.get_routes_oauth()
 
-app = webapp2.WSGIApplication( routes = routes, debug = enki.libutil.is_debug(), config = settings.config )
+app = webapp2.WSGIApplication( routes = locale_routes, debug = enki.libutil.is_debug(), config = settings.config )

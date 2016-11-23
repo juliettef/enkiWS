@@ -1,6 +1,7 @@
 import datetime, time
 import webapp2
 import json
+import google.appengine.api.users
 
 from google.appengine.ext import ndb
 
@@ -23,10 +24,11 @@ class HandlerApps( enki.HandlerBaseReauthenticate ):
 
 	def get_logged_in( self ):
 		self.render_tmpl( 'apps.html',
-		                  active_menu = 'profile',
-		                  data = enki.librestapi.apps_list( self.user_id ),
-		                  app_max = enki.librestapi.APP_MAX,
-		                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
+					  active_menu = 'profile',
+					  data = enki.librestapi.apps_list( self.user_id ),
+					  app_max = enki.librestapi.APP_MAX,
+					  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
+
 
 	def post_reauthenticated( self, params ):
 		app_secret_set = params.get( 'app_secret_set' )
@@ -60,13 +62,12 @@ class HandlerApps( enki.HandlerBaseReauthenticate ):
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.APP_CREATED())
 				app_success =  str( app.key.id())
 		self.render_tmpl( 'apps.html',
-		                  active_menu = 'profile',
-		                  error = error_message,
-		                  data = data,
-		                  app_success = app_success,
-		                  app_max = enki.librestapi.APP_MAX,
-		                  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
-
+						  active_menu = 'profile',
+						  error = error_message,
+						  data = data,
+						  app_success = app_success,
+						  app_max = enki.librestapi.APP_MAX,
+						  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
 
 class HandlerAppDataStores( enki.HandlerBaseReauthenticate ):
 
@@ -427,7 +428,7 @@ class ExtensionPageRestAPI( ExtensionPage ):
 class ExtensionRestAPI( Extension ):
 
 	def get_routes( self ):
-		return  [ webapp2.Route( '/apps', HandlerApps, name = 'apps' ),
+		return  [ webapp2.Route( '/admin/apps', HandlerApps, name = 'apps' ),
 		          webapp2.Route( '/appdatastores', HandlerAppDataStores, name = 'appdatastores' ),
 		          webapp2.Route( '/restapi', HandlerPageRestAPI, name = 'restapi' ),
 		          webapp2.Route( '/api/v1/connect', HandlerAPIv1Connect, name = 'apiv1connect' ),

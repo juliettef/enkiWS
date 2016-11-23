@@ -1,6 +1,7 @@
 import webapp2
 import urllib
 import re
+import random
 
 import webapp2_extras
 from google.appengine.api import urlfetch
@@ -11,6 +12,7 @@ import enki
 import enki.libutil
 import enki.libstore
 import enki.libuser
+import enki.libenkiDL
 import enki.textmessages as MSG
 
 from enki.modelproductkey import EnkiModelProductKey
@@ -28,14 +30,44 @@ class HandlerStore( enki.HandlerBase ):
 
 	def post( self ):
 		url = settings.URL_PURCHASE_FASTSPRING
-		if not settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_EMULATE_STORE:
-			url = enki.libutil.get_local_url( 'storeemulatefastspring' )
-		if self.is_logged_in():
-			purchaser_user_id = self.enki_user.key.id()
-			token = security.generate_random_string( entropy = 256 )
-			token_purchase = EnkiModelTokenVerify( token = token, user_id = purchaser_user_id, type = 'purchasebyuser' )
-			token_purchase.put()
-			url = enki.libutil.get_local_url( 'storeemulatefastspring', { 'referrer': token_purchase.token })
+
+		# ------
+		# Requires enkiDL
+		if self.request.get( 'download' ):
+			ref_url = enki.libutil.get_local_url( 'store' )
+			self.session[ 'sessionrefpath' ] = ref_url
+			url_fetcher = ''
+			if settings.URLS_ENKIDL:
+				# shuffle then try to download from locations in sequence
+				random.shuffle( settings.URLS_ENKIDL )
+				for i in range( len( settings.URLS_ENKIDL )):
+					url_enkiDL = settings.URLS_ENKIDL[ i ]
+					item_to_download = 'product_a'
+					url_fetcher = enki.libenkiDL.URLFetcher()
+					url_fetcher.get_download_URL( url_enkiDL, settings.SECRET_ENKIDL, item_to_download, self.request.remote_addr )
+					if not url_fetcher.error:
+						break
+				if url_fetcher and url_fetcher.error:
+					self.response.status_int = 500
+					self.add_infomessage( 'warning', MSG.WARNING(), MSG.DOWNLOAD_ERROR())
+					self.redirect( 'info' )
+					return
+				url = url_fetcher.download_url
+			else:
+				self.add_infomessage( 'warning', MSG.WARNING(), MSG.DOWNLOAD_ERROR())
+				self.redirect( 'info' )
+				return
+		# -------
+
+		else:
+			if not settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_EMULATE_STORE:
+				url = enki.libutil.get_local_url( 'storeemulatefastspring' )
+			if self.is_logged_in():
+				purchaser_user_id = self.enki_user.key.id()
+				token = security.generate_random_string( entropy = 256 )
+				token_purchase = EnkiModelTokenVerify( token = token, user_id = purchaser_user_id, type = 'purchasebyuser' )
+				token_purchase.put()
+				url = enki.libutil.get_local_url( 'storeemulatefastspring', { 'referrer': token_purchase.token })
 		self.redirect( url )
 
 

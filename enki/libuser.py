@@ -3,6 +3,7 @@ import re
 
 from google.appengine.ext import ndb
 
+import settings
 import enki.libutil
 from enki.authcryptcontext import pwd_context
 from enki.modeluser import EnkiModelUser
@@ -64,6 +65,13 @@ def revoke_user_authentications( user_id ):
 		ndb.delete_multi( tokens )
 
 
+def user_has_password_by_email( email ):
+	user = get_EnkiUser(email)
+	if user.password:
+		return True
+	return False
+
+
 #=== QUERIES ==================================================================
 
 
@@ -80,6 +88,11 @@ def get_key_EnkiUser( email ):
 def exist_EnkiUser( email ):
 	count = EnkiModelUser.query( EnkiModelUser.email == email ).count( 1 )
 	return count > 0
+
+
+def get_EnkiUser_by_auth_id( auth_id ):
+	entity = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == auth_id ).get()
+	return entity
 
 
 def exist_Auth_Id( auth_id ):

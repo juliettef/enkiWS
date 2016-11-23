@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>{{ _( "Information" )}}</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incbanner.html" %}
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+			<form class="form-horizontal" action="{{ 'info' }}" method="post" id="mainform">
+				<button class="btn btn-primary" type="submit" name="submittype" value="back">{{ _( "Back" ) }}</button>
+			</form>
+
+            {% include "incfooter.html" %}
+    	</div>
+    </body>
+</html>
