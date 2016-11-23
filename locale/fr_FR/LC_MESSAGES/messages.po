@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-22 13:01+0000\n"
+"POT-Creation-Date: 2016-11-23 14:25+0000\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -979,8 +979,8 @@ msgstr "visites"
 msgid "Description"
 msgstr "Description"
 
-#: templates/friends.html:16 templates/profile.html:145
-#: templates/profile.html:155
+#: templates/friends.html:16 templates/profile.html:144
+#: templates/profile.html:154
 msgid "Friends"
 msgstr "Ami.e.s"
 
@@ -1030,15 +1030,15 @@ msgstr "Bibliothèque"
 
 #: templates/inclibrary.html:11 templates/increstapi.html:11
 #: templates/profile.html:24 templates/profile.html:41
-#: templates/profile.html:74 templates/profile.html:94
-#: templates/profile.html:148
+#: templates/profile.html:74 templates/profile.html:93
+#: templates/profile.html:147
 msgid "Hide"
 msgstr "Masquer"
 
 #: templates/inclibrary.html:11 templates/increstapi.html:11
 #: templates/profile.html:24 templates/profile.html:41
-#: templates/profile.html:74 templates/profile.html:94
-#: templates/profile.html:148
+#: templates/profile.html:74 templates/profile.html:93
+#: templates/profile.html:147
 msgid "Show"
 msgstr "Afficher"
 
@@ -1109,13 +1109,17 @@ msgstr "Veuillez créer votre nom d'affichage."
 msgid "Products"
 msgstr "Produits"
 
-#: templates/increstapi.html:8
-msgid "Connect code"
-msgstr "Jeton de connexion"
+#: templates/increstapi.html:8 templates/profile.html:90
+msgid "Connected Applications"
+msgstr "Applications connectées"
 
 #: templates/increstapi.html:19
-msgid "Generate"
-msgstr "Créer"
+msgid "Generate Connect Code"
+msgstr "Générer un jeton de connexion"
+
+#: templates/increstapi.html:21
+msgid "Apps data"
+msgstr "Données applications"
 
 #: templates/incuserposts.html:13 templates/post.html:34
 #: templates/thread.html:37
@@ -1215,7 +1219,7 @@ msgstr "Votre identifiant chez %(providername)s :"
 msgid "Yes, add login method"
 msgstr "Oui, ajouter la nouvelle méthode de connexion"
 
-#: templates/messages.html:16 templates/profile.html:156
+#: templates/messages.html:16 templates/profile.html:155
 msgid "Messages"
 msgstr "Messages"
 
@@ -1312,47 +1316,39 @@ msgstr "Identifiant utilisateur.trice :"
 msgid "Account Settings"
 msgstr "Paramètres du compte"
 
-#: templates/profile.html:81
-msgid "Apps data"
-msgstr "Données applications"
-
-#: templates/profile.html:91
-msgid "Connected Applications"
-msgstr "Applications connectées"
-
-#: templates/profile.html:101
+#: templates/profile.html:100
 msgid "Browser sessions"
 msgstr "Sessions navigateur"
 
-#: templates/profile.html:106 templates/profile.html:122
+#: templates/profile.html:105 templates/profile.html:121
 msgid "Connected"
 msgstr "Connecté.e"
 
-#: templates/profile.html:108
+#: templates/profile.html:107
 msgid "Current session"
 msgstr "Session en cours"
 
-#: templates/profile.html:110 templates/profile.html:123
+#: templates/profile.html:109 templates/profile.html:122
 msgid "Disconnect"
 msgstr "Déconnecter"
 
-#: templates/profile.html:117
+#: templates/profile.html:116
 msgid "Apps"
 msgstr "Apps"
 
-#: templates/profile.html:130
+#: templates/profile.html:129
 msgid "browser session"
 msgid_plural "browser sessions"
 msgstr[0] "session navigateur"
 msgstr[1] "sessions navigateur"
 
-#: templates/profile.html:159
+#: templates/profile.html:158
 msgid "friend"
 msgid_plural "friends"
 msgstr[0] "ami.e"
 msgstr[1] "ami.e.s"
 
-#: templates/profile.html:160
+#: templates/profile.html:159
 msgid "message"
 msgid_plural "messages"
 msgstr[0] "message"
