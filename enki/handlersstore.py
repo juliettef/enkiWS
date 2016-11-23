@@ -1,6 +1,7 @@
 import webapp2
 import urllib
 import re
+import random
 
 import webapp2_extras
 from google.appengine.api import urlfetch
@@ -33,13 +34,20 @@ class HandlerStore( enki.HandlerBase ):
 		# ------
 		# Requires enkiDL
 		if self.request.get( 'download' ):
-			ref_url = enki.libutil.get_local_url('store')
+			ref_url = enki.libutil.get_local_url( 'store' )
 			self.session[ 'sessionrefpath' ] = ref_url
-			if settings.URL_ENKIDL:
-				item_to_download = 'product_a'
-				url_fetcher = enki.libenkiDL.URLFetcher()
-				url_fetcher.get_download_URL( settings.URL_ENKIDL, settings.SECRET_ENKIDL, item_to_download, self.request.remote_addr )
-				if url_fetcher.error:
+			url_fetcher = ''
+			if settings.URLS_ENKIDL:
+				# shuffle then try to download from locations in sequence
+				random.shuffle( settings.URLS_ENKIDL )
+				for i in range( len( settings.URLS_ENKIDL )):
+					url_enkiDL = settings.URLS_ENKIDL[ i ]
+					item_to_download = 'product_a'
+					url_fetcher = enki.libenkiDL.URLFetcher()
+					url_fetcher.get_download_URL( url_enkiDL, settings.SECRET_ENKIDL, item_to_download, self.request.remote_addr )
+					if not url_fetcher.error:
+						break
+				if url_fetcher and url_fetcher.error:
 					self.response.status_int = 500
 					self.add_infomessage( 'warning', MSG.WARNING(), MSG.DOWNLOAD_ERROR())
 					self.redirect( 'info' )
