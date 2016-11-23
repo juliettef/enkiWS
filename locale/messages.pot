@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-22 13:01+0000\n"
+"POT-Creation-Date: 2016-11-23 14:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -978,8 +978,8 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: templates/friends.html:16 templates/profile.html:145
-#: templates/profile.html:155
+#: templates/friends.html:16 templates/profile.html:144
+#: templates/profile.html:154
 msgid "Friends"
 msgstr ""
 
@@ -1029,15 +1029,15 @@ msgstr ""
 
 #: templates/inclibrary.html:11 templates/increstapi.html:11
 #: templates/profile.html:24 templates/profile.html:41
-#: templates/profile.html:74 templates/profile.html:94
-#: templates/profile.html:148
+#: templates/profile.html:74 templates/profile.html:93
+#: templates/profile.html:147
 msgid "Hide"
 msgstr ""
 
 #: templates/inclibrary.html:11 templates/increstapi.html:11
 #: templates/profile.html:24 templates/profile.html:41
-#: templates/profile.html:74 templates/profile.html:94
-#: templates/profile.html:148
+#: templates/profile.html:74 templates/profile.html:93
+#: templates/profile.html:147
 msgid "Show"
 msgstr ""
 
@@ -1108,12 +1108,16 @@ msgstr ""
 msgid "Products"
 msgstr ""
 
-#: templates/increstapi.html:8
-msgid "Connect code"
+#: templates/increstapi.html:8 templates/profile.html:90
+msgid "Connected Applications"
 msgstr ""
 
 #: templates/increstapi.html:19
-msgid "Generate"
+msgid "Generate Connect Code"
+msgstr ""
+
+#: templates/increstapi.html:21
+msgid "Apps data"
 msgstr ""
 
 #: templates/incuserposts.html:13 templates/post.html:34
@@ -1214,7 +1218,7 @@ msgstr ""
 msgid "Yes, add login method"
 msgstr ""
 
-#: templates/messages.html:16 templates/profile.html:156
+#: templates/messages.html:16 templates/profile.html:155
 msgid "Messages"
 msgstr ""
 
@@ -1311,47 +1315,39 @@ msgstr ""
 msgid "Account Settings"
 msgstr ""
 
-#: templates/profile.html:81
-msgid "Apps data"
-msgstr ""
-
-#: templates/profile.html:91
-msgid "Connected Applications"
-msgstr ""
-
-#: templates/profile.html:101
+#: templates/profile.html:100
 msgid "Browser sessions"
 msgstr ""
 
-#: templates/profile.html:106 templates/profile.html:122
+#: templates/profile.html:105 templates/profile.html:121
 msgid "Connected"
 msgstr ""
 
-#: templates/profile.html:108
+#: templates/profile.html:107
 msgid "Current session"
 msgstr ""
 
-#: templates/profile.html:110 templates/profile.html:123
+#: templates/profile.html:109 templates/profile.html:122
 msgid "Disconnect"
 msgstr ""
 
-#: templates/profile.html:117
+#: templates/profile.html:116
 msgid "Apps"
 msgstr ""
 
-#: templates/profile.html:130
+#: templates/profile.html:129
 msgid "browser session"
 msgid_plural "browser sessions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/profile.html:159
+#: templates/profile.html:158
 msgid "friend"
 msgid_plural "friends"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/profile.html:160
+#: templates/profile.html:159
 msgid "message"
 msgid_plural "messages"
 msgstr[0] ""
