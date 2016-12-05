@@ -16,6 +16,8 @@ product_displayname = { 'product_a' : 'Product A',
                         'product_c' : 'Product C',
                         'product_d' : 'Product D', }
 
+COMPANY_NAME = "Company"
+
 
 def get_forum_default_topics():
 	forum_topics = [

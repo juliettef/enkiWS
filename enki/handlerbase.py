@@ -366,7 +366,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			if send_success:
 				return
 		# we use app engine email if either we failed to send with mailgun or have no mailgun account
-		email_sender = "Company no reply <noreply@" + app_identity.get_application_id() + ".appspotmail.com>"
+		email_sender = settings.COMPANY_NAME + " no reply <noreply@" + app_identity.get_application_id() + ".appspotmail.com>"
 		mail.send_mail( sender = email_sender, to = email_address, subject = email_subject, body = email_body )
 		return
 
