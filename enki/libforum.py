@@ -28,9 +28,9 @@ ERROR_POST_CREATION = -52
 ERROR_POST_EDITION = -53
 ERROR_POST_DELETION = -54
 
-forumsData = collections.namedtuple( 'forumsData', 'num_threads, num_posts, list')
-forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown, forum_selected')
-threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown, thread_selected')
+
+forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown, forum_selected' )
+threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown, thread_selected' )
 postData = collections.namedtuple( 'postData', 'forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown' )
 authorpostsData = collections.namedtuple( 'authorpostsData', 'forums_url, author_data, list, markdown' )
 pagination = collections.namedtuple( 'pagination', 'page_first, page_previous, page_current, page_list, page_next, page_last' )
@@ -39,22 +39,50 @@ pagination = collections.namedtuple( 'pagination', 'page_first, page_previous, p
 #=== DISPLAY DATA =============================================================
 
 
-def set_forum():
-	ndb.put_multi( settings.get_forum_default_topics())
+def create_forums():
+	# create an executable string from the forums settings to add the forums
+	expression_forum = '''enki.modelforum.EnkiModelForum( group_order = {group_order}, forum_order = {forum_order}, group = "{group}", title = "{title}", description = "{description}" ), '''
+	expression = "ndb.put_multi([ "
+	increment = 10
+	group_order = 0
+	forum_order = 0
+	current_group = ''
+	for index, item in enumerate( settings.FORUMS):
+		if item[ 0 ] != current_group:
+		# new group: increment the group order index and reset the forum order index
+			current_group = item[ 0 ]
+			group_order += increment
+			forum_order = increment
+		else:
+			forum_order += increment
+		expression += expression_forum.format( group_order = group_order, forum_order = forum_order, group = current_group, title = item[ 1 ], description = item[ 2 ] )
+	expression += " ])"
+	exec( expression )
 
 
-def get_forums_data( group ):
-	num_threads = 0
-	num_posts = 0
-	list = fetch_EnkiForum_by_group( group )
-	if list:
-		for i, item in enumerate( list ):
-			num_threads += item.num_threads
-			num_posts += item.num_posts
-			url = enki.libutil.get_local_url( 'forum', { 'forum': str( item.key.id( ) ) } )
-			item.url = url
-			list[ i ] = item
-	forums_data = forumsData( num_threads, num_posts, list )
+def get_forums_data():
+	forums_data = []
+	all_forums = fetch_EnkiForums()
+	if all_forums:
+		# get the groups from the list (ordered)
+		groups_temp = []
+		for item in all_forums:
+			if item.group not in groups_temp:
+				groups_temp.append( item.group )
+		# get the forums for each group (ordered)
+		for group_name in groups_temp:
+			group_num_threads = 0
+			group_num_posts = 0
+			forums = []
+			for item in all_forums:
+				if item.group == group_name:
+					group_num_threads += item.num_threads
+					group_num_posts += item.num_posts
+					url = enki.libutil.get_local_url( 'forum', { 'forum':str(item.key.id())})
+					forums.append({ 'title' : item.title, 'description' : item.description,
+									'num_threads' : item.num_threads, 'num_posts' : item.num_posts, 'url' : url })
+			forums_data.append({ 'name' : group_name, 'num_threads' : group_num_threads, 'num_posts' : group_num_posts,
+								  'forums' : forums })
 	return forums_data
 
 
@@ -66,9 +94,9 @@ def get_forum_data( forum_selected ):
 	if list:
 		for i, item in enumerate( list ):
 			num_posts += item.num_posts
-			url = enki.libutil.get_local_url( 'thread', { 'thread': str( item.key.id( ) ) } )
+			url = enki.libutil.get_local_url( 'thread', { 'thread': str( item.key.id())})
 			item.url = url
-			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ) )
+			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
 			list[ i ] = item
 	forum_data = forumData( forums_url, forum, num_posts, list, markdown2.markdown, forum_selected )
 	return forum_data
@@ -81,10 +109,10 @@ def validate_thread_pagination( thread, post_requested, post_count ):
 			thread_entity = EnkiModelThread.get_by_id( int( thread ))
 			if thread_entity:
 				if post_requested and post_count:
-					if post_requested.isdigit( ) and post_count.isdigit( ) :
+					if post_requested.isdigit() and post_count.isdigit() :
 						if int( post_requested ) > 0 and int( post_requested ) <= thread_entity.num_posts and int( post_count ) > 0:
 							result = enki.libutil.ENKILIB_OK
-					elif post_requested == 'last' and post_count.isdigit( ):
+					elif post_requested == 'last' and post_count.isdigit():
 						result = enki.libutil.ENKILIB_OK
 				elif post_requested == '' and post_count == '':
 					result = enki.libutil.ENKILIB_OK
@@ -95,16 +123,16 @@ def get_thread_data( thread_selected, post_requested = POST_DEFAULT, post_count 
 	# get posts by thread
 	forums_url = enki.libutil.get_local_url( 'forums' )
 	thread = EnkiModelThread.get_by_id( int( thread_selected ))
-	thread_url = enki.libutil.get_local_url( 'thread', { 'thread': str( thread_selected ) } )
+	thread_url = enki.libutil.get_local_url( 'thread', { 'thread': str( thread_selected )})
 	forum = EnkiModelForum.get_by_id( thread.forum )
-	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id( ) ) } )
+	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
 	if post_requested == POST_LAST:
 		post_requested = thread.num_posts
-	list = fetch_EnkiPost_by_thread( int( thread_selected ), offset = (int( post_requested ) - 1), limit = int( post_count ) )
+	list = fetch_EnkiPost_by_thread( int( thread_selected ), offset = (int( post_requested ) - 1), limit = int( post_count ))
 	if list:
 		for i, item in enumerate( list ):
-			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ) )
-			item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id( ) ) } )
+			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
+			item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
 			list[ i ] = item
 	thread_data = threadData( forums_url, forum, forum_url, thread, thread_url, list, markdown2.markdown, thread_selected )
 	return thread_data
@@ -145,27 +173,27 @@ def get_thread_pagination_data( thread_selected, post_requested = POST_DEFAULT, 
 	# first page
 	first_post_first_page = 1
 	if post_requested <> 1:
-		page_first = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post_first_page ), 'count': str( post_count ) } )
+		page_first = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post_first_page ), 'count': str( post_count )})
 
 	# last page
 	first_post_last_page = get_first_post_on_page( get_page( thread, thread.num_posts, post_count ), post_count)
 	if post_requested + post_count <= thread.num_posts:
-		page_last = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post_last_page ), 'count': str( post_count ) } )
+		page_last = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post_last_page ), 'count': str( post_count )})
 
 	# current, previous and next pages
 	first_post_previous_page = get_first_post_on_page( get_page( thread, post_requested, post_count ), post_count )
 	first_post_next_page = get_first_post_on_page( get_page( thread, ( post_requested + post_count ), post_count ), post_count )
 	if get_first_post_on_page( get_page( thread, post_requested, post_count ), post_count ) == post_requested:
-		page = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( post_requested ), 'count': str( post_count ) } )
+		page = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( post_requested ), 'count': str( post_count )})
 		page_current = [ page, get_page( thread, post_requested, post_count )]
 		if page_current[ 1 ] > first_post_first_page:
 			first_post_previous_page = get_first_post_on_page( page_current[ 1 ] - 1, post_count )
 		if page_current[ 1 ] < get_page( thread, thread.num_posts, post_count ):
 			first_post_next_page = get_first_post_on_page( page_current[ 1 ] + 1, post_count )
 	if page_first:
-		page_previous = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post_previous_page ), 'count': str( post_count ) } )
+		page_previous = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post_previous_page ), 'count': str( post_count )})
 	if page_last:
-		page_next = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post_next_page ), 'count': str( post_count ) } )
+		page_next = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post_next_page ), 'count': str( post_count )})
 
 	# list of posts
 	start = get_page( thread, post_requested, post_count ) - PAGES_BEFORE
@@ -177,7 +205,7 @@ def get_thread_pagination_data( thread_selected, post_requested = POST_DEFAULT, 
 	index = start
 	while index <= stop :
 		first_post = get_first_post_on_page( index, post_count )
-		page = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post ), 'count': str( post_count ) } )
+		page = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post ), 'count': str( post_count )})
 		page_list.append([ page, index ])
 		index += 1
 
@@ -189,19 +217,19 @@ def	get_post_data ( post_selected ):
 	# get a post
 	forums_url = enki.libutil.get_local_url( 'forums' )
 	post = EnkiModelPost.get_by_id( int( post_selected ))
-	post_page =  enki.libutil.get_local_url( 'post', { 'post': str( post.key.id( ) ) } )
+	post_page =  enki.libutil.get_local_url( 'post', { 'post': str( post.key.id())})
 	thread = EnkiModelThread.get_by_id( post.thread )
-	thread_url = enki.libutil.get_local_url( 'thread', { 'thread': str( thread.key.id( ) ) } )
+	thread_url = enki.libutil.get_local_url( 'thread', { 'thread': str( thread.key.id())})
 	forum = EnkiModelForum.get_by_id( thread.forum )
-	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id( ) ) } )
-	author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( post.author ) )
+	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
+	author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( post.author ))
 	post_data = postData( forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown2.markdown, )
 	return post_data
 
 
 def get_author_posts( author_selected ):  # MOVED TO LIB
 	# get posts by author to display on their profile. If the author hasn't set a display name, return nothing
-	author_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( int( author_selected ) )
+	author_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( int( author_selected ))
 	if author_display_name:
 		forums_url = enki.libutil.get_local_url( 'forums' )
 		author_data = enki.libdisplayname.get_user_id_display_name_url( author_display_name )
@@ -211,11 +239,11 @@ def get_author_posts( author_selected ):  # MOVED TO LIB
 				thread = EnkiModelThread.get_by_id( item.thread )
 				forum = EnkiModelForum.get_by_id( thread.forum )
 				item.thread_title = thread.title
-				item.thread_url = enki.libutil.get_local_url( 'thread', { 'thread': str( item.thread ) } )
+				item.thread_url = enki.libutil.get_local_url( 'thread', { 'thread': str( item.thread )})
 				item.forum_title = forum.title
 				item.forum_group = forum.group
-				item.forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id( ) ) } )
-				item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id( ) ) } )
+				item.forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
+				item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
 				list[ i ] = item
 		author_posts_data = authorpostsData( forums_url, author_data, list, markdown2.markdown )
 		return author_posts_data
@@ -319,7 +347,7 @@ def delete_user_posts( user_id ):
 	posts = fetch_EnkiPost_key_by_author( user_id )
 	if posts:
 		for post in posts:
-			result = delete_post( user_id, post.id( ) )
+			result = delete_post( user_id, post.id())
 			if result == ERROR_POST_DELETION:
 				return result
 	return result
@@ -333,13 +361,13 @@ def exist_EnkiForums():
 	return count > 0
 
 
-def fetch_EnkiForum_by_group( group ):
-	list = EnkiModelForum.query( EnkiModelForum.group == group ).order( EnkiModelForum.order ).fetch()
+def fetch_EnkiForums():
+	list = EnkiModelForum.query().order( EnkiModelForum.group_order, EnkiModelForum.forum_order ).fetch()
 	return list
 
 
 def fetch_EnkiThread_by_forum( forum ):
-	list = EnkiModelThread.query( EnkiModelThread.forum == forum ).order( -EnkiModelThread.time_created ).fetch()
+	list = EnkiModelThread.query( EnkiModelThread.forum == forum ).order( -EnkiModelThread.time_updated ).fetch()
 	return list
 
 

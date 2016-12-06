@@ -16,15 +16,24 @@ product_displayname = { 'product_a' : 'Product A',
                         'product_c' : 'Product C',
                         'product_d' : 'Product D', }
 
+COMPANY_NAME = "Company"
 
-def get_forum_default_topics():
+# Forums groups and groups' topics (ordered)
+FORUMS = [[ 'Group A', 'Title A-1', 'Description A-1' ],
+		  [ 'Group A', 'Title A-2', 'Description A-2' ],
+		  [ 'Group A', 'Title A-3', 'Description A-3' ],
+		  [ 'Group B', 'Title B-1', 'Description B-1' ],
+		  [ 'Group B', 'Title B-2', 'Description B-2' ],
+		  ]
+
+def get_forum_groups_and_topics():
+
+	string = "enki.modelforum.EnkiModelForum( group = 'Group A', order = 10, title = 'General', description = 'General discussion' )"
+
 	forum_topics = [
-		enki.modelforum.EnkiModelForum( group = 'Company', order = 10, title = 'General', description = 'General discussion' ),
-		enki.modelforum.EnkiModelForum( group = 'Company', order = 20, title = 'News', description = 'Latest news' ),
-		enki.modelforum.EnkiModelForum( group = 'Company', order = 30, title = 'Support', description = 'Questions, feedback and bug reports' ),
-        enki.modelforum.EnkiModelForum( group = 'Game', order = 10, title = 'General', description = 'General discussion' ),
-		enki.modelforum.EnkiModelForum( group = 'Game', order = 20, title = 'News', description = 'Latest news' ),
-		enki.modelforum.EnkiModelForum( group = 'Game', order = 30, title = 'Support', description = 'Questions, feedback and bug reports' ),
+		enki.modelforum.EnkiModelForum( group = 'Group A', order = 10, title = 'General', description = 'General discussion' ),
+		enki.modelforum.EnkiModelForum( group = 'Group A', order = 20, title = 'News', description = 'Latest news' ),
+		enki.modelforum.EnkiModelForum( group = 'Group B', order = 10, title = 'Support', description = 'Questions, feedback and bug reports' ),
 		]
 	return forum_topics
 

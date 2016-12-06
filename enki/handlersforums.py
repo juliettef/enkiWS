@@ -15,13 +15,12 @@ class HandlerForums( enki.HandlerBase ):
 	def get( self ):
 		thread_view_count = EnkiModelCounter.get_count()
 		if not enki.libforum.exist_EnkiForums():
-			# if no forum topic exists , populate the forums with default topics
-			enki.libforum.set_forum()
+			# if no forum topic exists , populate the forums with user-defined groups and topics
+			enki.libforum.create_forums()
 		self.render_tmpl( 'forums.html', False,
 		                  active_menu = 'forums',
 		                  thread_view_count = thread_view_count,
-		                  data_company = enki.libforum.get_forums_data( 'Company' ),
-		                  data_game = enki.libforum.get_forums_data( 'Game' ) )
+		                  forums_data = enki.libforum.get_forums_data())
 
 
 class HandlerForum( enki.HandlerBase ):

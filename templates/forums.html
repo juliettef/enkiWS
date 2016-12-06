@@ -11,20 +11,6 @@
 
             {% include "incbanner.html" %}
             {% include "incnavbartop.html" %}
-
-	        <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Information</h3>
-                </div>
-                <div class="panel-body">
-                    <p>en-EN - This is a <b>test webservice</b> for an open source project.<br>
-                    Accounts and forum posts may be deleted at any time and without warning.</p>
-	                <hr>
-	                <p>fr-FR - Ceci est un <b>site test</b> pour un projet open source.<br>
-                    Comptes et messages de forum peuvent être supprimés à tout moment.</p>
-                </div>
-            </div>
-
             {% include "incmessageinfo.html" %}
 
             <h1>{{ _( "Forums" ) }}</h1>
@@ -38,44 +24,26 @@
                 <div class="col-xs-1"><p><em>{{ _( "Posts" ) }}</em></p></div>
             </div>
 
-            <div class="row">
-                <div class="col-xs-10"><p id="company">Company</p></div>
-                <div class="col-xs-1"><p><span class="badge">{{ data_company.num_threads }}</span></p></div>
-                <div class="col-xs-1"><p><span class="badge">{{ data_company.num_posts }}</span></p></div>
-            </div>
+			{% for group in forums_data %}
+				<div class="row">
+					<div class="col-xs-10"><p id="company">{{ group.name }}</p></div>
+					<div class="col-xs-1"><p><span class="badge">{{ group.num_threads }}</span></p></div>
+					<div class="col-xs-1"><p><span class="badge">{{ group.num_posts }}</span></p></div>
+				</div>
 
-            <ul class="list-group">
-                {% for item in data_company.list %}
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2"><a href="{{ item.url }}">{{ item.title }}</a></div>
-                            <div class="col-xs-8">{{ item.description }}</div>
-                            <div class="col-xs-1"><span class="badge">{{ item.num_threads }}</span></div>
-                            <div class="col-xs-1"><span class="badge">{{ item.num_posts }}</span></div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-
-
-            <div class="row">
-                <div class="col-xs-10"><p id="game">Game</p></div>
-                <div class="col-xs-1"><p><span class="badge">{{ data_game.num_threads }}</span></p></div>
-                <div class="col-xs-1"><p><span class="badge">{{ data_game.num_posts }}</span></p></div>
-            </div>
-
-            <ul class="list-group">
-                {% for item in data_game.list %}
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-xs-2"><a href="{{ item.url }}">{{ item.title }}</a></div>
-                            <div class="col-xs-8">{{ item.description }}</div>
-                            <div class="col-xs-1"><span class="badge">{{ item.num_threads }}</span></div>
-                            <div class="col-xs-1"><span class="badge">{{ item.num_posts }}</span></div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+				<ul class="list-group">
+					{% for forum in group.forums %}
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-xs-2"><a href="{{ forum.url }}">{{ forum.title }}</a></div>
+								<div class="col-xs-8">{{ forum.description }}</div>
+								<div class="col-xs-1"><span class="badge">{{ forum.num_threads }}</span></div>
+								<div class="col-xs-1"><span class="badge">{{ forum.num_posts }}</span></div>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endfor %}
 
             {% include "incfooter.html" %}
         </div>

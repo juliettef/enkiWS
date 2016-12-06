@@ -15,11 +15,6 @@ indexes:
   - name: user_id
   - name: time_created
 
-- kind: EnkiForum
-  properties:
-  - name: group
-  - name: order
-
 - kind: EnkiModelApp
   properties:
   - name: user_id
@@ -46,8 +41,8 @@ indexes:
 
 - kind: EnkiModelForum
   properties:
-  - name: group
-  - name: order
+  - name: group_order
+  - name: forum_order
 
 - kind: EnkiModelPost
   properties:
@@ -123,7 +118,7 @@ indexes:
 - kind: EnkiModelThread
   properties:
   - name: forum
-  - name: time_created
+  - name: time_updated
     direction: desc
 
 - kind: EnkiModelTokenAuth
@@ -178,9 +173,3 @@ indexes:
   - name: current
   - name: prefix
   - name: user_id
-
-- kind: enkiThread
-  properties:
-  - name: forum
-  - name: time_created
-    direction: desc
