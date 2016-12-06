@@ -118,6 +118,8 @@ indexes:
 - kind: EnkiModelThread
   properties:
   - name: forum
+  - name: sticky_order
+    direction: desc
   - name: time_updated
     direction: desc
 
