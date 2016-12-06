@@ -367,7 +367,7 @@ def fetch_EnkiForums():
 
 
 def fetch_EnkiThread_by_forum( forum ):
-	list = EnkiModelThread.query( EnkiModelThread.forum == forum ).order( -EnkiModelThread.time_updated ).fetch()
+	list = EnkiModelThread.query( EnkiModelThread.forum == forum ).order( -EnkiModelThread.sticky_order, -EnkiModelThread.time_updated ).fetch()
 	return list
 
 
