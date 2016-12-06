@@ -123,7 +123,7 @@ indexes:
 - kind: EnkiModelThread
   properties:
   - name: forum
-  - name: time_created
+  - name: time_updated
     direction: desc
 
 - kind: EnkiModelTokenAuth
@@ -178,9 +178,3 @@ indexes:
   - name: current
   - name: prefix
   - name: user_id
-
-- kind: enkiThread
-  properties:
-  - name: forum
-  - name: time_created
-    direction: desc

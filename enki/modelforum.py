@@ -12,3 +12,4 @@ class EnkiModelForum( model.Model ):
 	num_posts = model.IntegerProperty( default = 0 )    # number of posts in the forum's threads
 
 	time_created = model.DateTimeProperty( auto_now_add = True )
+	time_updated = model.DateTimeProperty( auto_now = True )

@@ -354,7 +354,7 @@ def fetch_EnkiForum_by_group( group ):
 
 
 def fetch_EnkiThread_by_forum( forum ):
-	list = EnkiModelThread.query( EnkiModelThread.forum == forum ).order( -EnkiModelThread.time_created ).fetch()
+	list = EnkiModelThread.query( EnkiModelThread.forum == forum ).order( -EnkiModelThread.time_updated ).fetch()
 	return list
 
 
