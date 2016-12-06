@@ -28,9 +28,9 @@ ERROR_POST_CREATION = -52
 ERROR_POST_EDITION = -53
 ERROR_POST_DELETION = -54
 
-forumsData = collections.namedtuple( 'forumsData', 'num_threads, num_posts, list')
-forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown, forum_selected')
-threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown, thread_selected')
+
+forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown, forum_selected' )
+threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown, thread_selected' )
 postData = collections.namedtuple( 'postData', 'forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown' )
 authorpostsData = collections.namedtuple( 'authorpostsData', 'forums_url, author_data, list, markdown' )
 pagination = collections.namedtuple( 'pagination', 'page_first, page_previous, page_current, page_list, page_next, page_last' )
@@ -41,35 +41,48 @@ pagination = collections.namedtuple( 'pagination', 'page_first, page_previous, p
 
 def create_forums():
 	# create an executable string from the forums settings to add the forums
-	expression_forum = '''enki.modelforum.EnkiModelForum( order = {order}, group = "{group}", title = "{title}", description = "{description}" ), '''
+	expression_forum = '''enki.modelforum.EnkiModelForum( group_order = {group_order}, forum_order = {forum_order}, group = "{group}", title = "{title}", description = "{description}" ), '''
 	expression = "ndb.put_multi([ "
-	order_lowest = 10
-	order_index = order_lowest
+	increment = 10
+	group_order = 0
+	forum_order = 0
 	current_group = ''
 	for index, item in enumerate( settings.FORUMS):
 		if item[ 0 ] != current_group:
-		# new group: reset the order index
+		# new group: increment the group order index and reset the forum order index
 			current_group = item[ 0 ]
-			order_index = order_lowest
+			group_order += increment
+			forum_order = increment
 		else:
-			order_index += 10
-		expression += expression_forum.format( order = order_index, group = current_group, title = item[ 1 ], description = item[ 2 ] )
+			forum_order += increment
+		expression += expression_forum.format( group_order = group_order, forum_order = forum_order, group = current_group, title = item[ 1 ], description = item[ 2 ] )
 	expression += " ])"
 	exec( expression )
 
 
-def get_forums_data( group ):
-	num_threads = 0
-	num_posts = 0
-	list = fetch_EnkiForum_by_group( group )
-	if list:
-		for i, item in enumerate( list ):
-			num_threads += item.num_threads
-			num_posts += item.num_posts
-			url = enki.libutil.get_local_url( 'forum', { 'forum': str( item.key.id())})
-			item.url = url
-			list[ i ] = item
-	forums_data = forumsData( num_threads, num_posts, list )
+def get_forums_data():
+	forums_data = []
+	all_forums = fetch_EnkiForums()
+	if all_forums:
+		# get the groups from the list (ordered)
+		groups_temp = []
+		for item in all_forums:
+			if item.group not in groups_temp:
+				groups_temp.append( item.group )
+		# get the forums for each group (ordered)
+		for group_name in groups_temp:
+			group_num_threads = 0
+			group_num_posts = 0
+			forums = []
+			for item in all_forums:
+				if item.group == group_name:
+					group_num_threads += item.num_threads
+					group_num_posts += item.num_posts
+					url = enki.libutil.get_local_url( 'forum', { 'forum':str(item.key.id())})
+					forums.append({ 'title' : item.title, 'description' : item.description,
+									'num_threads' : item.num_threads, 'num_posts' : item.num_posts, 'url' : url })
+			forums_data.append({ 'name' : group_name, 'num_threads' : group_num_threads, 'num_posts' : group_num_posts,
+								  'forums' : forums })
 	return forums_data
 
 
@@ -348,8 +361,8 @@ def exist_EnkiForums():
 	return count > 0
 
 
-def fetch_EnkiForum_by_group( group ):
-	list = EnkiModelForum.query( EnkiModelForum.group == group ).order( EnkiModelForum.order ).fetch()
+def fetch_EnkiForums():
+	list = EnkiModelForum.query().order( EnkiModelForum.group_order, EnkiModelForum.forum_order ).fetch()
 	return list
 
 

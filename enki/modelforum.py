@@ -6,7 +6,8 @@ class EnkiModelForum( model.Model ):
 	title = model.StringProperty()
 	description = model.StringProperty()
 	group = model.StringProperty() # group of forums
-	order = model.IntegerProperty( default = 0 ) # sort the forums (within a group)
+	group_order = model.IntegerProperty( default = 0 ) # order the groups appear in on the page
+	forum_order = model.IntegerProperty( default = 0 ) # order the forums appear in within a group
 
 	num_threads = model.IntegerProperty( default = 0 )  # number of threads in the forum
 	num_posts = model.IntegerProperty( default = 0 )    # number of posts in the forum's threads

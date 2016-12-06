@@ -20,8 +20,7 @@ class HandlerForums( enki.HandlerBase ):
 		self.render_tmpl( 'forums.html', False,
 		                  active_menu = 'forums',
 		                  thread_view_count = thread_view_count,
-		                  data_company = enki.libforum.get_forums_data( 'Company' ),
-		                  data_game = enki.libforum.get_forums_data( 'Game' ) )
+		                  forums_data = enki.libforum.get_forums_data())
 
 
 class HandlerForum( enki.HandlerBase ):
