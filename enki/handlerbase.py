@@ -155,8 +155,8 @@ class HandlerBase( webapp2.RequestHandler ):
 
 
 	def get_backoff_timer( self, identifier, increment = False ):
-		if self.exist_backoff_timer( identifier ):
-			entity = self.get_backofftimer( identifier )
+		entity = self.get_backofftimer(identifier)
+		if entity:
 			result = entity.last_failure - datetime.datetime.now() + entity.backoff_duration
 			if result <= datetime.timedelta( 0 ):
 				# inactive backoff timer. Increase the delay.
