@@ -52,6 +52,8 @@ class ExtensionLibrary():
 
 	@classmethod
 	def get_page_extensions_route( cls, handler, route_name ):
+		if 'locale-' in route_name:
+			route_name = route_name[7:]
 		list_data = []
 		page_extensions = cls.dict_page_extensions.get( route_name )
 		if page_extensions:
