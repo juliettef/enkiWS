@@ -353,7 +353,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 	# Create or edit user based on auth login info
 	def get( self ):
 		token = self.session.get( 'tokenregisterauth' )
-		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register', retry = 3 )
 		if tokenEntity:
 			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
 			self.render_tmpl( 'registeroauthconfirm.html',
@@ -438,7 +438,7 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 	# can do it from their profile page once they've logged in.
 	def get( self ):
 		token = self.session.get( 'tokenregisterauth' )
-		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register', retry = 3 )
 		if tokenEntity:
 			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
 			provider_email = tokenEntity.email
