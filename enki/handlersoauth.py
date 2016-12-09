@@ -456,10 +456,14 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 			return
 		return
 
-	def auth_sign( self, normalised_url, ordered_params, token_secret = '' ):
+	def auth_sign( self, normalised_url, ordered_params, token_secret = '', method_get = False ):
 		# note: create signature see https://dev.twitter.com/oauth/overview/creating-signatures
 		params_to_sign = urllib.urlencode( ordered_params )
-		oauth_signature_string = 'POST&' + percent_encode( normalised_url ) + '&' + percent_encode( params_to_sign )
+		oauth_signature_string = ''
+		if method_get:
+			oauth_signature_string = 'GET&' + percent_encode(normalised_url) + '&' + percent_encode(params_to_sign)
+		else:
+			oauth_signature_string = 'POST&' + percent_encode(normalised_url) + '&' + percent_encode(params_to_sign)
 		key = percent_encode( settings.secrets.CLIENT_SECRET_TWITTER ) + '&' + token_secret
 		hmac_hash = hmac.new( key, oauth_signature_string, hashlib.sha1 )
 		oauth_signature = base64.b64encode( hmac_hash.digest())
@@ -510,15 +514,30 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 		result = self.urlfetch_safe( url = normalised_url, payload = url_params, method = urlfetch.POST )
 		response = self.process_result_as_query_string( result )
 		oauth_token = response.get( 'oauth_token' )
+		oauth_token_secret = response.get('oauth_token_secret')
 		user_id = response.get( 'user_id')
 		if user_id and oauth_token:
-			#TODO get email address if we can
-			#url_params = urllib.urlencode([( 'oauth_token', oauth_token )])
-			#full_url = 'https://api.twitter.com/1.1/account/verify_credentials.json?' + url_params
-			#result_credentials = urlfetch.fetch( url = full_url, method = urlfetch.GET )
+			#get email address if we can
+			verify_params = [('include_email', 'true'),
+				             ('include_entities','false'),
+			                 ('oauth_consumer_key', settings.secrets.CLIENT_ID_TWITTER ),
+			                 ('oauth_nonce', webapp2_extras.security.generate_random_string( length = 42, pool = webapp2_extras.security.ALPHANUMERIC ).encode( 'utf-8' )),
+			                 ('oauth_signature_method', "HMAC-SHA1"),
+			                 ('oauth_timestamp', str(int(time.time()))),
+			                 ('oauth_token', oauth_token ),
+			                 ('oauth_version', "1.0"),
+							 ('skip_status', 'true')]
+			verify_oauth_signature = self.auth_sign('https://api.twitter.com/1.1/account/verify_credentials.json', verify_params,oauth_token_secret, method_get=True )
+			verify_params.append(('oauth_signature', verify_oauth_signature))
+			verify_url_params = urllib.urlencode( verify_params )
+			full_url = 'https://api.twitter.com/1.1/account/verify_credentials.json?' + verify_url_params
+			verify_credentials_result_json = self.urlfetch_safe( url = full_url, method = urlfetch.GET )
+			verify_credentials_result = self.process_result_as_JSON(verify_credentials_result_json)
+			response['email'] = verify_credentials_result['email']
+			response['email_verified'] = True
 			loginInfoSettings = { 'provider_uid': 'user_id',
-		              			  'email': '',
-		                          'email_verified': '' }
+		              			  'email': 'email',
+		                          'email_verified': 'email_verified' }
 			loginInfo = self.process_login_info( loginInfoSettings, response )
 			self.provider_authenticated_callback( loginInfo )
 		else:
