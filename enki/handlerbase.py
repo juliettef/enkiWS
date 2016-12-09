@@ -662,7 +662,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			self.redirect_to_relevant_page()
 
 
-	def redirect_to_relevant_page( self ):
+	def redirect_to_relevant_page( self, abort = False ):
 		# Redirect user to a previous page after login (& sign up) and logout,
 		# but only if they're allowed to be on the page with their new login status and the page is relevant.
 		# Otherwise redirect to Home.
@@ -684,7 +684,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			# Choose the redirection
 			if ( ref_path in relevant_pages ) or any( path in ref_path for path in relevant_paths ):
 				redirect_path = ref
-		self.redirect( redirect_path )
+		self.redirect( redirect_path, abort = abort )
 
 
 	@classmethod

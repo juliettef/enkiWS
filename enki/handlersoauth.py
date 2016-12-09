@@ -62,8 +62,7 @@ class HandlerOAuthBase( enki.HandlerBase ):
 
 		if haveError:
 			self.add_infomessage('info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
-			self.redirect_to_relevant_page()
-			return
+			self.redirect_to_relevant_page( True )
 		return result
 
 class HandlerOAuthOAUTH2( HandlerOAuthBase ):
