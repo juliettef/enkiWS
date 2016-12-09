@@ -1,8 +1,10 @@
 import datetime
+import time
 
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
 
+TIMEOUT_S = 0.1
 
 class EnkiModelTokenVerify( model.Model ):
 
@@ -19,9 +21,19 @@ class EnkiModelTokenVerify( model.Model ):
 		return entity
 
 	@classmethod
-	def get_by_token_type( cls, token, type ):
+	def get_by_token_type( cls, token, type, retry = 0 ):
 		entity = cls.query( ndb.AND( cls.token == token, cls.type == type )).get()
+		if retry and not entity:
+			timeout = TIMEOUT_S
+			for i in range( retry ):
+				entity = cls.query(ndb.AND(cls.token == token, cls.type == type)).get()
+				if entity:
+					break
+				else:
+					time.sleep(timeout)
+					timeout *= 2
 		return entity
+
 
 	@classmethod
 	def get_by_user_id_email_type( cls, user_id, email, type ):
