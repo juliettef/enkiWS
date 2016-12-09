@@ -24,8 +24,9 @@ enki.ExtensionLibrary.set_extensions([ enki.ExtensionStore(),
 
 routes = [ webapp2.Route( '/', HandlerMain, name = 'home' ) ]
 routes += enki.routes_account \
-		  + enki.routes_info \
-		  + enki.ExtensionLibrary.get_routes()
+		  + enki.ExtensionLibrary.get_routes()\
+		  + enki.routes_info\
+		  + enki.routes_legal\
 
 routes_copy = copy.deepcopy( routes )
 locale_routes = [ webapp2_extras.routes.PathPrefixRoute('/<locale:[a-z]{2}_[A-Z]{2}>',  [ webapp2_extras.routes.NamePrefixRoute('locale-', routes ) ] ) ]

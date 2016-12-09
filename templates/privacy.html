@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>{{ _( "Privacy policy" ) }}</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incbanner.html" %}
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+			<h1>{{ _( "Privacy policy" ) }}</h1>
+
+<p>This policy explains how we collect, use and share your information across our websites and connected services.</p>
+<p>This website is based on the open source project <a href="https://github.com/juliettef/enkiWS">enkiWS</a>.</p><p>When you register an account with us we store the email you provide us, a secure one way hash of your password if login with a password is chosen, and an authentication provider identifier if you login via one of the OAuth / OpenID providers.</p>
+<p>Our services allow you to voluntarily submit information to us, such as a display name, and forum posts.</p>
+<p>Our security system uses your email to notify you of important changes to your account. You may opt out of this by removing your email on the profile page if you have another login method enabled. We will not send any other emails unless you decide to opt-in for these.</p>
+<p>Cookies:</p>
+<p>We store a single internal session cookie to enable basic website features, such as form security, account sign-up, language preferences, and login. This cookie is set to expire by default when you close the browser.</p>
+<p>Data deletion:</p>
+<p>You may choose to delete your account and all related information you have submitted. Some secure backups of this may exist on our servers but these are not made publicly available and will be regularly purged.</p>
+
+
+            {% include "incfooter.html" %}
+    	</div>
+    </body>
+</html>
