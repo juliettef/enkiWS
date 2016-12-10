@@ -100,8 +100,9 @@ class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 
 		self.process_token_result( result )
 
-	def get_profile( self, token ):
-		fullUrl = self.profile_endpoint() + '?' + urllib.urlencode({ 'access_token': token })
+	def get_profile( self, token, params = {} ):
+		params.update( { 'access_token': token } )
+		fullUrl = self.profile_endpoint() + '?' + urllib.urlencode( params )
 		profile = self.urlfetch_safe( url = fullUrl )
 		return profile
 
@@ -260,12 +261,12 @@ class HandlerOAuthFacebook( HandlerOAuthOAUTH2 ):
 			self.redirect_to_relevant_page()
 			return
 		token = data[ 'access_token' ]
-		profile = self.get_profile( token )
+		profile = self.get_profile( token, { 'fields': 'id,email'} )
 		jdoc = self.process_result_as_JSON( profile )
-
+		jdoc[ 'email_verified' ] = True # Facebook emails only given if verified.
 		loginInfoSettings = {   'provider_uid': 'id',
 								'email': 'email',
-								'email_verified': 'verified' }
+								'email_verified': 'email_verified' }
 		loginInfo = self.process_login_info( loginInfoSettings, jdoc )
 		self.provider_authenticated_callback( loginInfo )
 
