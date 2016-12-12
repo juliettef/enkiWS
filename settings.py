@@ -26,17 +26,6 @@ FORUMS = [[ 'Group A', 'Title A-1', 'Description A-1' ],
 		  [ 'Group B', 'Title B-2', 'Description B-2' ],
 		  ]
 
-def get_forum_groups_and_topics():
-
-	string = "enki.modelforum.EnkiModelForum( group = 'Group A', order = 10, title = 'General', description = 'General discussion' )"
-
-	forum_topics = [
-		enki.modelforum.EnkiModelForum( group = 'Group A', order = 10, title = 'General', description = 'General discussion' ),
-		enki.modelforum.EnkiModelForum( group = 'Group A', order = 20, title = 'News', description = 'Latest news' ),
-		enki.modelforum.EnkiModelForum( group = 'Group B', order = 10, title = 'Support', description = 'Questions, feedback and bug reports' ),
-		]
-	return forum_topics
-
 
 # Steam OAuth always available as it doesn't use client ID nor secret - as of Jan 2016
 HANDLERS = [ enki.handlersoauth.HandlerOAuthSteam ]
