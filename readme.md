@@ -7,11 +7,12 @@ A permissively licensed Python web service for games developers. enkiWS is a lib
 
 [Online demo](https://enkisoftware-webservices.appspot.com) *(may be out of sync with the source code)* 
 
+Our website [enkisoftware.com](https://www.enkisoftware.com/) uses enkiWS, with the addition of static pages and a custom blog.
 
 ## Status
 
 This is a work in progress and not yet ready for production use.  
-__[ NEW in v0.7 ] REST API app registration and user datastore viewer; reauthentication checks__
+__[ NEW in v0.8 ] Github OAuth login, Facebook API update, Twitter OAuth can now get email, Example Privacy and Terms of Service, Language settings moved into path.
 
 
 ## Functionality
@@ -19,7 +20,7 @@ __[ NEW in v0.7 ] REST API app registration and user datastore viewer; reauthent
 ### Current
 
 * User Accounts - email, display name
-* [Login through OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter) - Valve's Steam, Facebook, Google, Twitter
+* [Login through OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter-github) - Valve's Steam, Facebook, Google, Twitter, Github
 * Forums
 * Localisation - English & French implemented
 * Online store
@@ -81,12 +82,12 @@ Note: if you'd prefer to configure PyCharm CE yourself see the [detailed tutoria
 1. Restart PyCharm
 1. You can now run / debug the project from PyCharm using one of the configurations provided (e.g. *GAE_config*).  
 
-### Enabling OAuth login with Google, Facebook, Twitter
+### Enabling OAuth login with Google, Facebook, Twitter, Github
 
 To set up Open Authentication, you need to configure secrets.py:  
 
 1. Follow the instructions in [example_secrets.txt](https://github.com/juliettef/enkiWS/blob/master/example_secrets.txt)  
-1. Go to the login page: you will see the login buttons for the providers you've set up. Clicking on those buttons creates and account &/or logs you into enkiWS using OAuth.  
+1. Go to the login page: you will see the login buttons for the providers you've set up. Clicking on those buttons creates an account &/or logs you into enkiWS using OAuth.  
 
 Notes:  
 
@@ -100,6 +101,8 @@ Notes:
 **_WARNING: The API is in flux until v1.0_**
 
 The rest api provides a mechanism for developers to create games, apps and websites which interact with users data.
+
+Administration of the Apps and app_secret required for access to the Game API use Google user account login which requires a Google App Engine admin account for the enkiWS GAE install. To access the admin page go to /admin/apps
 
  - Protocol: HTTPS
  - Request method: POST  
