@@ -247,13 +247,13 @@ class HandlerPost( enki.HandlerBase ):
 					result = enki.libforum.delete_post( user, post )
 					if result[ 0 ] == enki.libutil.ENKILIB_OK:
 						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_DELETED())
-						self.redirect( enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ] } ) ) # redirect to parent thread
+						self.redirect( enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})) # redirect to parent thread
 						return
 					else:
 						error_message = MSG.FAIL_POST_DELETION()
 
 				elif submit_type == 'cancel':
-					self.redirect( enki.libutil.get_local_url( data.post_page ) )
+					self.redirect( data.post_page )
 					return
 				else:
 					if not post_body:
@@ -269,7 +269,7 @@ class HandlerPost( enki.HandlerBase ):
 						result = enki.libforum.edit_post( user, post, post_body )
 						if result[ 0 ] == enki.libutil.ENKILIB_OK:
 							self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_MODIFIED())
-							self.redirect( enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ] } ) ) # redirect to parent thread
+							self.redirect( enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})) # redirect to parent thread
 							return
 						else:
 							error_message = MSG.FAIL_POST_MODIFICATION()
