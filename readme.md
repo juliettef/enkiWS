@@ -12,7 +12,7 @@ Our website [enkisoftware.com](https://www.enkisoftware.com/) uses enkiWS, with 
 ## Status
 
 This is a work in progress and not yet ready for production use.  
-__[ NEW in v0.7 ] REST API app registration and user datastore viewer; reauthentication checks__
+__[ NEW in v0.8 ] Github OAuth login, Facebook API update, Twitter OAuth can now get email, Example Privacy and Terms of Service, Language settings moved into path.
 
 
 ## Functionality
@@ -20,7 +20,7 @@ __[ NEW in v0.7 ] REST API app registration and user datastore viewer; reauthent
 ### Current
 
 * User Accounts - email, display name
-* [Login through OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter) - Valve's Steam, Facebook, Google, Twitter
+* [Login through OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter-github) - Valve's Steam, Facebook, Google, Twitter, Github
 * Forums
 * Localisation - English & French implemented
 * Online store
