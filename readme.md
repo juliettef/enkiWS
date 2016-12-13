@@ -81,7 +81,7 @@ Note: if you'd prefer to configure PyCharm CE yourself see the [detailed tutoria
 1. Restart PyCharm
 1. You can now run / debug the project from PyCharm using one of the configurations provided (e.g. *GAE_config*).  
 
-### Enabling OAuth login with Google, Facebook, Twitter
+### Enabling OAuth login with Google, Facebook, Twitter, Github
 
 To set up Open Authentication, you need to configure secrets.py:  
 
@@ -100,6 +100,8 @@ Notes:
 **_WARNING: The API is in flux until v1.0_**
 
 The rest api provides a mechanism for developers to create games, apps and websites which interact with users data.
+
+Administration of the Apps and app_secret required for access to the Game API use Google user account login which requires a Google App Engine admin account for the enkiWS GAE install. To access the admin page go to /admin/apps
 
  - Protocol: HTTPS
  - Request method: POST  
