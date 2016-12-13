@@ -7,6 +7,7 @@ A permissively licensed Python web service for games developers. enkiWS is a lib
 
 [Online demo](https://enkisoftware-webservices.appspot.com) *(may be out of sync with the source code)* 
 
+Our website [enkisoftware.com](https://www.enkisoftware.com/) uses enkiWS, with the addition of static pages and a custom blog.
 
 ## Status
 
@@ -86,7 +87,7 @@ Note: if you'd prefer to configure PyCharm CE yourself see the [detailed tutoria
 To set up Open Authentication, you need to configure secrets.py:  
 
 1. Follow the instructions in [example_secrets.txt](https://github.com/juliettef/enkiWS/blob/master/example_secrets.txt)  
-1. Go to the login page: you will see the login buttons for the providers you've set up. Clicking on those buttons creates and account &/or logs you into enkiWS using OAuth.  
+1. Go to the login page: you will see the login buttons for the providers you've set up. Clicking on those buttons creates an account &/or logs you into enkiWS using OAuth.  
 
 Notes:  
 
