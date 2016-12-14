@@ -39,6 +39,10 @@ pagination = collections.namedtuple( 'pagination', 'page_first, page_previous, p
 #=== DISPLAY DATA =============================================================
 
 
+# safe version of markdown
+def markdown( text ):
+	return markdown2.markdown( text, safe_mode='escape', extras=["nofollow"])
+
 def create_forums():
 	# create an executable string from the forums settings to add the forums
 	expression_forum = '''enki.modelforum.EnkiModelForum( group_order = {group_order}, forum_order = {forum_order}, group = "{group}", title = "{title}", description = "{description}" ), '''
@@ -98,7 +102,7 @@ def get_forum_data( forum_selected ):
 			item.url = url
 			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
 			list[ i ] = item
-	forum_data = forumData( forums_url, forum, num_posts, list, markdown2.markdown, forum_selected )
+	forum_data = forumData( forums_url, forum, num_posts, list, markdown, forum_selected )
 	return forum_data
 
 
@@ -134,7 +138,7 @@ def get_thread_data( thread_selected, post_requested = POST_DEFAULT, post_count 
 			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
 			item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
 			list[ i ] = item
-	thread_data = threadData( forums_url, forum, forum_url, thread, thread_url, list, markdown2.markdown, thread_selected )
+	thread_data = threadData( forums_url, forum, forum_url, thread, thread_url, list, markdown, thread_selected )
 	return thread_data
 
 
@@ -223,7 +227,7 @@ def	get_post_data ( post_selected ):
 	forum = EnkiModelForum.get_by_id( thread.forum )
 	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
 	author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( post.author ))
-	post_data = postData( forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown2.markdown, )
+	post_data = postData( forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown, )
 	return post_data
 
 
@@ -245,7 +249,7 @@ def get_author_posts( author_selected ):  # MOVED TO LIB
 				item.forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
 				item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
 				list[ i ] = item
-		author_posts_data = authorpostsData( forums_url, author_data, list, markdown2.markdown )
+		author_posts_data = authorpostsData( forums_url, author_data, list, markdown )
 		return author_posts_data
 
 
