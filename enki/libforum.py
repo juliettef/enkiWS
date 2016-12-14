@@ -29,19 +29,20 @@ ERROR_POST_EDITION = -53
 ERROR_POST_DELETION = -54
 
 
-forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown, forum_selected' )
-threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown, thread_selected' )
-postData = collections.namedtuple( 'postData', 'forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown' )
-authorpostsData = collections.namedtuple( 'authorpostsData', 'forums_url, author_data, list, markdown' )
+forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown_escaped, forum_selected' )
+threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown_escaped, thread_selected' )
+postData = collections.namedtuple( 'postData', 'forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown_escaped' )
+authorpostsData = collections.namedtuple( 'authorpostsData', 'forums_url, author_data, list, markdown_escaped' )
 pagination = collections.namedtuple( 'pagination', 'page_first, page_previous, page_current, page_list, page_next, page_last' )
 
 
 #=== DISPLAY DATA =============================================================
 
 
-# safe version of markdown
-def markdown( text ):
+def markdown_escaped( text ):
+	# safe version of markdown
 	return markdown2.markdown( text, safe_mode='escape', extras=["nofollow"])
+
 
 def create_forums():
 	# create an executable string from the forums settings to add the forums
@@ -102,7 +103,7 @@ def get_forum_data( forum_selected ):
 			item.url = url
 			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
 			list[ i ] = item
-	forum_data = forumData( forums_url, forum, num_posts, list, markdown, forum_selected )
+	forum_data = forumData(forums_url, forum, num_posts, list, markdown_escaped, forum_selected)
 	return forum_data
 
 
@@ -138,7 +139,7 @@ def get_thread_data( thread_selected, post_requested = POST_DEFAULT, post_count 
 			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
 			item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
 			list[ i ] = item
-	thread_data = threadData( forums_url, forum, forum_url, thread, thread_url, list, markdown, thread_selected )
+	thread_data = threadData(forums_url, forum, forum_url, thread, thread_url, list, markdown_escaped, thread_selected)
 	return thread_data
 
 
@@ -227,7 +228,7 @@ def	get_post_data ( post_selected ):
 	forum = EnkiModelForum.get_by_id( thread.forum )
 	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
 	author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( post.author ))
-	post_data = postData( forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown, )
+	post_data = postData(forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown_escaped, )
 	return post_data
 
 
@@ -249,7 +250,7 @@ def get_author_posts( author_selected ):  # MOVED TO LIB
 				item.forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
 				item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
 				list[ i ] = item
-		author_posts_data = authorpostsData( forums_url, author_data, list, markdown )
+		author_posts_data = authorpostsData(forums_url, author_data, list, markdown_escaped)
 		return author_posts_data
 
 
