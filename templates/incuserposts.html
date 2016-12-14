@@ -18,7 +18,7 @@
                     </ul>
                 </div>
                 <div class="panel-body">
-                    {% if item.body == deleted_post %}{{ deleted_post_display }}{% else %}{{ data.posts.markdown( item.body ) }}{% endif %}
+                    {% if item.body == deleted_post %}{{ deleted_post_display }}{% else %}{{ data.posts.markdown_escaped( item.body ) }}{% endif %}
                 </div>
             </div>
         {% endfor %}
