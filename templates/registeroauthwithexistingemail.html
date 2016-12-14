@@ -23,6 +23,23 @@
 						<p>{{ _( "Use an authentication method you've used before. Once logged in, you'll be able to add %(providername)s as a login method from your profile page.", providername = provider_name )}}</p>
 					</div>
 
+					{% if authhandlers %}
+					<div class="well bs-component">
+						<fieldset>
+							<legend>{{ _( "Log in with a third party provider" )}}</legend>
+							<div class="col-md-6 col-md-offset-3">
+								{% for handler in authhandlers %}
+									{% set oauthbutton = handler.get_button() %}
+									<a href="{{ oauthbutton.href }}" class="btn btn-block btn-oauth btn-{{ handler.get_provider_name()|lower }}">
+										<i class="i-oauth fa {{ oauthbutton.icon }}"></i> {{ _( "Log in with" )}} {{ handler.get_provider_name() }}
+										{% if handler.get_provider_name() == provider_name %}<br><small>{{ _( "You may need to log out or use a different browser" )}}</small>{% endif %}
+									</a>
+								{% endfor %}
+							</div>
+						</fieldset>
+					</div>
+					{% endif %}
+
 					{% if email_user_has_pw %}
 					<div class="well bs-component">
 						<form class="form-horizontal" action="{{ 'registeroauthwithexistingemail'|local }}" method="post">
@@ -58,22 +75,6 @@
 					</div>
 					{% endif %}
 
-					{% if authhandlers %}
-					<div class="well bs-component">
-						<fieldset>
-							<legend>{{ _( "Log in with a third party provider" )}}</legend>
-							<div class="col-md-6 col-md-offset-3">
-								{% for handler in authhandlers %}
-									{% set oauthbutton = handler.get_button() %}
-									<a href="{{ oauthbutton.href }}" class="btn btn-block btn-oauth btn-{{ handler.get_provider_name()|lower }}">
-										<i class="i-oauth fa {{ oauthbutton.icon }}"></i> {{ _( "Log in with" )}} {{ handler.get_provider_name() }}
-										{% if handler.get_provider_name() == provider_name %}<br><small>{{ _( "You may need to log out or use a different browser" )}}</small>{% endif %}
-									</a>
-								{% endfor %}
-							</div>
-						</fieldset>
-					</div>
-					{% endif %}
 				</div>
 
 				{% if provider_authhandler %}

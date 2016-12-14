@@ -137,6 +137,11 @@ indexes:
 - kind: EnkiModelTokenVerify
   properties:
   - name: type
+  - name: time_created
+
+- kind: EnkiModelTokenVerify
+  properties:
+  - name: type
   - name: user_id
   - name: time_created
     direction: desc
