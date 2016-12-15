@@ -69,6 +69,7 @@ config = {}
 config[ 'enki' ] = { 'user' : { 'PASSWORD_LENGTH_MIN' : 4 }
                      }
 config[ 'webapp2_extras.sessions' ] = { 'secret_key': KEY_SESSION,
+										'session_max_age': 3600,
 										'cookie_args': {'max_age': None, 'domain': None, 'secure': None, 'httponly': True, 'path': '/'} }
 config[ 'webapp2_extras.jinja2' ] = { 'template_path': 'templates',
                                       'environment_args': { 'extensions': [ 'jinja2.ext.i18n' ]},
