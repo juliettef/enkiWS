@@ -48,7 +48,7 @@
             <div class="form-group {% if data[ 0 ] %}has-error{% endif%}">
                 <label for="licence_key_manual" class="col-lg-2 control-label">{{ _( "Licence key" ) }}</label>
                  <div class="col-lg-10">
-                     <input class="form-control" type="text" name="licence_key_manual" placeholder="{{ _( "XXXXX-XXXXX-XXXXX" ) }}" {% if data[ 4 ] %}value = "{{ data[ 4 ] }}"{% endif %} maxlength="24" />
+                     <input class="form-control" type="text" name="licence_key_manual" placeholder="{{ _( "XXXXX-XXXXX-XXXXX" ) }}" {% if data[ 4 ] %}value = "{{ data[ 4 ]|e }}"{% endif %} maxlength="24" />
                      {% if data[ 0 ] %}<label class="control-label">{{ data[ 0 ] }}</label>{% endif%}
 	                 <p class="text-info">{{ _( "The licence key is a string of 15 alphanumeric characters, with or without dashes, e.g. 9CNJ5FLYH87HRZ1 and 9CNJ5-FLYH8-7HRZ1 are equally valid." ) }}</p>
                  </div>
