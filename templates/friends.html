@@ -42,7 +42,7 @@
                     <div class="form-group {% if error %}has-error{% endif %}">
                         <label for="friend_display_name" class="col-lg-2 control-label">{{ _( "Display name" ) }}</label>
                          <div class="col-lg-10">
-                             <input class="form-control" type="text" name="search" placeholder="{{ _( "display name" ) }}" {% if friend_name %}value = "{{ friend_name }}"{% endif %} maxlength="21" />
+                             <input class="form-control" type="text" name="search" placeholder="{{ _( "display name" ) }}" {% if friend_name %}value = "{{ friend_name|e }}"{% endif %} maxlength="21" />
                              {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
                              <p class="text-info">{{ _( "Enter the display name of the person you would like to add to your friends. The display name is a string of 3 to 12 alphanumeric characters (prefix), followed by '#' and 4 digits (suffix). You can enter the full display name or just the prefix. The search is case insensitive." ) }}</p>
                          </div>

@@ -44,7 +44,7 @@
                             <div class="form-group {% if error %}has-error{% endif%}">
                                 <label for="email" class="col-lg-2 control-label">{{ _( "Email" ) }}</label>
                                 <div class="col-lg-10">
-                                    <input class="form-control" type="text" name="email" placeholder="{{ _( "Email" ) }}" value = "{{ email }}" />
+                                    <input class="form-control" type="text" name="email" placeholder="{{ _( "Email" ) }}" value = "{{ email|e }}" />
                                 </div>
                             </div>
 
