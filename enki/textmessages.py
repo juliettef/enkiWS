@@ -44,7 +44,7 @@ def AUTH_PROVIDER_REMOVED( provider_name ): return _("Authentication method %(pr
 
 def PASSWORD_UPDATED(): return _( "Your password is updated." )
 def PASSWORD_SET(): return _( "Your password is set." )
-def PASSWORD_RESET_INFO_EMAIL_SENT( email ): return _( "If email address %(email)s matches an existing account, an email was sent to it. Please check your inbox and follow the instructions in the email to reset you password.", email = email )
+def PASSWORD_RESET_INFO_EMAIL_SENT( email ): return _( "If email address %(email)s matches an existing account, an email was sent to it. Please check your inbox and follow the instructions in the email to reset you password.<br> If you don't receive an email, it means you don't have an account regitered with that email address.", email = email )
 
 def DISPLAYNAME_NEEDED(): return _( "Please set your display name to continue." )
 def DISPLAYNAME_SET(): return _( "Your display name is set." )

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-12-04 13:45+0000\n"
+"POT-Creation-Date: 2016-12-17 13:09+0000\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -158,8 +158,8 @@ msgstr "Votre mot de passe est enregistré."
 
 #: enki/textmessages.py:47
 #, python-format
-msgid "If email address %(email)s matches an existing account, an email was sent to it. Please check your inbox and follow the instructions in the email to reset you password."
-msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de réinitialiser votre mot de passe."
+msgid "If email address %(email)s matches an existing account, an email was sent to it. Please check your inbox and follow the instructions in the email to reset you password.<br> If you don't receive an email, it means you don't have an account regitered with that email address."
+msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de réinitialiser votre mot de passe.<br> Si vous n'avez pas reçu de message, cela signifie que vous n'avez pas de compte correspondant à cette adresse de courrier électronique."
 
 #: enki/textmessages.py:49
 msgid "Please set your display name to continue."
@@ -382,8 +382,8 @@ msgstr[0] "Il est trop long. Veuillez vous assurer que votre nom d'affichage n'e
 msgstr[1] "Il est trop long. Veuillez vous assurer que votre nom d'affichage n'excède pas %(length)s caractères."
 
 #: enki/textmessages.py:107 templates/forum.html:23 templates/forums.html:6
-#: templates/forums.html:30 templates/incuserposts.html:8
-#: templates/post.html:23 templates/thread.html:24
+#: templates/forums.html:16 templates/incuserposts.html:8
+#: templates/post.html:24 templates/thread.html:25
 msgid "Forums"
 msgstr "Forums"
 
@@ -584,7 +584,7 @@ msgid "Provider"
 msgstr "Fournisseur"
 
 #: templates/accountconnect.html:40
-#: templates/registeroauthwithexistingemail.html:92
+#: templates/registeroauthwithexistingemail.html:93
 msgid "User identifier"
 msgstr "Identifiant utilisateur"
 
@@ -701,9 +701,9 @@ msgid "Warning: deleting your account cannot be undone."
 msgstr "Attention: supprimer votre compte est irréversible."
 
 #: templates/accountdelete.html:78 templates/forum.html:87
-#: templates/loginaddconfirm.html:30 templates/post.html:59
-#: templates/post.html:85 templates/reauthenticate.html:45
-#: templates/registeroauthconfirm.html:51 templates/thread.html:90
+#: templates/loginaddconfirm.html:30 templates/post.html:60
+#: templates/post.html:86 templates/reauthenticate.html:61
+#: templates/registeroauthconfirm.html:51 templates/thread.html:91
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -802,14 +802,14 @@ msgid "Current display name:"
 msgstr "Nom d'affichage actuel :"
 
 #: templates/displayname.html:22 templates/profile.html:53
-#: templates/profilepublic.html:22
+#: templates/profilepublic.html:23
 msgid "Past display name:"
 msgid_plural "Past display names:"
 msgstr[0] "Ancien nom d'affichage :"
 msgstr[1] "Anciens noms d'affichage :"
 
 #: templates/displayname.html:32 templates/forum.html:113
-#: templates/post.html:109 templates/profile.html:48 templates/thread.html:114
+#: templates/post.html:110 templates/profile.html:48 templates/thread.html:115
 msgid "Set display name"
 msgstr "Créer mon nom d'affichage"
 
@@ -852,16 +852,16 @@ msgstr "Nouvelle adresse de courrier électronique"
 msgid "Forum"
 msgstr "Forum"
 
-#: templates/forum.html:19 templates/post.html:19 templates/thread.html:19
+#: templates/forum.html:19 templates/post.html:20 templates/thread.html:20
 msgid "Go back to Forums"
 msgstr "Retourner aux forums"
 
-#: templates/forum.html:29 templates/forums.html:37
+#: templates/forum.html:29 templates/forums.html:23
 msgid "Threads"
 msgstr "Sujets"
 
-#: templates/forum.html:29 templates/forums.html:38
-#: templates/incuserposts.html:3 templates/thread.html:31
+#: templates/forum.html:29 templates/forums.html:24
+#: templates/incuserposts.html:3 templates/thread.html:32
 msgid "Posts"
 msgstr "Messages"
 
@@ -885,7 +885,7 @@ msgstr "# messages"
 msgid "Create a new thread"
 msgstr "Créer un nouveau sujet"
 
-#: templates/forum.html:68 templates/forums.html:35
+#: templates/forum.html:68 templates/forums.html:21
 msgid "Title"
 msgstr "Titre"
 
@@ -900,28 +900,28 @@ msgid_plural "Maximum thread title length: %(length)s characters."
 msgstr[0] "Votre sujet peut contenir jusqu'à %(length)s caractère."
 msgstr[1] "Votre sujet peut contenir jusqu'à %(length)s caractères."
 
-#: templates/forum.html:76 templates/incuserposts.html:12 templates/post.html:6
-#: templates/post.html:30 templates/post.html:74 templates/thread.html:79
+#: templates/forum.html:76 templates/incuserposts.html:12 templates/post.html:7
+#: templates/post.html:31 templates/post.html:75 templates/thread.html:80
 msgid "Post"
 msgstr "Message"
 
-#: templates/forum.html:78 templates/post.html:76 templates/thread.html:81
+#: templates/forum.html:78 templates/post.html:77 templates/thread.html:82
 msgid "Your text"
 msgstr "Texte de votre message"
 
-#: templates/forum.html:80 templates/post.html:78 templates/thread.html:83
+#: templates/forum.html:80 templates/post.html:79 templates/thread.html:84
 #, python-format
 msgid "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting."
 msgstr "Utilisez <a href='%(url)s' target='_blank'>markdown</a> pour formater votre message."
 
-#: templates/forum.html:80 templates/post.html:78 templates/thread.html:83
+#: templates/forum.html:80 templates/post.html:79 templates/thread.html:84
 #, python-format
 msgid "Maximum post length: %(length)s character."
 msgid_plural "Maximum post length: %(length)s characters."
 msgstr[0] "Votre message peut contenir jusqu'à %(length)s caractère."
 msgstr[1] "Votre message peut contenir jusqu'à %(length)s caractères."
 
-#: templates/forum.html:85 templates/post.html:83 templates/thread.html:88
+#: templates/forum.html:85 templates/post.html:84 templates/thread.html:89
 msgid "Preview"
 msgstr "Aperçu"
 
@@ -929,21 +929,21 @@ msgstr "Aperçu"
 msgid "Submit new thread"
 msgstr "Publier le nouveau sujet"
 
-#: templates/forum.html:95 templates/post.html:93 templates/thread.html:98
+#: templates/forum.html:95 templates/post.html:94 templates/thread.html:99
 msgid "PREVIEW"
 msgstr "APERÇU"
 
-#: templates/forum.html:97 templates/thread.html:6 templates/thread.html:30
+#: templates/forum.html:97 templates/thread.html:7 templates/thread.html:31
 msgid "Thread"
 msgstr "Sujet"
 
 #: templates/forum.html:100 templates/incuserposts.html:15
-#: templates/post.html:36 templates/post.html:97 templates/thread.html:39
-#: templates/thread.html:102
+#: templates/post.html:37 templates/post.html:98 templates/thread.html:40
+#: templates/thread.html:103
 msgid "permalink"
 msgstr "permalien"
 
-#: templates/forum.html:100 templates/post.html:97 templates/thread.html:102
+#: templates/forum.html:100 templates/post.html:98 templates/thread.html:103
 msgid "date and time submitted UTC"
 msgstr "Date et heure UTC de publication"
 
@@ -956,25 +956,25 @@ msgid "Please log in or create an account to start a new thread."
 msgstr "Veuillez vous connecter ou créer un compte pour ajouter un nouveau sujet."
 
 #: templates/forum.html:120 templates/incnavbartop.html:10
-#: templates/login.html:7 templates/login.html:45
-#: templates/passwordrecover.html:40 templates/post.html:121
-#: templates/register.html:41 templates/registeroauthwithexistingemail.html:51
-#: templates/thread.html:121
+#: templates/login.html:7 templates/login.html:61
+#: templates/passwordrecover.html:40 templates/post.html:122
+#: templates/register.html:57 templates/registeroauthwithexistingemail.html:68
+#: templates/thread.html:122
 msgid "Log in"
 msgstr "Accéder à mon compte"
 
 #: templates/forum.html:121 templates/incnavbartop.html:9
-#: templates/login.html:50 templates/passwordrecover.html:41
-#: templates/post.html:122 templates/register.html:7 templates/register.html:36
-#: templates/thread.html:122
+#: templates/login.html:66 templates/passwordrecover.html:41
+#: templates/post.html:123 templates/register.html:7 templates/register.html:52
+#: templates/thread.html:123
 msgid "Sign up"
 msgstr "Créer mon compte"
 
-#: templates/forums.html:32
+#: templates/forums.html:18
 msgid "total thread views"
 msgstr "visites"
 
-#: templates/forums.html:36
+#: templates/forums.html:22
 msgid "Description"
 msgstr "Description"
 
@@ -1022,6 +1022,15 @@ msgstr "Accueil"
 #: templates/incfooter.html:6
 msgid "made with enkiWS - source code on GitHub"
 msgstr "fait avec enkiWS - code source sur GitHub"
+
+#: templates/incfooter.html:7 templates/terms.html:6 templates/terms.html:16
+msgid "Terms of service"
+msgstr ""
+
+#: templates/incfooter.html:8 templates/privacy.html:6
+#: templates/privacy.html:16
+msgid "Privacy policy"
+msgstr ""
 
 #: templates/inclibrary.html:8
 msgid "Library"
@@ -1120,28 +1129,28 @@ msgstr "Générer un jeton de connexion"
 msgid "Apps data"
 msgstr "Données applications"
 
-#: templates/incuserposts.html:13 templates/post.html:34
-#: templates/thread.html:37
+#: templates/incuserposts.html:13 templates/post.html:35
+#: templates/thread.html:38
 msgid "posted"
 msgstr "publié"
 
-#: templates/incuserposts.html:14 templates/post.html:35
-#: templates/thread.html:38
+#: templates/incuserposts.html:14 templates/post.html:36
+#: templates/thread.html:39
 msgid "deleted"
 msgstr "supprimé"
 
-#: templates/incuserposts.html:14 templates/post.html:35
-#: templates/thread.html:38
+#: templates/incuserposts.html:14 templates/post.html:36
+#: templates/thread.html:39
 msgid "edited"
 msgstr "modifié"
 
-#: templates/incuserposts.html:16 templates/post.html:37
-#: templates/thread.html:40
+#: templates/incuserposts.html:16 templates/post.html:38
+#: templates/thread.html:41
 msgid "edit"
 msgstr "modifier"
 
-#: templates/incuserposts.html:17 templates/post.html:38
-#: templates/thread.html:41
+#: templates/incuserposts.html:17 templates/post.html:39
+#: templates/thread.html:42
 msgid "delete"
 msgstr "supprimer"
 
@@ -1149,45 +1158,45 @@ msgstr "supprimer"
 msgid "Back"
 msgstr "Retour"
 
-#: templates/login.html:24 templates/registeroauthwithexistingemail.html:32
-msgid "Log in with email and password"
-msgstr "Accéder à mon compte avec mon adresse électronique et mon mot de passe"
-
-#: templates/login.html:29 templates/login.html:31
-#: templates/passwordrecover.html:24 templates/passwordrecover.html:26
-#: templates/reauthenticate.html:28 templates/register.html:27
-#: templates/register.html:29 templates/registerconfirm.html:24
-#: templates/registeroauthconfirm.html:36
-#: templates/registeroauthwithexistingemail.html:35
-msgid "Email"
-msgstr "Adresse de courrier électronique"
-
-#: templates/login.html:36 templates/login.html:38
-#: templates/passwordrecoverconfirm.html:24
-#: templates/passwordrecoverconfirm.html:26 templates/reauthenticate.html:35
-#: templates/reauthenticate.html:37 templates/registerconfirm.html:31
-#: templates/registerconfirm.html:33
-#: templates/registeroauthwithexistingemail.html:42
-#: templates/registeroauthwithexistingemail.html:44
-msgid "Password"
-msgstr "Mot de passe"
-
-#: templates/login.html:51 templates/passwordchange.html:47
-#: templates/passwordrecover.html:6 templates/passwordrecover.html:21
-#: templates/reauthenticate.html:50 templates/register.html:42
-#: templates/registeroauthwithexistingemail.html:52
-msgid "Forgot password"
-msgstr "Mot de passe oublié"
-
-#: templates/login.html:62 templates/registeroauthwithexistingemail.html:64
+#: templates/login.html:22 templates/registeroauthwithexistingemail.html:29
 msgid "Log in with a third party provider"
 msgstr "Accéder à mon compte en m'authentifiant auprès d'une tierce partie"
 
-#: templates/login.html:67 templates/reauthenticate.html:67
-#: templates/register.html:58 templates/registeroauthwithexistingemail.html:69
-#: templates/registeroauthwithexistingemail.html:92
+#: templates/login.html:27 templates/reauthenticate.html:25
+#: templates/register.html:27 templates/registeroauthwithexistingemail.html:34
+#: templates/registeroauthwithexistingemail.html:93
 msgid "Log in with"
 msgstr "Se connecter avec"
+
+#: templates/login.html:40 templates/registeroauthwithexistingemail.html:49
+msgid "Log in with email and password"
+msgstr "Accéder à mon compte avec mon adresse électronique et mon mot de passe"
+
+#: templates/login.html:45 templates/login.html:47
+#: templates/passwordrecover.html:24 templates/passwordrecover.html:26
+#: templates/reauthenticate.html:44 templates/register.html:43
+#: templates/register.html:45 templates/registerconfirm.html:24
+#: templates/registeroauthconfirm.html:36
+#: templates/registeroauthwithexistingemail.html:52
+msgid "Email"
+msgstr "Adresse de courrier électronique"
+
+#: templates/login.html:52 templates/login.html:54
+#: templates/passwordrecoverconfirm.html:24
+#: templates/passwordrecoverconfirm.html:26 templates/reauthenticate.html:51
+#: templates/reauthenticate.html:53 templates/registerconfirm.html:31
+#: templates/registerconfirm.html:33
+#: templates/registeroauthwithexistingemail.html:59
+#: templates/registeroauthwithexistingemail.html:61
+msgid "Password"
+msgstr "Mot de passe"
+
+#: templates/login.html:67 templates/passwordchange.html:47
+#: templates/passwordrecover.html:6 templates/passwordrecover.html:21
+#: templates/reauthenticate.html:66 templates/register.html:58
+#: templates/registeroauthwithexistingemail.html:69
+msgid "Forgot password"
+msgstr "Mot de passe oublié"
 
 #: templates/login.html:76 templates/register.html:67
 msgid "You are currently logged in."
@@ -1263,31 +1272,31 @@ msgstr "Nouveau mot de passe"
 msgid "Save my password"
 msgstr "Enregistrer mon mot de passe"
 
-#: templates/post.html:53
+#: templates/post.html:54
 msgid "Delete post"
-msgstr "supprimer"
+msgstr "Supprimer"
 
-#: templates/post.html:57
+#: templates/post.html:58
 msgid "You are about to delete the contents of your post, are you sure? This cannot be undone."
 msgstr "Vous êtes sur le point de supprimer votre message. Cette action est irréversible."
 
-#: templates/post.html:58
+#: templates/post.html:59
 msgid "Delete"
-msgstr "supprimer"
+msgstr "Supprimer"
 
-#: templates/post.html:72
+#: templates/post.html:73
 msgid "Edit post"
 msgstr "Modifier votre message"
 
-#: templates/post.html:84
+#: templates/post.html:85
 msgid "Submit modified post"
 msgstr "Publier le message modifié"
 
-#: templates/post.html:108
+#: templates/post.html:109
 msgid "Please set up your display name to modify your post."
 msgstr "Veuillez créer votre nom d'affichage afin de modifier votre message."
 
-#: templates/post.html:120
+#: templates/post.html:121
 msgid "Please log in to modify your post."
 msgstr "Veuillez vous connecter afin de modifier votre message."
 
@@ -1357,29 +1366,29 @@ msgid_plural "messages"
 msgstr[0] "message"
 msgstr[1] "messages"
 
-#: templates/profilepublic.html:6 templates/profilepublic.html:20
+#: templates/profilepublic.html:7 templates/profilepublic.html:21
 msgid "User"
 msgstr "Utilisateur.trice"
 
-#: templates/reauthenticate.html:7 templates/reauthenticate.html:44
+#: templates/reauthenticate.html:7 templates/reauthenticate.html:60
 msgid "Reauthenticate"
 msgstr "Renouveler mon authentification"
 
-#: templates/reauthenticate.html:23
-msgid "Reauthenticate with email and password"
-msgstr "Renouveler mon authentification avec mon adresse électronique et mon mot de passe"
-
-#: templates/reauthenticate.html:62
+#: templates/reauthenticate.html:20
 msgid "Reauthenticate with a third party provider"
 msgstr "Renouveler mon authentification auprès d'une tierce partie"
 
-#: templates/register.html:24
-msgid "Create an account using an email and password"
-msgstr "Créer un compte à partir d'une adresse électronique et d'un mot de passe"
+#: templates/reauthenticate.html:39
+msgid "Reauthenticate with email and password"
+msgstr "Renouveler mon authentification avec mon adresse électronique et mon mot de passe"
 
-#: templates/register.html:53 templates/registeroauthwithexistingemail.html:87
+#: templates/register.html:22 templates/registeroauthwithexistingemail.html:88
 msgid "Create an account using a third party provider"
 msgstr "Créer un compte en s'authentifiant auprès d'une tierce partie"
+
+#: templates/register.html:40
+msgid "Create an account using an email and password"
+msgstr "Créer un compte à partir d'une adresse électronique et d'un mot de passe"
 
 #: templates/registerconfirm.html:21
 msgid "Confirm your registration using email and password"
@@ -1448,16 +1457,16 @@ msgstr "Se connecter à un compte existant"
 msgid "Use an authentication method you've used before. Once logged in, you'll be able to add %(providername)s as a login method from your profile page."
 msgstr "Utiliser une méthode d'authentification déjà enregistrée. Une fois connecté.e, vous pourrez ajouter %(providername)s à vos méthodes d'authentification à partir de la page des paramètres de votre compte."
 
-#: templates/registeroauthwithexistingemail.html:70
+#: templates/registeroauthwithexistingemail.html:35
 msgid "You may need to log out or use a different browser"
 msgstr "Vous devrez peut-être vous déconnecter ou utiliser un navigateur différent"
 
-#: templates/registeroauthwithexistingemail.html:81
+#: templates/registeroauthwithexistingemail.html:82
 #, python-format
 msgid "Create a new account using %(providername)s as a login method"
 msgstr "Créér un nouveau compte en utilisant %(providername)s pour s'authentifier"
 
-#: templates/registeroauthwithexistingemail.html:82
+#: templates/registeroauthwithexistingemail.html:83
 #, python-format
 msgid "Warning: you will need an email address different from %(email)s."
 msgstr "Attention: votre adresse de courrier électronique devra être différente de %(email)s."
@@ -1502,39 +1511,39 @@ msgstr "Quantité"
 msgid "Emulate a purchase"
 msgstr "Émuler un achat"
 
-#: templates/thread.html:51
+#: templates/thread.html:52
 msgid "First"
 msgstr "Premier"
 
-#: templates/thread.html:52
+#: templates/thread.html:53
 msgid "Previous"
 msgstr "Précédent"
 
-#: templates/thread.html:60
+#: templates/thread.html:61
 msgid "Next"
 msgstr "Suivant"
 
-#: templates/thread.html:61
+#: templates/thread.html:62
 msgid "Last"
 msgstr "Dernier"
 
-#: templates/thread.html:68
+#: templates/thread.html:69
 msgid "Reply"
 msgstr "Répondre"
 
-#: templates/thread.html:77
+#: templates/thread.html:78
 msgid "Reply "
 msgstr "Réponse"
 
-#: templates/thread.html:89
+#: templates/thread.html:90
 msgid "Submit new post"
 msgstr "Publier le message"
 
-#: templates/thread.html:113
+#: templates/thread.html:114
 msgid "Please set up your display name to post an answer."
 msgstr "Veuillez créer votre nom d'affichage pour répondre."
 
-#: templates/thread.html:120
+#: templates/thread.html:121
 msgid "Please log in or create an account to post an answer."
 msgstr "Veuillez vous connecter ou créer un compte pour répondre."
 
