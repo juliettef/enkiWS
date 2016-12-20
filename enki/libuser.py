@@ -1,4 +1,5 @@
 import webapp2
+import cgi
 import re
 
 from google.appengine.ext import ndb
@@ -21,12 +22,15 @@ ERROR_PASSWORD_NOT_SET = -23
 
 def validate_email( email ):
 	result = enki.libutil.ENKILIB_OK
-	if email:
-		if not re.search( '[^@]+@[^@]+', email ):
+	email_escaped = cgi.escape(email, quote = True)
+	if email == email_escaped:
+		if (('.' not in email) or (not re.search('[^@]+@[^@]+', email))):
 			result = ERROR_EMAIL_FORMAT_INVALID
-	else:
+	elif email == '':
 		result = ERROR_EMAIL_MISSING
-	return result
+	else:
+		result = ERROR_EMAIL_FORMAT_INVALID
+	return email_escaped, result
 
 
 def validate_password( password ):

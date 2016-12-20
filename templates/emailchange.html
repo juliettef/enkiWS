@@ -23,7 +23,7 @@
                         <div class="form-group {% if error %}has-error{% endif%}">
                             <label for="email" class="col-lg-2 control-label">{{ _( "New email" ) }}</label>
                              <div class="col-lg-10">
-                                 <input class="form-control" type="text" name="email" placeholder="{{ _( "New email" ) }}" value = "{{ email|e }}"/>
+                                 <input class="form-control" type="text" name="email" placeholder="{{ _( "New email" ) }}" value = "{{ email }}"/> {# <!-- email escaped in the handler --> #}
                                  {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
                              </div>
                         </div>

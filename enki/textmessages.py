@@ -77,9 +77,9 @@ def USER_ADMIN_RIGHTS_REQUIRED(): return _( "You must have Admin rights to perfo
 
 # emails
 def SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_SUBJECT(): return _( "Attempt to log in with your email" )
-def SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link, email ): return _( "An attempt was made to log in to your account using this email address. If you'd like to use your email to log in, you need to set a password for it: %(link)s (click or copy and paste in your browser)", link = link, email = email )
+def SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link ): return _( "An attempt was made to log in to your account using this email address. If you'd like to use your email to log in, you need to set a password for it: %(link)s (click or copy and paste in your browser)", link = link )
 def SEND_EMAIL_REGISTER_ATTEMPT_WITH_YOUR_EMAIL_SUBJECT(): return _( "Attempt to register with your email" )
-def SEND_EMAIL_REGISTER_ATTEMPT_WITH_YOUR_EMAIL_BODY( link, email ): return _( "An attempt was made to sign up to your account. If you've forgotten your password, you can reset it: %(link)s (click or copy and paste in your browser)", link = link, email = email )
+def SEND_EMAIL_REGISTER_ATTEMPT_WITH_YOUR_EMAIL_BODY( link ): return _( "An attempt was made to sign up to your account using this email address. If you've forgotten your password, you can reset it: %(link)s (click or copy and paste in your browser)", link = link )
 def SEND_EMAIL_REGISTER_CONFIRM_SUBJECT(): return _( "Registration confirmation" )
 def SEND_EMAIL_REGISTER_CONFIRM_BODY( link ): return _( "Follow this link to confirm your registration: %(link)s (click or copy and paste in your browser)", link = link )
 def SEND_EMAIL_EMAIL_CHANGE_CONFIRM_SUBJECT(): return _( "Confirm new email" )
