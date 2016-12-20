@@ -373,18 +373,16 @@ class HandlerBase( webapp2.RequestHandler ):
 
 	def email_set_request( self, email ):
 	# request the creation of a new account based on an email address
-		result = enki.libuser.validate_email( email )
-		if result == enki.libutil.ENKILIB_OK :
-			if enki.libuser.exist_EnkiUser( email ):
-				result = ERROR_EMAIL_IN_USE
-			else:
-				# create an email verify token, send it to the email address
-				token = security.generate_random_string( entropy = 256 )
-				emailToken = EnkiModelTokenVerify( token = token, email = email, type = 'register' )
-				emailToken.put()
-				link = enki.libutil.get_local_url( 'registerconfirm', { 'verifytoken': emailToken.token })
-				self.send_email( email, MSG.SEND_EMAIL_REGISTER_CONFIRM_SUBJECT(), MSG.SEND_EMAIL_REGISTER_CONFIRM_BODY( link ))
-				result = enki.libutil.ENKILIB_OK
+		result = enki.libutil.ENKILIB_OK
+		if enki.libuser.exist_EnkiUser( email ):
+			result = ERROR_EMAIL_IN_USE
+		else:
+			# create an email verify token, send it to the email address
+			token = security.generate_random_string( entropy = 256 )
+			emailToken = EnkiModelTokenVerify( token = token, email = email, type = 'register' )
+			emailToken.put()
+			link = enki.libutil.get_local_url( 'registerconfirm', { 'verifytoken': emailToken.token })
+			self.send_email( email, MSG.SEND_EMAIL_REGISTER_CONFIRM_SUBJECT(), MSG.SEND_EMAIL_REGISTER_CONFIRM_BODY( link ))
 		return result
 
 

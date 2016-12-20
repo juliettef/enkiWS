@@ -27,7 +27,7 @@ class HandlerLogout( enki.HandlerBase ):
 class HandlerLogin( enki.HandlerBase ):
 
 	def get( self ):
-		email = self.request.get( 'email' )
+		email = self.session.pop( 'email_prefill', '' )
 		# Get referal path to return the user to the page they were on after they've logged in
 		if 'sessionloginrefpath' in self.session:
 			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LOGIN_NEEDED())
@@ -42,10 +42,11 @@ class HandlerLogin( enki.HandlerBase ):
 		self.log_out()
 		self.check_CSRF()
 		submit_type = self.request.get( 'submittype' )
-		email = self.request.get( 'email' )
+		email_unsafe = self.request.get( 'email' )
+		email, result = enki.libuser.validate_email( email_unsafe )
 		if submit_type == 'login':
 			password = self.request.get( 'password' )
-			if self.log_in_with_email( email, password ):
+			if result == enki.libutil.ENKILIB_OK and self.log_in_with_email( email, password ):
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
 				self.redirect_to_relevant_page()
 			else:
@@ -55,8 +56,8 @@ class HandlerLogin( enki.HandlerBase ):
 					user = enki.libuser.get_EnkiUser( email )
 					if not user.password:
 						self.add_debugmessage( '''Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.''' )
-						link = enki.libutil.get_local_url( 'passwordrecover', { 'email': email })
-						self.send_email( email, MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_SUBJECT( ), MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link, email ))
+						link = enki.libutil.get_local_url( 'passwordrecover' )
+						self.send_email( email, MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_SUBJECT( ), MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link ))
 				backoff_timer = self.get_backoff_timer( email )
 				if backoff_timer != 0:
 					error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
@@ -65,10 +66,12 @@ class HandlerLogin( enki.HandlerBase ):
 				                  authhandlers = settings.HANDLERS,
 				                  email = email,
 				                  error = error_message )
-		elif submit_type == 'register':
-			self.redirect( enki.libutil.get_local_url( 'register', { 'email': email }))
 		else:
-			self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email }))
+			self.session[ 'email_prefill' ] = email if email else ''
+			if submit_type == 'register':
+				self.redirect( enki.libutil.get_local_url( 'register' ))
+			else:
+				self.redirect( enki.libutil.get_local_url( 'passwordrecover' ))
 
 
 class HandlerReauthenticate( enki.HandlerBase ):
@@ -104,7 +107,8 @@ class HandlerReauthenticate( enki.HandlerBase ):
 				elif submit_type == 'cancel':
 					self.redirect_to_relevant_page()
 				elif submit_type == 'recoverpass':
-					self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': self.enki_user.email }))
+					self.session[ 'email_prefill' ] = self.enki_user.email if self.enki_user.email else ''
+					self.redirect( enki.libutil.get_local_url( 'passwordrecover' ))
 
 
 class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
@@ -257,7 +261,7 @@ class HandlerProfilePublic( enki.HandlerBase ):
 class HandlerRegister( enki.HandlerBase ):
 
 	def get( self ):
-		email = self.request.get( 'email' )
+		email = self.session.pop( 'email_prefill', '' )
 		# Get referal path to return the user to the page they were on after they've logged in using auth
 		self.session[ 'sessionrefpath' ] = self.request.referrer
 		self.render_tmpl( 'register.html',
@@ -268,17 +272,19 @@ class HandlerRegister( enki.HandlerBase ):
 	def post( self ):
 		self.check_CSRF()
 		submit_type = self.request.get( 'submittype' )
-		email = self.request.get( 'email' )
+		email_unsafe = self.request.get( 'email' )
+		email, result = enki.libuser.validate_email( email_unsafe )
 		if submit_type == 'register':
-			result = self.email_set_request( email )
+			if result == enki.libutil.ENKILIB_OK:
+				result = self.email_set_request( email )
 			error_message = ''
 			if result == enki.libutil.ENKILIB_OK or result == enki.handlerbase.ERROR_EMAIL_IN_USE:
 			# if email exists, pretend there was a registration (i.e. hide the fact that the email exists) to prevent email checking
 				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTRATION_INFO_EMAIL_SENT( email ))
 				if result == enki.handlerbase.ERROR_EMAIL_IN_USE:
 					self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
-					link = enki.libutil.get_local_url( 'passwordrecover', { 'email': email } )
-					self.send_email( email, MSG.SEND_EMAIL_REGISTER_ATTEMPT_WITH_YOUR_EMAIL_SUBJECT(), MSG.SEND_EMAIL_REGISTER_ATTEMPT_WITH_YOUR_EMAIL_BODY( link, email ))
+					link = enki.libutil.get_local_url( 'passwordrecover' )
+					self.send_email( email, MSG.SEND_EMAIL_REGISTER_ATTEMPT_WITH_YOUR_EMAIL_SUBJECT(), MSG.SEND_EMAIL_REGISTER_ATTEMPT_WITH_YOUR_EMAIL_BODY( link ))
 				self.redirect_to_relevant_page()
 				return
 			else:
@@ -291,10 +297,12 @@ class HandlerRegister( enki.HandlerBase ):
 				                  authhandlers = settings.HANDLERS,
 				                  email = email,
 				                  error = error_message )
-		elif submit_type == 'login':
-			self.redirect( enki.libutil.get_local_url( 'login', { 'email': email } ) )
 		else:
-			self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email } ) )
+			self.session[ 'email_prefill' ] = email if email else ''
+			if submit_type == 'login':
+				self.redirect( enki.libutil.get_local_url( 'login' ))
+			else:
+				self.redirect( enki.libutil.get_local_url( 'passwordrecover' ))
 
 
 class HandlerRegisterConfirm( enki.HandlerBase ):
@@ -388,12 +396,12 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 				else:
 					# If the email isn't given by the provider, use the manually entered email.
 					self.check_CSRF()
-					email = self.request.get( 'email' )
+					email_unsafe = self.request.get( 'email' )
 					user = self.get_or_create_user_from_authid( authId )
 					self.log_in_session_token_create( user )
 					error_message = ''
 					success = False
-					result = enki.libuser.validate_email( email )
+					email, result = enki.libuser.validate_email( email_unsafe )
 					if result == enki.libutil.ENKILIB_OK:
 						result = self.email_change_request( email )	# send an email for verification. Since it's not verified at this point, create the account without the email.
 						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTER_AUTH_ADD_EMAIL_INFO_EMAIL_SENT( email ))
@@ -498,7 +506,8 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 			elif submit_type == 'recoverpass':
 				email = tokenEntity.email
 				tokenEntity.key.delete()
-				self.redirect( enki.libutil.get_local_url( 'passwordrecover', { 'email': email }))
+				self.session[ 'email_prefill' ] = email if email else ''
+				self.redirect( enki.libutil.get_local_url( 'passwordrecover' ))
 			# Create a new account using the OAuth provider but without the email
 			elif submit_type == 'register':
 				email = tokenEntity.email
@@ -563,7 +572,7 @@ class HandlerPasswordRecover( enki.HandlerBase ):
 # change password - user can't log in so email them
 
 	def get( self ):
-		email = self.request.get( 'email' )
+		email = self.session.pop( 'email_prefill', '' )
 		if not email and self.is_logged_in():
 			email = self.enki_user.email
 		self.render_tmpl( 'passwordrecover.html',
@@ -572,9 +581,9 @@ class HandlerPasswordRecover( enki.HandlerBase ):
 	def post( self ):
 		self.check_CSRF()
 		submit_type = self.request.get( 'submittype' )
-		email = self.request.get( 'email' )
+		email_unsafe = self.request.get( 'email' )
+		email, result = enki.libuser.validate_email( email_unsafe )
 		if submit_type == 'recoverpass':
-			result = enki.libuser.validate_email( email )
 			error_message = ''
 			if result == enki.libutil.ENKILIB_OK:
 				result = self.password_change_request( email )
@@ -592,10 +601,12 @@ class HandlerPasswordRecover( enki.HandlerBase ):
 			self.render_tmpl( 'passwordrecover.html',
 			                  email = email,
 			                  error = error_message )
-		elif submit_type == 'login':
-			self.redirect( enki.libutil.get_local_url( 'login', { 'email': email } ) )
 		else:
-			self.redirect( enki.libutil.get_local_url( 'register', { 'email': email } ) )
+			self.session[ 'email_prefill' ] = email if email else ''
+			if submit_type == 'login':
+				self.redirect( enki.libutil.get_local_url( 'login' ))
+			else:
+				self.redirect( enki.libutil.get_local_url( 'register' ))
 
 
 class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
@@ -702,9 +713,8 @@ class HandlerEmailChange( enki.HandlerBaseReauthenticate ):
 		                  active_menu = 'profile' )
 
 	def post_reauthenticated( self, params ):
-		email = params.get( 'email' )
-		old_email_existed = True if ( self.enki_user.email and self.enki_user.email != 'removed' ) else False
-		result = enki.libuser.validate_email( email )
+		email_unsafe = params.get( 'email' )
+		email, result = enki.libuser.validate_email( email_unsafe )
 		error_message = ''
 		if result == enki.libutil.ENKILIB_OK or result == enki.libuser.ERROR_EMAIL_MISSING:
 			result_of_change_request = self.email_change_request( email )
@@ -714,6 +724,7 @@ class HandlerEmailChange( enki.HandlerBaseReauthenticate ):
 				error_message = MSG.CANNOT_DELETE_EMAIL()
 			elif result_of_change_request == 'removed':
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.EMAIL_REMOVED())
+				old_email_existed = True if (self.enki_user.email and self.enki_user.email != 'removed') else False
 				if old_email_existed:
 					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_ROLLBACK_INFO_EMAIL_SENT())
 				self.redirect( enki.libutil.get_local_url( 'profile' ))
