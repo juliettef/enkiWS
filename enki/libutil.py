@@ -1,4 +1,5 @@
 import os
+import urllib
 
 import webapp2
 import webapp2_extras
@@ -65,6 +66,15 @@ def strip_locale_from_path( path, localetostrip ):
 def strip_current_locale_from_path( path ):
 	dirstrip = webapp2_extras.i18n.get_i18n().locale
 	return strip_locale_from_path( path , dirstrip )
+
+
+def urlencode( fields ):
+	fields_non_unicode = {}
+	for i, item in fields.iteritems():
+		if isinstance( item, unicode ):
+			item = item.encode( 'utf8' )
+		fields_non_unicode[ i ] = item
+	return urllib.urlencode( fields_non_unicode )
 
 
 def is_debug():
