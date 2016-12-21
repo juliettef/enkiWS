@@ -52,8 +52,15 @@ class HandlerBase( webapp2.RequestHandler ):
 		self.just_checked_CSRF = False
 
 
-	def dispatch( self ): # https://webapp-improved.appspot.com/api/webapp2_extras/sessions.html
-		self.session_store = sessions.get_store( request = self.request )
+	def dispatch( self ):
+
+		if settings.CANONICAL_HOST_URL and settings.CANONICAL_HOST_URL != self.request.host_url:
+			domain_redirect_URL = settings.CANONICAL_HOST_URL + self.request.path + (
+			('?' + self.request.query_string) if self.request.query_string else '')
+			self.redirect(domain_redirect_URL, permanent=True)
+			return
+
+		self.session_store = sessions.get_store( request = self.request ) # https://webapp-improved.appspot.com/api/webapp2_extras/sessions.html
 
 		if 'locale' in self.request.route_kwargs:
 			locale = self.request.route_kwargs.pop('locale')

@@ -74,3 +74,11 @@ def is_debug():
 		return True
 	else:
 		return False
+
+def is_develop_server():
+# check whether we're running locally or on GAE, or in forced debug mode
+	output = os.environ[ "SERVER_SOFTWARE" ]
+	if "Development" in output:
+		return True
+	else:
+		return False
