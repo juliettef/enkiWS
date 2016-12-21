@@ -1,4 +1,5 @@
 import os
+import urllib
 
 import webapp2
 import webapp2_extras
@@ -67,10 +68,27 @@ def strip_current_locale_from_path( path ):
 	return strip_locale_from_path( path , dirstrip )
 
 
+def urlencode( fields ):
+	fields_non_unicode = {}
+	for i, item in fields.iteritems():
+		if isinstance( item, unicode ):
+			item = item.encode( 'utf8' )
+		fields_non_unicode[ i ] = item
+	return urllib.urlencode( fields_non_unicode )
+
+
 def is_debug():
 # check whether we're running locally or on GAE, or in forced debug mode
 	output = os.environ[ "SERVER_SOFTWARE" ]
 	if "Development" in output or settings.ENKI_FORCE_DEBUG == True:
+		return True
+	else:
+		return False
+
+def is_develop_server():
+# check whether we're running locally or on GAE, or in forced debug mode
+	output = os.environ[ "SERVER_SOFTWARE" ]
+	if "Development" in output:
 		return True
 	else:
 		return False

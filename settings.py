@@ -19,6 +19,10 @@ product_displayname = { 'product_a' : 'Product A',
 
 COMPANY_NAME = "Company"
 
+CANONICAL_HOST_URL = ( '' if enki.libutil.is_develop_server() else '' )
+#e.g. CANONICAL_HOST_URL = ( '' if enki.libutil.is_debug() else 'https://www.enkisoftware.com' )
+# note no trailing slash
+
 # Forums groups and groups' topics (ordered)
 FORUMS = [[ 'Group A', 'Title A-1', 'Description A-1' ],
 		  [ 'Group A', 'Title A-2', 'Description A-2' ],

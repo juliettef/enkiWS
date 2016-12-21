@@ -75,10 +75,15 @@ def xstr( value ):
 	if not value:
 		return ''
 	else:
-		return str( value ).encode( 'utf-8' )
+		if type( value ) is not unicode:
+			value = str( value )
+		import cgi
+		escaped = cgi.escape( value, quote = True )
+		return escaped
+
 
 def xint( value ):
-	if not value:
+	if not value or not value.isdigit():
 		return 0
 	else:
 		return int( value )
@@ -209,7 +214,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			                'referrer' : referrer,
 			                'is_test' : True }
 
-			form_data = urllib.urlencode( form_fields )
+			form_data = enki.libutil.urlencode( form_fields )
 			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )
 			if result.status_code == 200:
 				message_view_library = ''
