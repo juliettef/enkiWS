@@ -48,7 +48,7 @@
 							    <td>{{ item.provider_name }}</td>
 							    <td>{{ item.provider_uid }}&nbsp;
 								    {% if item.status == 'registered' %}
-										<button class="btn btn-default btn-xs {% if not data.enough_accounts %}disabled{% endif %}" type="submit" name="deregister" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Remove" )}}</button>
+										{% if data.enough_accounts %}<button class="btn btn-default btn-xs" type="submit" name="deregister" value="{{ item.provider_name }}:{{ item.provider_uid }}">{{ _( "Remove" )}}</button>{% endif %}
 									{% endif %}
 							    </td>
 								<td>{% for authhandler in authhandlers %}

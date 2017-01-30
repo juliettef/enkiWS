@@ -14,6 +14,7 @@ import enki.libstore
 import enki.libuser
 import enki.libenkiDL
 import enki.textmessages as MSG
+import enki.modelcounter
 
 from enki.modelproductkey import EnkiModelProductKey
 from enki.modeltokenverify import EnkiModelTokenVerify
@@ -46,6 +47,7 @@ class HandlerStore( enki.HandlerBase ):
 					url_fetcher = enki.libenkiDL.URLFetcher()
 					url_fetcher.get_download_URL( url_enkiDL, settings.SECRET_ENKIDL, item_to_download, self.request.remote_addr )
 					if not url_fetcher.error:
+						enki.modelcounter.increment( 'downloads_product_a' )
 						break
 				if url_fetcher and url_fetcher.error:
 					self.response.status_int = 500
@@ -62,12 +64,14 @@ class HandlerStore( enki.HandlerBase ):
 		else:
 			if not settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_EMULATE_STORE:
 				url = enki.libutil.get_local_url( 'storeemulatefastspring' )
+			else:
+				enki.modelcounter.increment( 'purchases_product_a' )
 			if self.is_logged_in():
 				purchaser_user_id = self.enki_user.key.id()
 				token = security.generate_random_string( entropy = 256 )
 				token_purchase = EnkiModelTokenVerify( token = token, user_id = purchaser_user_id, type = 'purchasebyuser' )
 				token_purchase.put()
-				url = enki.libutil.get_local_url( 'storeemulatefastspring', { 'referrer': token_purchase.token })
+				url += '?referrer=' + token_purchase.token.encode('utf-8')
 		self.redirect( url )
 
 
@@ -126,8 +130,9 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 					purchaser_user_id = token.user_id
 					token.key.delete()
 
+			order_type = 'live'
 			is_test = self.request.get( 'is_test' )
-			if is_test:
+			if is_test == 'true' or is_test == 'True':
 				order_type = 'test'
 				if enki.libutil.is_debug() or settings.ENKI_EMULATE_STORE:
 					order_type = 'emulated'
@@ -212,7 +217,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 							'shop_name' : 'Emulator_FastSpring',
 							'quantity' : quantity ,
 			                'referrer' : referrer,
-			                'is_test' : True }
+			                'is_test' : 'true' }
 
 			form_data = enki.libutil.urlencode( form_fields )
 			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )

@@ -592,8 +592,8 @@ class HandlerBase( webapp2.RequestHandler ):
 
 
 	def has_enough_accounts( self ):
-		# note: if the user only has anemail but no password, they can do a 'forgot password'
-		has_email = True if ( self.enki_user.email and self.enki_user.email <> 'removed' ) else False
+		# note: if the user only has an email but no password, we don't count it as a valid acocunt (even though they could do a forget password)
+		has_email = True if ( self.enki_user.email and self.enki_user.email <> 'removed' and self.enki_user.password ) else False
 		has_two_auth_id = True if len( self.enki_user.auth_ids_provider ) > 1 else False
 		if has_email or has_two_auth_id:
 			return True

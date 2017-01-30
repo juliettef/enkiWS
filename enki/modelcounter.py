@@ -1,29 +1,123 @@
+# https://cloud.google.com/appengine/articles/sharding_counters
+# https://github.com/GoogleCloudPlatform/appengine-sharded-counters-python/blob/master/general_counter.py
+
+# Copyright 2008 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+"""A module implementing a general sharded counter."""
+
+
 import random
 
+from google.appengine.api import memcache
 from google.appengine.ext import ndb
 
 
-class EnkiModelCounter( ndb.Model ):
-# SHARDED COUNTER - https://cloud.google.com/appengine/articles/sharding_counters
+SHARD_KEY_TEMPLATE = 'shard-{}-{:d}'
 
-	count = ndb.IntegerProperty( default = 0 )  # sharded counter
 
-	@classmethod
-	@ndb.transactional
-	def increment( cls ):
-		# Increment the value for a given sharded counter.
-		NUM_SHARDS = 5
-		shard_string_index = str( random.randint( 0, NUM_SHARDS - 1 ))
-		counter = EnkiModelCounter.get_by_id( shard_string_index )
-		if counter is None:
-			counter = EnkiModelCounter( id = shard_string_index )
-		counter.count += 1
-		counter.put()
+class GeneralCounterShardConfig(ndb.Model):
+	"""Tracks the number of shards for each named counter."""
+	num_shards = ndb.IntegerProperty(default=20)
 
 	@classmethod
-	def get_count( cls ):
-		# cumulative count of all sharded counters.
+	def all_keys(cls, name):
+		"""Returns all possible keys for the counter name given the config.
+
+		Args:
+			name: The name of the counter.
+
+		Returns:
+			The full list of ndb.Key values corresponding to all the possible
+				counter shards that could exist.
+		"""
+		config = cls.get_or_insert(name)
+		shard_key_strings = [SHARD_KEY_TEMPLATE.format(name, index)
+							 for index in range(config.num_shards)]
+		return [ndb.Key(GeneralCounterShard, shard_key_string)
+				for shard_key_string in shard_key_strings]
+
+
+class GeneralCounterShard(ndb.Model):
+	"""Shards for each named counter."""
+	count = ndb.IntegerProperty(default=0)
+
+
+def get_count(name):
+	"""Retrieve the value for a given sharded counter.
+
+	Args:
+		name: The name of the counter.
+
+	Returns:
+		Integer; the cumulative count of all sharded counters for the given
+			counter name.
+	"""
+	total = memcache.get(name)
+	if total is None:
 		total = 0
-		for counter in EnkiModelCounter.query():
-			total += counter.count
-		return total
+		all_keys = GeneralCounterShardConfig.all_keys(name)
+		for counter in ndb.get_multi(all_keys):
+			if counter is not None:
+				total += counter.count
+		memcache.add(name, total, 60)
+	return total
+
+
+def increment(name):
+	"""Increment the value for a given sharded counter.
+
+	Args:
+		name: The name of the counter.
+	"""
+	config = GeneralCounterShardConfig.get_or_insert(name)
+	_increment(name, config.num_shards)
+
+
+@ndb.transactional
+def _increment(name, num_shards):
+	"""Transactional helper to increment the value for a given sharded counter.
+
+	Also takes a number of shards to determine which shard will be used.
+
+	Args:
+		name: The name of the counter.
+		num_shards: How many shards to use.
+	"""
+	index = random.randint(0, num_shards - 1)
+	shard_key_string = SHARD_KEY_TEMPLATE.format(name, index)
+	counter = GeneralCounterShard.get_by_id(shard_key_string)
+	if counter is None:
+		counter = GeneralCounterShard(id=shard_key_string)
+	counter.count += 1
+	counter.put()
+	# Memcache increment does nothing if the name is not a key in memcache
+	memcache.incr(name)
+
+
+@ndb.transactional
+def increase_shards(name, num_shards):
+	"""Increase the number of shards for a given sharded counter.
+
+	Will never decrease the number of shards.
+
+	Args:
+		name: The name of the counter.
+		num_shards: How many shards to use.
+	"""
+	config = GeneralCounterShardConfig.get_or_insert(name)
+	if config.num_shards < num_shards:
+		config.num_shards = num_shards
+		config.put()

@@ -2,10 +2,10 @@ import webapp2
 
 import enki
 import enki.textmessages as MSG
+import enki.modelcounter
 
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
-from enki.modelcounter import EnkiModelCounter
 from enki.modelforum import EnkiModelForum
 from enki.modelthread import EnkiModelThread
 
@@ -13,7 +13,7 @@ from enki.modelthread import EnkiModelThread
 class HandlerForums( enki.HandlerBase ):
 
 	def get( self ):
-		thread_view_count = EnkiModelCounter.get_count()
+		thread_view_count = enki.modelcounter.get_count( 'views_forum' )
 		if not enki.libforum.exist_EnkiForums():
 			# if no forum topic exists , populate the forums with user-defined groups and topics
 			enki.libforum.create_forums()
@@ -29,7 +29,7 @@ class HandlerForum( enki.HandlerBase ):
 		data = ''
 		not_found = ''
 		if forum.isdigit() and EnkiModelForum.get_by_id( int( forum ) ):
-			EnkiModelCounter.increment()
+			enki.modelcounter.increment( 'views_forum' )
 			data = enki.libforum.get_forum_data( forum )
 		else:
 			not_found = MSG.FORUM_NOT_EXIST( )
