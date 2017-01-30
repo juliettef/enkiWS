@@ -14,6 +14,7 @@ import enki.libstore
 import enki.libuser
 import enki.libenkiDL
 import enki.textmessages as MSG
+import enki.modelcounter
 
 from enki.modelproductkey import EnkiModelProductKey
 from enki.modeltokenverify import EnkiModelTokenVerify
@@ -46,6 +47,7 @@ class HandlerStore( enki.HandlerBase ):
 					url_fetcher = enki.libenkiDL.URLFetcher()
 					url_fetcher.get_download_URL( url_enkiDL, settings.SECRET_ENKIDL, item_to_download, self.request.remote_addr )
 					if not url_fetcher.error:
+						enki.modelcounter.increment( 'downloads_product_a' )
 						break
 				if url_fetcher and url_fetcher.error:
 					self.response.status_int = 500
@@ -62,6 +64,8 @@ class HandlerStore( enki.HandlerBase ):
 		else:
 			if not settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_EMULATE_STORE:
 				url = enki.libutil.get_local_url( 'storeemulatefastspring' )
+			else:
+				enki.modelcounter.increment( 'purchases_product_a' )
 			if self.is_logged_in():
 				purchaser_user_id = self.enki_user.key.id()
 				token = security.generate_random_string( entropy = 256 )
