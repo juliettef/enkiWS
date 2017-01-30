@@ -15,7 +15,7 @@ class URLFetcher():
 			result = urlfetch.fetch( url = enkiDL_URL, payload = form_data, method = urlfetch.POST )
 			if result.status_code == 200:
 				token = result.content
-				self.download_url = enkiDL_URL + '/download?token=' + str( token ) + '&item=' + str( item_to_download )
+				self.download_url = enkiDL_URL + 'download?token=' + str( token ) + '&item=' + str( item_to_download )
 			else:
 				self.error = 1
 				return
