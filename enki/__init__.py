@@ -8,4 +8,5 @@ from handlersrestapi import ExtensionRestAPI
 from handlersfriends import ExtensionFriends
 from handlersinfo import routes_info
 from handlerslegal import routes_legal
+from handlersadmin import routes_admin
 import jinjafilters
