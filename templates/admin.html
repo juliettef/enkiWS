@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>{{ _( "Admin" )}}</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incbanner.html" %}
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+			<h1 class="text-danger">Admin</h1>
+
+			<h2 class="text-danger">Stats</h2>
+
+			<p>Store - Download button clicks - product_a = {{ counter_downloads_product_a }}</p>
+			<p>Store - Purchase button clicks - not emulated - product_a = {{ counter_purchases_product_a }}</p>
+			<p>Forums - Forum views = {{ counter_views_forum }}</p>
+
+			<h2 class="text-danger">Tools</h2>
+			<p><a href="/admin/apps">Applications - use the REST API</a></p>
+
+            {% include "incfooter.html" %}
+    	</div>
+    </body>
+</html>

@@ -27,6 +27,7 @@ routes += enki.routes_account \
 		  + enki.ExtensionLibrary.get_routes()\
 		  + enki.routes_info\
 		  + enki.routes_legal\
+		  + enki.routes_admin
 
 routes_copy = copy.deepcopy( routes )
 locale_routes = [ webapp2_extras.routes.PathPrefixRoute('/<locale:[a-z]{2}_[A-Z]{2}>',  [ webapp2_extras.routes.NamePrefixRoute('locale-', routes ) ] ) ]
