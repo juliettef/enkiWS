@@ -3,6 +3,8 @@ version: 1
 runtime: python27
 api_version: 1
 threadsafe: true
+automatic_scaling:
+  max_concurrent_requests: 32 # default is 8, so this is 4x higher
 
 handlers:
 - url: /css
