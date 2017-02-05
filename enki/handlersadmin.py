@@ -1,8 +1,9 @@
 import webapp2
 
 import enki
-import enki.textmessages as MSG
+import enki.libutil
 import enki.modelcounter
+from enki.modelsummary import EnkiModelSummary
 
 
 class HandlerAdmin( enki.HandlerBase ):
@@ -20,4 +21,18 @@ class HandlerAdmin( enki.HandlerBase ):
 		pass
 
 
-routes_admin = [ webapp2.Route( '/admin/admin', HandlerAdmin, name = 'admin' )]
+class HandlerSummary( enki.HandlerBase ):
+
+	def get( self ):
+		test = enki.libutil.is_debug()
+		if self.request.headers.get( 'X-AppEngine-Cron' ) or enki.libutil.is_debug():
+			EnkiModelSummary.create( 'downloads_product_a' )
+			EnkiModelSummary.create( 'purchases_product_a' )
+			EnkiModelSummary.create( 'views_forum' )
+			self.response.status = 200
+		else:
+			self.error( 403 )
+
+
+routes_admin = [ webapp2.Route( '/admin/admin', HandlerAdmin, name = 'admin' ),
+				 webapp2.Route( '/admin/summary', HandlerSummary, name = 'summary') ]

@@ -1,0 +1,4 @@
+cron:
+- description: daily summary
+  url: /admin/summary
+  schedule: every day 02:00
