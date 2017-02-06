@@ -54,7 +54,7 @@ class HandlerBase( webapp2.RequestHandler ):
 
 	def dispatch( self ):
 
-		if settings.CANONICAL_HOST_URL and settings.CANONICAL_HOST_URL != self.request.host_url:
+		if settings.CANONICAL_HOST_URL and settings.CANONICAL_HOST_URL != self.request.host_url and not self.request.headers.get('X-AppEngine-Cron'):
 			domain_redirect_URL = settings.CANONICAL_HOST_URL + self.request.path + (
 			('?' + self.request.query_string) if self.request.query_string else '')
 			self.redirect(domain_redirect_URL, permanent=True)
