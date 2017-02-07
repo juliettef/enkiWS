@@ -130,7 +130,7 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 					purchaser_user_id = token.user_id
 					token.key.delete()
 
-			order_type = 'live'
+			order_type = 'purchase'
 			is_test = self.request.get( 'is_test' )
 			if is_test == 'true' or is_test == 'True':
 				order_type = 'test'

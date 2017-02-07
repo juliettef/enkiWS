@@ -13,7 +13,7 @@ class EnkiModelProductKey( model.Model ):
 	purchase_price = model.StringProperty()
 	quantity = model.IntegerProperty()
 	order_id = model.StringProperty()
-	order_type = model.StringProperty( choices = [ 'emulated', 'test', 'normal' ])
+	order_type = model.StringProperty( choices = [ 'emulated', 'test', 'purchase' ])
 
 	activated_by_user = model.IntegerProperty( )
 
