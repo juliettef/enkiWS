@@ -16,10 +16,22 @@
 			<h1 class="text-danger">Admin</h1>
 
 			<h2 class="text-danger">Stats</h2>
-
-			<p>Store - Download button clicks - product_a = {{ counter_downloads_product_a }}</p>
-			<p>Store - Purchase button clicks - not emulated - product_a = {{ counter_purchases_product_a }}</p>
-			<p>Forums - Forum views = {{ counter_views_forum }}</p>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Store<br>Download clicks<br>product_a</th>
+						<th>Store<br>Purchase clicks<br>product_a</th>
+						<th>Forums<br>Forum views</th>
+					</tr>
+				</thead>
+					<tbody>
+						<tr>
+							<td>{{ counter_downloads_product_a }}</td>
+							<td>{{ counter_purchases_product_a }}</td>
+							<td>{{ counter_views_forum }}</td>
+						</tr>
+					</tbody>
+				</table>
 
 			<h2 class="text-danger">Tools</h2>
 
