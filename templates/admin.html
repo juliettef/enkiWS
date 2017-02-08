@@ -22,7 +22,56 @@
 			<p>Forums - Forum views = {{ counter_views_forum }}</p>
 
 			<h2 class="text-danger">Tools</h2>
-			<p><a href="/admin/apps">Applications - use the REST API</a></p>
+
+			<h3 class="text-danger">Generate Licences</h3>
+				<div class="well bs-component">
+					<form class="form-horizontal" action="{{ 'generatelicencefree'|local }}" method="post">
+						<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+						<fieldset>
+							<legend>{{ _( "Licence Key Generator" ) }}</legend>
+
+							<div class="form-group">
+								<label for="product" class="col-lg-2 control-label">{{ _( 'Product' ) }}</label>
+								<div class="col-lg-10">
+									<select class="form-control" type="text" name="product">
+										<option>product_a</option>
+										<option>product_b</option>
+										<option>product_c</option>
+										<option>product_d</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="quantity" class="col-lg-2 control-label">{{ _( 'Quantity' ) }}</label>
+								<div class="col-lg-10">
+									<input class="form-control" type="text" name="quantity" value="1">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="order_type" class="col-lg-2 control-label">{{ _( 'Order type' ) }}</label>
+								<div class="col-lg-10">
+									<select class="form-control" type="text" name="order_type">
+										<option>free-gift</option>
+										<option>free-promo</option>
+										<option>free-press</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-lg-10 col-lg-offset-2">
+									<button class="btn btn-primary" type="submit" name="buy" value="{{ product }}">{{ _( "Generate" ) }}</button>
+								</div>
+							</div>
+
+						</fieldset>
+					</form>
+				</div>
+
+			<h3 class="text-danger">API</h3>
+			<p><a href="/admin/apps">Applications</a></p>
 
             {% include "incfooter.html" %}
     	</div>

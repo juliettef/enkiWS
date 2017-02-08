@@ -93,11 +93,11 @@ def xint( value ):
 		return int( value )
 
 
-class HandlerGenlicenceFastSpring( webapp2.RequestHandler ):
+class HandlerGenerateLicenceFastSpring( webapp2.RequestHandler ):
 
 	def post( self ):
 		secret = xstr( self.request.get( 'secret' ))
-		if secret == settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_EMULATE_STORE:
+		if secret == settings.SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_EMULATE_STORE:
 			quantity = xint( self.request.get( 'quantity' ))
 			licence_keys = enki.libstore.generate_licence_keys( quantity )
 			self.response.write( licence_keys )
@@ -112,15 +112,25 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 
 	def post( self ):
 		secret = xstr( self.request.get( 'secret' ))
-		if secret == settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_EMULATE_STORE:
+		if secret == settings.SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_EMULATE_STORE:
 
 			licence_key_bundle = xstr( self.request.get( 'licence_key' ))
 			purchase_price = xstr( self.request.get( 'purchase_price' ))
 			order_id = xstr(self.request.get( 'order_id' ))
 			product_name = xstr( self.request.get( 'product_name' ))
 			purchaser_email = xstr( self.request.get( 'purchaser_email' ))
-			shop_name = xstr( self.request.get( 'shop_name' ))
 			quantity = xint( self.request.get( 'quantity' ))
+
+			if secret == settings.SECRET_FASTSPRING:
+				shop_name = 'FastSpring'
+				is_test = self.request.get( 'is_test' )
+				if is_test.capitalize() == 'True':
+					order_type = 'test'
+				else:
+					order_type = 'purchase'
+			else:
+				shop_name = xstr( self.request.get( 'shop_name' ))
+				order_type = xstr( self.request.get( 'order_type' ))
 
 			purchaser_user_id = None
 			token_purchasebyuser = xstr( self.request.get( 'referrer' ))
@@ -129,13 +139,6 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 				if token:
 					purchaser_user_id = token.user_id
 					token.key.delete()
-
-			order_type = 'purchase'
-			is_test = self.request.get( 'is_test' )
-			if is_test == 'true' or is_test == 'True':
-				order_type = 'test'
-				if enki.libutil.is_debug() or settings.ENKI_EMULATE_STORE:
-					order_type = 'emulated'
 
 			licence_keys = licence_key_bundle.replace( '-', '' ).split()
 			for licence_key in licence_keys:
@@ -159,9 +162,10 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 						  referrer = xstr( self.request.get('referrer') ),
 		                  active_menu = 'store',
 						  purchase_price = '$3.00',
-						  purchaser_email = 'user_email@provided_to_fastspring.com' ,
+						  purchaser_email = 'user_email@provided_to_fastspring.com',
 						  quantity = 2,
-		                  product = 'product_a' )
+		                  product = 'product_a',
+						  order_type = 'test' )
 
 	def post( self ):
 		if not settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_EMULATE_STORE:
@@ -171,12 +175,13 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			quantity = xint( self.request.get('quantity'))
 			purchase_price = xstr( self.request.get( 'purchase_price' ))
 			purchaser_email = xstr( self.request.get( 'purchaser_email' ))
+			order_type = xstr( self.request.get( 'order_type' ))
 			licence_keys = 'not generated'
 			user_id = ''
-			emulator_order_id = 'EMULATED_' + webapp2_extras.security.generate_random_string( length = 10, pool = webapp2_extras.security.DIGITS )
+			order_id = webapp2_extras.security.generate_random_string( length = 10, pool = webapp2_extras.security.DIGITS )
 
-			url = enki.libutil.get_local_url( 'genlicencefastspring' )
-			form_fields = { 'secret': 'pretendsecret', 'quantity': str( quantity ) }
+			url = enki.libutil.get_local_url( 'generatelicencefastspring' )
+			form_fields = { 'secret': 'pretendsecret', 'quantity': str( quantity )}
 			form_data = urllib.urlencode( form_fields )
 			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )
 			if result.status_code == 200:
@@ -195,12 +200,13 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 									'<ul>' +
 										'<li>&lt;EnkiModelProductKey&gt; #{FastSpring variable} = <em>&lt;emulated value&gt;</em></li>' +
 										'<li>product_name #{orderItem.productName} = <em>' + product + '</em></li>' +
-			                            '<li>order_id #{order.id} = <em>' + emulator_order_id + '</em></li>' +
+			                            '<li>order_id #{order.id} = <em>' + order_id + '</em></li>' +
 			                            '<li>quantity #{orderItem.quantity} = <em>' + xstr( quantity ) + '</em></li>' +
 			                            '<li>purchase_price #{orderItem.totalUSD} = <em>' + purchase_price + '</em></li>' +
 			                            '<li>purchaser_email #{order.customer.email} = <em>' + purchaser_email + '</em></li>' +
-										'<li>shop_name = <em>Emulator_FastSpring</em></li>' +
 			                            '<li>licence_key #{orderItem.fulfillment.licence.licences.list} = <br><em><b>' + '<br>'.join( licence_key_display ) + '</b></em></li>' +
+										'<li>shop_name = <em>Emulator</em></li>' +
+								  		'<li>order_type = <em>' + order_type + '</em></li>' +
 									'</ul>'
 									'<h4>Internal data - generated if the purchaser was logged in when they bought the product</h4>' +
 									'<ul>' +
@@ -211,11 +217,12 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			url = enki.libutil.get_local_url( 'ordercompletefastspring' )
 			form_fields = { 'licence_key' : licence_keys,
 			                'purchase_price' : purchase_price,
-			                'order_id' : emulator_order_id,
+			                'order_id' : order_id,
+							'order_type': order_type,
 							'product_name' : product,
 							'purchaser_email' : purchaser_email,
-							'shop_name' : 'Emulator_FastSpring',
-							'quantity' : quantity ,
+							'shop_name' : 'Emulator',
+							'quantity' : quantity,
 			                'referrer' : referrer,
 			                'is_test' : 'true' }
 
@@ -230,6 +237,40 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 				self.add_infomessage( 'warning', MSG.WARNING(),'<h3>FastSpring Store Emulator - Step 2 FAILED: Purchase records not created</h3>' )
 
 			self.redirect_to_relevant_page()
+
+
+class HandlerGenerateLicenceFree(enki.HandlerBase):
+
+	def post( self ):
+		self.check_CSRF()
+		product = xstr( self.request.get( 'product' ))
+		quantity = xint( self.request.get( 'quantity' ))
+		order_type = xstr( self.request.get( 'order_type' ))
+		order_id = webapp2_extras.security.generate_random_string(length = 10, pool = webapp2_extras.security.DIGITS)
+		licence_keys = enki.libstore.generate_licence_keys( quantity )
+		licence_keys = licence_keys.replace( '-', '' ).split()
+		for licence_key in licence_keys:
+			item = EnkiModelProductKey( licence_key = licence_key,
+										order_id = order_id,
+										product_name = product,
+										shop_name = 'Generator',
+										quantity = quantity,
+										order_type = order_type )
+			item.put()
+		licence_key_display = []
+		for item in licence_keys:
+			item_dash = enki.libstore.insert_dashes_5_10( item )
+			licence_key_display.append( item_dash )
+		self.add_infomessage( 'info', MSG.INFORMATION(),
+								 '<h3>Licence keys generated</h3>'
+								 '<ul>' +
+									'<li>product_name = <em>' + product + '</em></li>' +
+									'<li>order_type = <em>' + order_type + '</em></li>' +
+									'<li>order_id = <em>' + order_id + '</em></li>' +
+									'<li>quantity = <em>' + xstr( quantity ) + '</em></li>' +
+									'<li>licence_key(s) = <br><em><b>' + '<br>'.join( licence_key_display ) + '</b></em></li>' +
+								 '</ul>' )
+		self.redirect( 'admin' )
 
 
 class ExtensionPageProducts( ExtensionPage ):
@@ -346,9 +387,10 @@ class ExtensionStore( Extension ):
 
 	def get_routes( self ):
 		return  [ webapp2.Route( '/store', HandlerStore, name = 'store' ),
-		          webapp2.Route( '/genlicencefastspring', HandlerGenlicenceFastSpring, name = 'genlicencefastspring' ),
+		          webapp2.Route( '/generatelicencefastspring', HandlerGenerateLicenceFastSpring, name = 'generatelicencefastspring' ),
 		          webapp2.Route( '/ordercompletefastspring', HandlerOrderCompleteFastSpring, name = 'ordercompletefastspring' ),
 		          webapp2.Route( '/storeemulatefastspring', HandlerStoreEmulateFastSpring, name = 'storeemulatefastspring' ),
+				  webapp2.Route( '/admin/generatelicencefree', HandlerGenerateLicenceFree, name = 'generatelicencefree'),
 		          webapp2.Route( '/library', HandlerLibrary, name = 'library' )
 		          ]
 
