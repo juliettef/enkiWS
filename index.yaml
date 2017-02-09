@@ -62,6 +62,12 @@ indexes:
 
 - kind: EnkiModelProductKey
   properties:
+  - name: order_type
+  - name: shop_name
+  - name: activated_by_user
+
+- kind: EnkiModelProductKey
+  properties:
   - name: purchaser_user_id
   - name: product_name
 

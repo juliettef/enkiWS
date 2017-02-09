@@ -38,6 +38,13 @@ def generate_licence_keys( quantity ):
 	return licence_keys
 
 
+def count_licence_keys( shop_name, product_key, activated = True ):
+	if activated:
+		return count_EnkiProductKey_by_shop_name_order_type_activated( shop_name, product_key )
+	else:
+		return count_EnkiProductKey_by_shop_name_order_type_not_activated(shop_name, product_key)
+
+
 #=== QUERIES ==================================================================
 
 
@@ -89,3 +96,13 @@ def exist_EnkiProductKey_by_purchaser_not_activated( user_id ):
 	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.purchaser_user_id == user_id,
 												EnkiModelProductKey.activated_by_user == None )).count( 1 )
 	return count > 0
+
+
+def count_EnkiProductKey_by_shop_name_order_type_activated( shop_name, order_type ):
+	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.shop_name == shop_name, EnkiModelProductKey.order_type == order_type, EnkiModelProductKey.activated_by_user != None )).count()
+	return count
+
+
+def count_EnkiProductKey_by_shop_name_order_type_not_activated( shop_name, order_type ):
+	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.shop_name == shop_name, EnkiModelProductKey.order_type == order_type, EnkiModelProductKey.activated_by_user == None )).count()
+	return count
