@@ -119,17 +119,16 @@ class HandlerOrderCompleteFastSpring( webapp2.RequestHandler ):
 			order_id = xstr(self.request.get( 'order_id' ))
 			product_name = xstr( self.request.get( 'product_name' ))
 			purchaser_email = xstr( self.request.get( 'purchaser_email' ))
+			shop_name = xstr(self.request.get('shop_name'))
 			quantity = xint( self.request.get( 'quantity' ))
 
 			if secret == settings.SECRET_FASTSPRING:
-				shop_name = 'FastSpring'
 				is_test = self.request.get( 'is_test' )
 				if is_test.capitalize() == 'True':
 					order_type = 'test'
 				else:
 					order_type = 'purchase'
 			else:
-				shop_name = xstr( self.request.get( 'shop_name' ))
 				order_type = xstr( self.request.get( 'order_type' ))
 
 			purchaser_user_id = None
