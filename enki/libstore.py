@@ -18,7 +18,7 @@ def generate_licence_key():
 		if not exist_EnkiProductKey( code ):
 			return code
 		attempt += 1
-	logging.error( 'Could not generate unique Licence Key. LICENCE_KEY_LENGTH = ' + LICENCE_KEY_LENGTH )
+	logging.error( 'Could not generate unique Licence Key. LICENCE_KEY_LENGTH = ' + str( LICENCE_KEY_LENGTH ))
 	return 'LICENGENERERROR'	# in case unique licence code cannot be generated (unlikely)
 
 
