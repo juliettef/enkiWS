@@ -2,6 +2,8 @@ import webapp2
 
 import enki
 import enki.libutil
+import enki.libuser
+import enki.libdisplayname
 import enki.libstore
 import enki.modelcounter
 from enki.modelsummary import EnkiModelSummary
@@ -14,6 +16,8 @@ class HandlerAdmin( enki.HandlerBase ):
 							counter_downloads_product_a = enki.modelcounter.get_count( 'downloads_product_a' ),
 							counter_purchases_product_a = enki.modelcounter.get_count( 'purchases_product_a' ),
 							counter_views_forum = enki.modelcounter.get_count( 'views_forum' ),
+						  	counter_users = enki.libuser.count_EnkiUser(),
+						  	counter_display_names_current = enki.libdisplayname.count_EnkiUserDisplayName_current(),
 							counter_licence_keys_fastspring_purchase_not_activated = enki.libstore.count_licence_keys( 'FastSpring', 'purchase', False ),
 							counter_licence_keys_fastspring_purchase_activated = enki.libstore.count_licence_keys( 'FastSpring', 'purchase', True ),
 							counter_licence_keys_generator_freegift_not_activated = enki.libstore.count_licence_keys( 'Generator', 'free-gift', False ),
@@ -33,6 +37,8 @@ class HandlerSummary( enki.HandlerBase ):
 			counters_from_modelcounter = [ 'downloads_product_a', 'purchases_product_a', 'views_forum' ]
 			for item in counters_from_modelcounter:
 				EnkiModelSummary.create( item, enki.modelcounter.get_count( item ))
+			EnkiModelSummary.create( 'users', enki.libuser.count_EnkiUser())
+			EnkiModelSummary.create( 'display_names_current', enki.libdisplayname.count_EnkiUserDisplayName_current())
 			EnkiModelSummary.create( 'lic_fs_purch_not_act', enki.libstore.count_licence_keys( 'FastSpring', 'purchase', False ))
 			EnkiModelSummary.create( 'lic_fs_purch_act', enki.libstore.count_licence_keys( 'FastSpring', 'purchase', True ))
 			EnkiModelSummary.create( 'lic_gen_gift_not_act', enki.libstore.count_licence_keys( 'Generator', 'free-gift', False ))
