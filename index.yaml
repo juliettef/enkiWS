@@ -121,6 +121,12 @@ indexes:
   - name: time_created
     direction: desc
 
+- kind: EnkiModelSummary
+  properties:
+  - name: time_created
+    direction: desc
+  - name: name
+
 - kind: EnkiModelThread
   properties:
   - name: forum
