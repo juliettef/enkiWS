@@ -99,10 +99,10 @@ def exist_EnkiProductKey_by_purchaser_not_activated( user_id ):
 
 
 def count_EnkiProductKey_by_shop_name_order_type_activated( shop_name, order_type ):
-	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.shop_name == shop_name, EnkiModelProductKey.order_type == order_type, EnkiModelProductKey.activated_by_user > 0 )).count()
+	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.shop_name == shop_name, EnkiModelProductKey.order_type == order_type, EnkiModelProductKey.activated_by_user >= 0 )).count()
 	return count
 
 
 def count_EnkiProductKey_by_shop_name_order_type_not_activated( shop_name, order_type ):
-	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.shop_name == shop_name, EnkiModelProductKey.order_type == order_type, EnkiModelProductKey.activated_by_user == 0 )).count()
+	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.shop_name == shop_name, EnkiModelProductKey.order_type == order_type, EnkiModelProductKey.activated_by_user == -1 )).count()
 	return count
