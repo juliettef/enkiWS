@@ -3,7 +3,7 @@ from google.appengine.ext.ndb import model
 
 class EnkiModelSummary( model.Model ):
 
-	name = model.TextProperty()
+	name = model.StringProperty()
 	count = model.IntegerProperty()
 	time_created = model.DateTimeProperty( auto_now_add = True )
 
