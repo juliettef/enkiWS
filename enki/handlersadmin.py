@@ -52,5 +52,15 @@ class HandlerSummary( enki.HandlerBase ):
 			self.error( 403 )
 
 
+class HandlerReport( enki.HandlerBase ):
+
+	def get( self ):
+		self.render_tmpl( 'report.txt',
+						  report = EnkiModelSummary.csv(),
+						  )
+
+
 routes_admin = [ webapp2.Route( '/admin/admin', HandlerAdmin, name = 'admin' ),
-				 webapp2.Route( '/admin/summary', HandlerSummary, name = 'summary') ]
+				 webapp2.Route( '/admin/summary', HandlerSummary, name = 'summary' ),
+				 webapp2.Route( '/admin/report', HandlerReport, name = 'report' ),
+				 ]

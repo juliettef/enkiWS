@@ -9,5 +9,16 @@ class EnkiModelSummary( model.Model ):
 
 	@classmethod
 	def create( cls, name, count ):
-		entity =  EnkiModelSummary( name = name, count = count )
-		entity.put_async()
+		cls( name = name, count = count ).put_async()
+
+	@classmethod
+	def csv( cls ):
+		list = cls.query().order( -cls.time_created, cls.name ).fetch()
+		result = '"time_created","count","name"\n'
+		for item in list:
+			time_created = '"' + str(item.time_created).replace('"', "''") + '"'
+			count = '"' + str( item.count ) + '"'
+			name = '"' + str(item.name).replace('"', "''") + '"'
+			result += ','.join([ time_created, count, name ]) + '\n'
+		return result
+

@@ -1,0 +1,1 @@
+<body style="white-space: pre-wrap">{{ report }}</body>
