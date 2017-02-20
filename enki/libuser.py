@@ -148,3 +148,7 @@ def fetch_keys_RollbackToken_by_time( user_id, time_created ):
 	keys = EnkiModelTokenEmailRollback.query( ndb.AND( EnkiModelTokenEmailRollback.time_created >= time_created ,
 	                                                   EnkiModelTokenEmailRollback.user_id == user_id )).fetch( keys_only = True )
 	return keys
+
+def count_EnkiUser():
+	count = EnkiModelUser.query().count()
+	return count

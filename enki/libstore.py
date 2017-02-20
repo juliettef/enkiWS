@@ -1,4 +1,5 @@
 import webapp2_extras.security
+import logging
 
 from google.appengine.ext import ndb
 
@@ -11,8 +12,14 @@ SEPARATOR_LICENCE_KEYS = '\n'
 
 
 def generate_licence_key():
-	code = webapp2_extras.security.generate_random_string( length = LICENCE_KEY_LENGTH, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
-	return code
+	attempt = 0
+	while attempt < 1000:
+		code = webapp2_extras.security.generate_random_string( length = LICENCE_KEY_LENGTH, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
+		if not exist_EnkiProductKey( code ):
+			return code
+		attempt += 1
+	logging.error( 'Could not generate unique Licence Key. LICENCE_KEY_LENGTH = ' + str( LICENCE_KEY_LENGTH ))
+	return 'LICENGENERERROR'	# in case unique licence code cannot be generated (unlikely)
 
 
 def insert_dashes_5_10( string ):
@@ -31,12 +38,24 @@ def generate_licence_keys( quantity ):
 	return licence_keys
 
 
+def count_licence_keys( shop_name, product_key, activated = True ):
+	if activated:
+		return count_EnkiProductKey_by_shop_name_order_type_activated( shop_name, product_key )
+	else:
+		return count_EnkiProductKey_by_shop_name_order_type_not_activated( shop_name, product_key )
+
+
 #=== QUERIES ==================================================================
 
 
 def get_EnkiProductKey_by_licence_key( licence_key ):
-	entity = EnkiModelProductKey.query( EnkiModelProductKey.licence_key == licence_key.replace( '-', '' ) ).get()
+	entity = EnkiModelProductKey.query( EnkiModelProductKey.licence_key == licence_key.replace( '-', '' )).get()
 	return entity
+
+
+def exist_EnkiProductKey( licence_key ):
+	count = EnkiModelProductKey.query( EnkiModelProductKey.licence_key == licence_key.replace( '-', '' )).count( 1 )
+	return count > 0
 
 
 def exist_EnkiProductKey_product_activated_by( user_id, product_name ):
@@ -77,3 +96,13 @@ def exist_EnkiProductKey_by_purchaser_not_activated( user_id ):
 	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.purchaser_user_id == user_id,
 												EnkiModelProductKey.activated_by_user == None )).count( 1 )
 	return count > 0
+
+
+def count_EnkiProductKey_by_shop_name_order_type_activated( shop_name, order_type ):
+	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.shop_name == shop_name, EnkiModelProductKey.order_type == order_type, EnkiModelProductKey.activated_by_user >= 0 )).count()
+	return count
+
+
+def count_EnkiProductKey_by_shop_name_order_type_not_activated( shop_name, order_type ):
+	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.shop_name == shop_name, EnkiModelProductKey.order_type == order_type, EnkiModelProductKey.activated_by_user == -1 )).count()
+	return count

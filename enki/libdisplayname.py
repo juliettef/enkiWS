@@ -269,3 +269,8 @@ def fetch_EnkiUserDisplayName_by_user_id_not_current( user_id ):
 	list = EnkiModelDisplayName.query( EnkiModelDisplayName.current == False,
 	                                   ancestor = ndb.Key( EnkiModelUser, user_id ) ).fetch()
 	return list
+
+
+def count_EnkiUserDisplayName_current():
+	count = EnkiModelDisplayName.query( EnkiModelDisplayName.current == True ).count()
+	return count
