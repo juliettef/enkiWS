@@ -15,7 +15,7 @@ class EnkiModelProductKey( model.Model ):
 	order_id = model.StringProperty()
 	order_type = model.StringProperty( choices = [ 'purchase', 'test', 'free-press', 'free-gift', 'free-promo' ])
 
-	activated_by_user = model.IntegerProperty( default = -1 ) # TODO
+	activated_by_user = model.IntegerProperty( default = -1 )
 
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )

@@ -303,7 +303,7 @@ class ExtensionPageLibrary( ExtensionPage ):
 				for i, item in enumerate( list_purchased ):
 					item_licence_key = enki.libstore.insert_dashes_5_10( item.licence_key )
 					product_already_owned = enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name )
-					if not item.activated_by_user:
+					if item.activated_by_user == -1 :
 						if not product_already_owned:
 							licences_to_activate.append([ item.product_name , item_licence_key, settings.product_displayname[ item.product_name ]])
 						else:
@@ -343,7 +343,7 @@ class HandlerLibrary( enki.HandlerBase ):
 								self.session[ 'error_library_licence' ] = licence_key
 						elif item:
 							licence_key_formatted = enki.libstore.insert_dashes_5_10( licence_key_reduced )
-							if not item.activated_by_user:
+							if item.activated_by_user == -1 :
 								# the licence key is not activated.
 								if enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name ):
 									# the user has already activated a key for the same product
