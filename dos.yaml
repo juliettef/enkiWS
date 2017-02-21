@@ -1,0 +1,12 @@
+# https://cloud.google.com/appengine/docs/python/config/dos
+blacklist:
+# examples:
+#- subnet: 192.0.2.1
+#  description: A single IPv4 address
+#- subnet: abcd::123:4567
+#  description: A single IPv6 address
+#- subnet: 1.2.3.4/24
+#  description: an IPv4 subnet
+#- subnet: abcd::123:4567/48
+#  description: an IPv6 subnet
+#
