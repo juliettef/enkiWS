@@ -94,7 +94,7 @@ def exist_EnkiProductKey_by_activator( user_id ):
 
 def exist_EnkiProductKey_by_purchaser_not_activated( user_id ):
 	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.purchaser_user_id == user_id,
-												EnkiModelProductKey.activated_by_user == None )).count( 1 )
+												EnkiModelProductKey.activated_by_user == -1 )).count( 1 )
 	return count > 0
 
 
