@@ -378,6 +378,14 @@ class HandlerBase( webapp2.RequestHandler ):
 		return
 
 
+	def send_email_admin( self, email_type, email_body ):
+	# send email notification to administrators when an event type occurs
+		for email_address, email_types in settings.ADMIN_EMAIL_ADDRESSES.iteritems():
+			if email_type in email_types:
+				self.send_email( email_address, settings.ADMIN_EMAIL_SUBJECT_PREFIX + settings.ADMIN_EMAIL_TYPES[ email_type ], email_body )
+		return
+
+
 	def email_set_request( self, email ):
 	# request the creation of a new account based on an email address
 		result = enki.libutil.ENKILIB_OK

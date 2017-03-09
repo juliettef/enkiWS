@@ -79,9 +79,9 @@ class HandlerForum( enki.HandlerBase ):
 								result = enki.libforum.add_thread_and_post( user_id, forum, thread_title, post_body )
 								if result == enki.libutil.ENKILIB_OK:
 									self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.THREAD_PUBLISHED())
-									thread_title = ''
-									post_body = ''
-									self.redirect( enki.libutil.get_local_url( 'forum', { 'forum': forum }))
+									url = enki.libutil.get_local_url( 'forum', { 'forum':forum })
+									self.send_email_admin( 'FTPA', url )
+									self.redirect( url )
 									return
 								else:
 									error_threadtitle = MSG.FAIL_THREAD_SUBMISSION()
@@ -172,9 +172,10 @@ class HandlerThread( enki.HandlerBase ):
 								result = enki.libforum.add_post( user, thread, post_body )
 								if result == enki.libutil.ENKILIB_OK:
 									self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_PUBLISHED())
-									post_body = ''
 									post_requested = enki.libforum.get_first_post_on_page( enki.libforum.get_page( EnkiModelThread.get_by_id( int( thread )), enki.libforum.POST_LAST, int( post_count )), int( post_count ))
-									self.redirect( enki.libutil.get_local_url( 'thread', { 'thread': thread, 'start': str( post_requested ), 'count': str( post_count )}))
+									url = enki.libutil.get_local_url( 'thread', { 'thread': thread, 'start': str( post_requested ), 'count': str( post_count )})
+									self.send_email_admin( 'FPA', url )
+									self.redirect( url )
 									return
 								else:
 									error_message = MSG.FAIL_POST_SUBMISSION()
@@ -247,7 +248,9 @@ class HandlerPost( enki.HandlerBase ):
 					result = enki.libforum.delete_post( user, post )
 					if result[ 0 ] == enki.libutil.ENKILIB_OK:
 						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_DELETED())
-						self.redirect( enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})) # redirect to parent thread
+						url = enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})
+						self.send_email_admin( 'FPD', url )
+						self.redirect( url ) # redirect to parent thread
 						return
 					else:
 						error_message = MSG.FAIL_POST_DELETION()
@@ -269,7 +272,9 @@ class HandlerPost( enki.HandlerBase ):
 						result = enki.libforum.edit_post( user, post, post_body )
 						if result[ 0 ] == enki.libutil.ENKILIB_OK:
 							self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_MODIFIED())
-							self.redirect( enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})) # redirect to parent thread
+							url = enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})
+							self.send_email_admin( 'FPE', url )
+							self.redirect( url ) # redirect to parent thread
 							return
 						else:
 							error_message = MSG.FAIL_POST_MODIFICATION()
