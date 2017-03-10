@@ -53,6 +53,13 @@ indexes:
 - kind: EnkiModelPost
   properties:
   - name: thread
+  - name: sticky_order
+    direction: desc
+  - name: time_created
+
+- kind: EnkiModelPost
+  properties:
+  - name: thread
   - name: time_created
 
 - kind: EnkiModelProductKey
