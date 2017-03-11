@@ -10,7 +10,7 @@ class EnkiModelThread( model.Model ):
 
 	num_posts = model.IntegerProperty( default = 0 )    # number of posts in the thread
 
-	sticky_order = model.IntegerProperty(default=0)  # admin can set sticky_order > 0 to get threads 'stuck'
+	sticky_order = model.IntegerProperty( default = 0 )  # admin can set sticky_order > 0 to get threads 'stuck'
 
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )

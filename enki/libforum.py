@@ -102,6 +102,7 @@ def get_forum_data( forum_selected ):
 			url = enki.libutil.get_local_url( 'thread', { 'thread': str( item.key.id())})
 			item.url = url
 			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
+			item.sticky = True if ( item.sticky_order > 0 ) else False
 			list[ i ] = item
 	forum_data = forumData(forums_url, forum, num_posts, list, markdown_escaped, forum_selected)
 	return forum_data
@@ -138,6 +139,7 @@ def get_thread_data( thread_selected, post_requested = POST_DEFAULT, post_count 
 		for i, item in enumerate( list ):
 			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
 			item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
+			item.sticky = True if (item.sticky_order > 0) else False
 			list[ i ] = item
 	thread_data = threadData(forums_url, forum, forum_url, thread, thread_url, list, markdown_escaped, thread_selected)
 	return thread_data
@@ -377,7 +379,7 @@ def fetch_EnkiThread_by_forum( forum ):
 
 
 def fetch_EnkiPost_by_thread( thread, limit, offset ):
-	list = EnkiModelPost.query( EnkiModelPost.thread == thread ).order( EnkiModelPost.time_created ).fetch( limit = limit, offset = offset )
+	list = EnkiModelPost.query( EnkiModelPost.thread == thread ).order( -EnkiModelPost.sticky_order, EnkiModelPost.time_created ).fetch( limit = limit, offset = offset )
 	return list
 
 

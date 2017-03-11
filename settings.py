@@ -19,6 +19,10 @@ product_displayname = { 'product_a' : 'Product A',
 
 COMPANY_NAME = "Company"
 
+CANONICAL_HOST_URL = ( '' if enki.libutil.is_develop_server() else '' )
+#e.g. CANONICAL_HOST_URL = ( '' if enki.libutil.is_debug() else 'https://www.enkisoftware.com' )
+# note no trailing slash
+
 # admin email notifications
 ADMIN_EMAIL_ADDRESSES = { 'admin1@enkiWS.com': [ 'FPD' ]}
 ADMIN_EMAIL_TYPES = { 'FTPA' : 'Forum Thread and Post added',
@@ -26,10 +30,6 @@ ADMIN_EMAIL_TYPES = { 'FTPA' : 'Forum Thread and Post added',
 					  'FPE' : 'Forum Post edited',
 					  'FPD' : 'Forum Post deleted' }
 ADMIN_EMAIL_SUBJECT_PREFIX = '[ enkiWS admin ] '
-
-CANONICAL_HOST_URL = ( '' if enki.libutil.is_develop_server() else '' )
-#e.g. CANONICAL_HOST_URL = ( '' if enki.libutil.is_debug() else 'https://www.enkisoftware.com' )
-# note no trailing slash
 
 # Forums groups and groups' topics (ordered)
 FORUMS = [[ 'Group A', 'Title A-1', 'Description A-1' ],

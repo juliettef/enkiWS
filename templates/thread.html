@@ -34,6 +34,7 @@
                 {% for item in data.list %}
                     <div class="panel panel-default">
                         <div class="panel-heading">
+							{% if item.sticky %}<i class="fa fa-thumb-tack"></i>&nbsp;&nbsp;{% endif %}
                             {% if item.author_data.display_name == deleted_dn %}{{ deleted_dn_display }}{% else %}<a href="{{ item.author_data.user_page }}">{{ item.author_data.display_name}}</a>{% endif %}
                             - {{ _( "posted" )}} {{ item.time_created.strftime( "%a, %d %b %Y, %H:%M:%S" )}} UTC
                             {% if item.time_updated > item.time_created %}- {% if item.body == deleted_post %}{{ _( "deleted" ) }}{% else %}{{ _( "edited" ) }}{% endif %} {{ item.time_updated.strftime( "%a, %d %b %Y %H:%M:%S" )}} UTC{% endif %}
