@@ -13,7 +13,7 @@ Our website [enkisoftware.com](https://www.enkisoftware.com/) uses enkiWS, with 
 
 This is a work in progress and not yet ready for production use.
  
-__[ NEW in v0.12 ] Sticky thread and posts, Forum events email notifications to admin__  
+__[ NEW in v0.12 ] Sticky threads and posts, Forum events email notifications to admin__  
 __[ NEW in v0.11 ] Added Admin tools page with free licence key generator, reporting cron, gcloud deployment script__  
 __[ NEW in v0.10 ] Added canonical host url, event counters for download and purchase, Store fixes and escaping, prevent remove auth method if user would only have email without pw left, email validation detects empty__  
 __[ NEW in v0.9 ] Security fixes and improvements__

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /GardenerInTheDark.patch
+Sitemap: https://enkisoftware-webservices.appspot.com/sitemap_index.xml

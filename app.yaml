@@ -27,6 +27,13 @@ handlers:
   static_files: static/\1
   upload: static/(.*\.(png))
 
+  #all images and support file (css, fonts...): return file if found, otherwise the default 404 page
+  #so it can be handled by sites that link directly to images
+- url: /(.*\.(gif|jpg|ico|bmp|css|otf|eot|svg|ttf|woff|txt|xml))
+  static_files: static/\1
+  upload: static/(.*\.(gif|jpg|ico|bmp|css|otf|eot|svg|ttf|woff|txt|xml))
+  secure: always
+
 - url: /admin/.*
   script: main.app
   secure: always
