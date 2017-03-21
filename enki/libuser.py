@@ -76,6 +76,28 @@ def user_has_password_by_email( email ):
 	return False
 
 
+def add_roles( user, trigger ):
+	for role in settings.ROLES_TRIGGERS[ trigger ]:
+		if role not in user.roles:
+			user.roles.append( role )
+	user.put()
+
+
+def remove_roles( user, trigger ):
+	for role in settings.ROLES_TRIGGERS[ trigger ]:
+		if role in user.roles:
+			user.roles.remove( role )
+	user.put()
+
+
+def ensure_has_permission( user, permission ):
+	for role in user.roles:
+		debug = settings.ROLES_PERMISSIONS[ role ]
+		if permission in settings.ROLES_PERMISSIONS[ role ]:
+			return True
+	return False
+
+
 #=== QUERIES ==================================================================
 
 
