@@ -76,26 +76,31 @@ def user_has_password_by_email( email ):
 	return False
 
 
-def add_roles( user, trigger ):
-	for role in settings.ROLES_TRIGGERS[ trigger ]:
+def add_roles( user, roles ):
+	for role in roles:
 		if role not in user.roles:
 			user.roles.append( role )
 	user.put()
 
 
-def remove_roles( user, trigger ):
-	for role in settings.ROLES_TRIGGERS[ trigger ]:
+def remove_roles( user, roles ):
+	for role in roles:
 		if role in user.roles:
 			user.roles.remove( role )
 	user.put()
 
 
-def ensure_has_permission( user, permission ):
-	for role in user.roles:
-		debug = settings.ROLES_PERMISSIONS[ role ]
-		if permission in settings.ROLES_PERMISSIONS[ role ]:
-			return True
-	return False
+def ensure_has_permissions( user, permissions ):
+# check a user has all the permissions required # TODO check loop
+	result = False
+	for permission in permissions:
+		for role in user.roles:
+			if permission in settings.ROLES_PERMISSIONS[ role ]:
+				result = True
+				break
+		if not result:
+			break
+	return result
 
 
 #=== QUERIES ==================================================================

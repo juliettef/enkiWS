@@ -20,17 +20,14 @@ product_displayname = { 'product_a' : 'Product A',
 COMPANY_NAME = "Company"
 
 
-# user roles and permissions
-DEFINITION_PERMISSIONS = { 'PFTS' : 'Permission to set/unset Forum Thread Sticky',
-						   'PFPS' : 'Permission to set/unset Forum Post Sticky' }
-DEFINITION_ROLES = { 'RUC' : 'User, Confirmed',
-					 'RFM' : 'Forum Moderator' }
-# permissions for each role
+# lists of user roles and permissions
+ROLES = { 'RUC':'User, Confirmed',
+		  'RFM':'Forum Moderator', }
+PERMISSIONS = { 'PFTS' :'Permission to set/unset Forum Thread Sticky',
+				'PFPS' : 'Permission to set/unset Forum Post Sticky', }
+# permissions granted to each role
 ROLES_PERMISSIONS = { 'RUC' : [],
-					  'RFM' : [ 'PFTS', 'PFPS' ] }
-# triggers to add or remove roles
-ROLES_TRIGGERS = { 'T010' : [ 'RUC' ],
-				   'T020' : [ 'RUC', 'RFM' ], }
+					  'RFM' : [ 'PFTS', 'PFPS' ], }
 
 
 # admin email notifications
