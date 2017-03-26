@@ -14,6 +14,7 @@ class EnkiModelProductKey( model.Model ):
 	quantity = model.IntegerProperty()
 	order_id = model.StringProperty()
 	order_type = model.StringProperty( choices = [ 'purchase', 'test', 'free-press', 'free-gift', 'free-promo' ])
+	info = model.TextProperty()
 
 	activated_by_user = model.IntegerProperty( default = -1 )
 

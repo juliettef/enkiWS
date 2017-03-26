@@ -245,6 +245,13 @@ class HandlerGenerateLicenceFree(enki.HandlerBase):
 		product = xstr( self.request.get( 'product' ))
 		quantity = xint( self.request.get( 'quantity' ))
 		order_type = xstr( self.request.get( 'order_type' ))
+		purchaser_email = xstr( self.request.get( 'purchaser_email' ))
+		purchaser_email = purchaser_email if purchaser_email else None
+		purchaser_user_id = xint( self.request.get( 'purchaser_user_id' ))
+		purchaser_user_id = purchaser_user_id if purchaser_user_id != 0 else None
+		info = xstr( self.request.get( 'info' ))
+		info = info if info else None
+
 		order_id = webapp2_extras.security.generate_random_string(length = 10, pool = webapp2_extras.security.DIGITS)
 		licence_keys = enki.libstore.generate_licence_keys( quantity )
 		licence_keys = licence_keys.replace( '-', '' ).split()
@@ -254,20 +261,27 @@ class HandlerGenerateLicenceFree(enki.HandlerBase):
 										product_name = product,
 										shop_name = 'Generator',
 										quantity = quantity,
-										order_type = order_type )
+										order_type = order_type,
+										purchaser_email = purchaser_email,
+										purchaser_user_id = purchaser_user_id,
+										info = info
+										)
 			item.put()
 		licence_key_display = []
 		for item in licence_keys:
 			item_dash = enki.libstore.insert_dashes_5_10( item )
 			licence_key_display.append( item_dash )
 		self.add_infomessage( 'info', MSG.INFORMATION(),
-								 '<h3>Licence keys generated</h3>'
+								 '<h3>Licence keys generated</h3>' +
 								 '<ul>' +
 									'<li>product_name = <em>' + product + '</em></li>' +
 									'<li>order_type = <em>' + order_type + '</em></li>' +
 									'<li>order_id = <em>' + order_id + '</em></li>' +
 									'<li>quantity = <em>' + xstr( quantity ) + '</em></li>' +
-									'<li>licence_key(s) = <br><em><b>' + '<br>'.join( licence_key_display ) + '</b></em></li>' +
+							  		'<li>Recipient mail (purchaser_email) = <em>' + ( purchaser_email if purchaser_email else 'none' )  + '</em></li>' +
+							  		'<li>Recipient user id (purchaser_user_id) = <em>' + ( xstr( purchaser_user_id) if purchaser_user_id else 'none' ) + '</em></li>' +
+									'<li>info = <em>' + ( info if info else 'none' ) + '</em></li>' +
+									'<li>licence_key(s) = <br><em>' + '<br>'.join( licence_key_display ) + '</em></li>' +
 								 '</ul>' )
 		self.redirect( 'admin' )
 

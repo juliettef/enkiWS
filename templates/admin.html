@@ -35,7 +35,7 @@
 				</tbody>
 			</table>
 			
-			<a href="/admin/report"><button class="btn btn-primary">csv report</button></a>
+			<a href="/admin/report"><button class="btn btn-primary">{{ _( 'Show csv report' ) }}</button></a>
 
 			<h2 class="text-danger">Generate Licences</h2>
 				<div class="well bs-component">
@@ -71,6 +71,27 @@
 										<option>free-promo</option>
 										<option>free-press</option>
 									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="purchaser_email" class="col-lg-2 control-label">{{ _( 'Recipient email (optional)' ) }}</label>
+								<div class="col-lg-10">
+									<input class="form-control" type="text" name="purchaser_email" placeholder="{{ _( "Email" ) }}">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="purchaser_user_id" class="col-lg-2 control-label">{{ _( 'Recipient user Id (optional)' ) }}</label>
+								<div class="col-lg-10">
+									<input class="form-control" type="text" name="purchaser_user_id" placeholder="5066549580791808">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="info" class="col-lg-2 control-label">{{ _( 'Information (optional)' ) }}</label>
+								<div class="col-lg-10">
+									<textarea class="form-control" rows="2" id="info" name="info"></textarea>
 								</div>
 							</div>
 
