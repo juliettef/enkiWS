@@ -19,9 +19,16 @@ product_displayname = { 'product_a' : 'Product A',
 
 COMPANY_NAME = "Company"
 
-CANONICAL_HOST_URL = ( '' if enki.libutil.is_develop_server() else '' )
-#e.g. CANONICAL_HOST_URL = ( '' if enki.libutil.is_debug() else 'https://www.enkisoftware.com' )
-# note no trailing slash
+
+# lists of user roles and permissions
+ROLES = { 'RUC':'User, Confirmed',
+		  'RFM':'Forum Moderator', }
+PERMISSIONS = { 'PFTS' :'Permission to set/unset Forum Thread Sticky',
+				'PFPS' : 'Permission to set/unset Forum Post Sticky', }
+# permissions granted to each role
+ROLES_PERMISSIONS = { 'RUC' : [],
+					  'RFM' : [ 'PFTS', 'PFPS' ], }
+
 
 # admin email notifications
 ADMIN_EMAIL_ADDRESSES = { 'admin1@enkiWS.com': [ 'FPD' ]}
@@ -31,6 +38,7 @@ ADMIN_EMAIL_TYPES = { 'FTPA' : 'Forum Thread and Post added',
 					  'FPD' : 'Forum Post deleted' }
 ADMIN_EMAIL_SUBJECT_PREFIX = '[ enkiWS admin ] '
 
+
 # Forums groups and groups' topics (ordered)
 FORUMS = [[ 'Group A', 'Title A-1', 'Description A-1' ],
 		  [ 'Group A', 'Title A-2', 'Description A-2' ],
@@ -39,6 +47,10 @@ FORUMS = [[ 'Group A', 'Title A-1', 'Description A-1' ],
 		  [ 'Group B', 'Title B-2', 'Description B-2' ],
 		  ]
 
+
+CANONICAL_HOST_URL = ( '' if enki.libutil.is_develop_server() else '' )
+#e.g. CANONICAL_HOST_URL = ( '' if enki.libutil.is_debug() else 'https://www.enkisoftware.com' )
+# note no trailing slash
 
 # Steam OAuth always available as it doesn't use client ID nor secret - as of Jan 2016
 HANDLERS = [ enki.handlersoauth.HandlerOAuthSteam ]

@@ -19,23 +19,23 @@
 
 			<table class="table  table-striped table-hover">
 				<tbody>
-					<tr><td>Store - Download clicks - product_a</td><td>{{ counter_downloads_product_a }}</td></tr>
-					<tr><td>Store - Purchase clicks - product_a</td><td>{{ counter_purchases_product_a }}</td></tr>
-					<tr><td>Store - Licence Keys - FastSpring - Purchase - Not Activated</td><td>{{ counter_licence_keys_fastspring_purchase_not_activated }}</td></tr>
-					<tr><td>Store - Licence Keys - FastSpring - Purchase - Activated</td><td>{{ counter_licence_keys_fastspring_purchase_activated }}</td></tr>
-					<tr><td>Store - Licence Keys - Generator - Free-gift - Not Activated</td><td>{{ counter_licence_keys_generator_freegift_not_activated }}</td></tr>
-					<tr><td>Store - Licence Keys - Generator - Free-gift - Activated</td><td>{{ counter_licence_keys_generator_freegift_activated }}</td></tr>
-					<tr><td>Store - Licence Keys - Generator - Free-press - Not Activated</td><td>{{ counter_licence_keys_generator_freepress_not_activated }}</td></tr>
-					<tr><td>Store - Licence Keys - Generator - Free-press - Activated</td><td>{{ counter_licence_keys_generator_freepress_activated }}</td></tr>
-					<tr><td>Store - Licence Keys - Generator - Free-promo - Not Activated</td><td>{{ counter_licence_keys_generator_freepromo_not_activated }}</td></tr>
-					<tr><td>Store - Licence Keys - Generator - Free-promo - Activated</td><td>{{ counter_licence_keys_generator_freepromo_activated }}</td></tr>
-					<tr><td>Forums - Forum views</td><td>{{ counter_views_forum }}</td></tr>
-					<tr><td>Users</td><td>{{ counter_users }}</td></tr>
-					<tr><td>User display names current</td><td>{{ counter_display_names_current }}</td></tr>
+					<tr><td>Store - Download clicks - product_a</td><td>{{ data[ 'counter_downloads_product_a' ] }}</td></tr>
+					<tr><td>Store - Purchase clicks - product_a</td><td>{{ data[ 'counter_purchases_product_a' ] }}</td></tr>
+					<tr><td>Store - Licence Keys - FastSpring - Purchase - Not Activated</td><td>{{ data[ 'counter_licence_keys_fastspring_purchase_not_activated' ] }}</td></tr>
+					<tr><td>Store - Licence Keys - FastSpring - Purchase - Activated</td><td>{{ data[ 'counter_licence_keys_fastspring_purchase_activated' ] }}</td></tr>
+					<tr><td>Store - Licence Keys - Generator - Free-gift - Not Activated</td><td>{{ data[ 'counter_licence_keys_generator_freegift_not_activated' ] }}</td></tr>
+					<tr><td>Store - Licence Keys - Generator - Free-gift - Activated</td><td>{{ data[ 'counter_licence_keys_generator_freegift_activated' ] }}</td></tr>
+					<tr><td>Store - Licence Keys - Generator - Free-press - Not Activated</td><td>{{ data[ 'counter_licence_keys_generator_freepress_not_activated' ] }}</td></tr>
+					<tr><td>Store - Licence Keys - Generator - Free-press - Activated</td><td>{{ data[ 'counter_licence_keys_generator_freepress_activated' ] }}</td></tr>
+					<tr><td>Store - Licence Keys - Generator - Free-promo - Not Activated</td><td>{{ data[ 'counter_licence_keys_generator_freepromo_not_activated' ] }}</td></tr>
+					<tr><td>Store - Licence Keys - Generator - Free-promo - Activated</td><td>{{ data[ 'counter_licence_keys_generator_freepromo_activated' ] }}</td></tr>
+					<tr><td>Forums - Forum views</td><td>{{ data[ 'counter_views_forum' ] }}</td></tr>
+					<tr><td>Users</td><td>{{ data[ 'counter_users' ] }}</td></tr>
+					<tr><td>User display names current</td><td>{{ data[ 'counter_display_names_current' ] }}</td></tr>
 				</tbody>
 			</table>
 			
-			<a href="/admin/report"><button class="btn btn-primary">csv report</button></a>
+			<a href="/admin/report"><button class="btn btn-primary">{{ _( 'Show csv report' ) }}</button></a>
 
 			<h2 class="text-danger">Generate Licences</h2>
 				<div class="well bs-component">
@@ -71,6 +71,27 @@
 										<option>free-promo</option>
 										<option>free-press</option>
 									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="purchaser_email" class="col-lg-2 control-label">{{ _( 'Recipient email (optional)' ) }}</label>
+								<div class="col-lg-10">
+									<input class="form-control" type="text" name="purchaser_email" placeholder="{{ _( "Email" ) }}">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="purchaser_user_id" class="col-lg-2 control-label">{{ _( 'Recipient user Id (optional)' ) }}</label>
+								<div class="col-lg-10">
+									<input class="form-control" type="text" name="purchaser_user_id" placeholder="5066549580791808">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="info" class="col-lg-2 control-label">{{ _( 'Information (optional)' ) }}</label>
+								<div class="col-lg-10">
+									<textarea class="form-control" rows="2" id="info" name="info"></textarea>
 								</div>
 							</div>
 

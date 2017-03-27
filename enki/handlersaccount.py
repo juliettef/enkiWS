@@ -677,8 +677,12 @@ class HandlerDisplayName( enki.HandlerBaseReauthenticate ):
 	def post_reauthenticated( self, params ):
 		prefix = params.get( 'prefix' )
 		error_message = ''
+		# add roles only the first time a display name is set # TODO Roles prototype
+		add_roles = not enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id )
 		result = enki.libdisplayname.make_unique_and_set_display_name( self.user_id, prefix )
 		if result == enki.libutil.ENKILIB_OK:
+			if add_roles: # TODO Roles prototype
+				enki.libuser.add_roles( self.enki_user, [ 'RUC' ] )
 			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISPLAYNAME_SET())
 			self.session[ 'sessiondisplaynamerefpath' ] = self.session.pop( 'sessionreauth', self.request.referrer )
 			self.redirect_to_relevant_page()

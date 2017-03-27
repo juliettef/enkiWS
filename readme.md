@@ -11,9 +11,12 @@ Our website [enkisoftware.com](https://www.enkisoftware.com/) uses enkiWS, with 
 
 ## Status
 
-This is a work in progress and not yet ready for production use.  
-__[ NEW in v0.8 ] Github OAuth login, Facebook API update, Twitter OAuth can now get email, Example Privacy and Terms of Service, Language settings moved into path.
-
+This is a work in progress and not yet ready for production use.
+ 
+__[ NEW in v0.12 ] Sticky threads and posts, Forum events email notifications to admin__  
+__[ NEW in v0.11 ] Added Admin tools page with free licence key generator, reporting cron, gcloud deployment script__  
+__[ NEW in v0.10 ] Added canonical host url, event counters for download and purchase, Store fixes and escaping, prevent remove auth method if user would only have email without pw left, email validation detects empty__  
+__[ NEW in v0.9 ] Security fixes and improvements__
 
 ## Functionality
 
@@ -22,7 +25,7 @@ __[ NEW in v0.8 ] Github OAuth login, Facebook API update, Twitter OAuth can now
 * User Accounts - email, display name
 * [Login through OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter-github) - Valve's Steam, Facebook, Google, Twitter, Github
 * Forums
-* Localisation - English & French implemented
+* Localisation - English & French
 * Online store
     * Payment provider [FastSpring](https://www.fastspring.com/)  
     * Licence key generation and activation
@@ -33,11 +36,14 @@ __[ NEW in v0.8 ] Github OAuth login, Facebook API update, Twitter OAuth can now
 * [REST API](https://github.com/juliettef/enkiWS#rest-api)
     * Authentication (account and game key)
     * Friends list
-    * Data Store   
+    * Data Store  
+* Admin tools
+    * Reporting
+    * Free licence keys generator
 
 ### Intended for release 1.0.0 
-    
-* Admin tools
+
+* User roles    
 * Installation and usage documentation
 * REST API improvements:
     * datastore limits
@@ -47,7 +53,6 @@ __[ NEW in v0.8 ] Github OAuth login, Facebook API update, Twitter OAuth can now
 
 ### Intended for  release 1.x.x
 
-* User roles
 * Issues reporting and tracking
 * Static blogging tool integration
 * Integration [presskit() for GAE](https://www.enkisoftware.com/devlogpost-20140123-1-Presskit_for_Google_App_Engine.html), 

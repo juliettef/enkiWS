@@ -13,20 +13,25 @@ class HandlerAdmin( enki.HandlerBase ):
 
 	def get( self ):
 		self.render_tmpl( 'admin.html',
-							counter_downloads_product_a = enki.modelcounter.get_count( 'downloads_product_a' ),
-							counter_purchases_product_a = enki.modelcounter.get_count( 'purchases_product_a' ),
-							counter_views_forum = enki.modelcounter.get_count( 'views_forum' ),
-						  	counter_users = enki.libuser.count_EnkiUser(),
-						  	counter_display_names_current = enki.libdisplayname.count_EnkiUserDisplayName_current(),
-							counter_licence_keys_fastspring_purchase_not_activated = enki.libstore.count_licence_keys( 'FastSpring', 'purchase', False ),
-							counter_licence_keys_fastspring_purchase_activated = enki.libstore.count_licence_keys( 'FastSpring', 'purchase', True ),
-							counter_licence_keys_generator_freegift_not_activated = enki.libstore.count_licence_keys( 'Generator', 'free-gift', False ),
-							counter_licence_keys_generator_freegift_activated = enki.libstore.count_licence_keys( 'Generator', 'free-gift', True ),
-							counter_licence_keys_generator_freepress_not_activated = enki.libstore.count_licence_keys( 'Generator', 'free-press', False ),
-							counter_licence_keys_generator_freepress_activated = enki.libstore.count_licence_keys( 'Generator', 'free-press', True ),
-							counter_licence_keys_generator_freepromo_not_activated = enki.libstore.count_licence_keys( 'Generator', 'free-promo', False ),
-							counter_licence_keys_generator_freepromo_activated = enki.libstore.count_licence_keys( 'Generator', 'free-promo', True ),
-						)
+						  data = self.get_report_data(),
+						  )
+
+	@classmethod
+	def get_report_data( self ):
+		return { 	'counter_downloads_product_a' : enki.modelcounter.get_count( 'downloads_product_a' ),
+					'counter_purchases_product_a' : enki.modelcounter.get_count( 'purchases_product_a' ),
+					'counter_views_forum' : enki.modelcounter.get_count( 'views_forum' ),
+					'counter_users' : enki.libuser.count_EnkiUser(),
+					'counter_display_names_current' : enki.libdisplayname.count_EnkiUserDisplayName_current(),
+					'counter_licence_keys_fastspring_purchase_not_activated' : enki.libstore.count_licence_keys( 'FastSpring', 'purchase', False ),
+					'counter_licence_keys_fastspring_purchase_activated' : enki.libstore.count_licence_keys( 'FastSpring', 'purchase', True ),
+					'counter_licence_keys_generator_freegift_not_activated' : enki.libstore.count_licence_keys( 'Generator', 'free-gift', False ),
+					'counter_licence_keys_generator_freegift_activated' : enki.libstore.count_licence_keys( 'Generator', 'free-gift', True ),
+					'counter_licence_keys_generator_freepress_not_activated' : enki.libstore.count_licence_keys( 'Generator', 'free-press', False ),
+					'counter_licence_keys_generator_freepress_activated' : enki.libstore.count_licence_keys( 'Generator', 'free-press', True ),
+					'counter_licence_keys_generator_freepromo_not_activated' : enki.libstore.count_licence_keys( 'Generator', 'free-promo', False ),
+					'counter_licence_keys_generator_freepromo_activated' : enki.libstore.count_licence_keys( 'Generator', 'free-promo', True ),
+					 }
 
 
 class HandlerSummary( enki.HandlerBase ):
