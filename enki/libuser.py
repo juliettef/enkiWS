@@ -90,17 +90,24 @@ def remove_roles( user, roles ):
 	user.put()
 
 
-def ensure_has_permissions( user, permissions ):
-# check a user has all the permissions required # TODO check loop
-	result = False
-	for permission in permissions:
-		for role in user.roles:
-			if permission in settings.ROLES_PERMISSIONS[ role ]:
-				result = True
-				break
-		if not result:
-			break
-	return result
+def has_permissions( user, permissions ):
+# check a user has all the permissions required
+	if user and permissions:
+		for permission in permissions:
+			if not has_permission( user, permission ):
+				return False
+		return True	# all permissions have tested true by this point
+	return False
+
+
+def has_permission( user, permission ):
+# check a user has a permission
+	if user and permission:
+		if user.roles:
+			for role in user.roles:
+				if permission in settings.ROLES_PERMISSIONS[ role ]:
+					return True
+	return False
 
 
 #=== QUERIES ==================================================================

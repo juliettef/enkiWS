@@ -10,6 +10,7 @@
                         <li><a href="{{ item.forum_url }}">{{ item.forum_title|e }}</a></li>
                         <li><a href="{{ item.thread_url }}">{{ item.thread_title|e }}</a></li>
                         <li><a href="{{ item.post_page }}">{{ _( "Post" ) }}</a></li>
+						{% if item.sticky %}<i class="fa fa-thumb-tack"></i>&nbsp;&nbsp;{% endif %}
                         - {{ _( "posted" )}} {{ item.time_created.strftime( "%a, %d %b %Y, %H:%M:%S" )}} UTC
                         {% if item.time_updated %}- {% if item.body == deleted_post %}{{ _( "deleted" ) }}{% else %}{{ _( "edited" ) }}{% endif %} {{ item.time_updated.strftime( "%a, %d %b %Y %H:%M:%S" )}} UTC{% endif %}
                         - <a href="{{ item.post_page }}">{{ _( "permalink" ) }}</a>

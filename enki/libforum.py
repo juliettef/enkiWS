@@ -31,7 +31,7 @@ ERROR_POST_DELETION = -54
 
 forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown_escaped, forum_selected' )
 threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown_escaped, thread_selected' )
-postData = collections.namedtuple( 'postData', 'forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown_escaped' )
+postData = collections.namedtuple( 'postData', 'forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, markdown_escaped' )
 authorpostsData = collections.namedtuple( 'authorpostsData', 'forums_url, author_data, list, markdown_escaped' )
 pagination = collections.namedtuple( 'pagination', 'page_first, page_previous, page_current, page_list, page_next, page_last' )
 
@@ -139,7 +139,7 @@ def get_thread_data( thread_selected, post_requested = POST_DEFAULT, post_count 
 		for i, item in enumerate( list ):
 			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
 			item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
-			item.sticky = True if (item.sticky_order > 0) else False
+			item.sticky = True if ( item.sticky_order > 0 ) else False
 			list[ i ] = item
 	thread_data = threadData(forums_url, forum, forum_url, thread, thread_url, list, markdown_escaped, thread_selected)
 	return thread_data
@@ -224,13 +224,14 @@ def	get_post_data ( post_selected ):
 	# get a post
 	forums_url = enki.libutil.get_local_url( 'forums' )
 	post = EnkiModelPost.get_by_id( int( post_selected ))
+	sticky = True if ( post.sticky_order > 0 ) else False
 	post_page =  enki.libutil.get_local_url( 'post', { 'post': str( post.key.id())})
 	thread = EnkiModelThread.get_by_id( post.thread )
 	thread_url = enki.libutil.get_local_url( 'thread', { 'thread': str( thread.key.id())})
 	forum = EnkiModelForum.get_by_id( thread.forum )
 	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
 	author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( post.author ))
-	post_data = postData(forums_url, forum, forum_url, thread, thread_url, post, post_page, author_data, markdown_escaped, )
+	post_data = postData(forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, markdown_escaped, )
 	return post_data
 
 
@@ -251,6 +252,7 @@ def get_author_posts( author_selected ):  # MOVED TO LIB
 				item.forum_group = forum.group
 				item.forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
 				item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
+				item.sticky = True if ( item.sticky_order > 0 ) else False
 				list[ i ] = item
 		author_posts_data = authorpostsData(forums_url, author_data, list, markdown_escaped)
 		return author_posts_data
@@ -299,11 +301,11 @@ def add_thread_and_post( user_id, forum, thread_title, post_body ):
 	return result
 
 
-def add_post( user_id, thread, post_body ):
+def add_post( user_id, thread, post_body, sticky_order ):
 	result = enki.libutil.ENKILIB_OK
 	if user_id and thread and post_body:
 		if len( post_body ) <= POST_LENGTH_MAX:
-			post = EnkiModelPost( author = user_id, thread = int( thread ), body = post_body )
+			post = EnkiModelPost( author = user_id, thread = int( thread ), body = post_body, sticky_order = int( sticky_order ))
 			post.put()
 			thread_selected = ndb.Key( EnkiModelThread, int( thread )).get()
 			thread_selected.num_posts += 1
@@ -318,7 +320,7 @@ def add_post( user_id, thread, post_body ):
 	return result
 
 
-def edit_post( user_id, post_id, post_body ):
+def edit_post( user_id, post_id, post_body, sticky_order ):
 	thread = ''
 	result = enki.libutil.ENKILIB_OK
 	if user_id and post_id and post_body:
@@ -326,6 +328,7 @@ def edit_post( user_id, post_id, post_body ):
 			post = EnkiModelPost.get_by_id( int( post_id ))
 			if post:
 				post.body = post_body
+				post.sticky_order = int( sticky_order )
 				thread = str( post.thread )
 			post.put()
 		else:

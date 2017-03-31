@@ -167,9 +167,10 @@ class HandlerThread( enki.HandlerBase ):
 							if exceed > 0:
 								error_message = MSG.POST_BODY_TOO_LONG( exceed )
 					if not error_message:
+						post_sticky_order = 0 if not self.request.get( 'sticky_order' ) else int( self.request.get( 'sticky_order' ))
 						if submit_type == 'submit':
 							if enki.libforum.check_and_delete_preventmultipost_token( pmtoken ):
-								result = enki.libforum.add_post( user, thread, post_body )
+								result = enki.libforum.add_post( user, thread, post_body, post_sticky_order )
 								if result == enki.libutil.ENKILIB_OK:
 									self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_PUBLISHED())
 									post_requested = enki.libforum.get_first_post_on_page( enki.libforum.get_page( EnkiModelThread.get_by_id( int( thread )), enki.libforum.POST_LAST, int( post_count )), int( post_count ))
@@ -193,6 +194,7 @@ class HandlerThread( enki.HandlerBase ):
 				                  data = data,
 				                  pagination = pagination,
 				                  user_id = self.user_id,
+								  has_permission_sticky = enki.libuser.has_permissions( self.enki_user, [ 'PFPS' ]),
 				                  show_input = show_input,
 				                  preventmultitoken = pmtoken,
 				                  error = error_message,
@@ -226,6 +228,7 @@ class HandlerPost( enki.HandlerBase ):
 		                  not_found = not_found,
 		                  change = change,
 		                  isauthor = is_author,
+						  has_permission_sticky = enki.libuser.has_permissions(self.enki_user, [ 'PFPS' ]),
 		                  postbody = post_body,
 		                  maxpostlength = enki.libforum.POST_LENGTH_MAX )
 
@@ -267,9 +270,10 @@ class HandlerPost( enki.HandlerBase ):
 							error_message = MSG.POST_BODY_TOO_LONG( exceed )
 
 				if not error_message:
+					post_sticky_order = 0 if not self.request.get( 'sticky_order' ) else int( self.request.get( 'sticky_order' ))
 					if submit_type == 'submit':
 						self.check_CSRF()
-						result = enki.libforum.edit_post( user, post, post_body )
+						result = enki.libforum.edit_post( user, post, post_body, post_sticky_order )
 						if result[ 0 ] == enki.libutil.ENKILIB_OK:
 							self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_MODIFIED())
 							url = enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})
@@ -286,6 +290,7 @@ class HandlerPost( enki.HandlerBase ):
 				                  data = data,
 				                  change = change,
 				                  isauthor = is_author,
+								  has_permission_sticky = enki.libuser.has_permissions( self.enki_user, [ 'PFPS' ]),
 				                  error = error_message,
 				                  postbody = post_body,
 				                  maxpostlength = enki.libforum.POST_LENGTH_MAX,
