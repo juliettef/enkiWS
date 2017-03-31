@@ -9,6 +9,9 @@ from enki.extensions import ExtensionPage
 from enki.modelforum import EnkiModelForum
 from enki.modelthread import EnkiModelThread
 
+from enki.libutil import xstr as xstr
+from enki.libutil import xint as xint
+
 
 class HandlerForums( enki.HandlerBase ):
 
@@ -75,8 +78,10 @@ class HandlerForum( enki.HandlerBase ):
 
 					if not error_message_threadtitle and not error_message_postbody:
 						if submit_type == 'submit':
+							thread_sticky_order = xint( self.request.get( 'sticky_order_thread' ))
+							post_sticky_order = xint( self.request.get( 'sticky_order_post' ))
 							if enki.libforum.check_and_delete_preventmultipost_token( pmtoken ):
-								result = enki.libforum.add_thread_and_post( user_id, forum, thread_title, post_body )
+								result = enki.libforum.add_thread_and_post( user_id, forum, thread_title, thread_sticky_order, post_body, post_sticky_order )
 								if result == enki.libutil.ENKILIB_OK:
 									self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.THREAD_PUBLISHED())
 									url = enki.libutil.get_local_url( 'forum', { 'forum':forum })
@@ -98,7 +103,8 @@ class HandlerForum( enki.HandlerBase ):
 				self.render_tmpl( 'forum.html', CSRFneeded = show_input,
 				                  active_menu = 'forums',
 				                  data = enki.libforum.get_forum_data( forum ),
-				                  show_input = show_input,
+								  has_permission_sticky = enki.libuser.has_permissions(self.enki_user, [ 'PFPS', 'PFTS' ]),
+								  show_input = show_input,
 				                  preventmultitoken = pmtoken,
 				                  error_threadtitle = error_message_threadtitle,
 				                  error_postbody = error_message_postbody,
@@ -167,7 +173,7 @@ class HandlerThread( enki.HandlerBase ):
 							if exceed > 0:
 								error_message = MSG.POST_BODY_TOO_LONG( exceed )
 					if not error_message:
-						post_sticky_order = 0 if not self.request.get( 'sticky_order' ) else int( self.request.get( 'sticky_order' ))
+						post_sticky_order = xint( self.request.get( 'sticky_order' ))
 						if submit_type == 'submit':
 							if enki.libforum.check_and_delete_preventmultipost_token( pmtoken ):
 								result = enki.libforum.add_post( user, thread, post_body, post_sticky_order )
@@ -270,7 +276,7 @@ class HandlerPost( enki.HandlerBase ):
 							error_message = MSG.POST_BODY_TOO_LONG( exceed )
 
 				if not error_message:
-					post_sticky_order = 0 if not self.request.get( 'sticky_order' ) else int( self.request.get( 'sticky_order' ))
+					post_sticky_order = xint( self.request.get( 'sticky_order' ))
 					if submit_type == 'submit':
 						self.check_CSRF()
 						result = enki.libforum.edit_post( user, post, post_body, post_sticky_order )

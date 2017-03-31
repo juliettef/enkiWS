@@ -279,14 +279,14 @@ def check_and_delete_preventmultipost_token( token ):
 	return result
 
 
-def add_thread_and_post( user_id, forum, thread_title, post_body ):
+def add_thread_and_post( user_id, forum, thread_title, thread_sticky_order, post_body, post_sticky_order ):
 	result = enki.libutil.ENKILIB_OK
 	if user_id and forum and thread_title and post_body:
 		if len( thread_title ) <= THREAD_TITLE_LENGTH_MAX and len( post_body ) <= POST_LENGTH_MAX:
 			if enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( user_id ):
-				thread = EnkiModelThread( author = user_id, forum = int( forum ), title = thread_title, num_posts = 1 )
+				thread = EnkiModelThread( author = user_id, forum = int( forum ), title = thread_title, num_posts = 1, sticky_order = int( thread_sticky_order ) )
 				thread.put()
-				post = EnkiModelPost( author = user_id, body = post_body, thread = thread.key.id())
+				post = EnkiModelPost( author = user_id, body = post_body, thread = thread.key.id(), sticky_order = int( post_sticky_order ))
 				post.put()
 				forum_selected = ndb.Key( EnkiModelForum, int( forum )).get()
 				forum_selected.num_posts += 1

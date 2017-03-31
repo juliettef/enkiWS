@@ -72,6 +72,22 @@
                                                 <p class="text-info">{{ ngettext( "Maximum thread title length: %(length)s character.", "Maximum thread title length: %(length)s characters.", maxthreadtitlelength, length = maxthreadtitlelength ) }}</p>
                                             </div>
                                         </div>
+										{% if has_permission_sticky %}
+										<div class="form-group">
+											<label for="sticky_order_thread" class="col-md-1 control-label">{{ _( "Thread stickiness" ) }}</label>
+												<div class="col-md-3">
+													<select class="form-control" name="sticky_order_thread">
+														<option value="0">0 - not sticky</option>
+														<option value="1">1 - sticky</option>
+														<option value="2">2 - more sticky</option>
+														<option value="3">3 - top sticky</option>
+													</select>
+												</div>
+												<div class="col-md-5">
+													<p class="text-info">{{ _( "To make a thread sticky, pick a number greater than 0. The lager the number the topmost the stickied thread is." ) }}</p>
+												</div>
+										</div>
+										{% endif %}
                                         <div class="form-group {% if error_postbody %}has-error{% endif%}">
                                             <label for="post_body" class="col-lg-1 control-label">{{ _( "Post" ) }}</label>
                                             <div class="col-lg-11">
@@ -80,6 +96,22 @@
                                                 <p class="text-info">{{ _( "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting.", url = "https://daringfireball.net/projects/markdown/syntax" ) }} {{ ngettext( "Maximum post length: %(length)s character.", "Maximum post length: %(length)s characters.", maxpostlength, length = maxpostlength ) }}</p>
                                             </div>
                                         </div>
+										{% if has_permission_sticky %}
+										<div class="form-group">
+											<label for="sticky_order_post" class="col-md-1 control-label">{{ _( "Stickiness" ) }}</label>
+												<div class="col-md-3">
+													<select class="form-control" name="sticky_order_post">
+														<option value="0">0 - not sticky</option>
+														<option value="1">1 - sticky</option>
+														<option value="2">2 - more sticky</option>
+														<option value="3">3 - top sticky</option>
+													</select>
+												</div>
+												<div class="col-md-5">
+													<p class="text-info">{{ _( "To make a post sticky, pick a number greater than 0. The lager the number the topmost the stickied post is." ) }}</p>
+												</div>
+										</div>
+										{% endif %}
                                         <div class="form-group">
                                             <div class="col-lg-11 col-lg-offset-1">
                                                 <button class="btn btn-info" type="submit" name="submittype" value="preview">{{ _( "Preview" ) }}</button>
