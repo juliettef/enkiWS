@@ -92,3 +92,19 @@ def is_develop_server():
 		return True
 	else:
 		return False
+
+def xstr( value ):
+	if not value:
+		return ''
+	else:
+		if type( value ) is not unicode:
+			value = str( value )
+		import cgi
+		escaped = cgi.escape( value, quote = True )
+		return escaped
+
+def xint( value ):
+	if not value or not value.isdigit():
+		return 0
+	else:
+		return int( value )

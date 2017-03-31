@@ -21,6 +21,9 @@ from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 
+from enki.libutil import xstr as xstr
+from enki.libutil import xint as xint
+
 
 class HandlerStore( enki.HandlerBase ):
 
@@ -73,24 +76,6 @@ class HandlerStore( enki.HandlerBase ):
 				token_purchase.put()
 				url += '?referrer=' + token_purchase.token.encode('utf-8')
 		self.redirect( url )
-
-
-def xstr( value ):
-	if not value:
-		return ''
-	else:
-		if type( value ) is not unicode:
-			value = str( value )
-		import cgi
-		escaped = cgi.escape( value, quote = True )
-		return escaped
-
-
-def xint( value ):
-	if not value or not value.isdigit():
-		return 0
-	else:
-		return int( value )
 
 
 class HandlerGenerateLicenceFastSpring( webapp2.RequestHandler ):
