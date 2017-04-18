@@ -225,12 +225,9 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			for item in list:
 				sessions_app.append({ 'token_id' : item.key.id(), 'time_created' : item.time_created })
 
-			friends = 0
-			messages = 0
 			apps = 0
-			if not extended:
-				friends = enki.libfriends.count_EnkiFriends( self.user_id )
-				messages = enki.libmessage.count_EnkiMessage_by_recipient( self.user_id )
+			friends = enki.libfriends.count_EnkiFriends( self.user_id )
+			messages = enki.libmessage.count_EnkiMessage_by_recipient( self.user_id )
 
 			data = data( current_display_name, previous_display_names, email, has_password, has_auth_id_providers, friends, messages, sessions, sessions_app )
 			self.render_tmpl( 'profile.html',
