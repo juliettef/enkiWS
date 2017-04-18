@@ -54,11 +54,10 @@
         {% if is_logged_in %}
 	    <div class="text-right">
 			<span>
-		        <small class="text-info">{{ _( "Logged in as" ) }} </small>
 		        {% if display_name %}
-		            &nbsp;<small class="text-info"><b>{{display_name}}</b></small>
+		            <a href="{{ 'profile'|local }}" class="nochange"><small class="text-info">{{ _( "Logged in as" ) }} <b>{{display_name}}</b></small></a>
 	            {% else %}
-		            &nbsp;<a href="{{ 'displayname'|local }}" class="btn btn-info btn-xs">{{ _( "Please set up your display name" ) }}</a>
+		            <small class="text-info">{{ _( "Logged in as" ) }}</small> <a href="{{ 'displayname'|local }}" class="btn btn-info btn-xs">{{ _( "Please set up your display name" ) }}</a>
 		        {% endif %}
 				&nbsp;
             </span>
