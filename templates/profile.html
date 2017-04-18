@@ -13,74 +13,108 @@
 			{% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
-            <h1>{{ _( "Profile and settings" ) }}</h1>
+            <h1>{{ _( "Profile and account settings" ) }}</h1>
 
-	        <div>
-				<form class="form-group" action="{{ 'profile'|local }}" method="post">
-					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-					<fieldset>
-						<div class="form-group">
-							<div class="col-sm-12" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
-	                        </div>
-	                    </div>
-	                </fieldset>
-	            </form>
-	        </div>
-
+			{# <!-- Public Info --> #}
 	        <div class="well">
-				<form class="form-group" action="{{ 'profile'|local }}" method="post">
-					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-					<input type="hidden" name="anchor" value="public"><a href id="public"></a>
-					<fieldset>
-						<div class="form-group row">
-							<div class="col-sm-10">
-								<h2>{{ _( "Public info" )}}</h2>
-	                        </div>
-							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
-	                        </div>
-	                    </div>
-	                </fieldset>
-	            </form>
-	            {% if not data.current_display_name %}
-	                <div><p class="text-info">{{ _( "Your display name is your public Id. You need a display name to post in the forums, invite friends and join games." )}}</p>
-	                    <a href="{{ 'displayname'|local }}" class="btn btn-info">{{ _( "Set display name" ) }}</a></div>
-	            {% else %}
-			        {% if extended %}
-		                <p>{{ _( "Current display name:" )}} {{ data.current_display_name.display_name }} &nbsp;<a href="{{ 'displayname'|local }}" class="btn btn-default btn-xs">{{ _( "Change display Name" ) }}</a></p>
-		                {% if data.previous_display_names %}
-		                    <p>{{ ngettext( "Past display name:", "Past display names:", data.previous_display_names | count ) }} {{ data.previous_display_names | join(', ') }}</p>
-		                {% endif %}
-		                <p>{{ _( "Public user profile and forum posts:" )}} <a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
-		                <p>{{ _( "User Id:" )}} {{ data.current_display_name.user_id }}</p>
-			        {% else %}
-				        <p>{{ data.current_display_name.display_name }}</p>
-		                <p><a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
-			        {% endif %}
-	            {% endif %}
-	        </div>
-
-	        <div class="well">
-			    <form class="form-group" action="{{ 'profile'|local }}" method="post">
-					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-					<input type="hidden" name="anchor" value="account"><a href id="account"></a>
-					<fieldset>
-						<div class="form-group row">
-							<div class="col-sm-10">
-								<h2>{{ _( "Account Settings" )}}</h2>
-	                        </div>
-							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs disabled" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
-	                        </div>
-	                    </div>
-	                </fieldset>
-	            </form>
-	            <a href="{{ 'accountconnect'|local }}" class="btn btn-default">{{ _( "Email, Password and Connected Accounts" ) }}</a>
-                <a href="{{ 'accountdelete'|local }}" class="btn btn-default">{{ _( "Delete account" )}}</a>
+				<h2><a href id="public"></a>{{ _( "Public profile" )}}</h2>
+				<div class="panel panel-default">
+					{% if data.current_display_name %}
+					<div class="panel-heading">
+						<h4>{{ _("Public page") }} &nbsp;&nbsp;&nbsp;<a href="{{ data.current_display_name.user_page }}" class="btn btn-default btn-sm">{{ _( "View" ) }}</a></h4>
+					</div>
+					<div class="panel-body">
+						<p><b>{{ _( "User Id" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ data.current_display_name.user_id }}</p>
+		                <p><b>{{ _( "Public page link" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b><a href = "{{ data.current_display_name.user_page }}">{{ data.current_display_name.user_page }}</a></p>
+					</div>
+					{% endif %}
+					<div class="panel-heading">
+						<h4>{{ _("Display Name") }} &nbsp;&nbsp;&nbsp;<a href="{{ 'displayname'|local }}" class="btn btn-default btn-sm">{{ _( "Change" ) }}</a></h4>
+					</div>
+					<div class="panel-body">
+						{% if not data.current_display_name %}
+							<div><p class="text-info">{{ _( "Your display name is your public Id. You need a display name to post in the forums, invite friends and join games." )}}</p>
+							<a href="{{ 'displayname'|local }}" class="btn btn-info">{{ _( "Set display name" ) }}</a></div>
+						{% else %}
+							<p><b>{{ _( "Current" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ data.current_display_name.display_name }}</p>
+							{% if data.previous_display_names %}
+							<p><b>{{ ngettext( "Previous", "Previous", data.previous_display_names | count ) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ data.previous_display_names | join(', ') }}</p>
+							{% endif %}
+						{% endif %}
+					</div>
+				</div>
 			</div>
 
+
+			{# <!-- Private Info --> #}
 	        <div class="well">
+				<h2><a href id="account"></a>{{ _( "Account" )}}</h2>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>{{ _("Authentication") }} &nbsp;&nbsp;&nbsp;<a href="{{ 'accountconnect'|local }}" class="btn btn-default btn-sm">{{ _( "Change" ) }}</a></h4>
+					</div>
+					<div class="panel-body">
+						<p><b>{{ _( "Email" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+							{% if data.email %}
+								{{ data.email }}
+							{% else %}
+								{{ _( "Not set" ) }}
+							{% endif %}
+						</p>
+						<p><b>{{ _( "Password" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+							{% if data.has_password %}
+								{{ _( "Enabled" ) }}
+							{% else %}
+								{{ _( "Not set" ) }}
+							{% endif %}
+						</p>
+						<p><b>{{ _( "Third party authentication" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+							{% if data.has_auth_id_providers %}
+								{{ _( "Enabled" ) }}
+							{% else %}
+								{{ _( "Not set" ) }}
+							{% endif %}
+						</p>
+					</div>
+				</div>
+
+                <a href="{{ 'accountdelete'|local }}" class="btn btn-default">{{ _( "Delete my account" )}}</a>
+			</div>
+
+
+			{# <!-- Friends --> #}
+	        <div class="well">
+		        <form class="form-group" action="{{ 'profile'|local }}" method="post">
+					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+					<input type="hidden" name="anchor" value="friends"><a href id="friends"></a>
+					<fieldset>
+						<div class="form-group row">
+							<div class="col-sm-10">
+								<h2>{{ _( "Friends" )}}</h2>
+	                        </div>
+							<div class="col-sm-2" align="right">
+								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
+	                        </div>
+	                    </div>
+	                </fieldset>
+	            </form>
+		        {% if extended %}
+		            <span>
+			            <a href="{{ 'friends'|local }}" class="btn btn-default">{{ _( "Friends" ) }}</a>
+			            <a href="{{ 'messages'|local }}" class="btn btn-default">{{ _( "Messages" ) }}</a>
+			        </span>
+		        {% else %}
+		                <p>{{ data.friends }} {{ ngettext( "friend", "friends", data.sessions | count ) }}</p>
+		                <p>{{ data.messages }} {{ ngettext( "message", "messages", data.sessions | count ) }}</p>
+		        {% endif %}
+			</div>
+
+			{# <!-- Library --> #}
+			{# <!-- Connected Applications --> #}
+            {% include "incpageextensions.html" %}
+
+			{# <!-- Connected Browsers and Applications --> #}
+			<div class="well">
 			    <form class="form-group" action="{{ 'profile'|local }}" method="post">
 					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 					<input type="hidden" name="anchor" value="connect"><a href id="connect"></a>
@@ -133,34 +167,6 @@
 		            {% endif %}
 		        {% endif %}
 	        </div>
-
-	        <div class="well">
-		        <form class="form-group" action="{{ 'profile'|local }}" method="post">
-					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-					<input type="hidden" name="anchor" value="friends"><a href id="friends"></a>
-					<fieldset>
-						<div class="form-group row">
-							<div class="col-sm-10">
-								<h2>{{ _( "Friends" )}}</h2>
-	                        </div>
-							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
-	                        </div>
-	                    </div>
-	                </fieldset>
-	            </form>
-		        {% if extended %}
-		            <span>
-			            <a href="{{ 'friends'|local }}" class="btn btn-default">{{ _( "Friends" ) }}</a>
-			            <a href="{{ 'messages'|local }}" class="btn btn-default">{{ _( "Messages" ) }}</a>
-			        </span>
-		        {% else %}
-		                <p>{{ data.friends }} {{ ngettext( "friend", "friends", data.sessions | count ) }}</p>
-		                <p>{{ data.messages }} {{ ngettext( "message", "messages", data.sessions | count ) }}</p>
-		        {% endif %}
-			</div>
-
-            {% include "incpageextensions.html" %}
 
             {% include "incfooter.html" %}
         </div>

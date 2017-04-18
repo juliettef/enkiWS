@@ -190,7 +190,9 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 		if self.ensure_is_logged_in():
 			extended = True if self.request.get( 'extended' ) == 'True' else False
 
-			data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, friends, messages, sessions, sessions_app' )
+			data = collections.namedtuple( 'data', '''current_display_name, previous_display_names,
+													email, has_password, has_auth_id_providers
+												   friends, messages, sessions, sessions_app''' )
 
 			current_display_name = ''
 			previous_display_names = ''
@@ -198,6 +200,16 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			if user_display_name:
 				current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
 				previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
+
+			email = self.enki_user.email
+			if email == 'removed':
+				email = ''
+			has_password = False
+			if self.enki_user.password:
+				has_password = True
+			has_auth_id_providers = False
+			if self.enki_user.auth_ids_provider:
+				has_auth_id_providers = True
 
 			sessions = []
 			current_token = self.session.get( 'auth_token' )
@@ -220,7 +232,7 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 				friends = enki.libfriends.count_EnkiFriends( self.user_id )
 				messages = enki.libmessage.count_EnkiMessage_by_recipient( self.user_id )
 
-			data = data( current_display_name, previous_display_names, friends, messages, sessions, sessions_app )
+			data = data( current_display_name, previous_display_names, email, has_password, has_auth_id_providers, friends, messages, sessions, sessions_app )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
 			                  extended = extended,

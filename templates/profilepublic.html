@@ -20,7 +20,7 @@
 	            {% else %}
 	                <h3>{{ _( "User" ) }} {{ display_name_data.entity.display_name }}</h3>
 	                {% if display_name_data.list %}
-	                    <p>{{ ngettext( "Past display name:", "Past display names:", display_name_data.list | count ) }} {{ display_name_data.list | join(', ') }}</p>
+	                    <p><b>{{ ngettext( "Previous display name", "Previous display names", display_name_data.list | count ) }} &nbsp;&nbsp;&nbsp;</b>{{ display_name_data.list | join(', ') }}</p>
 	                {% endif %}
 	            {% endif %}
 	        {% endif %}
