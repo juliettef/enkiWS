@@ -211,6 +211,9 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			if self.enki_user.auth_ids_provider:
 				has_auth_id_providers = True
 
+			friends = enki.libfriends.count_EnkiFriends(self.user_id)
+			messages = enki.libmessage.count_EnkiMessage_by_recipient(self.user_id)
+
 			sessions = []
 			current_token = self.session.get( 'auth_token' )
 			auth_tokens = enki.libuser.fetch_AuthTokens( self.user_id )
@@ -224,9 +227,6 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			list = EnkiModelRestAPITokenVerify.fetch_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
 			for item in list:
 				sessions_app.append({ 'token_id' : item.key.id(), 'time_created' : item.time_created })
-
-			friends = enki.libfriends.count_EnkiFriends( self.user_id )
-			messages = enki.libmessage.count_EnkiMessage_by_recipient( self.user_id )
 
 			data = data( current_display_name, previous_display_names,
 						 email, has_password, has_auth_id_providers,
