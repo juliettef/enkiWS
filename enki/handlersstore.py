@@ -223,7 +223,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			self.redirect_to_relevant_page()
 
 
-class HandlerGenerateLicenceFree(enki.HandlerBase):
+class HandlerGenerateLicenceFree( enki.HandlerBase ):
 
 	def post( self ):
 		self.check_CSRF()
@@ -291,30 +291,9 @@ class ExtensionPageLibrary( ExtensionPage ):
 	def get_data( self, handler ):
 		if handler.ensure_is_logged_in():
 			user_id = handler.enki_user.key.id()
-			licences_to_activate = []
-			# licences purchased by the user, available to activate or give. The user can only activate one licence per product. Licences activated by another user don't appear.
-			licences_to_give = []
-			# licences purchased by the user, available to give only as the user already activated a licence for the same product.
-			licences_activated = []
-			# licences activated byt the user (user purchased or received as gift).
-			list_purchased = enki.libstore.fetch_EnkiProductKey_by_purchaser( user_id )
-			if list_purchased:
-				for i, item in enumerate( list_purchased ):
-					item_licence_key = enki.libstore.insert_dashes_5_10( item.licence_key )
-					product_already_owned = enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name )
-					if item.activated_by_user == -1 :
-						if not product_already_owned:
-							licences_to_activate.append([ item.product_name , item_licence_key, settings.product_displayname[ item.product_name ]])
-						else:
-							licences_to_give.append([ item.product_name , item_licence_key, settings.product_displayname[ item.product_name ]])
-			list_activated = enki.libstore.fetch_EnkiProductKey_by_activator( user_id )
-			if list_activated:
-				for i, item in enumerate( list_activated ):
-					item_licence_key = enki.libstore.insert_dashes_5_10( item.licence_key )
-					licences_activated.append([ item.product_name , item_licence_key, settings.product_displayname[ item.product_name ]])
-			error = handler.session.pop( 'error_library', None )
-			licence_key_value = handler.session.pop( 'error_library_licence', None )
-			data = [ error, licences_to_activate, licences_to_give, licences_activated, licence_key_value ]
+			licences_activated =  enki.libstore.count_EnkiProductKey_by_activator( user_id )
+			licences_available_to_activate = enki.libstore.count_EnkiProductKey_by_purchaser( user_id ) - licences_activated
+			data = [ licences_available_to_activate, licences_activated ]
 			return data
 
 

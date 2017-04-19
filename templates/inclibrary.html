@@ -1,81 +1,24 @@
 <div class="well">
-	<form class="form-group" action="{{ 'profile'|local }}" method="post">
-		<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-		<input type="hidden" name="anchor" value="library"><a href id="library"></a>
-		<fieldset>
-			<div class="form-group row">
-				<div class="col-sm-10">
-					<h2>{{ _( "Library" )}}</h2>
-                </div>
-				<div class="col-sm-2" align="right">
-					<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
-                </div>
-            </div>
-        </fieldset>
-    </form>
-	{% if extended %}
-	{% if data[ 1 ] %}
-		<h3>{{ ngettext( "Available to activate or give", "Available to activate or give", data[ 1 ]|count ) }}</h3>
-		<form class="form-group" action="{{ 'library'|local  }}" method="post">
-			<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-			{% for item in data[ 1 ] %}
-				<p>{{ item[ 2 ] }} - {{ item[ 1 ] }}
-                    &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="licence_key_preset" value="{{ item[ 1 ] }}">{{ _( "Activate licence" )}}</button>
-				</p>
-			{% endfor %}
-		</form>
-	{% endif %}
-	{% if data[ 2 ] %}
-		<h3>{{ ngettext( "Available to give", "Available to give", data[ 2 ]|count ) }}</h3>
-		{% for item in data[ 2 ] %}
-			<p>{{ item[ 2 ] }} - {{ item[ 1 ] }}</p>
-		{% endfor %}
-	{% endif %}
-	{% if data[ 3 ] %}
-		<h3>{{ ngettext( "Activated", "Activated", data[ 3 ]|count ) }}</h3>
-		{% for item in data[ 3 ] %}
-			<p>{{ item[ 2 ] }} - {{ item[ 1 ] }}</p>
-		{% endfor %}
-	{% endif %}
-
-    <div class="well bs-component">
-    <form class="form-horizontal" action="{{ 'library'|local }}" method="post">
-        <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-        <fieldset>
-
-            <legend>{{ _( "Activate a licence" ) }}</legend>
-
-            <div class="form-group {% if data[ 0 ] %}has-error{% endif%}">
-                <label for="licence_key_manual" class="col-lg-2 control-label">{{ _( "Licence key" ) }}</label>
-                 <div class="col-lg-10">
-                     <input class="form-control" type="text" name="licence_key_manual" placeholder="{{ _( "XXXXX-XXXXX-XXXXX" ) }}" {% if data[ 4 ] %}value = "{{ data[ 4 ]|e }}"{% endif %} maxlength="24" />
-                     {% if data[ 0 ] %}<label class="control-label">{{ data[ 0 ] }}</label>{% endif%}
-	                 <p class="text-info">{{ _( "The licence key is a string of 15 alphanumeric characters, with or without dashes, e.g. 9CNJ5FLYH87HRZ1 and 9CNJ5-FLYH8-7HRZ1 are equally valid." ) }}</p>
-                 </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-2">
-                    <button class="btn btn-primary" type="submit" >{{ _( "Activate" ) }}</button>
-                </div>
-            </div>
-
-        </fieldset>
-    </form>
+	<h2><a href id="account"></a>{{ _( "Library" )}}</h2>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4>{{ _("Licences") }} &nbsp;&nbsp;&nbsp;<a href="{{ 'library'|local }}" class="btn btn-default btn-sm">{{ _( "Manage" ) }}</a></h4>
+		</div>
+		<div class="panel-body">
+			<p><b>{{ _( "Available to activate and/or give" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+				{% if data[ 0 ] %}
+					{{ data[ 0 ] }}
+				{% else %}
+					{{ _( "None" ) }}
+				{% endif %}
+			</p>
+			<p><b>{{ _( "Activated" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+				{% if data[ 1 ] %}
+					{{ data[ 1 ] }}
+				{% else %}
+					{{ _( "None" ) }}
+				{% endif %}
+			</p>
+		</div>
 	</div>
-
-	{% else %}
-        {% if data[ 1 ] %}
-            <p>{{ data[ 1 ]|length }} licences available to activate or give</p>
-        {% endif %}
-        {% if data[ 2 ] %}
-            <p>{{ data[ 2 ]|length }} licences available to give</p>
-        {% endif %}
-		{% if data[ 3 ] %}
-            <p>{{ data[ 3 ]|length }} licences activated</p>
-        {% endif %}
-		{% if not data[ 1 ] and not data[ 2 ] and not data[ 3 ] %}
-			<p>0 licences</p>
-        {% endif %}
-    {% endif %}
 </div>
