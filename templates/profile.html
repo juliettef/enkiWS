@@ -51,7 +51,7 @@
 				<h2><a href id="account"></a>{{ _( "Account" )}}</h2>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h4>{{ _("Authentication") }} &nbsp;&nbsp;&nbsp;<a href="{{ 'accountconnect'|local }}" class="btn btn-default btn-sm">{{ _( "Change" ) }}</a></h4>
+						<h4>{{ _("Authentication") }} &nbsp;&nbsp;&nbsp;<a href="{{ 'accountconnect'|local }}" class="btn btn-default btn-sm">{{ _( "Manage" ) }}</a></h4>
 					</div>
 					<div class="panel-body">
 						<p><b>{{ _( "Email" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
@@ -141,7 +141,7 @@
 		                        <p>
 		                            {{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
 			                        {% if session[ 'current' ] %}
-			                            &nbsp;<button class="btn btn-default disabled btn-xs" }}">{{ _( "Current session" ) }}</button>
+			                            &nbsp;<button class="btn btn-default disabled btn-xs">{{ _( "Current session" ) }}</button>
 			                        {% else %}
 		                                &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect" value="{{ session[ 'tokenauth_id' ] }}">{{ _( "Disconnect" ) }}</button>
 			                        {% endif %}
