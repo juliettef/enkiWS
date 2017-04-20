@@ -292,7 +292,7 @@ class ExtensionPageLibrary( ExtensionPage ):
 		if handler.ensure_is_logged_in():
 			user_id = handler.enki_user.key.id()
 			licences_activated =  enki.libstore.count_EnkiProductKey_by_activator( user_id )
-			licences_available_to_activate = enki.libstore.count_EnkiProductKey_by_purchaser( user_id ) - licences_activated
+			licences_available_to_activate = enki.libstore.count_EnkiProductKey_by_purchaser_not_activated( user_id )
 			data = [ licences_available_to_activate, licences_activated ]
 			return data
 

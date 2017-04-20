@@ -74,11 +74,6 @@ def fetch_EnkiProductKey_by_activator( user_id ):
 	return list
 
 
-def count_EnkiProductKey_by_purchaser( user_id ):
-	count = EnkiModelProductKey.query( EnkiModelProductKey.purchaser_user_id == user_id ).count()
-	return count
-
-
 def count_EnkiProductKey_by_activator( user_id ):
 	count = EnkiModelProductKey.query( EnkiModelProductKey.activated_by_user == user_id ).count()
 	return count
@@ -106,6 +101,12 @@ def exist_EnkiProductKey_by_purchaser_not_activated( user_id ):
 	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.purchaser_user_id == user_id,
 												EnkiModelProductKey.activated_by_user == -1 )).count( 1 )
 	return count > 0
+
+
+def count_EnkiProductKey_by_purchaser_not_activated( user_id ):
+	count = EnkiModelProductKey.query( ndb.AND( EnkiModelProductKey.purchaser_user_id == user_id,
+												EnkiModelProductKey.activated_by_user == -1)).count()
+	return count
 
 
 def count_EnkiProductKey_by_shop_name_order_type_activated( shop_name, order_type ):
