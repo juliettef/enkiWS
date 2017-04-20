@@ -297,67 +297,103 @@ class ExtensionPageLibrary( ExtensionPage ):
 			return data
 
 
-class HandlerLibrary( enki.HandlerBase ):
+class HandlerLibrary( enki.HandlerBaseReauthenticate ):
 
-	def post( self ):
-		if self.ensure_is_logged_in():
-			self.check_CSRF()
-			user_id = self.enki_user.key.id()
-			if self.get_backoff_timer( str( user_id ), True ) == 0:
-				licence_key_preset = self.request.get( 'licence_key_preset' ).strip()[:( enki.libstore.LICENCE_KEY_DASHES_LENGTH + 4 )] # 4 allows for some leading and trailing characters
-				licence_key_manual = self.request.get( 'licence_key_manual' ).strip()[:( enki.libstore.LICENCE_KEY_DASHES_LENGTH + 4 )]
-				licence_key = licence_key_manual
-				is_manual = True
-				if licence_key_preset and not licence_key_manual:
-					licence_key = licence_key_preset
-					is_manual = False
-				if licence_key:
-					if len( licence_key ) <= ( enki.libstore.LICENCE_KEY_DASHES_LENGTH ):
-						licence_key_reduced = re.sub( r'[^\w]', '', licence_key )[:enki.libstore.LICENCE_KEY_LENGTH ]
-						item = enki.libstore.get_EnkiProductKey_by_licence_key( licence_key_reduced )
-						if not item:
-							if is_manual:
-								self.session[ 'error_library' ] = MSG.LICENCE_INVALID()
-								self.session[ 'error_library_licence' ] = licence_key
-						elif item:
-							licence_key_formatted = enki.libstore.insert_dashes_5_10( licence_key_reduced )
-							if item.activated_by_user == -1 :
-								# the licence key is not activated.
-								if enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name ):
-									# the user has already activated a key for the same product
-									if is_manual:
-										self.session[ 'error_library' ] = MSG.LICENCE_ALREADY_ACTIVATED_GIVE( settings.product_displayname[ item.product_name ])
-										self.session[ 'error_library_licence' ] = licence_key_formatted
-								else:
-									# activate the licence
-									item.activated_by_user = user_id
-									item.put()
-									self.remove_backoff_timer( str( user_id ))
-									self.add_infomessage( 'success', MSG.SUCCESS(), MSG.PRODUCT_LICENCE_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
-							elif item.activated_by_user == user_id:
-								# the user has already activated this specific key
+	def get_logged_in( self ):
+		self.render_tmpl( 'library.html',
+						  active_menu = 'profile',
+						  data = self.get_data())
+
+	def post_reauthenticated( self, params ):
+		licence_key_preset = params.get( 'licence_key_preset' )
+		licence_key_manual = params.get( 'licence_key_manual' )
+		user_id = self.enki_user.key.id()
+		if self.get_backoff_timer( str( user_id ), True ) == 0:
+			licence_key_preset = licence_key_preset.strip()[ :( enki.libstore.LICENCE_KEY_DASHES_LENGTH + 4 )] if licence_key_preset else '' # 4 allows for some leading and trailing characters
+			licence_key_manual = licence_key_manual.strip()[ :( enki.libstore.LICENCE_KEY_DASHES_LENGTH + 4 )] if licence_key_manual else ''
+			licence_key = licence_key_manual
+			is_manual = True
+			if licence_key_preset and not licence_key_manual:
+				licence_key = licence_key_preset
+				is_manual = False
+			if licence_key:
+				if len( licence_key ) <= ( enki.libstore.LICENCE_KEY_DASHES_LENGTH ):
+					licence_key_reduced = re.sub( r'[^\w]', '', licence_key )[:enki.libstore.LICENCE_KEY_LENGTH ]
+					item = enki.libstore.get_EnkiProductKey_by_licence_key( licence_key_reduced )
+					if not item:
+						if is_manual:
+							self.session[ 'error_library' ] = MSG.LICENCE_INVALID()
+							self.session[ 'error_library_licence' ] = licence_key
+					elif item:
+						licence_key_formatted = enki.libstore.insert_dashes_5_10( licence_key_reduced )
+						if item.activated_by_user == -1 :
+							# the licence key is not activated.
+							if enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name ):
+								# the user has already activated a key for the same product
 								if is_manual:
-									self.session[ 'error_library' ] = MSG.PRODUCT_ALREADY_ACTIVATED( settings.product_displayname[ item.product_name ])
+									self.session[ 'error_library' ] = MSG.LICENCE_ALREADY_ACTIVATED_GIVE( settings.product_displayname[ item.product_name ])
 									self.session[ 'error_library_licence' ] = licence_key_formatted
-								else:
-									self.add_infomessage( 'info', MSG.INFORMATION(), MSG.PRODUCT_ALREADY_ACTIVATED( settings.product_displayname[ item.product_name ]))
 							else:
-								# another user has activated the key
-								if is_manual:
-									self.session[ 'error_library' ] = MSG.LICENCE_ANOTHER_USER_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted )
-									self.session[ 'error_library_licence' ] = licence_key_formatted
-								else:
-									self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LICENCE_ANOTHER_USER_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
+								# activate the licence
+								item.activated_by_user = user_id
+								item.put()
+								self.remove_backoff_timer( str( user_id ))
+								self.add_infomessage( 'success', MSG.SUCCESS(), MSG.PRODUCT_LICENCE_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
+						elif item.activated_by_user == user_id:
+							# the user has already activated this specific key
+							if is_manual:
+								self.session[ 'error_library' ] = MSG.PRODUCT_ALREADY_ACTIVATED( settings.product_displayname[ item.product_name ])
+								self.session[ 'error_library_licence' ] = licence_key_formatted
+							else:
+								self.add_infomessage( 'info', MSG.INFORMATION(), MSG.PRODUCT_ALREADY_ACTIVATED( settings.product_displayname[ item.product_name ]))
+						else:
+							# another user has activated the key
+							if is_manual:
+								self.session[ 'error_library' ] = MSG.LICENCE_ANOTHER_USER_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted )
+								self.session[ 'error_library_licence' ] = licence_key_formatted
+							else:
+								self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LICENCE_ANOTHER_USER_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
+				else:
+					self.session[ 'error_library' ] = MSG.LICENCE_TOO_LONG()
+					self.session[ 'error_library_licence' ] = licence_key
+			elif is_manual:
+				self.session[ 'error_library' ] = MSG.LICENCE_MISSING()
+		else:
+			backoff_timer = self.get_backoff_timer( str( user_id ))
+			if backoff_timer != 0:
+				self.session[ 'error_library' ] = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
+
+		self.render_tmpl('library.html',
+						 active_menu = 'profile',
+						 data = self.get_data())
+
+	def get_data( self ):
+		user_id = self.enki_user.key.id()
+		licences_to_activate = []
+		# licences purchased by the user, available to activate or give. The user can only activate one licence per product. Licences activated by another user don't appear.
+		licences_to_give = []
+		# licences purchased by the user, available to give only as the user already activated a licence for the same product.
+		licences_activated = []
+		# licences activated byt the user (user purchased or received as gift).
+		list_purchased = enki.libstore.fetch_EnkiProductKey_by_purchaser( user_id )
+		if list_purchased:
+			for i, item in enumerate( list_purchased ):
+				item_licence_key = enki.libstore.insert_dashes_5_10( item.licence_key )
+				product_already_owned = enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name )
+				if item.activated_by_user == -1:
+					if not product_already_owned:
+						licences_to_activate.append([ item.product_name, item_licence_key, settings.product_displayname[ item.product_name ]])
 					else:
-						self.session[ 'error_library' ] = MSG.LICENCE_TOO_LONG()
-						self.session[ 'error_library_licence' ] = licence_key
-				elif is_manual:
-					self.session[ 'error_library' ] = MSG.LICENCE_MISSING()
-			else:
-				backoff_timer = self.get_backoff_timer( str( user_id ))
-				if backoff_timer != 0:
-					self.session[ 'error_library' ] = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
-			self.redirect_to_relevant_page()
+						licences_to_give.append([ item.product_name, item_licence_key, settings.product_displayname[ item.product_name ]])
+		list_activated = enki.libstore.fetch_EnkiProductKey_by_activator(user_id)
+		if list_activated:
+			for i, item in enumerate( list_activated ):
+				item_licence_key = enki.libstore.insert_dashes_5_10(item.licence_key)
+				licences_activated.append([ item.product_name, item_licence_key, settings.product_displayname[ item.product_name ]])
+		error = self.session.pop( 'error_library', None )
+		licence_key_value = self.session.pop( 'error_library_licence', None )
+		data = [ error, licences_to_activate, licences_to_give, licences_activated, licence_key_value ]
+		return data
 
 
 class ExtensionStore( Extension ):
