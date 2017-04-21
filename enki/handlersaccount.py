@@ -188,12 +188,9 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 
 	def get( self ):
 		if self.ensure_is_logged_in():
-			extended = True if self.request.get( 'extended' ) == 'True' else False
-
 			data = collections.namedtuple( 'data', '''current_display_name, previous_display_names,
 													email, has_password, has_auth_id_providers
 												   friends, messages, sessions, sessions_app''' )
-
 			current_display_name = ''
 			previous_display_names = ''
 			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
@@ -233,25 +230,50 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 						 friends, messages, sessions, sessions_app )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
-			                  extended = extended,
 			                  data = data )
 
-	def post( self ):
-		if self.ensure_is_logged_in():
-			self.check_CSRF()
-			anchor = self.request.get( 'anchor', '' )
-			extended = 'True' if self.request.get( 'extended' ) == 'True' else 'False'
-			disconnect_session_token = self.request.get( 'disconnect' )
-			disconnect_app_token = self.request.get( 'disconnect_app' )
-			if disconnect_session_token:
-				enki.libuser.delete_session_token_auth( disconnect_session_token )
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_SESSION())
-				extended = 'True'
-			elif disconnect_app_token:
-				EnkiModelRestAPITokenVerify.delete_token_by_id( disconnect_app_token )
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_APP())
-				extended = 'True'
-			self.redirect( enki.libutil.get_local_url( 'profile', { 'extended' : extended, '_fragment' : anchor }))
+
+class HandlerSessions( enki.HandlerBaseReauthenticate ):
+
+	def get_logged_in( self ):
+		data = self.get_data()
+		self.render_tmpl( 'sessions.html',
+						  active_menu = 'profile',
+						  data = self.get_data())
+
+	def post_reauthenticated( self, params ):
+		self.check_CSRF()
+		token_disconnect_browser = params.get( 'disconnect_browser' )
+		token_disconnect_app = params.get( 'disconnect_app' )
+		if token_disconnect_browser:
+			enki.libuser.delete_session_token_auth( token_disconnect_browser )
+			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_SESSION())
+		elif token_disconnect_app:
+			EnkiModelRestAPITokenVerify.delete_token_by_id( token_disconnect_app )
+			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_APP())
+		self.render_tmpl( 'sessions.html',
+						  active_menu = 'profile',
+						  data = self.get_data())
+
+	def get_data( self ):
+		data = collections.namedtuple( 'data', '''sessions_browsers, sessions_apps''')
+
+		sessions_browsers = []
+		current_token = self.session.get( 'auth_token' )
+		auth_tokens = enki.libuser.fetch_AuthTokens( self.user_id )
+		for item in auth_tokens:
+			current = False
+			if current_token == item.token:
+				current = True
+			sessions_browsers.append({ 'tokenauth_id':item.key.id(), 'time_created':item.time_created, 'current':current })
+
+		sessions_apps = []
+		list = EnkiModelRestAPITokenVerify.fetch_by_user_id_type(user_id = self.user_id, type = 'apiconnect')
+		for item in list:
+			sessions_apps.append({ 'token_id':item.key.id(), 'time_created':item.time_created })
+
+		data = [ sessions_browsers, sessions_apps ]
+		return data
 
 
 class HandlerProfilePublic( enki.HandlerBase ):
@@ -878,4 +900,5 @@ routes_account = [ webapp2.Route( '/login', HandlerLogin, name = 'login' ),
 		           webapp2.Route( '/er/<rollbacktoken>', HandlerEmailRollback, name = 'emailrollback' ),
 		           webapp2.Route( '/accountdelete', HandlerAccountDelete, name = 'accountdelete' ),
 		           webapp2.Route( '/ad/<verifytoken>', HandlerAccountDeleteConfirm, name = 'accountdeleteconfirm' ),
+				   webapp2.Route( '/sessions', HandlerSessions, name = 'sessions' ),
 				   ]

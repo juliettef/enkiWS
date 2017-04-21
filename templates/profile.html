@@ -15,6 +15,7 @@
 
             <h1>{{ _( "Profile and account settings" ) }}</h1>
 
+
 			{# <!-- Public Info --> #}
 	        <div class="well">
 				<h2><a href id="public"></a>{{ _( "Public profile" )}}</h2>
@@ -83,7 +84,7 @@
 
 			{# <!-- Friends --> #}
 	        <div class="well">
-				<h2>{{ _( "Friends and Messaging" )}}</h2>
+				<h2><a href id="friends"></a>{{ _( "Friends and Messaging" )}}</h2>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h4>{{ _("Friends") }} &nbsp;&nbsp;&nbsp;<a href="{{ 'friends'|local }}" class="btn btn-default btn-sm">{{ _( "Manage" ) }}</a></h4>
@@ -117,60 +118,33 @@
 			{# <!-- Applications --> #}
             {% include "incpageextensions.html" %}
 
-			{# <!-- Connected Browsers and Applications --> #}
-			<div class="well">
-			    <form class="form-group" action="{{ 'profile'|local }}" method="post">
-					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-					<input type="hidden" name="anchor" value="connect"><a href id="connect"></a>
-					<fieldset>
-						<div class="form-group row">
-							<div class="col-sm-10">
-								<h2>{{ _( "Connected Applications" )}}</h2>
-	                        </div>
-							<div class="col-sm-2" align="right">
-								<button class="btn btn-default btn-xs" type="submit" name="extended" value={% if extended %}False>{{ _( "Hide" ) }}{% else %}True>{{ _( "Show" ) }}{% endif %}</button>
-	                        </div>
-	                    </div>
-	                </fieldset>
-	            </form>
-		        {% if extended %}
-		            {% if data.sessions %}
-		                <h3>{{ _( "Browser sessions" ) }}</h3>
-		                <form class="form-group" action="{{ 'profile'|local }}" method="post">
-		                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-		                    {% for session in data.sessions %}
-		                        <p>
-		                            {{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
-			                        {% if session[ 'current' ] %}
-			                            &nbsp;<button class="btn btn-default disabled btn-xs">{{ _( "Current session" ) }}</button>
-			                        {% else %}
-		                                &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect" value="{{ session[ 'tokenauth_id' ] }}">{{ _( "Disconnect" ) }}</button>
-			                        {% endif %}
-		                        </p>
-		                    {% endfor %}
-		                </form>
-		            {% endif %}
-		            {% if data.sessions_app %}
-			            <h3>{{ _( "Apps" ) }}</h3>
-			            <form class="form-group" action="{{ 'profile'|local }}" method="post">
-			                <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-			                {% for session_app in data.sessions_app %}
-			                    <p>
-			                        {{ _( "Connected" ) }} {{ session_app[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
-			                        &nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect_app" value="{{ session_app[ 'token_id' ] }}">{{ _( "Disconnect" ) }}</button>
-			                    </p>
-			                {% endfor %}
-			            </form>
-		            {% endif %}
-		        {% else %}
-		            {% if data.sessions %}
-		                <p>{{ data.sessions|length }} {{ ngettext( "browser session", "browser sessions", data.sessions | count ) }}</p>
-		            {% endif %}
-		            {% if data.sessions_app %}
-		                <p>{{ data.sessions_app|length }} apps</p>
-		            {% endif %}
-		        {% endif %}
-	        </div>
+
+			{# <!-- Sessions --> #}
+	        <div class="well">
+				<h2><a href id="sessions"></a>{{ _( "Sessions" )}}</h2>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>{{ _( "Connected sessions" ) }} &nbsp;&nbsp;&nbsp;<a href="{{ 'sessions'|local }}" class="btn btn-default btn-sm">{{ _( "Manage" ) }}</a></h4>
+					</div>
+					<div class="panel-body">
+						<p><b>{{ _( "Browser sessions" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+							{% if data.sessions %}
+								{{ data.sessions|length }}
+							{% else %}
+								{{ _( "None" ) }}
+							{% endif %}
+						</p>
+						<p><b>{{ _( "Apps sessions" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+							{% if data.sessions_app %}
+								{{ data.sessions_app|length }}
+							{% else %}
+								{{ _( "None" ) }}
+							{% endif %}
+						</p>
+					</div>
+				</div>
+			</div>
+
 
             {% include "incfooter.html" %}
         </div>
