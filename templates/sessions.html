@@ -15,21 +15,12 @@
 
 			<h1>{{ _( "Sessions" )}}</h1>
 
-			<div class="well bs-component">
-				<form class="form-horizontal" action="{{ 'sessions'|local }}" method="post">
-
-					<fieldset>
-					</fieldset>
-				</form>
-			</div>
-
-			{% if data[ 0 ] %}
-				<h2>{{ _( "Browser sessions" ) }}</h2>
+			{% if data.sessions_browsers %}
 				<form class="form-group" action="{{ 'sessions'|local }}" method="post">
 					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-					{% for session in data[ 0 ] %}
-						<p>
-							{{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
+					<h2>{{ _( "Browser sessions" ) }}</h2>
+					{% for session in data.sessions_browsers %}
+						<p>{{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
 							{% if session[ 'current' ] %}
 								&nbsp;<button class="btn btn-default disabled btn-xs">{{ _( "Current session" ) }}</button>
 							{% else %}
@@ -40,19 +31,18 @@
 				</form>
 			{% endif %}
 
-			{% if data[ 1 ] %}
-				<h2>{{ _( "Apps sessions" ) }}</h2>
+			{% if data.sessions_apps %}
 				<form class="form-group" action="{{ 'sessions'|local }}" method="post">
 					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-					{% for session in data[ 1 ] %}
-						<p>
-							{{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
+					<h2>{{ _( "Apps sessions" ) }}</h2>
+					{% for session in data.sessions_apps %}
+						<p>{{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
 							&nbsp;<button class="btn btn-primary btn-xs" type="submit" name="disconnect_app" value="{{ session[ 'token_id' ] }}">{{ _( "Disconnect" ) }}</button>
 						</p>
 					{% endfor %}
 				</form>
 			{% endif %}
-			
+
             {% include "incfooter.html" %}
         </div>
     </body>

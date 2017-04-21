@@ -56,6 +56,11 @@ class EnkiModelTokenVerify( model.Model ):
 		return entity
 
 	@classmethod
+	def count_by_user_id_type( cls, user_id, type ):
+		count = cls.query( ndb.AND( cls.user_id == user_id, cls.type == type )).count()
+		return count
+
+	@classmethod
 	def fetch_by_user_id_type( cls, user_id, type ):
 		list = cls.query( ndb.AND( cls.user_id == user_id, cls.type == type )).order( -cls.time_created ).fetch()
 		return list

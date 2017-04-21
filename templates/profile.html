@@ -127,16 +127,16 @@
 						<h4>{{ _( "Connected sessions" ) }} &nbsp;&nbsp;&nbsp;<a href="{{ 'sessions'|local }}" class="btn btn-default btn-sm">{{ _( "Manage" ) }}</a></h4>
 					</div>
 					<div class="panel-body">
-						<p><b>{{ _( "Browser sessions" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-							{% if data.sessions %}
-								{{ data.sessions|length }}
+						<p><b>{{ _( "Browser sessions (including current session)" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+							{% if data.sessions_browsers %}
+								{{ data.sessions_browsers }}
 							{% else %}
 								{{ _( "None" ) }}
 							{% endif %}
 						</p>
 						<p><b>{{ _( "Apps sessions" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-							{% if data.sessions_app %}
-								{{ data.sessions_app|length }}
+							{% if data.sessions_apps %}
+								{{ data.sessions_apps }}
 							{% else %}
 								{{ _( "None" ) }}
 							{% endif %}

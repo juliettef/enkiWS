@@ -190,7 +190,7 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 		if self.ensure_is_logged_in():
 			data = collections.namedtuple( 'data', '''current_display_name, previous_display_names,
 													email, has_password, has_auth_id_providers
-												   friends, messages, sessions, sessions_app''' )
+												   friends, messages, sessions_browsers, sessions_apps''' )
 			current_display_name = ''
 			previous_display_names = ''
 			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
@@ -211,23 +211,12 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			friends = enki.libfriends.count_EnkiFriends(self.user_id)
 			messages = enki.libmessage.count_EnkiMessage_by_recipient(self.user_id)
 
-			sessions = []
-			current_token = self.session.get( 'auth_token' )
-			auth_tokens = enki.libuser.fetch_AuthTokens( self.user_id )
-			for item in auth_tokens:
-				current = False
-				if current_token == item.token:
-					current = True
-				sessions.append({ 'tokenauth_id' : item.key.id(), 'time_created' : item.time_created, 'current' : current })
-
-			sessions_app = []
-			list = EnkiModelRestAPITokenVerify.fetch_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
-			for item in list:
-				sessions_app.append({ 'token_id' : item.key.id(), 'time_created' : item.time_created })
+			sessions_browsers = enki.libuser.count_AuthTokens( self.user_id )
+			sessions_apps = EnkiModelRestAPITokenVerify.count_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
 
 			data = data( current_display_name, previous_display_names,
 						 email, has_password, has_auth_id_providers,
-						 friends, messages, sessions, sessions_app )
+						 friends, messages, sessions_browsers, sessions_apps )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
 			                  data = data )
@@ -242,7 +231,6 @@ class HandlerSessions( enki.HandlerBaseReauthenticate ):
 						  data = self.get_data())
 
 	def post_reauthenticated( self, params ):
-		self.check_CSRF()
 		token_disconnect_browser = params.get( 'disconnect_browser' )
 		token_disconnect_app = params.get( 'disconnect_app' )
 		if token_disconnect_browser:
@@ -256,8 +244,7 @@ class HandlerSessions( enki.HandlerBaseReauthenticate ):
 						  data = self.get_data())
 
 	def get_data( self ):
-		data = collections.namedtuple( 'data', '''sessions_browsers, sessions_apps''')
-
+		data = collections.namedtuple( 'data', '''sessions_browsers, sessions_apps''' )
 		sessions_browsers = []
 		current_token = self.session.get( 'auth_token' )
 		auth_tokens = enki.libuser.fetch_AuthTokens( self.user_id )
@@ -266,13 +253,11 @@ class HandlerSessions( enki.HandlerBaseReauthenticate ):
 			if current_token == item.token:
 				current = True
 			sessions_browsers.append({ 'tokenauth_id':item.key.id(), 'time_created':item.time_created, 'current':current })
-
 		sessions_apps = []
 		list = EnkiModelRestAPITokenVerify.fetch_by_user_id_type(user_id = self.user_id, type = 'apiconnect')
 		for item in list:
 			sessions_apps.append({ 'token_id':item.key.id(), 'time_created':item.time_created })
-
-		data = [ sessions_browsers, sessions_apps ]
+		data = data( sessions_browsers, sessions_apps )
 		return data
 
 

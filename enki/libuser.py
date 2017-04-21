@@ -152,6 +152,11 @@ def exist_AuthToken( user_id, token ):
 	return count > 0
 
 
+def count_AuthTokens( user_id ):
+	count = EnkiModelTokenAuth.query( EnkiModelTokenAuth.user_id == user_id ).count()
+	return count
+
+
 def fetch_AuthTokens( user_id ):
 	list = EnkiModelTokenAuth.query( EnkiModelTokenAuth.user_id == user_id ).order( -EnkiModelTokenAuth.time_created ).fetch()
 	return list
