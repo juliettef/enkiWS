@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-22 17:47+0100\n"
+"POT-Creation-Date: 2017-04-22 19:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -956,6 +956,26 @@ msgstr[1] ""
 #: templates/forum.html:77 templates/forum.html:101 templates/post.html:85
 #: templates/thread.html:90
 msgid "Sticky"
+msgstr ""
+
+#: templates/forum.html:80 templates/forum.html:104 templates/post.html:88
+#: templates/thread.html:93
+msgid "0 - not sticky"
+msgstr ""
+
+#: templates/forum.html:81 templates/forum.html:105 templates/post.html:89
+#: templates/thread.html:94
+msgid "1 - sticky"
+msgstr ""
+
+#: templates/forum.html:82 templates/forum.html:106 templates/post.html:90
+#: templates/thread.html:95
+msgid "2 - more sticky"
+msgstr ""
+
+#: templates/forum.html:83 templates/forum.html:107 templates/post.html:91
+#: templates/thread.html:96
+msgid "3 - top sticky"
 msgstr ""
 
 #: templates/forum.html:87

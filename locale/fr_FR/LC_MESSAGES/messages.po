@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-22 17:47+0100\n"
+"POT-Creation-Date: 2017-04-22 19:09+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -958,6 +958,26 @@ msgstr[1] "Votre sujet peut contenir jusqu'à %(length)s caractères."
 #: templates/thread.html:90
 msgid "Sticky"
 msgstr "Coller"
+
+#: templates/forum.html:80 templates/forum.html:104 templates/post.html:88
+#: templates/thread.html:93
+msgid "0 - not sticky"
+msgstr "0 - décollé"
+
+#: templates/forum.html:81 templates/forum.html:105 templates/post.html:89
+#: templates/thread.html:94
+msgid "1 - sticky"
+msgstr "1 - collé"
+
+#: templates/forum.html:82 templates/forum.html:106 templates/post.html:90
+#: templates/thread.html:95
+msgid "2 - more sticky"
+msgstr "2 - plus collé"
+
+#: templates/forum.html:83 templates/forum.html:107 templates/post.html:91
+#: templates/thread.html:96
+msgid "3 - top sticky"
+msgstr "3 - le plus collé"
 
 #: templates/forum.html:87
 msgid "To make a thread sticky, pick a number greater than 0. The larger the number, the higher up the list the stickied thread is."
