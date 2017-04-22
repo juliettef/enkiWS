@@ -131,7 +131,7 @@ def FRIEND_REMOVED( name ): return _( "%(name)s has been removed from your frien
 def STORE(): return _( "Store" )
 def PRODUCT_LICENCE_ACTIVATED( product, licence ): return _( "Product %(product)s licence %(licence)s activated.", product = product, licence = licence )
 def PRODUCT_ALREADY_ACTIVATED( product ): return _( "You already activated %(product)s.", product = product )
-def LICENCE_ALREADY_ACTIVATED_GIVE( product ): return _( "You already activated %(product)s. Do you want to give your spare licence key to a friend?", product = product )
+def LICENCE_ALREADY_ACTIVATED_GIVE( product ): return _( "You already activated %(product)s. Your spare licence key can be given away.", product = product )
 def LICENCE_ANOTHER_USER_ACTIVATED( product, licence ): return _( "Another user already activated %(product)s licence %(licence)s.", product = product, licence = licence )
 def LICENCE_INVALID(): return _( "Invalid licence key." )
 def LICENCE_MISSING(): return _( "A licence key is needed." )

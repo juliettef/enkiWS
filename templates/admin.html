@@ -35,9 +35,9 @@
 				</tbody>
 			</table>
 			
-			<a href="/admin/report"><button class="btn btn-primary">{{ _( 'Show csv report' ) }}</button></a>
+			<a href="/admin/report"><button class="btn btn-primary">{{ _( 'Open csv report' ) }}</button></a>
 
-			<h2 class="text-danger">Generate Licences</h2>
+			<h2 class="text-danger">{{ _( "Licences" ) }}</h2>
 				<div class="well bs-component">
 					<form class="form-horizontal" action="{{ 'generatelicencefree'|local }}" method="post">
 						<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">

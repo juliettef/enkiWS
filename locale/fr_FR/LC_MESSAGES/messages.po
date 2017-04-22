@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-12-17 13:09+0000\n"
+"POT-Creation-Date: 2017-04-22 17:47+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -275,7 +275,7 @@ msgstr "Tentative de connexion"
 #: enki/textmessages.py:80
 #, python-format
 msgid "An attempt was made to log in to your account using this email address. If you'd like to use your email to log in, you need to set a password for it: %(link)s (click or copy and paste in your browser)"
-msgstr "Une tentative de connexion à votre compte a été détectée. Si vous désirez utiliser votre adresse de courrier électronique pour vous connecter, vous devez d'abord créer un mot de passe: %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
+msgstr "Une tentative de connexion à votre compte en utilisant cette adresse de courrier électronique a été détectée. Si vous désirez utiliser votre adresse de courrier électronique pour vous connecter, vous devez créer un mot de passe: %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
 
 #: enki/textmessages.py:81
 msgid "Attempt to register with your email"
@@ -283,8 +283,8 @@ msgstr "Tentative de connexion"
 
 #: enki/textmessages.py:82
 #, python-format
-msgid "An attempt was made to sign up to your account. If you've forgotten your password, you can reset it: %(link)s (click or copy and paste in your browser)"
-msgstr "Une tentative de connexion à votre compte a été détectée. Si vous avez oublié votre mot de passe, vous pouvez le réinitialiser : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
+msgid "An attempt was made to sign up to your account using this email address. If you've forgotten your password, you can reset it: %(link)s (click or copy and paste in your browser)"
+msgstr "Une tentative de connexion à votre compte en utilisant cette adresse de courrier électronique a été détectée. Si vous avez oublié votre mot de passe, vous pouvez le réinitialiser : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
 
 #: enki/textmessages.py:83 templates/registerconfirm.html:6
 msgid "Registration confirmation"
@@ -489,8 +489,8 @@ msgstr "Vous avez déjà activé le produit %(product)s."
 
 #: enki/textmessages.py:134
 #, python-format
-msgid "You already activated %(product)s. Do you want to give your spare licence key to a friend?"
-msgstr "Vous avez déjà activé le produit %(product)s. Vous pouvez donner cette clé de licence à un.e ami.e."
+msgid "You already activated %(product)s. Your spare licence key can be given away."
+msgstr "Vous avez déjà activé le produit %(product)s. Vous pouvez donner cette clé de licence."
 
 #: enki/textmessages.py:135
 #, python-format
@@ -575,7 +575,7 @@ msgstr "Ajouter une adresse de courrier électronique"
 msgid "Change password"
 msgstr "Changer mon mot de passe"
 
-#: templates/accountconnect.html:32
+#: templates/accountconnect.html:32 templates/profile.html:72
 msgid "Third party authentication"
 msgstr "Solutions d'authentification tierces"
 
@@ -596,7 +596,7 @@ msgstr "Supprimer"
 msgid "Add login"
 msgstr "Ajouter connexion"
 
-#: templates/accountdelete.html:6 templates/profile.html:80
+#: templates/accountdelete.html:6
 msgid "Delete account"
 msgstr "Supprimer mon compte"
 
@@ -680,6 +680,7 @@ msgid "Warning: activated licence keys cannot be transferred. Once your account 
 msgstr "Attention: les clés de licence activées ne peuvent pas être transferrées. Après avoir supprimé votre compte, <b>vous ne pourrez plus les utiliser</b>."
 
 #: templates/accountdelete.html:61 templates/accountdelete.html:76
+#: templates/profile.html:81
 msgid "Delete my account"
 msgstr "Supprimer mon compte"
 
@@ -700,12 +701,65 @@ msgstr "Envoyez-moi un message de courrier électronique pour supprimer mon comp
 msgid "Warning: deleting your account cannot be undone."
 msgstr "Attention: supprimer votre compte est irréversible."
 
-#: templates/accountdelete.html:78 templates/forum.html:87
-#: templates/loginaddconfirm.html:30 templates/post.html:60
-#: templates/post.html:86 templates/reauthenticate.html:61
-#: templates/registeroauthconfirm.html:51 templates/thread.html:91
+#: templates/accountdelete.html:78 templates/forum.html:119
+#: templates/loginaddconfirm.html:30 templates/post.html:61
+#: templates/post.html:103 templates/reauthenticate.html:61
+#: templates/registeroauthconfirm.html:51 templates/thread.html:108
 msgid "Cancel"
 msgstr "Annuler"
+
+#: templates/admin.html:6
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/admin.html:38
+msgid "Open csv report"
+msgstr "Ouvrir rapport csv"
+
+#: templates/admin.html:40 templates/inclibrary.html:5
+msgid "Licences"
+msgstr "Clés de licence"
+
+#: templates/admin.html:45
+msgid "Licence Key Generator"
+msgstr "Générateur de clés de licence"
+
+#: templates/admin.html:48
+msgid "Product"
+msgstr "Produit"
+
+#: templates/admin.html:60 templates/storeemulatefastspring.html:54
+msgid "Quantity"
+msgstr "Quantité"
+
+#: templates/admin.html:67 templates/storeemulatefastspring.html:61
+msgid "Order type"
+msgstr "Type de commande"
+
+#: templates/admin.html:78
+msgid "Recipient email (optional)"
+msgstr "Courrier électronique destinataire (facultatif)"
+
+#: templates/admin.html:80 templates/login.html:45 templates/login.html:47
+#: templates/passwordrecover.html:24 templates/passwordrecover.html:26
+#: templates/profile.html:58 templates/reauthenticate.html:44
+#: templates/register.html:43 templates/register.html:45
+#: templates/registerconfirm.html:24 templates/registeroauthconfirm.html:36
+#: templates/registeroauthwithexistingemail.html:52
+msgid "Email"
+msgstr "Adresse de courrier électronique"
+
+#: templates/admin.html:85
+msgid "Recipient user Id (optional)"
+msgstr "Identifiant destinataire (facultatif)"
+
+#: templates/admin.html:92
+msgid "Information (optional)"
+msgstr "Information (facultatif)"
+
+#: templates/admin.html:100
+msgid "Generate"
+msgstr "Générer"
 
 #: templates/appdatastores.html:6
 msgid "User data"
@@ -716,6 +770,7 @@ msgid "Application data stores"
 msgstr "Données utilisateur conservées par les applications"
 
 #: templates/appdatastores.html:21 templates/apps.html:6 templates/apps.html:17
+#: templates/increstapi.html:8
 msgid "Applications"
 msgstr "Applications"
 
@@ -797,23 +852,22 @@ msgstr "Enregistrer"
 msgid "Display name"
 msgstr "Nom d'affichage"
 
-#: templates/displayname.html:18 templates/profile.html:51
+#: templates/displayname.html:18
 msgid "Current display name:"
 msgstr "Nom d'affichage actuel :"
 
-#: templates/displayname.html:22 templates/profile.html:53
-#: templates/profilepublic.html:23
+#: templates/displayname.html:22
 msgid "Past display name:"
 msgid_plural "Past display names:"
 msgstr[0] "Ancien nom d'affichage :"
 msgstr[1] "Anciens noms d'affichage :"
 
-#: templates/displayname.html:32 templates/forum.html:113
-#: templates/post.html:110 templates/profile.html:48 templates/thread.html:115
+#: templates/displayname.html:32 templates/forum.html:145
+#: templates/post.html:127 templates/profile.html:38 templates/thread.html:132
 msgid "Set display name"
 msgstr "Créer mon nom d'affichage"
 
-#: templates/displayname.html:34 templates/profile.html:51
+#: templates/displayname.html:34
 msgid "Change display Name"
 msgstr "Modifier mon nom d'affichage"
 
@@ -900,73 +954,86 @@ msgid_plural "Maximum thread title length: %(length)s characters."
 msgstr[0] "Votre sujet peut contenir jusqu'à %(length)s caractère."
 msgstr[1] "Votre sujet peut contenir jusqu'à %(length)s caractères."
 
-#: templates/forum.html:76 templates/incuserposts.html:12 templates/post.html:7
-#: templates/post.html:31 templates/post.html:75 templates/thread.html:80
+#: templates/forum.html:77 templates/forum.html:101 templates/post.html:85
+#: templates/thread.html:90
+msgid "Sticky"
+msgstr "Coller"
+
+#: templates/forum.html:87
+msgid "To make a thread sticky, pick a number greater than 0. The larger the number, the higher up the list the stickied thread is."
+msgstr "Pour coller un sujet, choisissez un chiffre supérieur à 0. Plus le chiffre est élevé, plus le sujet a priorité. "
+
+#: templates/forum.html:92 templates/incuserposts.html:12 templates/post.html:7
+#: templates/post.html:31 templates/post.html:76 templates/thread.html:81
 msgid "Post"
 msgstr "Message"
 
-#: templates/forum.html:78 templates/post.html:77 templates/thread.html:82
+#: templates/forum.html:94 templates/post.html:78 templates/thread.html:83
 msgid "Your text"
 msgstr "Texte de votre message"
 
-#: templates/forum.html:80 templates/post.html:79 templates/thread.html:84
+#: templates/forum.html:96 templates/post.html:80 templates/thread.html:85
 #, python-format
 msgid "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting."
 msgstr "Utilisez <a href='%(url)s' target='_blank'>markdown</a> pour formater votre message."
 
-#: templates/forum.html:80 templates/post.html:79 templates/thread.html:84
+#: templates/forum.html:96 templates/post.html:80 templates/thread.html:85
 #, python-format
 msgid "Maximum post length: %(length)s character."
 msgid_plural "Maximum post length: %(length)s characters."
 msgstr[0] "Votre message peut contenir jusqu'à %(length)s caractère."
 msgstr[1] "Votre message peut contenir jusqu'à %(length)s caractères."
 
-#: templates/forum.html:85 templates/post.html:84 templates/thread.html:89
+#: templates/forum.html:111 templates/post.html:95 templates/thread.html:100
+msgid "To make a post sticky, pick a number greater than 0. The larger the number, the higher up the list the stickied post is."
+msgstr "Pour coller un message, choisissez un chiffre supérieur à 0. Plus le chiffre est élevé, plus le message a priorité."
+
+#: templates/forum.html:117 templates/post.html:101 templates/thread.html:106
 msgid "Preview"
 msgstr "Aperçu"
 
-#: templates/forum.html:86
+#: templates/forum.html:118
 msgid "Submit new thread"
 msgstr "Publier le nouveau sujet"
 
-#: templates/forum.html:95 templates/post.html:94 templates/thread.html:99
+#: templates/forum.html:127 templates/post.html:111 templates/thread.html:116
 msgid "PREVIEW"
 msgstr "APERÇU"
 
-#: templates/forum.html:97 templates/thread.html:7 templates/thread.html:31
+#: templates/forum.html:129 templates/thread.html:7 templates/thread.html:31
 msgid "Thread"
 msgstr "Sujet"
 
-#: templates/forum.html:100 templates/incuserposts.html:15
-#: templates/post.html:37 templates/post.html:98 templates/thread.html:40
-#: templates/thread.html:103
+#: templates/forum.html:132 templates/incuserposts.html:17
+#: templates/post.html:38 templates/post.html:115 templates/thread.html:41
+#: templates/thread.html:120
 msgid "permalink"
 msgstr "permalien"
 
-#: templates/forum.html:100 templates/post.html:98 templates/thread.html:103
+#: templates/forum.html:132 templates/post.html:115 templates/thread.html:120
 msgid "date and time submitted UTC"
 msgstr "Date et heure UTC de publication"
 
-#: templates/forum.html:112
+#: templates/forum.html:144
 msgid "Please set up your display name to start a new thread."
 msgstr "Veuillez créer votre nom d'affichage pour ajouter un nouveau sujet."
 
-#: templates/forum.html:119
+#: templates/forum.html:151
 msgid "Please log in or create an account to start a new thread."
 msgstr "Veuillez vous connecter ou créer un compte pour ajouter un nouveau sujet."
 
-#: templates/forum.html:120 templates/incnavbartop.html:10
+#: templates/forum.html:152 templates/incnavbartop.html:10
 #: templates/login.html:7 templates/login.html:61
-#: templates/passwordrecover.html:40 templates/post.html:122
+#: templates/passwordrecover.html:40 templates/post.html:139
 #: templates/register.html:57 templates/registeroauthwithexistingemail.html:68
-#: templates/thread.html:122
+#: templates/thread.html:139
 msgid "Log in"
 msgstr "Accéder à mon compte"
 
-#: templates/forum.html:121 templates/incnavbartop.html:9
+#: templates/forum.html:153 templates/incnavbartop.html:9
 #: templates/login.html:66 templates/passwordrecover.html:41
-#: templates/post.html:123 templates/register.html:7 templates/register.html:52
-#: templates/thread.html:123
+#: templates/post.html:140 templates/register.html:7 templates/register.html:52
+#: templates/thread.html:140
 msgid "Sign up"
 msgstr "Créer mon compte"
 
@@ -978,8 +1045,7 @@ msgstr "visites"
 msgid "Description"
 msgstr "Description"
 
-#: templates/friends.html:16 templates/profile.html:144
-#: templates/profile.html:154
+#: templates/friends.html:16 templates/profile.html:90
 msgid "Friends"
 msgstr "Ami.e.s"
 
@@ -1011,11 +1077,7 @@ msgstr "Inviter"
 msgid "Users with a similar prefix"
 msgstr "Utilisateurs.trices ayant un préfix similaire"
 
-#: templates/home.html:6
-msgid "enkiWS"
-msgstr "enkiWS"
-
-#: templates/home.html:16 templates/incnavbartop.html:2
+#: templates/home.html:17 templates/incnavbartop.html:2
 msgid "Home"
 msgstr "Accueil"
 
@@ -1032,67 +1094,44 @@ msgstr ""
 msgid "Privacy policy"
 msgstr ""
 
-#: templates/inclibrary.html:8
+#: templates/inclibrary.html:2 templates/library.html:6
+#: templates/library.html:16
 msgid "Library"
 msgstr "Bibliothèque"
 
-#: templates/inclibrary.html:11 templates/increstapi.html:11
-#: templates/profile.html:24 templates/profile.html:41
-#: templates/profile.html:74 templates/profile.html:93
-#: templates/profile.html:147
-msgid "Hide"
-msgstr "Masquer"
+#: templates/inclibrary.html:5 templates/profile.html:55
+#: templates/profile.html:90 templates/profile.html:102
+#: templates/profile.html:127
+msgid "Manage"
+msgstr "Gérer"
 
-#: templates/inclibrary.html:11 templates/increstapi.html:11
-#: templates/profile.html:24 templates/profile.html:41
-#: templates/profile.html:74 templates/profile.html:93
-#: templates/profile.html:147
-msgid "Show"
-msgstr "Afficher"
-
-#: templates/inclibrary.html:18
+#: templates/inclibrary.html:8 templates/library.html:45
 msgid "Available to activate or give"
-msgid_plural "Available to activate or give"
-msgstr[0] "À activer ou donner"
-msgstr[1] "À activer ou donner"
+msgstr "À activer ou donner"
 
-#: templates/inclibrary.html:23
-msgid "Activate licence"
-msgstr "Activer la licence"
+#: templates/inclibrary.html:12 templates/inclibrary.html:19
+#: templates/profile.html:62 templates/profile.html:69
+#: templates/profile.html:76 templates/profile.html:97
+#: templates/profile.html:109 templates/profile.html:134
+#: templates/profile.html:141
+msgid "None"
+msgstr "Aucun.e"
 
-#: templates/inclibrary.html:29
-msgid "Available to give"
-msgid_plural "Available to give"
-msgstr[0] "À donner"
-msgstr[1] "À donner"
-
-#: templates/inclibrary.html:35
+#: templates/inclibrary.html:15 templates/library.html:62
 msgid "Activated"
 msgid_plural "Activated"
-msgstr[0] "Active"
-msgstr[1] "Actives"
+msgstr[0] "Activée"
+msgstr[1] "Activées"
 
-#: templates/inclibrary.html:46
-msgid "Activate a licence"
-msgstr "Activer une licence"
+#: templates/incmessagealert.html:2 templates/messages.html:19
+msgid "You have messages"
+msgstr "Vous avez des messages"
 
-#: templates/inclibrary.html:49
-msgid "Licence key"
-msgstr "Clé de licence"
+#: templates/incmessagealert.html:2 templates/messages.html:39
+msgid "You have no messages"
+msgstr "Vous n'avez pas de messages"
 
-#: templates/inclibrary.html:51
-msgid "XXXXX-XXXXX-XXXXX"
-msgstr "XXXXX-XXXXX-XXXXX"
-
-#: templates/inclibrary.html:53
-msgid "The licence key is a string of 15 alphanumeric characters, with or without dashes, e.g. 9CNJ5FLYH87HRZ1 and 9CNJ5-FLYH8-7HRZ1 are equally valid."
-msgstr "La clé de licence est une série de 15 caractères alphanumériques, avec ou sans tirets. Par exemple 9CNJ5FLYH87HRZ1 ou 9CNJ5-FLYH8-7HRZ1 sont également valides."
-
-#: templates/inclibrary.html:59
-msgid "Activate"
-msgstr "Activer"
-
-#: templates/incnavbartop.html:6 templates/profile.html:16
+#: templates/incnavbartop.html:6
 msgid "Profile and settings"
 msgstr "Profil et paramètres du compte"
 
@@ -1105,11 +1144,11 @@ msgstr "Déconnexion"
 msgid "Languages"
 msgstr "Langues"
 
-#: templates/incnavbartop.html:57
+#: templates/incnavbartop.html:58 templates/incnavbartop.html:60
 msgid "Logged in as"
 msgstr "Connecté.e"
 
-#: templates/incnavbartop.html:61
+#: templates/incnavbartop.html:60
 msgid "Please set up your display name"
 msgstr "Veuillez créer votre nom d'affichage."
 
@@ -1117,46 +1156,62 @@ msgstr "Veuillez créer votre nom d'affichage."
 msgid "Products"
 msgstr "Produits"
 
-#: templates/increstapi.html:8 templates/profile.html:90
-msgid "Connected Applications"
-msgstr "Applications connectées"
-
-#: templates/increstapi.html:19
+#: templates/increstapi.html:16
 msgid "Generate Connect Code"
 msgstr "Générer un jeton de connexion"
 
-#: templates/increstapi.html:21
+#: templates/increstapi.html:18
 msgid "Apps data"
-msgstr "Données applications"
+msgstr "Données des applications"
 
-#: templates/incuserposts.html:13 templates/post.html:35
-#: templates/thread.html:38
+#: templates/incuserposts.html:15 templates/post.html:36
+#: templates/thread.html:39
 msgid "posted"
 msgstr "publié"
 
-#: templates/incuserposts.html:14 templates/post.html:36
-#: templates/thread.html:39
+#: templates/incuserposts.html:16 templates/post.html:37
+#: templates/thread.html:40
 msgid "deleted"
 msgstr "supprimé"
 
-#: templates/incuserposts.html:14 templates/post.html:36
-#: templates/thread.html:39
+#: templates/incuserposts.html:16 templates/post.html:37
+#: templates/thread.html:40
 msgid "edited"
 msgstr "modifié"
 
-#: templates/incuserposts.html:16 templates/post.html:38
-#: templates/thread.html:41
+#: templates/incuserposts.html:18 templates/post.html:39
+#: templates/thread.html:42
 msgid "edit"
 msgstr "modifier"
 
-#: templates/incuserposts.html:17 templates/post.html:39
-#: templates/thread.html:42
+#: templates/incuserposts.html:19 templates/post.html:40
+#: templates/thread.html:43
 msgid "delete"
 msgstr "supprimer"
 
 #: templates/info.html:17
 msgid "Back"
 msgstr "Retour"
+
+#: templates/library.html:23 templates/library.html:50
+msgid "Activate licence"
+msgstr "Activer la clé de licence"
+
+#: templates/library.html:26
+msgid "Licence key"
+msgstr "Clé de licence"
+
+#: templates/library.html:30
+msgid "The licence key is a string of 15 alphanumeric characters, with or without dashes, e.g. 9CNJ5FLYH87HRZ1 and 9CNJ5-FLYH8-7HRZ1 are equally valid."
+msgstr "La clé de licence est une série de 15 caractères alphanumériques, avec ou sans tirets. Par exemple 9CNJ5FLYH87HRZ1 ou 9CNJ5-FLYH8-7HRZ1 sont également valides."
+
+#: templates/library.html:36
+msgid "Activate"
+msgstr "Activée"
+
+#: templates/library.html:56
+msgid "Available to give"
+msgstr "À activer ou à donner"
 
 #: templates/login.html:22 templates/registeroauthwithexistingemail.html:29
 msgid "Log in with a third party provider"
@@ -1172,20 +1227,11 @@ msgstr "Se connecter avec"
 msgid "Log in with email and password"
 msgstr "Accéder à mon compte avec mon adresse électronique et mon mot de passe"
 
-#: templates/login.html:45 templates/login.html:47
-#: templates/passwordrecover.html:24 templates/passwordrecover.html:26
-#: templates/reauthenticate.html:44 templates/register.html:43
-#: templates/register.html:45 templates/registerconfirm.html:24
-#: templates/registeroauthconfirm.html:36
-#: templates/registeroauthwithexistingemail.html:52
-msgid "Email"
-msgstr "Adresse de courrier électronique"
-
 #: templates/login.html:52 templates/login.html:54
 #: templates/passwordrecoverconfirm.html:24
-#: templates/passwordrecoverconfirm.html:26 templates/reauthenticate.html:51
-#: templates/reauthenticate.html:53 templates/registerconfirm.html:31
-#: templates/registerconfirm.html:33
+#: templates/passwordrecoverconfirm.html:26 templates/profile.html:65
+#: templates/reauthenticate.html:51 templates/reauthenticate.html:53
+#: templates/registerconfirm.html:31 templates/registerconfirm.html:33
 #: templates/registeroauthwithexistingemail.html:59
 #: templates/registeroauthwithexistingemail.html:61
 msgid "Password"
@@ -1227,25 +1273,21 @@ msgstr "Votre identifiant chez %(providername)s :"
 msgid "Yes, add login method"
 msgstr "Oui, ajouter la nouvelle méthode de connexion"
 
-#: templates/messages.html:16 templates/profile.html:155
+#: templates/messages.html:16 templates/profile.html:102
 msgid "Messages"
 msgstr "Messages"
 
-#: templates/messages.html:24
+#: templates/messages.html:25
 msgid "Friend requests"
 msgstr "Demandes d'ajout à votre liste d'ami.e.s"
 
-#: templates/messages.html:28
+#: templates/messages.html:29
 msgid "Accept"
 msgstr "Accepter"
 
-#: templates/messages.html:29
+#: templates/messages.html:30
 msgid "Decline"
 msgstr "Décliner"
-
-#: templates/messages.html:38
-msgid "You do not have any messages."
-msgstr "Vous n'avez pas de messages."
 
 #: templates/passwordchange.html:24 templates/passwordchange.html:26
 msgid "Current password"
@@ -1272,31 +1314,31 @@ msgstr "Nouveau mot de passe"
 msgid "Save my password"
 msgstr "Enregistrer mon mot de passe"
 
-#: templates/post.html:54
+#: templates/post.html:55
 msgid "Delete post"
 msgstr "Supprimer"
 
-#: templates/post.html:58
+#: templates/post.html:59
 msgid "You are about to delete the contents of your post, are you sure? This cannot be undone."
 msgstr "Vous êtes sur le point de supprimer votre message. Cette action est irréversible."
 
-#: templates/post.html:59
+#: templates/post.html:60
 msgid "Delete"
 msgstr "Supprimer"
 
-#: templates/post.html:73
+#: templates/post.html:74
 msgid "Edit post"
 msgstr "Modifier votre message"
 
-#: templates/post.html:85
+#: templates/post.html:102
 msgid "Submit modified post"
 msgstr "Publier le message modifié"
 
-#: templates/post.html:109
+#: templates/post.html:126
 msgid "Please set up your display name to modify your post."
 msgstr "Veuillez créer votre nom d'affichage afin de modifier votre message."
 
-#: templates/post.html:121
+#: templates/post.html:138
 msgid "Please log in to modify your post."
 msgstr "Veuillez vous connecter afin de modifier votre message."
 
@@ -1304,71 +1346,106 @@ msgstr "Veuillez vous connecter afin de modifier votre message."
 msgid "Profile"
 msgstr "Profil"
 
-#: templates/profile.html:38
-msgid "Public info"
-msgstr "Informations publiques"
+#: templates/profile.html:16
+msgid "Profile and account settings"
+msgstr "Profil et paramètres du compte"
 
-#: templates/profile.html:47
+#: templates/profile.html:21
+msgid "Public profile"
+msgstr "Profil public"
+
+#: templates/profile.html:25
+msgid "Public page"
+msgstr "Page publique"
+
+#: templates/profile.html:25
+msgid "View"
+msgstr "Voir"
+
+#: templates/profile.html:28
+msgid "User Id"
+msgstr "Identifiant utilisateur.trice :"
+
+#: templates/profile.html:29
+msgid "Public page link"
+msgstr "Lien page publique"
+
+#: templates/profile.html:33
+msgid "Display Name"
+msgstr "Nom d'affichage"
+
+#: templates/profile.html:33
+msgid "Change"
+msgstr "Modifier"
+
+#: templates/profile.html:37
 msgid "Your display name is your public Id. You need a display name to post in the forums, invite friends and join games."
 msgstr "Votre nom d'affichage est votre identité publique. Il est nécessaire pour poster des messages dans le forum, inviter des ami.e.s et jouer."
 
+#: templates/profile.html:40
+msgid "Current"
+msgstr "Actuel"
+
+#: templates/profile.html:42 templates/thread.html:54
+msgid "Previous"
+msgid_plural "Previous"
+msgstr[0] "Précédent"
+msgstr[1] "Précédents"
+
+#: templates/profile.html:52
+msgid "Account"
+msgstr "Compte"
+
 #: templates/profile.html:55
-msgid "Public user profile and forum posts:"
-msgstr "Profil public et messages de forum :"
+msgid "Authentication"
+msgstr "Authentification"
 
-#: templates/profile.html:56
-msgid "User Id:"
-msgstr "Identifiant utilisateur.trice :"
+#: templates/profile.html:67 templates/profile.html:74
+msgid "Enabled"
+msgstr "Activé"
 
-#: templates/profile.html:71
-msgid "Account Settings"
-msgstr "Paramètres du compte"
+#: templates/profile.html:87
+msgid "Friends and Messaging"
+msgstr "Ami.e.s et Messages"
 
-#: templates/profile.html:79
-msgid "Email, Password and Connected Accounts"
-msgstr "Adresse de courrier électronique, mot de passe et comptes attachés"
+#: templates/profile.html:93
+msgid "Friend"
+msgid_plural "Friends"
+msgstr[0] "Ami.e"
+msgstr[1] "Ami.e.s"
 
-#: templates/profile.html:100
-msgid "Browser sessions"
-msgstr "Sessions navigateur"
+#: templates/profile.html:105
+msgid "Message"
+msgid_plural "Messages"
+msgstr[0] "Message"
+msgstr[1] "Messages"
 
-#: templates/profile.html:105 templates/profile.html:121
-msgid "Connected"
-msgstr "Connecté.e"
+#: templates/profile.html:124 templates/sessions.html:6
+#: templates/sessions.html:16
+msgid "Sessions"
+msgstr "Sessions"
 
-#: templates/profile.html:107
-msgid "Current session"
-msgstr "Session en cours"
+#: templates/profile.html:127
+msgid "Connected sessions"
+msgstr "Sessions connectées"
 
-#: templates/profile.html:109 templates/profile.html:122
-msgid "Disconnect"
-msgstr "Déconnecter"
+#: templates/profile.html:130
+msgid "Browser sessions (including current session)"
+msgstr "Sessions navigateurs (session actuelle incluse)"
 
-#: templates/profile.html:116
-msgid "Apps"
-msgstr "Apps"
-
-#: templates/profile.html:129
-msgid "browser session"
-msgid_plural "browser sessions"
-msgstr[0] "session navigateur"
-msgstr[1] "sessions navigateur"
-
-#: templates/profile.html:158
-msgid "friend"
-msgid_plural "friends"
-msgstr[0] "ami.e"
-msgstr[1] "ami.e.s"
-
-#: templates/profile.html:159
-msgid "message"
-msgid_plural "messages"
-msgstr[0] "message"
-msgstr[1] "messages"
+#: templates/profile.html:137 templates/sessions.html:37
+msgid "Apps sessions"
+msgstr "Sessions applications"
 
 #: templates/profilepublic.html:7 templates/profilepublic.html:21
 msgid "User"
 msgstr "Utilisateur.trice"
+
+#: templates/profilepublic.html:23
+msgid "Previous display name"
+msgid_plural "Previous display names"
+msgstr[0] "Nom d'affichage précédent"
+msgstr[1] "Noms d'affichage précédents"
 
 #: templates/reauthenticate.html:7 templates/reauthenticate.html:60
 msgid "Reauthenticate"
@@ -1442,7 +1519,7 @@ msgstr "Retourner au site"
 
 #: templates/registeroauthwithexistingemail.html:7
 msgid "Authentication with existing email"
-msgstr "M'authentificatier avec mon adresse électronique et mon mot de passe"
+msgstr "M'authentifier avec mon adresse électronique et mon mot de passe"
 
 #: templates/registeroauthwithexistingemail.html:18
 msgid "Log in or create a new account"
@@ -1470,6 +1547,22 @@ msgstr "Créér un nouveau compte en utilisant %(providername)s pour s'authentif
 #, python-format
 msgid "Warning: you will need an email address different from %(email)s."
 msgstr "Attention: votre adresse de courrier électronique devra être différente de %(email)s."
+
+#: templates/sessions.html:21
+msgid "Browser sessions"
+msgstr "Sessions navigateur"
+
+#: templates/sessions.html:23 templates/sessions.html:39
+msgid "Connected"
+msgstr "Connecté.e"
+
+#: templates/sessions.html:25
+msgid "Current session"
+msgstr "Session en cours"
+
+#: templates/sessions.html:27 templates/sessions.html:40
+msgid "Disconnect"
+msgstr "Déconnecter"
 
 #: templates/store.html:22
 msgid "Purchase"
@@ -1503,47 +1596,39 @@ msgstr "Prix d'achat"
 msgid "Purchaser Email"
 msgstr "Adresse de courrier électronique de l'acheteur"
 
-#: templates/storeemulatefastspring.html:54
-msgid "Quantity"
-msgstr "Quantité"
-
-#: templates/storeemulatefastspring.html:62
+#: templates/storeemulatefastspring.html:75
 msgid "Emulate a purchase"
 msgstr "Émuler un achat"
 
-#: templates/thread.html:52
+#: templates/thread.html:53
 msgid "First"
 msgstr "Premier"
 
-#: templates/thread.html:53
-msgid "Previous"
-msgstr "Précédent"
-
-#: templates/thread.html:61
+#: templates/thread.html:62
 msgid "Next"
 msgstr "Suivant"
 
-#: templates/thread.html:62
+#: templates/thread.html:63
 msgid "Last"
 msgstr "Dernier"
 
-#: templates/thread.html:69
+#: templates/thread.html:70
 msgid "Reply"
 msgstr "Répondre"
 
-#: templates/thread.html:78
+#: templates/thread.html:79
 msgid "Reply "
 msgstr "Réponse"
 
-#: templates/thread.html:90
+#: templates/thread.html:107
 msgid "Submit new post"
 msgstr "Publier le message"
 
-#: templates/thread.html:114
+#: templates/thread.html:131
 msgid "Please set up your display name to post an answer."
 msgstr "Veuillez créer votre nom d'affichage pour répondre."
 
-#: templates/thread.html:121
+#: templates/thread.html:138
 msgid "Please log in or create an account to post an answer."
 msgstr "Veuillez vous connecter ou créer un compte pour répondre."
 

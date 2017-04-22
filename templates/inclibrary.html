@@ -5,14 +5,14 @@
 			<h4>{{ _("Licences") }} &nbsp;&nbsp;&nbsp;<a href="{{ 'library'|local }}" class="btn btn-default btn-sm">{{ _( "Manage" ) }}</a></h4>
 		</div>
 		<div class="panel-body">
-			<p><b>{{ _( "Available to activate and/or give" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+			<p><b>{{ _( "Available to activate or give" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
 				{% if data[ 0 ] %}
 					{{ data[ 0 ] }}
 				{% else %}
 					{{ _( "None" ) }}
 				{% endif %}
 			</p>
-			<p><b>{{ _( "Activated" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+			<p><b>{{ ngettext( "Activated", "Activated", data[ 1 ] ) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
 				{% if data[ 1 ] %}
 					{{ data[ 1 ] }}
 				{% else %}

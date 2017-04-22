@@ -59,21 +59,21 @@
 							{% if data.email %}
 								{{ data.email }}
 							{% else %}
-								{{ _( "Not set" ) }}
+								{{ _( "None" ) }}
 							{% endif %}
 						</p>
 						<p><b>{{ _( "Password" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
 							{% if data.has_password %}
 								{{ _( "Enabled" ) }}
 							{% else %}
-								{{ _( "Not set" ) }}
+								{{ _( "None" ) }}
 							{% endif %}
 						</p>
 						<p><b>{{ _( "Third party authentication" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
 							{% if data.has_auth_id_providers %}
 								{{ _( "Enabled" ) }}
 							{% else %}
-								{{ _( "Not set" ) }}
+								{{ _( "None" ) }}
 							{% endif %}
 						</p>
 					</div>
