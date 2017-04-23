@@ -3,7 +3,7 @@
 
     <head>
         {% include "inchead.html" %}
-        <title>{{ _( "Forum" ) }}</title>
+        <title>{{ data.forum.group|e }} > {{ _( "Forum" ) }} - {{ data.forum.title|e }}</title>
     </head>
 
     <body>
@@ -20,9 +20,8 @@
                 </p>
             {% elif data %}
                 <ul class="breadcrumb">
-                    <li><a href="{{ data.forums_url }}">{{ _( "Forums" ) }}</a></li>
                     <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group|e }}</a></li>
-                    <li>{{ data.forum.title|e }}</li>
+                    <li>{{ _( "Forum" ) }} - {{ data.forum.title|e }}</li>
                 </ul>
 
                 <h3>{{ _( "Forum" ) }} - {{ data.forum.title|e }}</h3>

@@ -4,7 +4,7 @@
     <head>
         {% include "inchead.html" %}
 		{% include "incheadrobotsnofollow.html" %}
-        <title>{{ _( "Post" ) }}</title>
+        <title>{{ data.forum.group|e }} > {{ _( "Forum" ) }} - {{ data.forum.title|e }} > {{ _( "Thread" ) }} - {{ data.thread.title|e|truncate(80) }} > {{ _( "Post" ) }}</title>
     </head>
 
     <body>
@@ -21,11 +21,10 @@
                 </p>
             {% elif data %}
                 <ul class="breadcrumb">
-                    <li><a href="{{ data.forums_url }}">{{ _( "Forums" ) }}</a></li>
                     <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group|e }}</a></li>
-                    <li><a href="{{ data.forum_url }}">{{ data.forum.title|e }}</a></li>
-                    <li><a href="{{ data.thread_url }}">{{ data.thread.title|e }}</a></li>
-                    <li>post</li>
+                    <li><a href="{{ data.forum_url }}">{{ _( "Forum" ) }} - {{ data.forum.title|e }}</a></li>
+                    <li><a href="{{ data.thread_url }}">{{ _( "Thread" ) }} - {{ data.thread.title|e|truncate(80) }}</a></li>
+                    <li>{{ _( "Post" ) }}</li>
                 </ul>
 
                 <h3>{{ _( "Post" ) }}</h3>
