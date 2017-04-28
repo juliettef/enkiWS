@@ -19,11 +19,11 @@
             {% include "incmessageinfo.html" %}
 
             {% if data %}
-                 <ul class="breadcrumb navbar-default">
-                    <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group|e }}</a></li>
-                    <li><a href="{{ data.forum_url }}">{{ _( "Forum" ) }} - {{ data.forum.title|e }}</a></li>
-                    <li>{{ _( "Thread" ) }} - {{ data.thread.title|e|truncate(80) }}</li>
-                </ul>
+				<ul class="breadcrumb">
+					<li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group|e }}</a></li>
+					<li><a href="{{ data.forum_url }}">{{ _( "Forum" ) }} - {{ data.forum.title|e }}</a></li>
+					<li>{{ _( "Thread" ) }} - {{ data.thread.title|e|truncate(80) }}</li>
+				</ul>
 
                 <h3>{{ _( "Thread" ) }} - {{ data.thread.title|e }}</h3>
                 <p>{{ data.thread.num_posts }} {{ _( "Posts" ) }}</p>
