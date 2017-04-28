@@ -3,7 +3,11 @@
 
     <head>
         {% include "inchead.html" %}
-        <title>{{ data.forum.group|e }} > {{ _( "Forum" ) }} - {{ data.forum.title|e }}</title>
+		{% if data %}
+        	<title>{{ data.forum.group|e }} > {{ _( "Forum" ) }} - {{ data.forum.title|e }}</title>
+		{% else %}
+			<title>{{ _( "Forum" ) }}</title>
+		{% endif %}
     </head>
 
     <body>
@@ -13,12 +17,7 @@
             {% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
-            {% if not_found %}
-                <p class="text-info">{{ not_found }}</p>
-                <p>
-                    <a href="{{ 'forums'|local }}" class="btn btn-primary">{{ _( "Go back to Forums" ) }}</a>
-                </p>
-            {% elif data %}
+            {% if data %}
                 <ul class="breadcrumb">
                     <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group|e }}</a></li>
                     <li>{{ _( "Forum" ) }} - {{ data.forum.title|e }}</li>
@@ -153,6 +152,11 @@
                     </div>
                 {% endif %}
 
+            {% else %}
+                <p class="text-info">{{ not_found }}</p>
+                <p>
+                    <a href="{{ 'forums'|local }}" class="btn btn-primary">{{ _( "Go back to Forums" ) }}</a>
+                </p>
             {% endif %}
 
             {% include "incfooter.html" %}
