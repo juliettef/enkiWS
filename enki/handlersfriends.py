@@ -2,7 +2,6 @@ import webapp2
 
 import enki
 import enki.libutil
-import enki.libfriends
 import enki.libdisplayname
 import enki.textmessages as MSG
 
@@ -18,7 +17,7 @@ class HandlerFriends( enki.HandlerBase ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
 			self.render_tmpl( 'friends.html',
 			                  active_menu = 'profile',
-			                  data = enki.libfriends.get_friends_user_id_display_name_url( self.user_id ))
+			                  data = EnkiModelFriends.get_friends_user_id_display_name_url( self.user_id ))
 
 	def post( self ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
@@ -33,19 +32,19 @@ class HandlerFriends( enki.HandlerBase ):
 			result = ''
 
 			if friend_id_invite: # send invitation to user to become friend
-				outcome = enki.libfriends.send_friend_request( user_id, int( friend_id_invite ))
-				if outcome == enki.libfriends.INFO_FRIENDS:
+				outcome = EnkiModelFriends.send_friend_request( user_id, int( friend_id_invite ))
+				if outcome == EnkiModelFriends.INFO_FRIENDS:
 					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_ADDED( enki.libdisplayname.get_display_name( int( friend_id_invite ))))
 				elif outcome == enki.libutil.ENKILIB_OK:
 					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_INVITATION_SENT( enki.libdisplayname.get_display_name( int( friend_id_invite ))))
 			elif friend_id_remove: # unfriend
-				enki.libfriends.remove_friend( user_id, int( friend_id_remove ))
+				EnkiModelFriends.remove_friend( user_id, int( friend_id_remove ))
 				has_friends = EnkiModelFriends.exist_by_user_id( user_id )
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_REMOVED( enki.libdisplayname.get_display_name( int( friend_id_remove ))))
 			elif friend_name_search: # search for user to invite
 				users_ids_to_ignore = [ user_id ]
 				if has_friends:
-					users_ids_to_ignore += enki.libfriends.get_friends_user_id( user_id )
+					users_ids_to_ignore += EnkiModelFriends.get_friends_user_id( user_id )
 				result = enki.libdisplayname.find_users_by_display_name( friend_name_search, users_ids_to_ignore )
 				if result.error == enki.libdisplayname.ERROR_DISPLAY_NAME_INVALID:
 					error_message = MSG.DISPLAY_NAME_INVALID()
@@ -55,7 +54,7 @@ class HandlerFriends( enki.HandlerBase ):
 				error_message = MSG.DISPLAY_NAME_NEEDED()
 
 			if has_friends:
-				already_friends = enki.libfriends.get_friends_user_id_display_name_url( user_id )
+				already_friends = EnkiModelFriends.get_friends_user_id_display_name_url( user_id )
 
 			self.render_tmpl( 'friends.html',
 			                  data = already_friends,
@@ -82,7 +81,7 @@ class HandlerMessages( enki.HandlerBase ):
 			if message_accept:
 				sender_id = EnkiModelMessage.get_by_id( int( message_accept )).sender
 				if sender_id:
-					enki.libfriends.add_friend( user_id, sender_id )
+					EnkiModelFriends.add_friend( user_id, sender_id )
 					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_ADDED( enki.libdisplayname.get_display_name( sender_id )))
 			elif message_decline:
 				sender_id = EnkiModelMessage.get_by_id( int( message_decline )).sender

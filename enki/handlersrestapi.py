@@ -8,7 +8,6 @@ from google.appengine.ext import ndb
 import enki
 import enki.libuser
 import enki.libdisplayname
-import enki.libfriends
 import enki.libstore
 import enki.librestapi
 import enki.textmessages as MSG
@@ -16,6 +15,7 @@ import enki.textmessages as MSG
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 from enki.modelapp import EnkiModelApp
+from enki.modelfriends import EnkiModelFriends
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
 from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 
@@ -242,7 +242,7 @@ class HandlerAPIv1Friends( webapp2.RequestHandler ):
 			if user_id and auth_token and app_secret:
 				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
 					if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
-						friends = enki.libfriends.get_friends_user_id_display_name( user_id )
+						friends = EnkiModelFriends.get_friends_user_id_display_name( user_id )
 						if friends:
 							answer.update({ 'friends' : friends })
 							success = True
@@ -368,7 +368,7 @@ class HandlerAPIv1DataStoreGetList( webapp2.RequestHandler ):
 							if read_access == 'private':    # returns all user's data with read-access "private"
 								people_list = [ user_id ]
 							elif read_access == 'friends':    # returns list of user's friends' data with friends' read_access "friends"
-								people_list = enki.libfriends.get_friends_user_id( user_id )    # get the user's friends' ids
+								people_list = EnkiModelFriends.get_friends_user_id( user_id )    # get the user's friends' ids
 							if people_list:
 								for person_id in people_list:   # get each persons' data
 									data_store_list = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_read_access_not_expired( person_id, token_valid.app_id, data_type, read_access )
