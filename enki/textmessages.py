@@ -135,6 +135,7 @@ def LICENCE_ALREADY_ACTIVATED_GIVE( product ): return _( "You already activated 
 def LICENCE_ANOTHER_USER_ACTIVATED( product, licence ): return _( "Another user already activated %(product)s licence %(licence)s.", product = product, licence = licence )
 def LICENCE_INVALID(): return _( "Invalid licence key." )
 def LICENCE_MISSING(): return _( "A licence key is needed." )
+def LICENCE_TOO_SHORT(): return _( "Licence key is too short." )
 def LICENCE_TOO_LONG(): return _( "Licence key is too long." )
 
 # Download

@@ -25,7 +25,6 @@ import enki.libdisplayname
 import enki.libforum
 import enki.libuser
 import enki.libutil
-import enki.libdisplayname
 import enki.librestapi
 import enki.modeltokenverify
 from enki import textmessages as MSG
@@ -36,6 +35,7 @@ from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modeluser import EnkiModelUser
 from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
+from enki.modelproductkey import EnkiModelProductKey
 
 
 ERROR_EMAIL_IN_USE = -13
@@ -710,7 +710,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		has_friends = True if EnkiModelFriends.fetch_by_user_id( user_id ) else False
 		has_messages = True if EnkiModelMessage.exist_sent_or_received( user_id ) else False
 		has_forum_posts = True if enki.libforum.fetch_EnkiPost_by_author( user_id ) else False
-		has_product = True if enki.libstore.exist_EnkiProductKey_by_purchaser_or_activator( user_id ) else False
+		has_product = True if EnkiModelProductKey.exist_by_purchaser_or_activator( user_id ) else False
 		if has_friends or has_messages or has_forum_posts or has_product:
 			result = True
 		return result

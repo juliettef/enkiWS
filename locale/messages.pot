@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-23 10:08+0100\n"
+"POT-Creation-Date: 2017-04-29 18:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -504,46 +504,50 @@ msgid "A licence key is needed."
 msgstr ""
 
 #: enki/textmessages.py:138
+msgid "Licence key is too short."
+msgstr ""
+
+#: enki/textmessages.py:139
 msgid "Licence key is too long."
 msgstr ""
 
-#: enki/textmessages.py:141
+#: enki/textmessages.py:142
 msgid "Download error"
 msgstr ""
 
-#: enki/textmessages.py:144
+#: enki/textmessages.py:145
 #, python-format
 msgid "Your single-use game connect code is valid for <b>%(minutes)s minute</b>. <h1><b><font face=\"monospace\">%(token)s</font></b></h1>"
 msgid_plural "Your single-use game connect code is valid for <b>%(minutes)s minutes</b>. <h1><b><font face=\"monospace\">%(token)s</font></b></h1>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: enki/textmessages.py:145
+#: enki/textmessages.py:146
 msgid "A name is needed"
 msgstr ""
 
-#: enki/textmessages.py:146
+#: enki/textmessages.py:147
 msgid "Application created."
 msgstr ""
 
-#: enki/textmessages.py:147
+#: enki/textmessages.py:148
 #, python-format
 msgid "The application name is too long. Please ensure it is maximum %(length)s characters long."
 msgstr ""
 
-#: enki/textmessages.py:148
+#: enki/textmessages.py:149
 msgid "This application name already exists. Please choose a different name."
 msgstr ""
 
-#: enki/textmessages.py:149
+#: enki/textmessages.py:150
 msgid "You have exceeded the number of applications allowed per user."
 msgstr ""
 
-#: enki/textmessages.py:150
+#: enki/textmessages.py:151
 msgid "New secret generated."
 msgstr ""
 
-#: enki/textmessages.py:151
+#: enki/textmessages.py:152
 msgid "Application data deleted."
 msgstr ""
 
@@ -699,10 +703,10 @@ msgstr ""
 msgid "Warning: deleting your account cannot be undone."
 msgstr ""
 
-#: templates/accountdelete.html:78 templates/forum.html:118
-#: templates/loginaddconfirm.html:30 templates/post.html:60
-#: templates/post.html:102 templates/reauthenticate.html:61
-#: templates/registeroauthconfirm.html:51 templates/thread.html:107
+#: templates/accountdelete.html:78 templates/forum.html:117
+#: templates/loginaddconfirm.html:30 templates/post.html:59
+#: templates/post.html:101 templates/reauthenticate.html:61
+#: templates/registeroauthconfirm.html:51 templates/thread.html:105
 msgid "Cancel"
 msgstr ""
 
@@ -860,8 +864,8 @@ msgid_plural "Past display names:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/displayname.html:32 templates/forum.html:144
-#: templates/post.html:126 templates/profile.html:38 templates/thread.html:131
+#: templates/displayname.html:32 templates/forum.html:143
+#: templates/post.html:125 templates/profile.html:38 templates/thread.html:129
 msgid "Set display name"
 msgstr ""
 
@@ -900,163 +904,164 @@ msgstr ""
 msgid "New email"
 msgstr ""
 
-#: templates/forum.html:6 templates/forum.html:24 templates/forum.html:27
-#: templates/post.html:7 templates/post.html:25 templates/thread.html:7
-#: templates/thread.html:26
+#: templates/forum.html:7 templates/forum.html:9 templates/forum.html:23
+#: templates/forum.html:26 templates/post.html:8 templates/post.html:24
+#: templates/thread.html:8 templates/thread.html:24
 msgid "Forum"
 msgstr ""
 
-#: templates/forum.html:19 templates/post.html:20 templates/thread.html:20
-msgid "Go back to Forums"
-msgstr ""
-
-#: templates/forum.html:28 templates/forums.html:23
+#: templates/forum.html:27 templates/forums.html:23
 msgid "Threads"
 msgstr ""
 
-#: templates/forum.html:28 templates/forums.html:24
-#: templates/incuserposts.html:3 templates/thread.html:31
+#: templates/forum.html:27 templates/forums.html:24
+#: templates/incuserposts.html:3 templates/thread.html:29
 msgid "Posts"
 msgstr ""
 
-#: templates/forum.html:34
+#: templates/forum.html:33
 msgid "Thread title"
 msgstr ""
 
-#: templates/forum.html:35
+#: templates/forum.html:34
 msgid "Started by"
 msgstr ""
 
-#: templates/forum.html:36
+#: templates/forum.html:35
 msgid "Date"
 msgstr ""
 
-#: templates/forum.html:37
+#: templates/forum.html:36
 msgid "# posts"
 msgstr ""
 
-#: templates/forum.html:56 templates/forum.html:65
+#: templates/forum.html:55 templates/forum.html:64
 msgid "Create a new thread"
 msgstr ""
 
-#: templates/forum.html:67 templates/forums.html:21
+#: templates/forum.html:66 templates/forums.html:21
 msgid "Title"
 msgstr ""
 
-#: templates/forum.html:69
+#: templates/forum.html:68
 msgid "Your thread title"
 msgstr ""
 
-#: templates/forum.html:71
+#: templates/forum.html:70
 #, python-format
 msgid "Maximum thread title length: %(length)s character."
 msgid_plural "Maximum thread title length: %(length)s characters."
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/forum.html:76 templates/forum.html:100 templates/post.html:84
-#: templates/thread.html:89
+#: templates/forum.html:75 templates/forum.html:99 templates/post.html:83
+#: templates/thread.html:87
 msgid "Sticky"
 msgstr ""
 
-#: templates/forum.html:79 templates/forum.html:103 templates/post.html:87
-#: templates/thread.html:92
+#: templates/forum.html:78 templates/forum.html:102 templates/post.html:86
+#: templates/thread.html:90
 msgid "0 - not sticky"
 msgstr ""
 
-#: templates/forum.html:80 templates/forum.html:104 templates/post.html:88
-#: templates/thread.html:93
+#: templates/forum.html:79 templates/forum.html:103 templates/post.html:87
+#: templates/thread.html:91
 msgid "1 - sticky"
 msgstr ""
 
-#: templates/forum.html:81 templates/forum.html:105 templates/post.html:89
-#: templates/thread.html:94
+#: templates/forum.html:80 templates/forum.html:104 templates/post.html:88
+#: templates/thread.html:92
 msgid "2 - more sticky"
 msgstr ""
 
-#: templates/forum.html:82 templates/forum.html:106 templates/post.html:90
-#: templates/thread.html:95
+#: templates/forum.html:81 templates/forum.html:105 templates/post.html:89
+#: templates/thread.html:93
 msgid "3 - top sticky"
 msgstr ""
 
-#: templates/forum.html:86
+#: templates/forum.html:85
 msgid "To make a thread sticky, pick a number greater than 0. The larger the number, the higher up the list the stickied thread is."
 msgstr ""
 
-#: templates/forum.html:91 templates/incuserposts.html:12 templates/post.html:7
-#: templates/post.html:27 templates/post.html:30 templates/post.html:75
-#: templates/thread.html:80
+#: templates/forum.html:90 templates/incuserposts.html:12 templates/post.html:8
+#: templates/post.html:10 templates/post.html:26 templates/post.html:29
+#: templates/post.html:74 templates/thread.html:78
 msgid "Post"
 msgstr ""
 
-#: templates/forum.html:93 templates/post.html:77 templates/thread.html:82
+#: templates/forum.html:92 templates/post.html:76 templates/thread.html:80
 msgid "Your text"
 msgstr ""
 
-#: templates/forum.html:95 templates/post.html:79 templates/thread.html:84
+#: templates/forum.html:94 templates/post.html:78 templates/thread.html:82
 #, python-format
 msgid "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting."
 msgstr ""
 
-#: templates/forum.html:95 templates/post.html:79 templates/thread.html:84
+#: templates/forum.html:94 templates/post.html:78 templates/thread.html:82
 #, python-format
 msgid "Maximum post length: %(length)s character."
 msgid_plural "Maximum post length: %(length)s characters."
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/forum.html:110 templates/post.html:94 templates/thread.html:99
+#: templates/forum.html:109 templates/post.html:93 templates/thread.html:97
 msgid "To make a post sticky, pick a number greater than 0. The larger the number, the higher up the list the stickied post is."
 msgstr ""
 
-#: templates/forum.html:116 templates/post.html:100 templates/thread.html:105
+#: templates/forum.html:115 templates/post.html:99 templates/thread.html:103
 msgid "Preview"
 msgstr ""
 
-#: templates/forum.html:117
+#: templates/forum.html:116
 msgid "Submit new thread"
 msgstr ""
 
-#: templates/forum.html:126 templates/post.html:110 templates/thread.html:115
+#: templates/forum.html:125 templates/post.html:109 templates/thread.html:113
 msgid "PREVIEW"
 msgstr ""
 
-#: templates/forum.html:128 templates/post.html:7 templates/post.html:26
-#: templates/thread.html:7 templates/thread.html:27 templates/thread.html:30
+#: templates/forum.html:127 templates/post.html:8 templates/post.html:25
+#: templates/thread.html:8 templates/thread.html:10 templates/thread.html:25
+#: templates/thread.html:28
 msgid "Thread"
 msgstr ""
 
-#: templates/forum.html:131 templates/incuserposts.html:17
-#: templates/post.html:37 templates/post.html:114 templates/thread.html:40
-#: templates/thread.html:119
+#: templates/forum.html:130 templates/incuserposts.html:17
+#: templates/post.html:36 templates/post.html:113 templates/thread.html:38
+#: templates/thread.html:117
 msgid "permalink"
 msgstr ""
 
-#: templates/forum.html:131 templates/post.html:114 templates/thread.html:119
+#: templates/forum.html:130 templates/post.html:113 templates/thread.html:117
 msgid "date and time submitted UTC"
 msgstr ""
 
-#: templates/forum.html:143
+#: templates/forum.html:142
 msgid "Please set up your display name to start a new thread."
 msgstr ""
 
-#: templates/forum.html:150
+#: templates/forum.html:149
 msgid "Please log in or create an account to start a new thread."
 msgstr ""
 
-#: templates/forum.html:151 templates/incnavbartop.html:10
+#: templates/forum.html:150 templates/incnavbartop.html:10
 #: templates/login.html:7 templates/login.html:61
-#: templates/passwordrecover.html:40 templates/post.html:138
+#: templates/passwordrecover.html:40 templates/post.html:133
 #: templates/register.html:57 templates/registeroauthwithexistingemail.html:68
-#: templates/thread.html:138
+#: templates/thread.html:136
 msgid "Log in"
 msgstr ""
 
-#: templates/forum.html:152 templates/incnavbartop.html:9
+#: templates/forum.html:151 templates/incnavbartop.html:9
 #: templates/login.html:66 templates/passwordrecover.html:41
-#: templates/post.html:139 templates/register.html:7 templates/register.html:52
-#: templates/thread.html:139
+#: templates/post.html:134 templates/register.html:7 templates/register.html:52
+#: templates/thread.html:137
 msgid "Sign up"
+msgstr ""
+
+#: templates/forum.html:158 templates/post.html:142 templates/thread.html:144
+msgid "Go back to Forums"
 msgstr ""
 
 #: templates/forums.html:18
@@ -1186,28 +1191,28 @@ msgstr ""
 msgid "Apps data"
 msgstr ""
 
-#: templates/incuserposts.html:15 templates/post.html:35
-#: templates/thread.html:38
+#: templates/incuserposts.html:15 templates/post.html:34
+#: templates/thread.html:36
 msgid "posted"
 msgstr ""
 
-#: templates/incuserposts.html:16 templates/post.html:36
-#: templates/thread.html:39
+#: templates/incuserposts.html:16 templates/post.html:35
+#: templates/thread.html:37
 msgid "deleted"
 msgstr ""
 
-#: templates/incuserposts.html:16 templates/post.html:36
-#: templates/thread.html:39
+#: templates/incuserposts.html:16 templates/post.html:35
+#: templates/thread.html:37
 msgid "edited"
 msgstr ""
 
-#: templates/incuserposts.html:18 templates/post.html:38
-#: templates/thread.html:41
+#: templates/incuserposts.html:18 templates/post.html:37
+#: templates/thread.html:39
 msgid "edit"
 msgstr ""
 
-#: templates/incuserposts.html:19 templates/post.html:39
-#: templates/thread.html:42
+#: templates/incuserposts.html:19 templates/post.html:38
+#: templates/thread.html:40
 msgid "delete"
 msgstr ""
 
@@ -1336,31 +1341,31 @@ msgstr ""
 msgid "Save my password"
 msgstr ""
 
-#: templates/post.html:54
+#: templates/post.html:53
 msgid "Delete post"
 msgstr ""
 
-#: templates/post.html:58
+#: templates/post.html:57
 msgid "You are about to delete the contents of your post, are you sure? This cannot be undone."
 msgstr ""
 
-#: templates/post.html:59
+#: templates/post.html:58
 msgid "Delete"
 msgstr ""
 
-#: templates/post.html:73
+#: templates/post.html:72
 msgid "Edit post"
 msgstr ""
 
-#: templates/post.html:101
+#: templates/post.html:100
 msgid "Submit modified post"
 msgstr ""
 
-#: templates/post.html:125
+#: templates/post.html:124
 msgid "Please set up your display name to modify your post."
 msgstr ""
 
-#: templates/post.html:137
+#: templates/post.html:132
 msgid "Please log in to modify your post."
 msgstr ""
 
@@ -1408,7 +1413,7 @@ msgstr ""
 msgid "Current"
 msgstr ""
 
-#: templates/profile.html:42 templates/thread.html:53
+#: templates/profile.html:42 templates/thread.html:51
 msgid "Previous"
 msgid_plural "Previous"
 msgstr[0] ""
@@ -1622,35 +1627,35 @@ msgstr ""
 msgid "Emulate a purchase"
 msgstr ""
 
-#: templates/thread.html:52
+#: templates/thread.html:50
 msgid "First"
 msgstr ""
 
-#: templates/thread.html:61
+#: templates/thread.html:59
 msgid "Next"
 msgstr ""
 
-#: templates/thread.html:62
+#: templates/thread.html:60
 msgid "Last"
 msgstr ""
 
-#: templates/thread.html:69
+#: templates/thread.html:67
 msgid "Reply"
 msgstr ""
 
-#: templates/thread.html:78
+#: templates/thread.html:76
 msgid "Reply "
 msgstr ""
 
-#: templates/thread.html:106
+#: templates/thread.html:104
 msgid "Submit new post"
 msgstr ""
 
-#: templates/thread.html:130
+#: templates/thread.html:128
 msgid "Please set up your display name to post an answer."
 msgstr ""
 
-#: templates/thread.html:137
+#: templates/thread.html:135
 msgid "Please log in or create an account to post an answer."
 msgstr ""
 

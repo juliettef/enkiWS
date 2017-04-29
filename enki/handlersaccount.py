@@ -12,6 +12,7 @@ import enki.libforum
 import enki.textmessages as MSG
 from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
+from enki.modelproductkey import EnkiModelProductKey
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
 
@@ -808,8 +809,8 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 		has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
 		has_messages = True if EnkiModelMessage.exist_sent_or_received( self.user_id ) else False
 		has_friends = True if EnkiModelFriends.exist_by_user_id( self.user_id ) else False
-		has_product_purchased_unactivated = True if enki.libstore.exist_EnkiProductKey_by_purchaser_not_activated( self.user_id ) else False
-		has_product_activated = True if enki.libstore.exist_EnkiProductKey_by_activator( self.user_id ) else False
+		has_product_purchased_unactivated = True if EnkiModelProductKey.exist_by_purchaser_not_activated( self.user_id ) else False
+		has_product_activated = True if EnkiModelProductKey.exist_by_activator( self.user_id ) else False
 		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated )
 		self.render_tmpl( 'accountdelete.html',
 						  active_menu = 'profile',

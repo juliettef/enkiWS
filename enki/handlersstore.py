@@ -10,7 +10,6 @@ from webapp2_extras import security
 import settings
 import enki
 import enki.libutil
-import enki.libstore
 import enki.libuser
 import enki.libenkiDL
 import enki.textmessages as MSG
@@ -84,7 +83,7 @@ class HandlerGenerateLicenceFastSpring( webapp2.RequestHandler ):
 		secret = xstr( self.request.get( 'secret' ))
 		if secret == settings.SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_EMULATE_STORE:
 			quantity = xint( self.request.get( 'quantity' ))
-			licence_keys = enki.libstore.generate_licence_keys( quantity )
+			licence_keys = EnkiModelProductKey.generate_licence_keys( quantity )
 			self.response.write( licence_keys )
 			return
 		self.abort( 404 )
@@ -177,7 +176,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 				user_id = token.user_id
 			licence_key_display = []
 			for item in licence_keys.split():
-				item_dash = enki.libstore.insert_dashes_5_10( item )
+				item_dash = EnkiModelProductKey.insert_dashes_5_10( item )
 				licence_key_display.append( item_dash )
 			self.add_infomessage( 'info', MSG.INFORMATION(),'<h3>FastSpring Store Emulator - Step 1</h3>'+
 									'<h4>Emulated purchase details</h4>' +
@@ -238,7 +237,7 @@ class HandlerGenerateLicenceFree( enki.HandlerBase ):
 		info = info if info else None
 
 		order_id = webapp2_extras.security.generate_random_string(length = 10, pool = webapp2_extras.security.DIGITS)
-		licence_keys = enki.libstore.generate_licence_keys( quantity )
+		licence_keys = EnkiModelProductKey.generate_licence_keys( quantity )
 		licence_keys = licence_keys.replace( '-', '' ).split()
 		for licence_key in licence_keys:
 			item = EnkiModelProductKey( licence_key = licence_key,
@@ -254,7 +253,7 @@ class HandlerGenerateLicenceFree( enki.HandlerBase ):
 			item.put()
 		licence_key_display = []
 		for item in licence_keys:
-			item_dash = enki.libstore.insert_dashes_5_10( item )
+			item_dash = EnkiModelProductKey.insert_dashes_5_10( item )
 			licence_key_display.append( item_dash )
 		self.add_infomessage( 'info', MSG.INFORMATION(),
 								 '<h3>Licence keys generated</h3>' +
@@ -291,8 +290,8 @@ class ExtensionPageLibrary( ExtensionPage ):
 	def get_data( self, handler ):
 		if handler.ensure_is_logged_in():
 			user_id = handler.enki_user.key.id()
-			licences_activated =  enki.libstore.count_EnkiProductKey_by_activator( user_id )
-			licences_available_to_activate = enki.libstore.count_EnkiProductKey_by_purchaser_not_activated( user_id )
+			licences_activated =  EnkiModelProductKey.count_by_activator( user_id )
+			licences_available_to_activate = EnkiModelProductKey.count_by_purchaser_not_activated( user_id )
 			data = [ licences_available_to_activate, licences_activated ]
 			return data
 
@@ -309,26 +308,29 @@ class HandlerLibrary( enki.HandlerBaseReauthenticate ):
 		licence_key_manual = params.get( 'licence_key_manual' )
 		user_id = self.enki_user.key.id()
 		if self.get_backoff_timer( str( user_id ), True ) == 0:
-			licence_key_preset = licence_key_preset.strip()[ :( enki.libstore.LICENCE_KEY_DASHES_LENGTH + 4 )] if licence_key_preset else '' # 4 allows for some leading and trailing characters
-			licence_key_manual = licence_key_manual.strip()[ :( enki.libstore.LICENCE_KEY_DASHES_LENGTH + 4 )] if licence_key_manual else ''
+			licence_key_preset = licence_key_preset.strip()[ :( EnkiModelProductKey.LICENCE_KEY_DASHES_LENGTH + 4 )] if licence_key_preset else '' # 4 allows for some leading and trailing characters
+			licence_key_manual = licence_key_manual.strip()[ :( EnkiModelProductKey.LICENCE_KEY_DASHES_LENGTH + 4 )] if licence_key_manual else ''
 			licence_key = licence_key_manual
 			is_manual = True
 			if licence_key_preset and not licence_key_manual:
 				licence_key = licence_key_preset
 				is_manual = False
 			if licence_key:
-				if len( licence_key ) <= ( enki.libstore.LICENCE_KEY_DASHES_LENGTH ):
-					licence_key_reduced = re.sub( r'[^\w]', '', licence_key )[:enki.libstore.LICENCE_KEY_LENGTH ]
-					item = enki.libstore.get_EnkiProductKey_by_licence_key( licence_key_reduced )
+				if len( licence_key ) < EnkiModelProductKey.LICENCE_KEY_LENGTH:
+					self.session[ 'error_library' ] = MSG.LICENCE_TOO_SHORT()
+					self.session[ 'error_library_licence' ] = licence_key
+				elif len( licence_key ) <= ( EnkiModelProductKey.LICENCE_KEY_DASHES_LENGTH ):
+					licence_key_reduced = re.sub( r'[^\w]', '', licence_key )[:EnkiModelProductKey.LICENCE_KEY_LENGTH ]
+					item = EnkiModelProductKey.get_by_licence_key( licence_key_reduced )
 					if not item:
 						if is_manual:
 							self.session[ 'error_library' ] = MSG.LICENCE_INVALID()
 							self.session[ 'error_library_licence' ] = licence_key
 					elif item:
-						licence_key_formatted = enki.libstore.insert_dashes_5_10( licence_key_reduced )
+						licence_key_formatted = EnkiModelProductKey.insert_dashes_5_10( licence_key_reduced )
 						if item.activated_by_user == -1 :
 							# the licence key is not activated.
-							if enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name ):
+							if EnkiModelProductKey.exist_product_by_activator( user_id, item.product_name ):
 								# the user has already activated a key for the same product
 								if is_manual:
 									self.session[ 'error_library' ] = MSG.LICENCE_ALREADY_ACTIVATED_GIVE( settings.product_displayname[ item.product_name ])
@@ -375,20 +377,20 @@ class HandlerLibrary( enki.HandlerBaseReauthenticate ):
 		# licences purchased by the user, available to give only as the user already activated a licence for the same product.
 		licences_activated = []
 		# licences activated byt the user (user purchased or received as gift).
-		list_purchased = enki.libstore.fetch_EnkiProductKey_by_purchaser( user_id )
+		list_purchased = EnkiModelProductKey.fetch_by_purchaser( user_id )
 		if list_purchased:
 			for i, item in enumerate( list_purchased ):
-				item_licence_key = enki.libstore.insert_dashes_5_10( item.licence_key )
-				product_already_owned = enki.libstore.exist_EnkiProductKey_product_activated_by( user_id, item.product_name )
+				item_licence_key = EnkiModelProductKey.insert_dashes_5_10( item.licence_key )
+				product_already_owned = EnkiModelProductKey.exist_product_by_activator( user_id, item.product_name )
 				if item.activated_by_user == -1:
 					if not product_already_owned:
 						licences_to_activate.append([ item.product_name, item_licence_key, settings.product_displayname[ item.product_name ]])
 					else:
 						licences_to_give.append([ item.product_name, item_licence_key, settings.product_displayname[ item.product_name ]])
-		list_activated = enki.libstore.fetch_EnkiProductKey_by_activator(user_id)
+		list_activated = EnkiModelProductKey.fetch_by_activator(user_id)
 		if list_activated:
 			for i, item in enumerate( list_activated ):
-				item_licence_key = enki.libstore.insert_dashes_5_10(item.licence_key)
+				item_licence_key = EnkiModelProductKey.insert_dashes_5_10(item.licence_key)
 				licences_activated.append([ item.product_name, item_licence_key, settings.product_displayname[ item.product_name ]])
 		error = self.session.pop( 'error_library', None )
 		licence_key_value = self.session.pop( 'error_library_licence', None )

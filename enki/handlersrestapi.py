@@ -8,7 +8,6 @@ from google.appengine.ext import ndb
 import enki
 import enki.libuser
 import enki.libdisplayname
-import enki.libstore
 import enki.librestapi
 import enki.textmessages as MSG
 
@@ -16,6 +15,7 @@ from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 from enki.modelapp import EnkiModelApp
 from enki.modelfriends import EnkiModelFriends
+from enki.modelproductkey import EnkiModelProductKey
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
 from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 
@@ -207,9 +207,9 @@ class HandlerAPIv1OwnsProducts( webapp2.RequestHandler ):
 				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
 					if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 						if products:   # check which products in the list are activated by the user and return them
-							list_entities = enki.libstore.fetch_EnkiProductKey_by_activator_products_list( user_id, products )
+							list_entities = EnkiModelProductKey.fetch_by_activator_products_list( user_id, products )
 						else:    # no product specified, return all products activated by the user
-							list_entities = enki.libstore.fetch_EnkiProductKey_by_activator( user_id )
+							list_entities = EnkiModelProductKey.fetch_by_activator( user_id )
 						if list_entities:
 							list_products = []
 							for i, item in enumerate( list_entities ):
