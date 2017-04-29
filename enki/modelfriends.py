@@ -10,3 +10,7 @@ class EnkiModelFriends( model.Model ):
 	def exist_by_user_id( cls, user_id ):
 		count = cls.query( ndb.OR( cls.friends == user_id, cls.friends == user_id )).count( 1 )
 		return count > 0
+
+	@classmethod
+	def count_by_user_id( cls, user_id ):
+		return cls.query( ndb.OR( cls.friends == user_id, cls.friends == user_id )).count()

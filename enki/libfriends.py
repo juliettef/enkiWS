@@ -79,13 +79,6 @@ def remove_friend( user_id, friend_id ):
 
 #=== QUERIES ==================================================================
 
-
-def count_EnkiFriends( user_id ):
-	count = EnkiModelFriends.query( ndb.OR( EnkiModelFriends.friends == user_id,
-	                                         EnkiModelFriends.friends == user_id )).count()
-	return count
-
-
 def fetch_EnkiFriends_by_user( user ):
 	list = EnkiModelFriends.query( EnkiModelFriends.friends == user ).fetch()
 	return list

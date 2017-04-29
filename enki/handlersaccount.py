@@ -209,8 +209,8 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			if self.enki_user.auth_ids_provider:
 				has_auth_id_providers = True
 
-			friends = enki.libfriends.count_EnkiFriends(self.user_id)
-			messages = enki.libmessage.count_EnkiMessage_by_recipient(self.user_id)
+			friends = EnkiModelFriends.count_by_user_id( self.user_id )
+			messages = enki.libmessage.count_EnkiMessage_by_recipient( self.user_id )
 
 			sessions_browsers = enki.libuser.count_AuthTokens( self.user_id )
 			sessions_apps = EnkiModelRestAPITokenVerify.count_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
