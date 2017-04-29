@@ -12,7 +12,7 @@ INFO_FRIENDS = -61
 
 def get_friends_user_id( user_id ):
 	friend_list = []
-	list = fetch_EnkiFriends_by_user( user_id )
+	list = EnkiModelFriends.fetch_by_user_id( user_id )
 	if list:
 		for i, item in enumerate( list ):
 			if item.friends[ 0 ] == user_id:
@@ -46,7 +46,7 @@ def get_friends_user_id_display_name_url( user_id ):
 def send_friend_request( sender_id, friend_id ):
 	result = enki.libutil.ENKILIB_OK
 	if friend_id != sender_id: # friend is not me
-		if not exist_EnkiFriends_by_friends( sender_id, friend_id ): # we're not currently friends
+		if not EnkiModelFriends.exist_by_user_ids( sender_id, friend_id ): # we're not currently friends
 			already_invited = enki.libmessage.get_key_EnkiMessage_by_sender_recipient( friend_id, sender_id )
 			if already_invited:
 				# if an invite from the potential friend already exists, add the pair of friends immediately and delete the invite(s)
@@ -62,7 +62,7 @@ def send_friend_request( sender_id, friend_id ):
 
 
 def add_friend( user_id, friend_id ):
-	if not exist_EnkiFriends_by_friends( user_id, friend_id ):
+	if not EnkiModelFriends.exist_by_user_ids( user_id, friend_id ):
 		friends = EnkiModelFriends( friends = [ user_id, friend_id ])
 		friends.put()
 	# clean up any remaining friend invitations (from either side)
@@ -70,27 +70,8 @@ def add_friend( user_id, friend_id ):
 
 
 def remove_friend( user_id, friend_id ):
-	friends = get_key_EnkiFriends_by_friends( user_id, friend_id )
+	friends = EnkiModelFriends.get_key_by_user_ids( user_id, friend_id )
 	if friends:
 		friends.delete()
 	# clean up any remaining friend invitations (from either side)
 	enki.libmessage.remove_messages_crossed( user_id, friend_id )
-
-
-#=== QUERIES ==================================================================
-
-def fetch_EnkiFriends_by_user( user ):
-	list = EnkiModelFriends.query( EnkiModelFriends.friends == user ).fetch()
-	return list
-
-
-def exist_EnkiFriends_by_friends( user_a_id, user_b_id ):
-	count = EnkiModelFriends.query( ndb.AND( EnkiModelFriends.friends == user_a_id,
-	                                         EnkiModelFriends.friends == user_b_id )).count( 1 )
-	return count > 0
-
-
-def get_key_EnkiFriends_by_friends( user_a_id, user_b_id ):
-	entity = EnkiModelFriends.query( ndb.AND( EnkiModelFriends.friends == user_a_id,
-	                                          EnkiModelFriends.friends == user_b_id )).get( keys_only = True )
-	return entity

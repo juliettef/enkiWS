@@ -23,7 +23,6 @@ import enki
 import enki.authcryptcontext
 import enki.libdisplayname
 import enki.libforum
-import enki.libfriends
 import enki.libmessage
 import enki.libuser
 import enki.libutil
@@ -36,6 +35,7 @@ from enki.modeltokenauth import EnkiModelTokenAuth
 from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modeluser import EnkiModelUser
+from enki.modelfriends import EnkiModelFriends
 
 
 ERROR_EMAIL_IN_USE = -13
@@ -707,7 +707,7 @@ class HandlerBase( webapp2.RequestHandler ):
 	def account_is_active( cls, user_id ):
 		# detect activity on a user account
 		result = False
-		has_friends = True if enki.libfriends.fetch_EnkiFriends_by_user( user_id ) else False
+		has_friends = True if EnkiModelFriends.fetch_by_user_id( user_id ) else False
 		has_messages = True if enki.libmessage.exist_sent_or_received_message( user_id ) else False
 		has_forum_posts = True if enki.libforum.fetch_EnkiPost_by_author( user_id ) else False
 		has_product = True if enki.libstore.exist_EnkiProductKey_by_purchaser_or_activator( user_id ) else False
