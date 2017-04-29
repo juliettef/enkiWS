@@ -9,6 +9,7 @@ import enki.textmessages as MSG
 
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
+from enki.modelfriends import EnkiModelFriends
 
 
 class HandlerFriends( enki.HandlerBase ):
@@ -27,7 +28,7 @@ class HandlerFriends( enki.HandlerBase ):
 			friend_id_remove = self.request.get( 'remove' )
 			friend_name_search = self.request.get( 'search' ).strip()[:(enki.libdisplayname.DISPLAY_NAME_LENGTH_MAX + 4 )]  # 4 allows for some leading and trailing characters
 			already_friends = ''
-			has_friends = enki.libfriends.exist_EnkiFriends
+			has_friends = EnkiModelFriends.exist_by_user_id( user_id )
 			error_message = ''
 			result = ''
 
@@ -39,7 +40,7 @@ class HandlerFriends( enki.HandlerBase ):
 					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_INVITATION_SENT( enki.libdisplayname.get_display_name( int( friend_id_invite ))))
 			elif friend_id_remove: # unfriend
 				enki.libfriends.remove_friend( user_id, int( friend_id_remove ))
-				has_friends = enki.libfriends.exist_EnkiFriends
+				has_friends = EnkiModelFriends.exist_by_user_id( user_id )
 				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_REMOVED( enki.libdisplayname.get_display_name( int( friend_id_remove ))))
 			elif friend_name_search: # search for user to invite
 				users_ids_to_ignore = [ user_id ]

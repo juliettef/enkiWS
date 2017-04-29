@@ -80,12 +80,6 @@ def remove_friend( user_id, friend_id ):
 #=== QUERIES ==================================================================
 
 
-def exist_EnkiFriends( user_id ):
-	count = EnkiModelFriends.query( ndb.OR( EnkiModelFriends.friends == user_id,
-	                                         EnkiModelFriends.friends == user_id )).count( 1 )
-	return count > 0
-
-
 def count_EnkiFriends( user_id ):
 	count = EnkiModelFriends.query( ndb.OR( EnkiModelFriends.friends == user_id,
 	                                         EnkiModelFriends.friends == user_id )).count()
