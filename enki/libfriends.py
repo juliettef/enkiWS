@@ -1,5 +1,3 @@
-from google.appengine.ext import ndb
-
 import enki.libdisplayname
 import enki.libmessage
 import enki.libutil
@@ -47,13 +45,13 @@ def send_friend_request( sender_id, friend_id ):
 	result = enki.libutil.ENKILIB_OK
 	if friend_id != sender_id: # friend is not me
 		if not EnkiModelFriends.exist_by_user_ids( sender_id, friend_id ): # we're not currently friends
-			already_invited = enki.libmessage.get_key_EnkiMessage_by_sender_recipient( friend_id, sender_id )
+			already_invited = EnkiModelMessage.get_key_by_sender_recipient( friend_id, sender_id )
 			if already_invited:
 				# if an invite from the potential friend already exists, add the pair of friends immediately and delete the invite(s)
 				add_friend( sender_id, friend_id )
 				result = INFO_FRIENDS
 			# send an invitation to friend (unless it's a duplicate)
-			elif not enki.libmessage.exist_EnkiMessage_by_sender_recipient( sender_id, friend_id ):
+			elif not EnkiModelMessage.exist_by_sender_recipient( sender_id, friend_id ):
 				message = EnkiModelMessage( sender = sender_id, recipient = friend_id, type = 'friend_request' )
 				message.put()
 	else:

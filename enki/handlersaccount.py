@@ -9,9 +9,9 @@ import enki.libutil
 import enki.libuser
 import enki.libdisplayname
 import enki.libforum
-import enki.libmessage
 import enki.textmessages as MSG
 from enki.modelfriends import EnkiModelFriends
+from enki.modelmessage import EnkiModelMessage
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
 
@@ -209,7 +209,7 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 				has_auth_id_providers = True
 
 			friends = EnkiModelFriends.count_by_user_id( self.user_id )
-			messages = enki.libmessage.count_EnkiMessage_by_recipient( self.user_id )
+			messages = EnkiModelMessage.count_by_recipient( self.user_id )
 
 			sessions_browsers = enki.libuser.count_AuthTokens( self.user_id )
 			sessions_apps = EnkiModelRestAPITokenVerify.count_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
@@ -806,7 +806,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 			provider_name, provider_uid = item.partition( ':' )[ ::2 ]
 			auth_provider.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid )})
 		has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
-		has_messages = True if enki.libmessage.exist_sent_or_received_message( self.user_id ) else False
+		has_messages = True if EnkiModelMessage.exist_sent_or_received( self.user_id ) else False
 		has_friends = True if EnkiModelFriends.exist_by_user_id( self.user_id ) else False
 		has_product_purchased_unactivated = True if enki.libstore.exist_EnkiProductKey_by_purchaser_not_activated( self.user_id ) else False
 		has_product_activated = True if enki.libstore.exist_EnkiProductKey_by_activator( self.user_id ) else False

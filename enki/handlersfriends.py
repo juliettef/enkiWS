@@ -10,6 +10,7 @@ import enki.textmessages as MSG
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 from enki.modelfriends import EnkiModelFriends
+from enki.modelmessage import EnkiModelMessage
 
 
 class HandlerFriends( enki.HandlerBase ):
@@ -80,12 +81,12 @@ class HandlerMessages( enki.HandlerBase ):
 			message_decline = self.request.get( 'decline' )
 
 			if message_accept:
-				sender_id = enki.libmessage.get_EnkiMessage_by_id( int( message_accept )).sender
+				sender_id = EnkiModelMessage.get_by_id( int( message_accept )).sender
 				if sender_id:
 					enki.libfriends.add_friend( user_id, sender_id )
 					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_ADDED( enki.libdisplayname.get_display_name( sender_id )))
 			elif message_decline:
-				sender_id = enki.libmessage.get_EnkiMessage_by_id( int( message_decline )).sender
+				sender_id = EnkiModelMessage.get_by_id( int( message_decline )).sender
 				if sender_id:
 					enki.libmessage.remove_messages_crossed( user_id, sender_id )
 
@@ -101,7 +102,7 @@ class ExtensionPageMessageAlert( ExtensionPage ):
 	def get_data( self, handler ):
 		data = [ 0 ]
 		if handler.user_id:
-			if enki.libmessage.exist_EnkiMessage_by_recipient( handler.user_id ):
+			if EnkiModelMessage.exist_by_recipient( handler.user_id ):
 				data = [ 1 ]  # user has message
 		return data
 

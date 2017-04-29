@@ -23,7 +23,6 @@ import enki
 import enki.authcryptcontext
 import enki.libdisplayname
 import enki.libforum
-import enki.libmessage
 import enki.libuser
 import enki.libutil
 import enki.libdisplayname
@@ -36,6 +35,7 @@ from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modeluser import EnkiModelUser
 from enki.modelfriends import EnkiModelFriends
+from enki.modelmessage import EnkiModelMessage
 
 
 ERROR_EMAIL_IN_USE = -13
@@ -708,7 +708,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		# detect activity on a user account
 		result = False
 		has_friends = True if EnkiModelFriends.fetch_by_user_id( user_id ) else False
-		has_messages = True if enki.libmessage.exist_sent_or_received_message( user_id ) else False
+		has_messages = True if EnkiModelMessage.exist_sent_or_received( user_id ) else False
 		has_forum_posts = True if enki.libforum.fetch_EnkiPost_by_author( user_id ) else False
 		has_product = True if enki.libstore.exist_EnkiProductKey_by_purchaser_or_activator( user_id ) else False
 		if has_friends or has_messages or has_forum_posts or has_product:
@@ -779,7 +779,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				if display_name.prefix != enki.libdisplayname.DELETED_PREFIX or display_name.suffix != enki.libdisplayname.DELETED_SUFFIX:
 					enki.libdisplayname.set_display_name( user_to_delete.key.id(), enki.libdisplayname.DELETED_PREFIX, enki.libdisplayname.DELETED_SUFFIX )
 			# delete user's sent and received messages
-			ndb.delete_multi( enki.libmessage.fetch_keys_sent_or_received_message( user_to_delete.key.id()))
+			ndb.delete_multi( EnkiModelMessage.fetch_keys_sent_or_received( user_to_delete.key.id()))
 			# delete user's posts if required
 			if delete_posts:
 				enki.libforum.delete_user_posts( user_to_delete.key.id())
