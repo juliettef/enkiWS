@@ -3,7 +3,7 @@ import collections
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
 
-import enki.libdisplayname
+from enki.modeldisplayname import EnkiModelDisplayName
 
 
 messageData = collections.namedtuple( 'message_data', 'message_id, type, sender' )
@@ -66,8 +66,8 @@ class EnkiModelMessage( model.Model ):
 		message_list = []
 		if list:
 			for i, item in enumerate( list ):
-				entity = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.sender )
-				sender = enki.libdisplayname.get_user_id_display_name_url( entity )
+				entity = EnkiModelDisplayName.get_by_user_id_current( item.sender )
+				sender = EnkiModelDisplayName.get_user_id_display_name_url( entity )
 				type = item.type
 				message_id = item.key.id()
 				message = messageData( message_id, type, sender  )

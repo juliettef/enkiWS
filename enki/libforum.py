@@ -5,10 +5,10 @@ from webapp2_extras import security
 from markdown2 import markdown2
 
 import settings
-import enki.libdisplayname
 import enki.libuser
 import enki.libutil
 from enki.modeltokenverify import EnkiModelTokenVerify
+from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelforum import EnkiModelForum
 from enki.modelpost import EnkiModelPost
 from enki.modelthread import EnkiModelThread
@@ -101,7 +101,7 @@ def get_forum_data( forum_selected ):
 			num_posts += item.num_posts
 			url = enki.libutil.get_local_url( 'thread', { 'thread': str( item.key.id())})
 			item.url = url
-			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
+			item.author_data = EnkiModelDisplayName.get_user_id_display_name_url( EnkiModelDisplayName.get_by_user_id_current( item.author ))
 			item.sticky = True if ( item.sticky_order > 0 ) else False
 			list[ i ] = item
 	forum_data = forumData(forums_url, forum, num_posts, list, markdown_escaped, forum_selected)
@@ -137,7 +137,7 @@ def get_thread_data( thread_selected, post_requested = POST_DEFAULT, post_count 
 	list = fetch_EnkiPost_by_thread( int( thread_selected ), offset = (int( post_requested ) - 1), limit = int( post_count ))
 	if list:
 		for i, item in enumerate( list ):
-			item.author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.author ))
+			item.author_data = EnkiModelDisplayName.get_user_id_display_name_url( EnkiModelDisplayName.get_by_user_id_current( item.author ))
 			item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
 			item.sticky = True if ( item.sticky_order > 0 ) else False
 			list[ i ] = item
@@ -230,17 +230,17 @@ def	get_post_data ( post_selected ):
 	thread_url = enki.libutil.get_local_url( 'thread', { 'thread': str( thread.key.id())})
 	forum = EnkiModelForum.get_by_id( thread.forum )
 	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
-	author_data = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( post.author ))
+	author_data = EnkiModelDisplayName.get_user_id_display_name_url( EnkiModelDisplayName.get_by_user_id_current( post.author ))
 	post_data = postData(forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, markdown_escaped, )
 	return post_data
 
 
 def get_author_posts( author_selected ):  # MOVED TO LIB
 	# get posts by author to display on their profile. If the author hasn't set a display name, return nothing
-	author_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( int( author_selected ))
+	author_display_name = EnkiModelDisplayName.get_by_user_id_current( int( author_selected ))
 	if author_display_name:
 		forums_url = enki.libutil.get_local_url( 'forums' )
-		author_data = enki.libdisplayname.get_user_id_display_name_url( author_display_name )
+		author_data = EnkiModelDisplayName.get_user_id_display_name_url( author_display_name )
 		list = fetch_EnkiPost_by_author( int( author_selected ))
 		if list:
 			for i, item in enumerate( list ):
@@ -283,7 +283,7 @@ def add_thread_and_post( user_id, forum, thread_title, thread_sticky_order, post
 	result = enki.libutil.ENKILIB_OK
 	if user_id and forum and thread_title and post_body:
 		if len( thread_title ) <= THREAD_TITLE_LENGTH_MAX and len( post_body ) <= POST_LENGTH_MAX:
-			if enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( user_id ):
+			if EnkiModelDisplayName.get_by_user_id_current( user_id ):
 				thread = EnkiModelThread( author = user_id, forum = int( forum ), title = thread_title, num_posts = 1, sticky_order = int( thread_sticky_order ) )
 				thread.put()
 				post = EnkiModelPost( author = user_id, body = post_body, thread = thread.key.id(), sticky_order = int( post_sticky_order ))

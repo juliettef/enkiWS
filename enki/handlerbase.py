@@ -21,7 +21,6 @@ from webapp2_extras import sessions_ndb
 import settings
 import enki
 import enki.authcryptcontext
-import enki.libdisplayname
 import enki.libforum
 import enki.libuser
 import enki.libutil
@@ -33,6 +32,7 @@ from enki.modeltokenauth import EnkiModelTokenAuth
 from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modeluser import EnkiModelUser
+from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
 from enki.modelproductkey import EnkiModelProductKey
@@ -150,7 +150,7 @@ class HandlerBase( webapp2.RequestHandler ):
 
 
 	def ensure_has_display_name( self, url = None ):    # user must set their display_name to continue
-		user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
+		user_display_name = EnkiModelDisplayName.get_by_user_id_current( self.user_id )
 		if not user_display_name:
 			if not url:
 				url = self.request.url
@@ -288,7 +288,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			navbar_items = enki.ExtensionLibrary.get_navbar_items()
 			navbar_extensions = enki.ExtensionLibrary.get_navbar_extensions( self )
 			page_extensions = enki.ExtensionLibrary.get_page_extensions( self )
-			display_name = enki.libdisplayname.get_display_name( self.user_id ) if self.is_logged_in( ) else ''
+			display_name = EnkiModelDisplayName.get_display_name( self.user_id ) if self.is_logged_in() else ''
 			CSRFtoken = ''
 			if CSRFneeded:
 				CSRFtoken = self.create_CSRF( self.request.path )
@@ -306,7 +306,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				                    infomessage = self.session.pop( 'infomessage', None ),
 									deleted_post = enki.libforum.POST_DELETED,
 									deleted_post_display = MSG.POST_DELETED_DISPLAY(),
-									deleted_dn = enki.libdisplayname.DELETED_PREFIX + enki.libdisplayname.DELETED_SUFFIX,
+									deleted_dn = EnkiModelDisplayName.DELETED_PREFIX + EnkiModelDisplayName.DELETED_SUFFIX,
 									deleted_dn_display = MSG.DISPLAY_NAME_DELETED_DISPLAY(),
 				                    **kwargs ))
 		except TemplateNotFound:
@@ -760,7 +760,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		# Delete the user account and log them out.
 		if not HandlerBase.account_is_active( user_to_delete.key.id()):
 			# delete user if the account is inactive
-			display_names = enki.libdisplayname.fetch_EnkiUserDisplayName_by_user_id( user_to_delete.key.id())
+			display_names = EnkiModelDisplayName.fetch_by_user_id( user_to_delete.key.id())
 			if display_names:
 				ndb.delete_multi( display_names )
 			user_to_delete.key.delete()
@@ -774,10 +774,10 @@ class HandlerBase( webapp2.RequestHandler ):
 				user_to_delete.auth_ids_provider = []
 			user_to_delete.put()
 			# keep all historical display_names. Add a new current display_name '[deleted]' (unless it's already been deleted)
-			display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( user_to_delete.key.id())
+			display_name = EnkiModelDisplayName.get_by_user_id_current( user_to_delete.key.id())
 			if display_name:
-				if display_name.prefix != enki.libdisplayname.DELETED_PREFIX or display_name.suffix != enki.libdisplayname.DELETED_SUFFIX:
-					enki.libdisplayname.set_display_name( user_to_delete.key.id(), enki.libdisplayname.DELETED_PREFIX, enki.libdisplayname.DELETED_SUFFIX )
+				if display_name.prefix != EnkiModelDisplayName.DELETED_PREFIX or display_name.suffix != EnkiModelDisplayName.DELETED_SUFFIX:
+					EnkiModelDisplayName.set_display_name( user_to_delete.key.id(), EnkiModelDisplayName.DELETED_PREFIX, EnkiModelDisplayName.DELETED_SUFFIX )
 			# delete user's sent and received messages
 			EnkiModelMessage.delete_user_messages( user_to_delete.key.id())
 			# delete user's posts if required

@@ -7,9 +7,9 @@ import settings
 import enki
 import enki.libutil
 import enki.libuser
-import enki.libdisplayname
 import enki.libforum
 import enki.textmessages as MSG
+from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
 from enki.modelproductkey import EnkiModelProductKey
@@ -194,10 +194,10 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 												   friends, messages, sessions_browsers, sessions_apps''' )
 			current_display_name = ''
 			previous_display_names = ''
-			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
+			user_display_name = EnkiModelDisplayName.get_by_user_id_current( self.user_id )
 			if user_display_name:
-				current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
-				previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
+				current_display_name = EnkiModelDisplayName.get_user_id_display_name_url( user_display_name )
+				previous_display_names = EnkiModelDisplayName.get_user_display_name_old( self.user_id )
 
 			email = self.enki_user.email
 			if email == 'removed':
@@ -268,7 +268,7 @@ class HandlerProfilePublic( enki.HandlerBase ):
 		if self.ensure_is_logged_in():
 			display_name_data = None
 			if useridnumber.isdigit and enki.libuser.EnkiModelUser.get_by_id( int( useridnumber )):
-				display_name_data = enki.libdisplayname.get_display_name_data( int( useridnumber ))
+				display_name_data = EnkiModelDisplayName.get_display_name_data( int( useridnumber ))
 			else:
 				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.USER_NOT_EXIST())
 			self.render_tmpl( 'profilepublic.html', False,
@@ -680,22 +680,22 @@ class HandlerDisplayName( enki.HandlerBaseReauthenticate ):
 		self.session[ 'sessionreauth' ] = self.session[ 'sessiondisplaynamerefpath' ]
 		auto_generated = ''
 		intro_message = ''
-		if not enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
+		if not EnkiModelDisplayName.exist_by_user_id( self.user_id ):
 			# if no displayname exists, auto-generate one
-			auto_generated = enki.libdisplayname.cosmopompe()[ 0 ]
+			auto_generated = EnkiModelDisplayName.cosmopompe()[ 0 ]
 			intro_message = " ".join([ MSG.DISPLAY_NAME_INTRO(), MSG.DISPLAY_NAME_AUTO_GENERATED()])
 		self.render_tmpl( 'displayname.html',
 		                  active_menu = 'profile',
 		                  auto_generated = auto_generated,
 		                  intro = intro_message,
-		                  data = enki.libdisplayname.get_display_name_data( self.user_id ),
-		                  prefix_length_min = enki.libdisplayname.PREFIX_LENGTH_MIN,
-		                  prefix_length_max = enki.libdisplayname.PREFIX_LENGTH_MAX )
+		                  data = EnkiModelDisplayName.get_display_name_data( self.user_id ),
+		                  prefix_length_min = EnkiModelDisplayName.PREFIX_LENGTH_MIN,
+		                  prefix_length_max = EnkiModelDisplayName.PREFIX_LENGTH_MAX )
 
 	def post_reauthenticated( self, params ):
 		prefix = params.get( 'prefix' )
 		error_message = ''
-		result = enki.libdisplayname.make_unique_and_set_display_name( self.user_id, prefix )
+		result = EnkiModelDisplayName.make_unique_and_set_display_name( self.user_id, prefix )
 		if result == enki.libutil.ENKILIB_OK:
 			enki.libuser.add_roles( self.enki_user, [ 'RUC' ])
 			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISPLAYNAME_SET())
@@ -703,24 +703,24 @@ class HandlerDisplayName( enki.HandlerBaseReauthenticate ):
 			self.redirect_to_relevant_page()
 			return
 		else:
-			if result == enki.libdisplayname.ERROR_DISPLAY_NAME_LENGTH:
+			if result == EnkiModelDisplayName.ERROR_DISPLAY_NAME_LENGTH:
 				length = len( prefix )
 				instruction = ''
-				if length < enki.libdisplayname.PREFIX_LENGTH_MIN:
-					instruction = MSG.DISPLAY_NAME_TOO_SHORT_LENGTHEN( enki.libdisplayname.PREFIX_LENGTH_MIN )
-				elif length > enki.libdisplayname.PREFIX_LENGTH_MAX:
-					instruction = MSG.DISPLAY_NAME_TOO_LONG_SHORTEN( enki.libdisplayname.PREFIX_LENGTH_MAX )
+				if length < EnkiModelDisplayName.PREFIX_LENGTH_MIN:
+					instruction = MSG.DISPLAY_NAME_TOO_SHORT_LENGTHEN( EnkiModelDisplayName.PREFIX_LENGTH_MIN )
+				elif length > EnkiModelDisplayName.PREFIX_LENGTH_MAX:
+					instruction = MSG.DISPLAY_NAME_TOO_LONG_SHORTEN( EnkiModelDisplayName.PREFIX_LENGTH_MAX )
 				error_message = " ".join([ MSG.DISPLAY_NAME_WRONG_LENGTH( length ), instruction ])
-			elif result == enki.libdisplayname.ERROR_DISPLAY_NAME_ALNUM:
+			elif result == EnkiModelDisplayName.ERROR_DISPLAY_NAME_ALNUM:
 				error_message = MSG.DISPLAY_NAME_WRONG_SYMBOLS()
-			elif result == enki.libdisplayname.ERROR_DISPLAY_NAME_IN_USE:
+			elif result == EnkiModelDisplayName.ERROR_DISPLAY_NAME_IN_USE:
 				error_message = MSG.DISPLAY_NAME_ALREADY_USED()
 			self.render_tmpl( 'displayname.html',
 			                  active_menu = 'profile',
 			                  prefix = prefix,
-			                  data = enki.libdisplayname.get_display_name_data( self.user_id ),
-			                  prefix_length_min = enki.libdisplayname.PREFIX_LENGTH_MIN,
-			                  prefix_length_max = enki.libdisplayname.PREFIX_LENGTH_MAX,
+			                  data = EnkiModelDisplayName.get_display_name_data( self.user_id ),
+			                  prefix_length_min = EnkiModelDisplayName.PREFIX_LENGTH_MIN,
+			                  prefix_length_max = EnkiModelDisplayName.PREFIX_LENGTH_MAX,
 			                  error = error_message )
 
 
@@ -796,10 +796,10 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 	def get_logged_in( self ):
 		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated' )
 		current_display_name = ''
-		if enki.libdisplayname.exist_EnkiUserDisplayName_by_user_id( self.user_id ):
-			user_display_name = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( self.user_id )
-			current_display_name = enki.libdisplayname.get_user_id_display_name_url( user_display_name )
-		previous_display_names = enki.libdisplayname.get_user_display_name_old( self.user_id )
+		if EnkiModelDisplayName.exist_by_user_id( self.user_id ):
+			user_display_name = EnkiModelDisplayName.get_by_user_id_current( self.user_id )
+			current_display_name = EnkiModelDisplayName.get_user_id_display_name_url( user_display_name )
+		previous_display_names = EnkiModelDisplayName.get_user_display_name_old( self.user_id )
 		email = self.enki_user.email if ( self.enki_user.email and self.enki_user.email != 'removed' ) else ''
 		password = True if self.enki_user.password else False
 		auth_provider = []

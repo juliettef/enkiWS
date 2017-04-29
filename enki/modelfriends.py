@@ -2,8 +2,8 @@ from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
 
 import enki.libutil
-import enki.libdisplayname
 
+from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelmessage import EnkiModelMessage
 
 
@@ -54,7 +54,7 @@ class EnkiModelFriends( model.Model ):
 		list = cls.get_friends_user_id( user_id )
 		if list:
 			for friend_id in list:
-				friend = enki.libdisplayname.get_user_id_display_name( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( friend_id ))
+				friend = EnkiModelDisplayName.get_user_id_display_name( EnkiModelDisplayName.get_by_user_id_current( friend_id ))
 				friend_list.append( friend )
 		return friend_list
 
@@ -64,7 +64,7 @@ class EnkiModelFriends( model.Model ):
 		list = cls.get_friends_user_id( user_id )
 		if list:
 			for friend_id in list:
-				friend = enki.libdisplayname.get_user_id_display_name_url( enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( friend_id ))
+				friend = EnkiModelDisplayName.get_user_id_display_name_url( EnkiModelDisplayName.get_by_user_id_current( friend_id ))
 				friend_list.append( friend )
 		return friend_list
 
@@ -82,7 +82,7 @@ class EnkiModelFriends( model.Model ):
 				elif not EnkiModelMessage.exist_by_sender_recipient( sender_id, friend_id ):
 					EnkiModelMessage.send_message( sender_id, friend_id, 'friend_request' )
 		else:
-			result = enki.libdisplayname.ERROR_DISPLAY_NAME_INVALID
+			result = EnkiModelDisplayName.ERROR_DISPLAY_NAME_INVALID
 		return result
 
 	@classmethod

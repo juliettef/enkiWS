@@ -7,13 +7,13 @@ from google.appengine.ext import ndb
 
 import enki
 import enki.libuser
-import enki.libdisplayname
 import enki.librestapi
 import enki.textmessages as MSG
 
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 from enki.modelapp import EnkiModelApp
+from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelfriends import EnkiModelFriends
 from enki.modelproductkey import EnkiModelProductKey
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
@@ -116,7 +116,7 @@ class HandlerAPIv1Connect( webapp2.RequestHandler ):
 			app_secret = jsonobject.get( 'app_secret', '')
 			if code and displayname and app_id and app_secret:
 				if EnkiModelApp.exist_by_app_id_app_secret( app_id, app_secret ):   # check against registered apps
-					user_id = enki.libdisplayname.get_user_id_from_display_name( displayname )
+					user_id = EnkiModelDisplayName.get_user_id_from_display_name( displayname )
 					if user_id:
 						entity = enki.librestapi.get_EnkiModelRestAPIConnectToken_by_token_user_id_valid_age( token = code, user_id = user_id )
 						if entity:
@@ -175,7 +175,7 @@ class HandlerAPIv1AuthValidate( webapp2.RequestHandler ):
 			if user_id and auth_token and app_secret:
 				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
 					if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
-						user_displayname = enki.libdisplayname.get_display_name( user_id )
+						user_displayname = EnkiModelDisplayName.get_display_name( user_id )
 						if user_displayname:
 							answer.update({ 'user_displayname' : user_displayname })
 							success = True
