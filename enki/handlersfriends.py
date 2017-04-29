@@ -3,7 +3,6 @@ import webapp2
 import enki
 import enki.libutil
 import enki.libfriends
-import enki.libmessage
 import enki.libdisplayname
 import enki.textmessages as MSG
 
@@ -71,7 +70,7 @@ class HandlerMessages( enki.HandlerBase ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
 			self.render_tmpl( 'messages.html',
 			                  active_menu = 'profile',
-			                  data = enki.libmessage.get_messages( self.user_id ))
+			                  data = EnkiModelMessage.get_messages( self.user_id ))
 
 	def post( self ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
@@ -88,10 +87,10 @@ class HandlerMessages( enki.HandlerBase ):
 			elif message_decline:
 				sender_id = EnkiModelMessage.get_by_id( int( message_decline )).sender
 				if sender_id:
-					enki.libmessage.remove_messages_crossed( user_id, sender_id )
+					EnkiModelMessage.remove_messages_crossed( user_id, sender_id )
 
 			self.render_tmpl( 'messages.html',
-			                  data = enki.libmessage.get_messages( self.user_id ) )
+			                  data = EnkiModelMessage.get_messages( self.user_id ) )
 
 
 class ExtensionPageMessageAlert( ExtensionPage ):

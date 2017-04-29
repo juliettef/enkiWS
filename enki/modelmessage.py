@@ -1,5 +1,12 @@
+import collections
+
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
+
+import enki.libdisplayname
+
+
+messageData = collections.namedtuple( 'message_data', 'message_id, type, sender' )
 
 
 class EnkiModelMessage( model.Model ):
@@ -47,3 +54,43 @@ class EnkiModelMessage( model.Model ):
 	@classmethod
 	def fetch_keys_sent_or_received( cls, user_id ):
 		return cls.query( ndb.OR( cls.sender == user_id, cls.recipient == user_id )).fetch( keys_only = True )
+
+	@classmethod
+	def send_message( cls, sender_id, recipient_id, type ):
+		message = EnkiModelMessage( sender = sender_id, recipient = recipient_id, type = type )
+		message.put()
+
+	@classmethod
+	def get_messages( cls, user_id ):
+		list = cls.fetch_by_recipient( user_id )
+		message_list = []
+		if list:
+			for i, item in enumerate( list ):
+				entity = enki.libdisplayname.get_EnkiUserDisplayName_by_user_id_current( item.sender )
+				sender = enki.libdisplayname.get_user_id_display_name_url( entity )
+				type = item.type
+				message_id = item.key.id()
+				message = messageData( message_id, type, sender  )
+				message_list.append( message )
+			return message_list
+
+	@classmethod
+	def remove_message( cls, message_id ):
+		message = cls.get_by_id( message_id )
+		if message:
+			message.key.delete()
+
+	@classmethod
+	def remove_messages_crossed( cls, sender_or_receiver_a_id, sender_or_receiver_b_id ):
+		message_a = cls.get_by_sender_recipient( sender_or_receiver_a_id, sender_or_receiver_b_id )
+		message_b = cls.get_by_sender_recipient( sender_or_receiver_b_id, sender_or_receiver_a_id )
+		if message_a:
+			if message_a.type == 'friend_request':
+				message_a.key.delete()
+		if message_b:
+			if message_b.type == 'friend_request':
+				message_b.key.delete()
+
+	@classmethod
+	def delete_user_messages( cls, user_id ):
+		ndb.delete_multi( cls.fetch_keys_sent_or_received( user_id ))

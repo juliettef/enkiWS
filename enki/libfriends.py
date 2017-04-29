@@ -1,5 +1,4 @@
 import enki.libdisplayname
-import enki.libmessage
 import enki.libutil
 from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
@@ -52,8 +51,7 @@ def send_friend_request( sender_id, friend_id ):
 				result = INFO_FRIENDS
 			# send an invitation to friend (unless it's a duplicate)
 			elif not EnkiModelMessage.exist_by_sender_recipient( sender_id, friend_id ):
-				message = EnkiModelMessage( sender = sender_id, recipient = friend_id, type = 'friend_request' )
-				message.put()
+				EnkiModelMessage.send_message( sender_id, friend_id, 'friend_request' )
 	else:
 		result = enki.libdisplayname.ERROR_DISPLAY_NAME_INVALID
 	return result
@@ -64,7 +62,7 @@ def add_friend( user_id, friend_id ):
 		friends = EnkiModelFriends( friends = [ user_id, friend_id ])
 		friends.put()
 	# clean up any remaining friend invitations (from either side)
-	enki.libmessage.remove_messages_crossed( user_id, friend_id )
+	EnkiModelMessage.remove_messages_crossed( user_id, friend_id )
 
 
 def remove_friend( user_id, friend_id ):
@@ -72,4 +70,4 @@ def remove_friend( user_id, friend_id ):
 	if friends:
 		friends.delete()
 	# clean up any remaining friend invitations (from either side)
-	enki.libmessage.remove_messages_crossed( user_id, friend_id )
+	EnkiModelMessage.remove_messages_crossed( user_id, friend_id )

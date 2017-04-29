@@ -779,7 +779,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				if display_name.prefix != enki.libdisplayname.DELETED_PREFIX or display_name.suffix != enki.libdisplayname.DELETED_SUFFIX:
 					enki.libdisplayname.set_display_name( user_to_delete.key.id(), enki.libdisplayname.DELETED_PREFIX, enki.libdisplayname.DELETED_SUFFIX )
 			# delete user's sent and received messages
-			ndb.delete_multi( EnkiModelMessage.fetch_keys_sent_or_received( user_to_delete.key.id()))
+			EnkiModelMessage.delete_user_messages( user_to_delete.key.id())
 			# delete user's posts if required
 			if delete_posts:
 				enki.libforum.delete_user_posts( user_to_delete.key.id())
