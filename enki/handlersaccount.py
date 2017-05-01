@@ -14,6 +14,7 @@ from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
 from enki.modelproductkey import EnkiModelProductKey
 from enki.modeltokenverify import EnkiModelTokenVerify
+from enki.modelpost import EnkiModelPost
 from enki.modelrestapitokenverify import EnkiModelRestAPITokenVerify
 
 
@@ -806,7 +807,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 		for item in self.enki_user.auth_ids_provider:
 			provider_name, provider_uid = item.partition( ':' )[ ::2 ]
 			auth_provider.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid )})
-		has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
+		has_posts = True if EnkiModelPost.fetch_by_author( self.enki_user.key.id()) else False
 		has_messages = True if EnkiModelMessage.exist_sent_or_received( self.user_id ) else False
 		has_friends = True if EnkiModelFriends.exist_by_user_id( self.user_id ) else False
 		has_product_purchased_unactivated = True if EnkiModelProductKey.exist_by_purchaser_not_activated( self.user_id ) else False
@@ -824,7 +825,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 		elif submit_type == 'delete':
 			delete_posts = False
 			if enki.HandlerBase.account_is_active( self.enki_user.key.id()):
-				has_posts = True if enki.libforum.fetch_EnkiPost_by_author( self.enki_user.key.id()) else False
+				has_posts = True if EnkiModelPost.fetch_by_author( self.enki_user.key.id()) else False
 				if has_posts and params.get( 'deleteposts' ) == 'on':
 					delete_posts = True
 			if self.enki_user.email and self.enki_user.email != 'removed':

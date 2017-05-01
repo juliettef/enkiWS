@@ -67,7 +67,7 @@ def create_forums():
 
 def get_forums_data():
 	forums_data = []
-	all_forums = fetch_EnkiForums()
+	all_forums = EnkiModelForum.fetch()
 	if all_forums:
 		# get the groups from the list (ordered)
 		groups_temp = []
@@ -95,7 +95,7 @@ def get_forum_data( forum_selected ):
 	forums_url = enki.libutil.get_local_url( 'forums' )
 	forum = EnkiModelForum.get_by_id( int( forum_selected ))
 	num_posts = 0
-	list = fetch_EnkiThread_by_forum( int( forum_selected ))
+	list = EnkiModelThread.fetch_by_forum( int( forum_selected ))
 	if list:
 		for i, item in enumerate( list ):
 			num_posts += item.num_posts
@@ -134,7 +134,7 @@ def get_thread_data( thread_selected, post_requested = POST_DEFAULT, post_count 
 	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
 	if post_requested == POST_LAST:
 		post_requested = thread.num_posts
-	list = fetch_EnkiPost_by_thread( int( thread_selected ), offset = (int( post_requested ) - 1), limit = int( post_count ))
+	list = EnkiModelPost.fetch_by_thread( int( thread_selected ), offset = (int( post_requested ) - 1), limit = int( post_count ))
 	if list:
 		for i, item in enumerate( list ):
 			item.author_data = EnkiModelDisplayName.get_user_id_display_name_url( EnkiModelDisplayName.get_by_user_id_current( item.author ))
@@ -241,7 +241,7 @@ def get_author_posts( author_selected ):  # MOVED TO LIB
 	if author_display_name:
 		forums_url = enki.libutil.get_local_url( 'forums' )
 		author_data = EnkiModelDisplayName.get_user_id_display_name_url( author_display_name )
-		list = fetch_EnkiPost_by_author( int( author_selected ))
+		list = EnkiModelPost.fetch_by_author( int( author_selected ))
 		if list:
 			for i, item in enumerate( list ):
 				thread = EnkiModelThread.get_by_id( item.thread )
@@ -354,43 +354,10 @@ def delete_post( user_id, post_id ):
 
 def delete_user_posts( user_id ):
 	result = enki.libutil.ENKILIB_OK
-	posts = fetch_EnkiPost_key_by_author( user_id )
+	posts = EnkiModelPost.fetch_key_by_author( user_id )
 	if posts:
 		for post in posts:
 			result = delete_post( user_id, post.id())
 			if result == ERROR_POST_DELETION:
 				return result
 	return result
-
-
-#=== QUERIES ==================================================================
-
-
-def exist_EnkiForums():
-	count = EnkiModelForum.query().count( 1 )
-	return count > 0
-
-
-def fetch_EnkiForums():
-	list = EnkiModelForum.query().order( EnkiModelForum.group_order, EnkiModelForum.forum_order ).fetch()
-	return list
-
-
-def fetch_EnkiThread_by_forum( forum ):
-	list = EnkiModelThread.query( EnkiModelThread.forum == forum ).order( -EnkiModelThread.sticky_order, -EnkiModelThread.time_updated ).fetch()
-	return list
-
-
-def fetch_EnkiPost_by_thread( thread, limit, offset ):
-	list = EnkiModelPost.query( EnkiModelPost.thread == thread ).order( -EnkiModelPost.sticky_order, EnkiModelPost.time_created ).fetch( limit = limit, offset = offset )
-	return list
-
-
-def fetch_EnkiPost_by_author( author ):
-	list = EnkiModelPost.query( EnkiModelPost.author == author ).order( -EnkiModelPost.time_created ).fetch()
-	return list
-
-
-def fetch_EnkiPost_key_by_author( author ):
-	list = EnkiModelPost.query( EnkiModelPost.author == author ).fetch( keys_only = True )
-	return list

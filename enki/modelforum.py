@@ -3,6 +3,8 @@ from google.appengine.ext.ndb import model
 
 class EnkiModelForum( model.Model ):
 
+	#=== MODEL ====================================================================
+
 	title = model.StringProperty()
 	description = model.StringProperty()
 	group = model.StringProperty() # group of forums
@@ -14,3 +16,14 @@ class EnkiModelForum( model.Model ):
 
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )
+
+	#=== QUERIES ==================================================================
+
+	@classmethod
+	def exist( cls ):
+		count = cls.query().count( 1 )
+		return count > 0
+
+	@classmethod
+	def fetch( cls ):
+		return cls.query().order( cls.group_order, cls.forum_order ).fetch()

@@ -17,7 +17,7 @@ class HandlerForums( enki.HandlerBase ):
 
 	def get( self ):
 		thread_view_count = enki.modelcounter.get_count( 'views_forum' )
-		if not enki.libforum.exist_EnkiForums():
+		if not EnkiModelForum.exist():
 			# if no forum topic exists , populate the forums with user-defined groups and topics
 			enki.libforum.create_forums()
 		self.render_tmpl( 'forums.html', False,

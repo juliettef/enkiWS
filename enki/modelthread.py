@@ -3,6 +3,8 @@ from google.appengine.ext.ndb import model
 
 class EnkiModelThread( model.Model ):
 
+	#=== MODEL ====================================================================
+
 	author = model.IntegerProperty()
 	title = model.StringProperty()
 
@@ -14,3 +16,9 @@ class EnkiModelThread( model.Model ):
 
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )
+
+	#=== QUERIES ==================================================================
+
+	@classmethod
+	def fetch_by_forum( cls, forum ):
+		return cls.query( cls.forum == forum ).order( -cls.sticky_order, -cls.time_updated ).fetch()
