@@ -6,13 +6,14 @@ import enki.modelcounter
 
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
+from enki.modeluser import EnkiModelUser
+from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modelforum import EnkiModelForum
 from enki.modelthread import EnkiModelThread
 from enki.modelpost import EnkiModelPost
 
 from enki.libutil import xstr as xstr
 from enki.libutil import xint as xint
-from enki.modeltokenverify import EnkiModelTokenVerify
 
 
 class HandlerForums( enki.HandlerBase ):
@@ -316,7 +317,7 @@ class ExtensionPageUserPosts( ExtensionPage ):
 		data[ 'posts' ] = ''
 		data[ 'is_author' ] = False
 		if handler.ensure_is_logged_in():
-			if useridnumber.isdigit() and enki.libuser.EnkiModelUser.get_by_id( int( useridnumber ) ):
+			if useridnumber.isdigit() and EnkiModelUser.get_by_id( int( useridnumber ) ):
 				posts = EnkiModelPost.get_author_posts( useridnumber )
 				if posts:
 					data[ 'posts' ] = posts

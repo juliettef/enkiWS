@@ -15,7 +15,7 @@ ERROR_PASSWORD_NOT_SET = -23
 
 def validate_email( email ):
 	result = enki.libutil.ENKILIB_OK
-	email_escaped = cgi.escape(email, quote = True)
+	email_escaped = cgi.escape( email, quote = True )
 	if email and email == email_escaped:
 		if (('.' not in email) or (not re.search('[^@]+@[^@]+', email))):
 			result = ERROR_EMAIL_FORMAT_INVALID

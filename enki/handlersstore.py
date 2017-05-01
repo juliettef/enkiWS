@@ -10,7 +10,6 @@ from google.appengine.api import urlfetch
 import settings
 import enki
 import enki.libutil
-import enki.libuser
 import enki.libenkiDL
 import enki.textmessages as MSG
 import enki.modelcounter

@@ -7,7 +7,6 @@ from google.appengine.ext import ndb
 
 import enki
 import enki.libutil
-import enki.libuser
 import enki.textmessages as MSG
 
 from enki.extensions import Extension
