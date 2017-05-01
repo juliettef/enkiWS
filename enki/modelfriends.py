@@ -38,7 +38,7 @@ class EnkiModelFriends( model.Model ):
 		return count > 0
 
 	@classmethod
-	def get_keys_by_user_ids( cls, user_a_id, user_b_id ):
+	def get_key_by_user_ids( cls, user_a_id, user_b_id ):
 		return cls.query( ndb.AND( cls.friends == user_a_id, cls.friends == user_b_id )).get( keys_only = True )
 
 	#=== UTILITIES ================================================================
@@ -81,7 +81,7 @@ class EnkiModelFriends( model.Model ):
 		result = enki.libutil.ENKILIB_OK
 		if friend_id != sender_id: # friend is not me
 			if not cls.exist_by_user_ids( sender_id, friend_id ): # we're not currently friends
-				already_invited = EnkiModelMessage.get_keys_by_sender_recipient(friend_id, sender_id)
+				already_invited = EnkiModelMessage.get_key_by_sender_recipient(friend_id, sender_id)
 				if already_invited:
 					# if an invite from the potential friend already exists, add the pair of friends immediately and delete the invite(s)
 					cls.add_friend( sender_id, friend_id )
@@ -103,7 +103,7 @@ class EnkiModelFriends( model.Model ):
 
 	@classmethod
 	def remove_friend( cls, user_id, friend_id ):
-		friends = cls.get_keys_by_user_ids(user_id, friend_id)
+		friends = cls.get_key_by_user_ids(user_id, friend_id)
 		if friends:
 			friends.delete()
 		# clean up any remaining friend invitations (from either side)

@@ -9,6 +9,7 @@ import enki.libutil
 import enki.libuser
 import enki.textmessages as MSG
 from enki.modelbackofftimer import EnkiModelBackoffTimer
+from enki.modeluser import EnkiModelUser
 from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
@@ -53,9 +54,9 @@ class HandlerLogin( enki.HandlerBase ):
 				self.redirect_to_relevant_page()
 			else:
 				error_message = MSG.WRONG_EMAIL_OR_PW()
-				if enki.libuser.exist_EnkiUser( email ):
+				if EnkiModelUser.exist_by_email( email ):
 				# if the email exist as part of an Auth account (doesn't have a password), silently email them to set a password.
-					user = enki.libuser.get_EnkiUser( email )
+					user = EnkiModelUser.get_by_email( email )
 					if not user.password:
 						self.add_debugmessage( '''Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.''' )
 						link = enki.libutil.get_local_url( 'passwordrecover' )
@@ -474,10 +475,10 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 				if handler.get_provider_name() == provider_name:
 					provider_authhandler = handler
 			# only display the email/pw login if the user has a password
-			email_user_has_pw = enki.libuser.user_has_password_by_email( provider_email )
+			email_user_has_pw = EnkiModelUser.has_password_by_email( provider_email )
 			# list of email user's auth providers
 			authhandlers = []
-			user = enki.libuser.get_EnkiUser( provider_email )
+			user = EnkiModelUser.get_by_email( provider_email )
 			for user_provider_uid in user.auth_ids_provider:
 				for handler in settings.HANDLERS:
 					if ( handler.get_provider_name() in user_provider_uid ) and ( handler not in authhandlers ):
@@ -647,7 +648,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'passwordchange' )
 		if tokenEntity:
 			email = tokenEntity.email
-			user = enki.libuser.get_EnkiUser( email )
+			user = EnkiModelUser.get_by_email( email )
 			if user:
 				password = self.request.get( 'password' )
 				result = enki.libuser.set_password( user, password )

@@ -43,7 +43,7 @@ class EnkiModelMessage( model.Model ):
 		return count > 0
 
 	@classmethod
-	def get_keys_by_sender_recipient( cls, sender_id, recipient_id ):
+	def get_key_by_sender_recipient( cls, sender_id, recipient_id ):
 		return cls.query( ndb.AND( cls.sender == sender_id, cls.recipient == recipient_id )).get( keys_only = True )
 
 	@classmethod

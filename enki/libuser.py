@@ -7,7 +7,6 @@ from google.appengine.ext import ndb
 import settings
 import enki.libutil
 from enki.authcryptcontext import pwd_context
-from enki.modeluser import EnkiModelUser
 from enki.modeltokenauth import EnkiModelTokenAuth
 from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeltokenverify import EnkiModelTokenVerify
@@ -69,13 +68,6 @@ def revoke_user_authentications( user_id ):
 		ndb.delete_multi( tokens )
 
 
-def user_has_password_by_email( email ):
-	user = get_EnkiUser(email)
-	if user.password:
-		return True
-	return False
-
-
 def add_roles( user, roles ):
 	for role in roles:
 		if role not in user.roles:
@@ -111,34 +103,6 @@ def has_permission( user, permission ):
 
 
 #=== QUERIES ==================================================================
-
-
-def get_EnkiUser( email ):
-	entity = EnkiModelUser.query( EnkiModelUser.email == email ).get()
-	return entity
-
-
-def get_key_EnkiUser( email ):
-	key = EnkiModelUser.query( EnkiModelUser.email == email ).get( keys_only = True )
-	return key
-
-
-def exist_EnkiUser( email ):
-	if email and email != 'removed':
-		count = EnkiModelUser.query( EnkiModelUser.email == email ).count( 1 )
-		return count > 0
-	return False
-
-
-def get_EnkiUser_by_auth_id( auth_id ):
-	entity = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == auth_id ).get()
-	return entity
-
-
-def exist_Auth_Id( auth_id ):
-	count = EnkiModelUser.query( EnkiModelUser.auth_ids_provider == auth_id ).count( 1 )
-	return count > 0
-
 
 def fetch_keys_AuthToken_by_user_id_token( user_id, token ):
 	entity = EnkiModelTokenAuth.query( ndb.AND( EnkiModelTokenAuth.user_id == user_id,
@@ -187,7 +151,3 @@ def fetch_keys_RollbackToken_by_time( user_id, time_created ):
 	keys = EnkiModelTokenEmailRollback.query( ndb.AND( EnkiModelTokenEmailRollback.time_created >= time_created ,
 	                                                   EnkiModelTokenEmailRollback.user_id == user_id )).fetch( keys_only = True )
 	return keys
-
-def count_EnkiUser():
-	count = EnkiModelUser.query().count()
-	return count
