@@ -7,11 +7,12 @@ import enki.modelcounter
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 from enki.modelforum import EnkiModelForum
-from enki.modelpost import EnkiModelPost
 from enki.modelthread import EnkiModelThread
+from enki.modelpost import EnkiModelPost
 
 from enki.libutil import xstr as xstr
 from enki.libutil import xint as xint
+from enki.modeltokenverify import EnkiModelTokenVerify
 
 
 class HandlerForums( enki.HandlerBase ):
@@ -20,11 +21,11 @@ class HandlerForums( enki.HandlerBase ):
 		thread_view_count = enki.modelcounter.get_count( 'views_forum' )
 		if not EnkiModelForum.exist():
 			# if no forum topic exists , populate the forums with user-defined groups and topics
-			enki.libforum.create_forums()
+			EnkiModelForum.create_forums()
 		self.render_tmpl( 'forums.html', False,
 		                  active_menu = 'forums',
 		                  thread_view_count = thread_view_count,
-		                  forums_data = enki.libforum.get_forums_data())
+		                  forums_data = EnkiModelForum.get_forums_data())
 
 
 class HandlerForum( enki.HandlerBase ):
@@ -34,7 +35,7 @@ class HandlerForum( enki.HandlerBase ):
 		not_found = ''
 		if forum.isdigit() and EnkiModelForum.get_by_id( int( forum ) ):
 			enki.modelcounter.increment( 'views_forum' )
-			data = enki.libforum.get_forum_data( forum )
+			data = EnkiModelThread.get_forum_data( forum )
 		else:
 			not_found = MSG.FORUM_NOT_EXIST( )
 		self.render_tmpl( 'forum.html', False,
@@ -60,7 +61,7 @@ class HandlerForum( enki.HandlerBase ):
 				if submit_type == 'input':
 					thread_title = ''
 					post_body = ''
-					pmtoken = enki.libforum.add_preventmultipost_token( )
+					pmtoken = EnkiModelTokenVerify.add_preventmultipost_token( 'preventmultipost' )
 				else:
 					self.check_CSRF()
 					if submit_type != 'cancel':
@@ -81,8 +82,8 @@ class HandlerForum( enki.HandlerBase ):
 						if submit_type == 'submit':
 							thread_sticky_order = xint( self.request.get( 'sticky_order_thread' ))
 							post_sticky_order = xint( self.request.get( 'sticky_order_post' ))
-							if enki.libforum.check_and_delete_preventmultipost_token( pmtoken ):
-								result = enki.libforum.add_thread_and_post( user_id, forum, thread_title, thread_sticky_order, post_body, post_sticky_order )
+							if EnkiModelTokenVerify.check_and_delete_preventmultipost_token( pmtoken, 'preventmultipost' ):
+								result = EnkiModelPost.add_thread_and_post( user_id, forum, thread_title, thread_sticky_order, post_body, post_sticky_order )
 								if result == enki.libutil.ENKILIB_OK:
 									self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.THREAD_PUBLISHED())
 									url = enki.libutil.get_local_url( 'forum', { 'forum':forum })
@@ -103,7 +104,7 @@ class HandlerForum( enki.HandlerBase ):
 
 				self.render_tmpl( 'forum.html', CSRFneeded = show_input,
 				                  active_menu = 'forums',
-				                  data = enki.libforum.get_forum_data( forum ),
+				                  data = EnkiModelThread.get_forum_data( forum ),
 								  has_permission_sticky = enki.libuser.has_permissions(self.enki_user, [ 'PFPS', 'PFTS' ]),
 								  show_input = show_input,
 				                  preventmultitoken = pmtoken,
@@ -125,14 +126,14 @@ class HandlerThread( enki.HandlerBase ):
 		not_found = ''
 		post_requested = str( self.request.get( 'start' ))
 		post_count = str( self.request.get( 'count' ))
-		validation_result = enki.libforum.validate_thread_pagination( thread, post_requested, post_count )
+		validation_result = EnkiModelThread.validate_thread_pagination( thread, post_requested, post_count )
 		if validation_result == enki.libutil.ENKILIB_OK:
 			if not post_requested:
 				post_requested = EnkiModelPost.POST_DEFAULT
 			if not post_count:
 				post_count = EnkiModelPost.POSTS_PER_PAGE
-			data = enki.libforum.get_thread_data( thread, post_requested, post_count )
-			pagination = enki.libforum.get_thread_pagination_data( thread, post_requested, post_count )
+			data = EnkiModelPost.get_thread_data( thread, post_requested, post_count )
+			pagination = EnkiModelPost.get_thread_pagination_data( thread, post_requested, post_count )
 		else:
 			not_found = MSG.POST_THREAD_NOT_EXIST( )
 		self.render_tmpl( 'thread.html', False,
@@ -155,7 +156,7 @@ class HandlerThread( enki.HandlerBase ):
 				if not post_count:
 					post_count = EnkiModelPost.POSTS_PER_PAGE
 				if not post_requested:
-					post_requested = enki.libforum.get_first_post_on_page( enki.libforum.get_page( EnkiModelThread.get_by_id( int( thread )), EnkiModelPost.POST_LAST, int( post_count )), int( post_count ))
+					post_requested = EnkiModelPost.get_first_post_on_page( EnkiModelPost.get_page( EnkiModelThread.get_by_id( int( thread )), EnkiModelPost.POST_LAST, int( post_count )), int( post_count ))
 
 				error_message = ''
 				preview = ''
@@ -163,7 +164,7 @@ class HandlerThread( enki.HandlerBase ):
 				show_input = True
 				if submit_type == 'input':
 					post_body = ''
-					pmtoken = enki.libforum.add_preventmultipost_token( )
+					pmtoken = EnkiModelTokenVerify.add_preventmultipost_token( 'preventmultipost' )
 				else:
 					self.check_CSRF()
 					if submit_type != 'cancel':
@@ -176,11 +177,11 @@ class HandlerThread( enki.HandlerBase ):
 					if not error_message:
 						post_sticky_order = xint( self.request.get( 'sticky_order' ))
 						if submit_type == 'submit':
-							if enki.libforum.check_and_delete_preventmultipost_token( pmtoken ):
-								result = enki.libforum.add_post( user, thread, post_body, post_sticky_order )
+							if EnkiModelTokenVerify.check_and_delete_preventmultipost_token( pmtoken, 'preventmultipost' ):
+								result = EnkiModelPost.add_post( user, thread, post_body, post_sticky_order )
 								if result == enki.libutil.ENKILIB_OK:
 									self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_PUBLISHED())
-									post_requested = enki.libforum.get_first_post_on_page( enki.libforum.get_page( EnkiModelThread.get_by_id( int( thread )), EnkiModelPost.POST_LAST, int( post_count )), int( post_count ))
+									post_requested = EnkiModelPost.get_first_post_on_page( EnkiModelPost.get_page( EnkiModelThread.get_by_id( int( thread )), EnkiModelPost.POST_LAST, int( post_count )), int( post_count ))
 									url = enki.libutil.get_local_url( 'thread', { 'thread': thread, 'start': str( post_requested ), 'count': str( post_count )})
 									self.send_email_admin( 'FPA', url )
 									self.redirect( url )
@@ -194,8 +195,8 @@ class HandlerThread( enki.HandlerBase ):
 						elif submit_type == 'cancel':
 							post_body = ''
 
-				data = enki.libforum.get_thread_data( thread, post_requested, post_count )
-				pagination = enki.libforum.get_thread_pagination_data( thread, post_requested, post_count )
+				data = EnkiModelPost.get_thread_data( thread, post_requested, post_count )
+				pagination = EnkiModelPost.get_thread_pagination_data( thread, post_requested, post_count )
 				self.render_tmpl( 'thread.html', CSRFneeded = show_input,
 				                  active_menu = 'forums',
 				                  data = data,
@@ -218,8 +219,8 @@ class HandlerPost( enki.HandlerBase ):
 		is_author = False
 		post_body = ''
 		self.session[ 'sessionrefpath' ] = self.request.referrer
-		if post.isdigit() and enki.libforum.EnkiModelPost.get_by_id( int( post ) ):
-			data = enki.libforum.get_post_data( post )
+		if post.isdigit() and EnkiModelPost.get_by_id( int( post ) ):
+			data = EnkiModelPost.get_post_data( post )
 			if data:
 				is_author = True if self.user_id == data.author_data.user_id else False
 				post_body = '' if data.post.body == EnkiModelPost.POST_DELETED else data.post.body
@@ -242,9 +243,9 @@ class HandlerPost( enki.HandlerBase ):
 
 	def post( self, post ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
-			if post.isdigit() and enki.libforum.EnkiModelPost.get_by_id( int( post )):
+			if post.isdigit() and EnkiModelPost.get_by_id( int( post )):
 
-				data = enki.libforum.get_post_data( post )
+				data = EnkiModelPost.get_post_data( post )
 				is_author = True if self.user_id == data.author_data.user_id else False
 				user = self.user_id
 				post_body = self.request.get( 'post_body' )
@@ -255,7 +256,7 @@ class HandlerPost( enki.HandlerBase ):
 
 				if submit_type == 'delete':
 					self.check_CSRF()
-					result = enki.libforum.delete_post( user, post )
+					result = EnkiModelPost.delete_post( user, post )
 					if result[ 0 ] == enki.libutil.ENKILIB_OK:
 						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_DELETED())
 						url = enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})
@@ -280,7 +281,7 @@ class HandlerPost( enki.HandlerBase ):
 					post_sticky_order = xint( self.request.get( 'sticky_order' ))
 					if submit_type == 'submit':
 						self.check_CSRF()
-						result = enki.libforum.edit_post( user, post, post_body, post_sticky_order )
+						result = EnkiModelPost.edit_post( user, post, post_body, post_sticky_order )
 						if result[ 0 ] == enki.libutil.ENKILIB_OK:
 							self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_MODIFIED())
 							url = enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})
@@ -316,7 +317,7 @@ class ExtensionPageUserPosts( ExtensionPage ):
 		data[ 'is_author' ] = False
 		if handler.ensure_is_logged_in():
 			if useridnumber.isdigit() and enki.libuser.EnkiModelUser.get_by_id( int( useridnumber ) ):
-				posts = enki.libforum.get_author_posts( useridnumber )
+				posts = EnkiModelPost.get_author_posts( useridnumber )
 				if posts:
 					data[ 'posts' ] = posts
 					data[ 'is_author' ] = True if handler.user_id == posts.author_data.user_id else False

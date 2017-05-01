@@ -7,7 +7,6 @@ import settings
 import enki
 import enki.libutil
 import enki.libuser
-import enki.libforum
 import enki.textmessages as MSG
 from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelfriends import EnkiModelFriends

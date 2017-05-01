@@ -23,7 +23,6 @@ import enki
 import enki.authcryptcontext
 import enki.libutil
 import enki.libuser
-import enki.libforum
 import enki.modeltokenverify
 from enki import textmessages as MSG
 from enki.modelbackofftimer import EnkiModelBackoffTimer
@@ -784,7 +783,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			EnkiModelMessage.delete_user_messages( user_to_delete.key.id())
 			# delete user's posts if required
 			if delete_posts:
-				enki.libforum.delete_user_posts( user_to_delete.key.id())
+				EnkiModelPost.delete_user_posts( user_to_delete.key.id())
 		# log the deleted user out
 		if self.enki_user == user_to_delete.key.id():
 			self.log_out()
