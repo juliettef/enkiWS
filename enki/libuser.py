@@ -140,7 +140,7 @@ def exist_Auth_Id( auth_id ):
 	return count > 0
 
 
-def fetch_key_AuthToken_by_user_id_token( user_id, token ):
+def fetch_keys_AuthToken_by_user_id_token( user_id, token ):
 	entity = EnkiModelTokenAuth.query( ndb.AND( EnkiModelTokenAuth.user_id == user_id,
 	                                            EnkiModelTokenAuth.token == token )).fetch( keys_only = True )
 	return entity

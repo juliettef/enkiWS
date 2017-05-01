@@ -56,11 +56,12 @@ class EnkiModelPost( model.Model ):
 		return cls.query( cls.author == author ).order( -cls.time_created ).fetch()
 
 	@classmethod
-	def fetch_key_by_author( cls, author ):
+	def fetch_keys_by_author( cls, author ):
 		return cls.query( cls.author == author ).fetch( keys_only = True )
 
 	#=== UTILITIES ================================================================
-	#=== DISPLAY DATA =============================================================
+
+	#--- DISPLAY DATA -------------------------------------------------------------
 
 	@classmethod
 	def get_thread_data( cls, thread_selected, post_requested = POST_DEFAULT, post_count = POSTS_PER_PAGE ):
@@ -205,7 +206,7 @@ class EnkiModelPost( model.Model ):
 		result = pagination( page_first, page_previous, page_current, page_list, page_next, page_last )
 		return result
 
-	#=== ADD DATA =================================================================
+	#--- ADD DATA -----------------------------------------------------------------
 
 	@classmethod
 	def add_thread_and_post( cls, user_id, forum, thread_title, thread_sticky_order, post_body, post_sticky_order ):
@@ -283,7 +284,7 @@ class EnkiModelPost( model.Model ):
 	@classmethod
 	def delete_user_posts( cls, user_id ):
 		result = enki.libutil.ENKILIB_OK
-		posts = cls.fetch_key_by_author( user_id )
+		posts = cls.fetch_keys_by_author(user_id)
 		if posts:
 			for post in posts:
 				result = cls.delete_post( user_id, post.id())

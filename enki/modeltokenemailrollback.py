@@ -3,6 +3,8 @@ from google.appengine.ext.ndb import model
 
 class EnkiModelTokenEmailRollback( model.Model ):
 
+	#=== MODEL ====================================================================
+
 	token = model.StringProperty()
 	email = model.StringProperty()
 	user_id = model.IntegerProperty() # ndb user ID

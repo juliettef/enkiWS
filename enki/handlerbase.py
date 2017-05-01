@@ -78,26 +78,21 @@ class HandlerBase( webapp2.RequestHandler ):
 		finally:
 			self.session_store.save_sessions( self.response )
 
-
 	@webapp2.cached_property
 	def session( self ): #  https://webapp-improved.appspot.com/api/webapp2_extras/sessions.html
 		return self.session_store.get_session( backend = 'datastore' )
-
 
 	@webapp2.cached_property
 	def jinja2( self ): # Returns a Jinja2 renderer cached in the app registry
 		return jinja2.get_jinja2( app = self.app )
 
-
 	@webapp2.cached_property
 	def domain_name( self ):
 		return self.uri_for( 'home', _full = True )
 
-
 	@webapp2.cached_property
 	def user_id( self ): # The currently logged in user
 		return self.session.get( 'user_id' )
-
 
 	def create_CSRF( self, form_name ):    # protect against forging login requests http://en.wikipedia.org/wiki/Cross-site_request_forgery http://www.ethicalhack3r.co.uk/login-cross-site-request-forgery-csrf/
 		# check if the CSRF token for this form already exists, if so reuse it. Otherwise create a new one and add it to the dictionary
@@ -114,7 +109,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			self.session[ 'CSRF' ] = sessionCSRFs
 		return form_name + '-' + CSRFToken
 
-
 	def check_CSRF( self, query_name = 'CSRF' ):    # protect against forging login requests http://en.wikipedia.org/wiki/Cross-site_request_forgery http://www.ethicalhack3r.co.uk/login-cross-site-request-forgery-csrf/
 		if self.just_checked_CSRF:
 			return
@@ -130,8 +124,8 @@ class HandlerBase( webapp2.RequestHandler ):
 				return
 		self.redirect_to_relevant_page()
 
-
-	def is_logged_in( self ):   # returns true if a session exists and corresponds to a logged in user (i.e. a user with a valid auth token)
+	def is_logged_in( self ):
+	# returns true if a session exists and corresponds to a logged in user (i.e. a user with a valid auth token)
 		# get session info
 		if self.just_logged_in:
 			return True
@@ -141,21 +135,23 @@ class HandlerBase( webapp2.RequestHandler ):
 		else:
 			return False
 
-
-	def ensure_is_logged_in( self ):       # force the user out if not logged in
+	def ensure_is_logged_in( self ):
+	# force the user out if not logged in
 		if not self.is_logged_in():
-			self.session[ 'sessionloginrefpath' ] = self.request.url # get referal path to return the user to it after they've logged in
+			# get referal path to return the user to it after they've logged in
+			self.session[ 'sessionloginrefpath' ] = self.request.url
 			self.redirect( enki.libutil.get_local_url( 'login' ))
 			return False
 		return True
 
-
-	def ensure_has_display_name( self, url = None ):    # user must set their display_name to continue
+	def ensure_has_display_name( self, url = None ):
+	# user must set their display_name to continue
 		user_display_name = EnkiModelDisplayName.get_by_user_id_current( self.user_id )
 		if not user_display_name:
 			if not url:
 				url = self.request.url
-			self.session[ 'sessiondisplaynamerefpath' ] = url # get referal path to return the user to it after they've set their display name
+			# get referal path to return the user to it after they've set their display name
+			self.session[ 'sessiondisplaynamerefpath' ] = url
 			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.DISPLAYNAME_NEEDED())
 			self.redirect( enki.libutil.get_local_url( 'displayname' ))
 			return False
@@ -223,7 +219,6 @@ class HandlerBase( webapp2.RequestHandler ):
 					return True
 		return False
 
-
 	def log_in_with_email( self, email, password ):
 	# log the user in using their email
 		if self.get_backoff_timer( email, True ) == 0:
@@ -235,7 +230,6 @@ class HandlerBase( webapp2.RequestHandler ):
 					self.remove_backoff_timer( user.email )
 					return True
 		return False
-
 
 	def reauthenticate( self, email, password ):
 	# reauthenticate the user
@@ -249,7 +243,6 @@ class HandlerBase( webapp2.RequestHandler ):
 					return True
 		return False
 
-
 	def log_in_session_token_create( self, user ):
 		# generate authentication token and add it to the db and the session
 		token = security.generate_random_string( entropy = 128 )
@@ -259,19 +252,17 @@ class HandlerBase( webapp2.RequestHandler ):
 		self.session[ 'user_id' ] = user.key.id()
 		self.just_logged_in = True
 
-
 	def log_out( self ):
 	# log out the currently logged in user
 		if self.is_logged_in():
 			token = self.session.get( 'auth_token' )
-			token_key = enki.libuser.fetch_key_AuthToken_by_user_id_token( self.user_id, token )
+			token_key = enki.libuser.fetch_keys_AuthToken_by_user_id_token(self.user_id, token)
 			if token_key:
 				# delete the token from the db
 				ndb.delete_multi( token_key )
 			#delete the session
 			self.session.clear()
 			self.just_logged_in = False
-
 
 	@webapp2.cached_property
 	def enki_user( self ):
@@ -281,7 +272,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			return enkiKey.get()
 		else:
 			return None
-
 
 	def render_tmpl( self, template_file, CSRFneeded = True, **kwargs ):
 	# render an html template with data using jinja2
@@ -313,11 +303,9 @@ class HandlerBase( webapp2.RequestHandler ):
 		except TemplateNotFound:
 			self.abort( 404 )
 
-
 	def add_debugmessage( self, message_body ):
 		if enki.libutil.is_debug():
 			self.session[ 'debugmessage' ] = self.session.pop( 'debugmessage', '' ) + message_body + '<hr>'
-
 
 	def add_infomessage( self, message_type, message_header, message_body ):
 	# reference: http://bootswatch.com/flatly/#indicators
@@ -325,7 +313,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		self.session[ 'infomessage' ] = self.session.pop( 'infomessage', [] ) + [[ message_type, message_header, message_body ]]
 
 	def debug_output_email( self, email_address, email_subject, email_body ):
-		# display email on page to enable debugging
+	# display email on page to enable debugging
 		result = '<p><b>Sent email</b></p>' + \
 				 '<p><b>To:</b> ' + email_address + '</p>' + \
 				 '<p><b>Subject:</b> ' + email_subject + '</p>' + \
@@ -340,7 +328,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			result += '</ul>'
 		self.add_debugmessage(result)
 
-
 	def send_email( self, email_address, email_subject, email_body ):
 		if enki.libutil.is_debug():
 			self.debug_output_email( email_address, email_subject, email_body )
@@ -348,18 +335,11 @@ class HandlerBase( webapp2.RequestHandler ):
 		# Sends an email and displays a message in the browser. If running locally an additional message is displayed in the browser.
 		if settings.SECRET_API_KEY_MAILGUN:
 			# use mailgun to send, this has higher limits than Google App Engine send_mail
-
-			headers = {'Authorization':
-						   'Basic ' + base64.b64encode( 'api:' + settings.SECRET_API_KEY_MAILGUN ) }
+			headers = {'Authorization': 'Basic ' + base64.b64encode( 'api:' + settings.SECRET_API_KEY_MAILGUN ) }
 			url_mailgun = settings.secrets.URL_API_MAILGUN
-			data = {
-				'from': settings.secrets.NOREPLY_SEND_MAILGUN,
-				'to': email_address,
-				'subject': email_subject,
-				'text': email_body
-			}
+			data = { 'from': settings.secrets.NOREPLY_SEND_MAILGUN, 'to': email_address,
+					 'subject': email_subject, 'text': email_body }
 			form_data = urllib.urlencode( data )
-
 			send_success = True
 			try:
 				result = urlfetch.fetch(
@@ -378,14 +358,12 @@ class HandlerBase( webapp2.RequestHandler ):
 		mail.send_mail( sender = email_sender, to = email_address, subject = email_subject, body = email_body )
 		return
 
-
 	def send_email_admin( self, email_type, email_body ):
 	# send email notification to administrators when an event type occurs
 		for email_address, email_types in settings.ADMIN_EMAIL_ADDRESSES.iteritems():
 			if email_type in email_types:
 				self.send_email( email_address, settings.ADMIN_EMAIL_SUBJECT_PREFIX + settings.ADMIN_EMAIL_TYPES[ email_type ], email_body )
 		return
-
 
 	def email_set_request( self, email ):
 	# request the creation of a new account based on an email address
@@ -401,7 +379,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			self.send_email( email, MSG.SEND_EMAIL_REGISTER_CONFIRM_SUBJECT(), MSG.SEND_EMAIL_REGISTER_CONFIRM_BODY( link ))
 		return result
 
-
 	def email_change_request( self, email ):
 	# request an email address to be modified. Create a rollback option.
 		result = 'cannot_remove'
@@ -412,7 +389,8 @@ class HandlerBase( webapp2.RequestHandler ):
 			if emailCurrent == email:
 				result = 'same'
 			else:
-				result = ERROR_EMAIL_IN_USE # Note: send an email to emailcurrent regardless to prevent email checking (see below)
+				result = ERROR_EMAIL_IN_USE
+				# Note: send an email to emailcurrent regardless to prevent email checking (see below)
 		else:
 			if email == '':
 				# if the user erased the email, and they can log in through auth, store "removed" in the email field, so it isn't overwritten by an auth login with a verified email
@@ -455,7 +433,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			self.send_email( emailCurrent, MSG.SEND_EMAIL_EMAIL_CHANGE_UNDO_SUBJECT(), MSG.SEND_EMAIL_EMAIL_CHANGE_UNDO_BODY( link, emailCurrent ))
 		return result
 
-
 	def email_change( self, token ):
 		email = token.email
 		user_id = token.user_id
@@ -470,7 +447,6 @@ class HandlerBase( webapp2.RequestHandler ):
 		else:
 			# delete the email verification token
 			token.key.delete()
-
 
 	def email_rollback( self, token ):
 		email = token.email
@@ -488,7 +464,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			if userTokens:
 				ndb.delete_multi( userTokens )
 
-
 	def password_change_request( self, email ):
 		if enki.libuser.exist_EnkiUser( email ):
 		# create an email verify token, send it to the email address
@@ -501,7 +476,6 @@ class HandlerBase( webapp2.RequestHandler ):
 		else:
 			result = ERROR_EMAIL_NOT_EXIST
 		return result
-
 
 	def create_user_from_email_pw( self, email, password ):
 		result = enki.libutil.ENKILIB_OK
@@ -516,7 +490,6 @@ class HandlerBase( webapp2.RequestHandler ):
 		else:
 			result = ERROR_USER_NOT_CREATED
 		return result
-
 
 	@db.transactional
 	def set_email( self, email, user_id = None ):
@@ -536,10 +509,9 @@ class HandlerBase( webapp2.RequestHandler ):
 		else:
 			return None
 
-
 	@db.transactional
 	def set_auth_id( self, auth_id, user_id ):
-		# add a new auth Id to an existing account
+	# add a new auth Id to an existing account
 		user_has_same_auth_id = enki.libuser.exist_Auth_Id( auth_id )
 		if not user_has_same_auth_id:
 			user = ndb.Key( EnkiModelUser, user_id ).get()
@@ -553,11 +525,9 @@ class HandlerBase( webapp2.RequestHandler ):
 		else:
 			return None
 
-
 	def get_user_from_authid( self, auth_id, email = None ):
 		user = self.get_or_create_user_from_authid( auth_id = auth_id, email = email, allow_create = False )
 		return user
-
 
 	@db.transactional
 	def get_or_create_user_from_authid( self, auth_id, email = None, allow_create = True ):
@@ -576,7 +546,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			user.put()
 		return user
 
-
 	@db.transactional
 	def remove_auth_id( self, auth_id_to_remove ):
 	# remove an auth Id from a user account
@@ -588,7 +557,6 @@ class HandlerBase( webapp2.RequestHandler ):
 		else:
 			return False
 
-
 	def get_user_auth_providers( self ):
 	# get list of the user's OAuth handlers
 		user_auth_providers = []
@@ -599,7 +567,6 @@ class HandlerBase( webapp2.RequestHandler ):
 					break
 		return user_auth_providers
 
-
 	def has_enough_accounts( self ):
 		# note: if the user only has an email but no password, we don't count it as a valid acocunt (even though they could do a forget password)
 		has_email = True if ( self.enki_user.email and self.enki_user.email <> 'removed' and self.enki_user.password ) else False
@@ -608,7 +575,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			return True
 		else:
 			return False
-
 
 	def provider_authenticated_callback( self, loginInfo ):
 		# We expect the fields of the dictionary to be:
@@ -675,11 +641,10 @@ class HandlerBase( webapp2.RequestHandler ):
 		else:
 			self.redirect_to_relevant_page()
 
-
 	def redirect_to_relevant_page( self, abort = False ):
-		# Redirect user to a previous page after login (& sign up) and logout,
-		# but only if they're allowed to be on the page with their new login status and the page is relevant.
-		# Otherwise redirect to Home.
+	# Redirect user to a previous page after login (& sign up) and logout,
+	# but only if they're allowed to be on the page with their new login status and the page is relevant.
+	# Otherwise redirect to Home.
 		home_page = enki.libutil.get_local_url( )
 		redirect_path = home_page
 		# retrieve the referrer that's been saved as a session parameter. Otherwise retrieve the request referrer.
@@ -703,10 +668,9 @@ class HandlerBase( webapp2.RequestHandler ):
 				redirect_path = ref
 		self.redirect( redirect_path, abort = abort )
 
-
 	@classmethod
 	def account_is_active( cls, user_id ):
-		# detect activity on a user account
+	# detect activity on a user account
 		result = False
 		has_friends = True if EnkiModelFriends.fetch_by_user_id( user_id ) else False
 		has_messages = True if EnkiModelMessage.exist_sent_or_received( user_id ) else False
@@ -715,7 +679,6 @@ class HandlerBase( webapp2.RequestHandler ):
 		if has_friends or has_messages or has_forum_posts or has_product:
 			result = True
 		return result
-
 
 	def account_deletion_request( self, delete_posts = False ):
 		token_type = 'accountdelete'
@@ -737,7 +700,6 @@ class HandlerBase( webapp2.RequestHandler ):
 				self.send_email( self.enki_user.email, MSG.SEND_EMAIL_ACCOUT_POSTS_DELETE_SUBJECT(), MSG.SEND_EMAIL_ACCOUT_POSTS_DELETE_BODY( link ))
 			else:
 				self.send_email( self.enki_user.email, MSG.SEND_EMAIL_ACCOUT_DELETE_SUBJECT(), MSG.SEND_EMAIL_ACCOUT_DELETE_BODY( link ))
-
 
 	@db.transactional
 	def delete_account( self, delete_posts = False, token = '' ):
@@ -761,7 +723,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		# Delete the user account and log them out.
 		if not HandlerBase.account_is_active( user_to_delete.key.id()):
 			# delete user if the account is inactive
-			display_names = EnkiModelDisplayName.fetch_by_user_id( user_to_delete.key.id())
+			display_names = EnkiModelDisplayName.fetch_keys_by_user_id(user_to_delete.key.id())
 			if display_names:
 				ndb.delete_multi( display_names )
 			user_to_delete.key.delete()

@@ -7,6 +7,8 @@ from google.appengine.ext.ndb import model
 
 class EnkiModelProductKey( model.Model ):
 
+	#=== MODEL ====================================================================
+
 	licence_key = model.StringProperty()  # mandatory
 	product_name = model.StringProperty()  # mandatory
 
@@ -25,11 +27,13 @@ class EnkiModelProductKey( model.Model ):
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )
 
+	#=== CONSTANTS ================================================================
 
 	LICENCE_KEY_LENGTH = 15
 	LICENCE_KEY_DASHES_LENGTH = LICENCE_KEY_LENGTH + 2  # licence including two inserted dashes
 	SEPARATOR_LICENCE_KEYS = '\n'
 
+	#=== QUERIES ==================================================================
 
 	@classmethod
 	def exist_by_licence_key( cls, licence_key ):
@@ -87,6 +91,8 @@ class EnkiModelProductKey( model.Model ):
 	@classmethod
 	def count_by_shop_name_order_type_not_activated( cls, shop_name, order_type ):
 		return cls.query( ndb.AND( cls.shop_name == shop_name, cls.order_type == order_type, cls.activated_by_user == -1 )).count()
+
+	#=== UTILITIES ================================================================
 
 	@classmethod
 	def generate_licence_key( cls ):

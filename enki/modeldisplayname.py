@@ -17,6 +17,8 @@ displayNameSelection = collections.namedtuple( 'displayNameSelection', 'error, b
 
 class EnkiModelDisplayName( model.Model ):
 
+	#=== MODEL ====================================================================
+
 	user_id = model.IntegerProperty()
 	prefix = model.StringProperty() # prefix e.g. 'Jane'
 	prefix_lower = model.ComputedProperty(lambda self: self.prefix.lower()) # lowercase prefix e.g. "jane"
@@ -24,6 +26,7 @@ class EnkiModelDisplayName( model.Model ):
 	current = model.BooleanProperty( default = True )
 	time_created = model.DateTimeProperty( auto_now_add = True )
 
+	#=== CONSTANTS ================================================================
 
 	DELETED_PREFIX = '[deleted]'
 	DELETED_SUFFIX = '#0000'
@@ -40,6 +43,7 @@ class EnkiModelDisplayName( model.Model ):
 	ERROR_DISPLAY_NAME_INVALID = -44
 	ERROR_DISPLAY_NAME_NOT_EXIST = -45
 
+	#=== QUERIES ==================================================================
 
 	@classmethod
 	def exist_by_user_id( cls, user_id ):
@@ -73,7 +77,7 @@ class EnkiModelDisplayName( model.Model ):
 		return cls.query( cls.prefix_lower == prefix_lower, cls.suffix == suffix ).get()
 
 	@classmethod
-	def fetch_by_user_id( cls, user_id ):
+	def fetch_keys_by_user_id( cls, user_id ):
 		return cls.query( ancestor = ndb.Key( EnkiModelUser, user_id )).fetch( keys_only = True )
 
 	@classmethod
@@ -84,6 +88,7 @@ class EnkiModelDisplayName( model.Model ):
 	def count_current( cls ):
 		return cls.query( cls.current == True ).count()
 
+	#=== UTILITIES ================================================================
 
 	@classmethod
 	def get_display_name( cls, user_id ):

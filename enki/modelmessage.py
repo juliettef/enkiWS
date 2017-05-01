@@ -11,10 +11,14 @@ messageData = collections.namedtuple( 'message_data', 'message_id, type, sender'
 
 class EnkiModelMessage( model.Model ):
 
+	#=== MODEL ====================================================================
+
 	sender = model.IntegerProperty()
 	recipient = model.IntegerProperty()
 	type = model.StringProperty()
 	time_created = model.DateTimeProperty( auto_now_add = True )
+
+	#=== QUERIES ==================================================================
 
 	@classmethod
 	def get_by_id( cls, message_id ):
@@ -39,7 +43,7 @@ class EnkiModelMessage( model.Model ):
 		return count > 0
 
 	@classmethod
-	def get_key_by_sender_recipient( cls, sender_id, recipient_id ):
+	def get_keys_by_sender_recipient( cls, sender_id, recipient_id ):
 		return cls.query( ndb.AND( cls.sender == sender_id, cls.recipient == recipient_id )).get( keys_only = True )
 
 	@classmethod
@@ -54,6 +58,8 @@ class EnkiModelMessage( model.Model ):
 	@classmethod
 	def fetch_keys_sent_or_received( cls, user_id ):
 		return cls.query( ndb.OR( cls.sender == user_id, cls.recipient == user_id )).fetch( keys_only = True )
+
+	#=== UTILITIES ================================================================
 
 	@classmethod
 	def send_message( cls, sender_id, recipient_id, type ):
