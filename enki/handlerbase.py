@@ -437,7 +437,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			result = enki.libuser.set_password( user, password )
 			if result == enki.libutil.ENKILIB_OK:
 				# cleanup: delete all verify tokens created when registering the email
-				enki.libuser.delete_verifytoken_by_email( email, 'register' )
+				EnkiModelTokenVerify.delete_by_email_type( email, 'register' )
 		else:
 			result = ERROR_USER_NOT_CREATED
 		return result

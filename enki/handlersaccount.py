@@ -655,7 +655,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 				password = self.request.get( 'password' )
 				result = enki.libuser.set_password( user, password )
 				if result == enki.libutil.ENKILIB_OK:
-					enki.libuser.delete_verifytoken_by_email( email, 'passwordchange' )
+					EnkiModelTokenVerify.delete_by_email_type( email, 'passwordchange' )
 					EnkiModelBackoffTimer.remove( user.email )
 					self.log_in_with_id( user.key.id(), password )
 					self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.PASSWORD_SET())

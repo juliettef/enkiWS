@@ -2,12 +2,9 @@ import webapp2
 import cgi
 import re
 
-from google.appengine.ext import ndb
-
 import settings
 import enki.libutil
 from enki.authcryptcontext import pwd_context
-from enki.modeltokenverify import EnkiModelTokenVerify
 
 
 ERROR_EMAIL_MISSING = -11
@@ -15,7 +12,6 @@ ERROR_EMAIL_FORMAT_INVALID = -12
 ERROR_PASSWORD_BLANK = -21
 ERROR_PASSWORD_TOO_SHORT = -22
 ERROR_PASSWORD_NOT_SET = -23
-
 
 def validate_email( email ):
 	result = enki.libutil.ENKILIB_OK
@@ -29,7 +25,6 @@ def validate_email( email ):
 		result = ERROR_EMAIL_FORMAT_INVALID
 	return email_escaped, result
 
-
 def validate_password( password ):
 	result = enki.libutil.ENKILIB_OK
 	if password == '':
@@ -37,7 +32,6 @@ def validate_password( password ):
 	elif len( password ) < webapp2.get_app().config.get( 'enki' ).get( 'user' ).get( 'PASSWORD_LENGTH_MIN' ):
 		result = ERROR_PASSWORD_TOO_SHORT
 	return result
-
 
 def set_password( user, password ):
 	result = validate_password( password )
@@ -47,27 +41,17 @@ def set_password( user, password ):
 		user.put()
 	return result
 
-
-def delete_verifytoken_by_email( email, type ):
-	# delete all verify tokens for a given email and type (cleanup)
-	entities = EnkiModelTokenVerify.fetch_keys_by_email_type( email, type )
-	if entities:
-		ndb.delete_multi( entities )
-
-
 def add_roles( user, roles ):
 	for role in roles:
 		if role not in user.roles:
 			user.roles.append( role )
 	user.put()
 
-
 def remove_roles( user, roles ):
 	for role in roles:
 		if role in user.roles:
 			user.roles.remove( role )
 	user.put()
-
 
 def has_permissions( user, permissions ):
 # check a user has all the permissions required
@@ -78,7 +62,6 @@ def has_permissions( user, permissions ):
 		return True	# all permissions have tested true by this point
 	return False
 
-
 def has_permission( user, permission ):
 # check a user has a permission
 	if user and permission:
@@ -87,6 +70,3 @@ def has_permission( user, permission ):
 				if permission in settings.ROLES_PERMISSIONS[ role ]:
 					return True
 	return False
-
-#=== QUERIES ==================================================================
-

@@ -106,8 +106,15 @@ class EnkiModelTokenVerify( model.Model ):
 		ndb.Key(cls, int(token_id)).delete()
 
 	@classmethod
+	def delete_by_email_type( cls, email, type ):
+	# delete all verify tokens for a given email and type (cleanup)
+		entities = cls.fetch_keys_by_email_type(email, type)
+		if entities:
+			ndb.delete_multi(entities)
+
+	@classmethod
 	def add_preventmultipost_token( cls, type ):
-		# prevent accidental multiple posting
+	# prevent accidental multiple posting
 		token = security.generate_random_string( entropy = 256 )
 		pmtoken = cls( token = token, type = type )
 		pmtoken.put()
@@ -115,7 +122,7 @@ class EnkiModelTokenVerify( model.Model ):
 
 	@classmethod
 	def check_and_delete_preventmultipost_token( cls, token, type ):
-		# prevent accidental multiple posting
+	# prevent accidental multiple posting
 		result = False
 		verify_token = cls.get_by_token_type( token, type )
 		if verify_token:
