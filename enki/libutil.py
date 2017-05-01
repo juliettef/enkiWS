@@ -7,6 +7,8 @@ import webapp2_extras
 import webapp2_extras.i18n
 import webapp2_extras.security
 
+from markdown2 import markdown2
+
 import settings
 import enki.textmessages as MSG
 
@@ -120,3 +122,7 @@ def generate_auth_token():
 
 def generate_connect_code():
 	return webapp2_extras.security.generate_random_string( length = 5, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
+
+def markdown_escaped_nofollow( text ):
+	# safe version of markdown
+	return markdown2.markdown( text, safe_mode='escape', extras=["nofollow"])

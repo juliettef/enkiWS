@@ -2,7 +2,7 @@ import collections
 
 from google.appengine.ext import ndb
 from webapp2_extras import security
-from markdown2 import markdown2
+
 
 import settings
 import enki.libuser
@@ -14,35 +14,14 @@ from enki.modelpost import EnkiModelPost
 from enki.modelthread import EnkiModelThread
 
 
-POST_LENGTH_MAX = 10000
-THREAD_TITLE_LENGTH_MAX = 200
-POST_DELETED = '[deleted]'
-POSTS_PER_PAGE = 10
-POST_DEFAULT = 1
-POST_LAST = 'last'
-PAGES_BEFORE = 3
-PAGES_AFTER = 3
-
-ERROR_POST_LENGTH = -51
-ERROR_POST_CREATION = -52
-ERROR_POST_EDITION = -53
-ERROR_POST_DELETION = -54
-
-
-forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown_escaped, forum_selected' )
-threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown_escaped, thread_selected' )
-postData = collections.namedtuple( 'postData', 'forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, markdown_escaped' )
-authorpostsData = collections.namedtuple( 'authorpostsData', 'forums_url, author_data, list, markdown_escaped' )
+forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown_escaped_nofollow, forum_selected' )
+threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown_escaped_nofollow, thread_selected' )
+postData = collections.namedtuple( 'postData', 'forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, markdown_escaped_nofollow' )
+authorpostsData = collections.namedtuple( 'authorpostsData', 'forums_url, author_data, list, markdown_escaped_nofollow' )
 pagination = collections.namedtuple( 'pagination', 'page_first, page_previous, page_current, page_list, page_next, page_last' )
 
 
 #=== DISPLAY DATA =============================================================
-
-
-def markdown_escaped( text ):
-	# safe version of markdown
-	return markdown2.markdown( text, safe_mode='escape', extras=["nofollow"])
-
 
 def create_forums():
 	# create an executable string from the forums settings to add the forums
@@ -104,7 +83,7 @@ def get_forum_data( forum_selected ):
 			item.author_data = EnkiModelDisplayName.get_user_id_display_name_url( EnkiModelDisplayName.get_by_user_id_current( item.author ))
 			item.sticky = True if ( item.sticky_order > 0 ) else False
 			list[ i ] = item
-	forum_data = forumData(forums_url, forum, num_posts, list, markdown_escaped, forum_selected)
+	forum_data = forumData(forums_url, forum, num_posts, list, enki.libutil.markdown_escaped_nofollow, forum_selected)
 	return forum_data
 
 
@@ -125,14 +104,14 @@ def validate_thread_pagination( thread, post_requested, post_count ):
 	return result
 
 
-def get_thread_data( thread_selected, post_requested = POST_DEFAULT, post_count = POSTS_PER_PAGE ):
+def get_thread_data( thread_selected, post_requested = EnkiModelPost.POST_DEFAULT, post_count = EnkiModelPost.POSTS_PER_PAGE ):
 	# get posts by thread
 	forums_url = enki.libutil.get_local_url( 'forums' )
 	thread = EnkiModelThread.get_by_id( int( thread_selected ))
 	thread_url = enki.libutil.get_local_url( 'thread', { 'thread': str( thread_selected )})
 	forum = EnkiModelForum.get_by_id( thread.forum )
 	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
-	if post_requested == POST_LAST:
+	if post_requested == EnkiModelPost.POST_LAST:
 		post_requested = thread.num_posts
 	list = EnkiModelPost.fetch_by_thread( int( thread_selected ), offset = (int( post_requested ) - 1), limit = int( post_count ))
 	if list:
@@ -141,12 +120,12 @@ def get_thread_data( thread_selected, post_requested = POST_DEFAULT, post_count 
 			item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
 			item.sticky = True if ( item.sticky_order > 0 ) else False
 			list[ i ] = item
-	thread_data = threadData(forums_url, forum, forum_url, thread, thread_url, list, markdown_escaped, thread_selected)
+	thread_data = threadData(forums_url, forum, forum_url, thread, thread_url, list, enki.libutil.markdown_escaped_nofollow, thread_selected)
 	return thread_data
 
 
 def get_page( thread, post_requested, post_count ):
-	if post_requested == POST_LAST:
+	if post_requested == EnkiModelPost.POST_LAST:
 		post_requested = thread.num_posts
 	page = 1
 	if post_count == 1:
@@ -165,9 +144,9 @@ def get_first_post_on_page( page, post_count ):
 	return post
 
 
-def get_thread_pagination_data( thread_selected, post_requested = POST_DEFAULT, post_count = POSTS_PER_PAGE ):
+def get_thread_pagination_data( thread_selected, post_requested = EnkiModelPost.POST_DEFAULT, post_count = EnkiModelPost.POSTS_PER_PAGE ):
 	thread = EnkiModelThread.get_by_id( int( thread_selected ))
-	post_requested = thread.num_posts if post_requested == POST_LAST else int( post_requested )
+	post_requested = thread.num_posts if post_requested == EnkiModelPost.POST_LAST else int( post_requested )
 	post_count = int( post_count )
 	page_first = ''
 	page_previous = ''
@@ -203,10 +182,10 @@ def get_thread_pagination_data( thread_selected, post_requested = POST_DEFAULT, 
 		page_next = enki.libutil.get_local_url( 'thread', { 'thread': thread_selected, 'start': str( first_post_next_page ), 'count': str( post_count )})
 
 	# list of posts
-	start = get_page( thread, post_requested, post_count ) - PAGES_BEFORE
+	start = get_page( thread, post_requested, post_count ) - EnkiModelPost.PAGES_BEFORE
 	while start < 1:
 		start += 1
-	stop = get_page( thread, post_requested, post_count ) + PAGES_AFTER
+	stop = get_page( thread, post_requested, post_count ) + EnkiModelPost.PAGES_AFTER
 	while stop > get_page( thread, thread.num_posts, post_count ):
 		stop -= 1
 	index = start
@@ -231,7 +210,7 @@ def	get_post_data ( post_selected ):
 	forum = EnkiModelForum.get_by_id( thread.forum )
 	forum_url = enki.libutil.get_local_url( 'forum', { 'forum': str( forum.key.id())})
 	author_data = EnkiModelDisplayName.get_user_id_display_name_url( EnkiModelDisplayName.get_by_user_id_current( post.author ))
-	post_data = postData(forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, markdown_escaped, )
+	post_data = postData(forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, enki.libutil.markdown_escaped_nofollow, )
 	return post_data
 
 
@@ -254,7 +233,7 @@ def get_author_posts( author_selected ):  # MOVED TO LIB
 				item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
 				item.sticky = True if ( item.sticky_order > 0 ) else False
 				list[ i ] = item
-		author_posts_data = authorpostsData(forums_url, author_data, list, markdown_escaped)
+		author_posts_data = authorpostsData(forums_url, author_data, list, enki.libutil.markdown_escaped_nofollow)
 		return author_posts_data
 
 
@@ -282,7 +261,7 @@ def check_and_delete_preventmultipost_token( token ):
 def add_thread_and_post( user_id, forum, thread_title, thread_sticky_order, post_body, post_sticky_order ):
 	result = enki.libutil.ENKILIB_OK
 	if user_id and forum and thread_title and post_body:
-		if len( thread_title ) <= THREAD_TITLE_LENGTH_MAX and len( post_body ) <= POST_LENGTH_MAX:
+		if len( thread_title ) <= EnkiModelThread.THREAD_TITLE_LENGTH_MAX and len( post_body ) <= EnkiModelPost.POST_LENGTH_MAX:
 			if EnkiModelDisplayName.get_by_user_id_current( user_id ):
 				thread = EnkiModelThread( author = user_id, forum = int( forum ), title = thread_title, num_posts = 1, sticky_order = int( thread_sticky_order ) )
 				thread.put()
@@ -293,18 +272,18 @@ def add_thread_and_post( user_id, forum, thread_title, thread_sticky_order, post
 				forum_selected.num_threads += 1
 				forum_selected.put()
 			else:
-				result = ERROR_POST_CREATION
+				result = EnkiModelPost.ERROR_POST_CREATION
 		else:
-			result = ERROR_POST_LENGTH
+			result = EnkiModelPost.ERROR_POST_LENGTH
 	else:
-		result = ERROR_POST_CREATION
+		result = EnkiModelPost.ERROR_POST_CREATION
 	return result
 
 
 def add_post( user_id, thread, post_body, sticky_order ):
 	result = enki.libutil.ENKILIB_OK
 	if user_id and thread and post_body:
-		if len( post_body ) <= POST_LENGTH_MAX:
+		if len( post_body ) <= EnkiModelPost.POST_LENGTH_MAX:
 			post = EnkiModelPost( author = user_id, thread = int( thread ), body = post_body, sticky_order = int( sticky_order ))
 			post.put()
 			thread_selected = ndb.Key( EnkiModelThread, int( thread )).get()
@@ -314,9 +293,9 @@ def add_post( user_id, thread, post_body, sticky_order ):
 			forum_selected.num_posts += 1
 			forum_selected.put()
 		else:
-			result = ERROR_POST_LENGTH
+			result = EnkiModelPost.ERROR_POST_LENGTH
 	else:
-		result = ERROR_POST_CREATION
+		result = EnkiModelPost.ERROR_POST_CREATION
 	return result
 
 
@@ -324,7 +303,7 @@ def edit_post( user_id, post_id, post_body, sticky_order ):
 	thread = ''
 	result = enki.libutil.ENKILIB_OK
 	if user_id and post_id and post_body:
-		if len( post_body ) <= POST_LENGTH_MAX:
+		if len( post_body ) <= EnkiModelPost.POST_LENGTH_MAX:
 			post = EnkiModelPost.get_by_id( int( post_id ))
 			if post:
 				post.body = post_body
@@ -332,9 +311,9 @@ def edit_post( user_id, post_id, post_body, sticky_order ):
 				thread = str( post.thread )
 			post.put()
 		else:
-			result = ERROR_POST_LENGTH
+			result = EnkiModelPost.ERROR_POST_LENGTH
 	else:
-		result = ERROR_POST_EDITION
+		result = EnkiModelPost.ERROR_POST_EDITION
 	return result, thread
 
 
@@ -344,11 +323,11 @@ def delete_post( user_id, post_id ):
 	if user_id and post_id:
 		post = EnkiModelPost.get_by_id( int( post_id ))
 		if post:
-			post.body = POST_DELETED
+			post.body = EnkiModelPost.POST_DELETED
 			thread = str( post.thread )
 		post.put()
 	else:
-		result = ERROR_POST_DELETION
+		result = EnkiModelPost.ERROR_POST_DELETION
 	return result, thread
 
 
@@ -358,6 +337,6 @@ def delete_user_posts( user_id ):
 	if posts:
 		for post in posts:
 			result = delete_post( user_id, post.id())
-			if result == ERROR_POST_DELETION:
+			if result == EnkiModelPost.ERROR_POST_DELETION:
 				return result
 	return result

@@ -306,7 +306,7 @@ class HandlerBase( webapp2.RequestHandler ):
 									locale = i18n.get_i18n().locale,
 				                    debug = self.session.pop( 'debugmessage', None ) if enki.libutil.is_debug else None,
 				                    infomessage = self.session.pop( 'infomessage', None ),
-									deleted_post = enki.libforum.POST_DELETED,
+									deleted_post = EnkiModelPost.POST_DELETED,
 									deleted_post_display = MSG.POST_DELETED_DISPLAY(),
 									deleted_dn = EnkiModelDisplayName.DELETED_PREFIX + EnkiModelDisplayName.DELETED_SUFFIX,
 									deleted_dn_display = MSG.DISPLAY_NAME_DELETED_DISPLAY(),

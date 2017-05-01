@@ -7,6 +7,7 @@ import enki.modelcounter
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 from enki.modelforum import EnkiModelForum
+from enki.modelpost import EnkiModelPost
 from enki.modelthread import EnkiModelThread
 
 from enki.libutil import xstr as xstr
@@ -40,8 +41,8 @@ class HandlerForum( enki.HandlerBase ):
 		                  active_menu = 'forums',
 		                  data = data,
 		                  not_found = not_found,
-		                  maxpostlength = enki.libforum.POST_LENGTH_MAX,
-		                  maxthreadtitlelength = enki.libforum.THREAD_TITLE_LENGTH_MAX )
+		                  maxpostlength = EnkiModelPost.POST_LENGTH_MAX,
+		                  maxthreadtitlelength = EnkiModelThread.THREAD_TITLE_LENGTH_MAX )
 
 	def post( self, forum ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
@@ -66,13 +67,13 @@ class HandlerForum( enki.HandlerBase ):
 						if not thread_title:
 							error_message_threadtitle = MSG.THREAD_TITLE_NEEDED( )
 						else:
-							exceed = len( thread_title ) - enki.libforum.THREAD_TITLE_LENGTH_MAX
+							exceed = len( thread_title ) - EnkiModelThread.THREAD_TITLE_LENGTH_MAX
 							if exceed > 0:
 								error_message_threadtitle = MSG.THREAD_TITLE_TOO_LONG( exceed )
 						if not post_body:
 							error_message_postbody = MSG.POST_BODY_NEEDED()
 						else:
-							exceed = len( post_body ) - enki.libforum.POST_LENGTH_MAX
+							exceed = len( post_body ) - EnkiModelPost.POST_LENGTH_MAX
 							if exceed > 0:
 								error_message_postbody = MSG.POST_BODY_TOO_LONG( exceed )
 
@@ -108,8 +109,8 @@ class HandlerForum( enki.HandlerBase ):
 				                  preventmultitoken = pmtoken,
 				                  error_threadtitle = error_message_threadtitle,
 				                  error_postbody = error_message_postbody,
-				                  maxpostlength = enki.libforum.POST_LENGTH_MAX,
-				                  maxthreadtitlelength = enki.libforum.THREAD_TITLE_LENGTH_MAX,
+				                  maxpostlength = EnkiModelPost.POST_LENGTH_MAX,
+				                  maxthreadtitlelength = EnkiModelThread.THREAD_TITLE_LENGTH_MAX,
 				                  threadtitle = thread_title,
 				                  postbody = post_body,
 				                  previewthreadtitle = preview_threadtitle,
@@ -127,9 +128,9 @@ class HandlerThread( enki.HandlerBase ):
 		validation_result = enki.libforum.validate_thread_pagination( thread, post_requested, post_count )
 		if validation_result == enki.libutil.ENKILIB_OK:
 			if not post_requested:
-				post_requested = enki.libforum.POST_DEFAULT
+				post_requested = EnkiModelPost.POST_DEFAULT
 			if not post_count:
-				post_count = enki.libforum.POSTS_PER_PAGE
+				post_count = EnkiModelPost.POSTS_PER_PAGE
 			data = enki.libforum.get_thread_data( thread, post_requested, post_count )
 			pagination = enki.libforum.get_thread_pagination_data( thread, post_requested, post_count )
 		else:
@@ -140,7 +141,7 @@ class HandlerThread( enki.HandlerBase ):
 		                  pagination = pagination,
 		                  user_id = self.user_id,
 		                  not_found = not_found,
-		                  maxpostlength = enki.libforum.POST_LENGTH_MAX )
+		                  maxpostlength = EnkiModelPost.POST_LENGTH_MAX )
 
 	def post( self, thread ):
 		if self.ensure_is_logged_in() and self.ensure_has_display_name():
@@ -152,9 +153,9 @@ class HandlerThread( enki.HandlerBase ):
 				post_count = str( self.request.get( 'count' ))
 				post_requested = str( self.request.get( 'start' ))
 				if not post_count:
-					post_count = enki.libforum.POSTS_PER_PAGE
+					post_count = EnkiModelPost.POSTS_PER_PAGE
 				if not post_requested:
-					post_requested = enki.libforum.get_first_post_on_page( enki.libforum.get_page( EnkiModelThread.get_by_id( int( thread )), enki.libforum.POST_LAST, int( post_count )), int( post_count ))
+					post_requested = enki.libforum.get_first_post_on_page( enki.libforum.get_page( EnkiModelThread.get_by_id( int( thread )), EnkiModelPost.POST_LAST, int( post_count )), int( post_count ))
 
 				error_message = ''
 				preview = ''
@@ -169,7 +170,7 @@ class HandlerThread( enki.HandlerBase ):
 						if not post_body:
 							error_message = MSG.POST_BODY_NEEDED()
 						else:
-							exceed = len( post_body ) - enki.libforum.POST_LENGTH_MAX
+							exceed = len( post_body ) - EnkiModelPost.POST_LENGTH_MAX
 							if exceed > 0:
 								error_message = MSG.POST_BODY_TOO_LONG( exceed )
 					if not error_message:
@@ -179,7 +180,7 @@ class HandlerThread( enki.HandlerBase ):
 								result = enki.libforum.add_post( user, thread, post_body, post_sticky_order )
 								if result == enki.libutil.ENKILIB_OK:
 									self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_PUBLISHED())
-									post_requested = enki.libforum.get_first_post_on_page( enki.libforum.get_page( EnkiModelThread.get_by_id( int( thread )), enki.libforum.POST_LAST, int( post_count )), int( post_count ))
+									post_requested = enki.libforum.get_first_post_on_page( enki.libforum.get_page( EnkiModelThread.get_by_id( int( thread )), EnkiModelPost.POST_LAST, int( post_count )), int( post_count ))
 									url = enki.libutil.get_local_url( 'thread', { 'thread': thread, 'start': str( post_requested ), 'count': str( post_count )})
 									self.send_email_admin( 'FPA', url )
 									self.redirect( url )
@@ -204,7 +205,7 @@ class HandlerThread( enki.HandlerBase ):
 				                  show_input = show_input,
 				                  preventmultitoken = pmtoken,
 				                  error = error_message,
-				                  maxpostlength = enki.libforum.POST_LENGTH_MAX,
+				                  maxpostlength = EnkiModelPost.POST_LENGTH_MAX,
 				                  postbody = post_body,
 				                  preview = preview )
 
@@ -221,7 +222,7 @@ class HandlerPost( enki.HandlerBase ):
 			data = enki.libforum.get_post_data( post )
 			if data:
 				is_author = True if self.user_id == data.author_data.user_id else False
-				post_body = '' if data.post.body == enki.libforum.POST_DELETED else data.post.body
+				post_body = '' if data.post.body == EnkiModelPost.POST_DELETED else data.post.body
 		else:
 			not_found = MSG.POST_NOT_EXIST( )
 		change = self.request.get( 'change' )
@@ -236,7 +237,7 @@ class HandlerPost( enki.HandlerBase ):
 		                  isauthor = is_author,
 						  has_permission_sticky = enki.libuser.has_permissions(self.enki_user, [ 'PFPS' ]),
 		                  postbody = post_body,
-		                  maxpostlength = enki.libforum.POST_LENGTH_MAX )
+		                  maxpostlength = EnkiModelPost.POST_LENGTH_MAX )
 
 
 	def post( self, post ):
@@ -271,7 +272,7 @@ class HandlerPost( enki.HandlerBase ):
 					if not post_body:
 						error_message = MSG.POST_BODY_NEEDED()
 					else:
-						exceed = len( post_body ) - enki.libforum.POST_LENGTH_MAX
+						exceed = len( post_body ) - EnkiModelPost.POST_LENGTH_MAX
 						if exceed > 0:
 							error_message = MSG.POST_BODY_TOO_LONG( exceed )
 
@@ -299,7 +300,7 @@ class HandlerPost( enki.HandlerBase ):
 								  has_permission_sticky = enki.libuser.has_permissions( self.enki_user, [ 'PFPS' ]),
 				                  error = error_message,
 				                  postbody = post_body,
-				                  maxpostlength = enki.libforum.POST_LENGTH_MAX,
+				                  maxpostlength = EnkiModelPost.POST_LENGTH_MAX,
 				                  preview = preview )
 
 

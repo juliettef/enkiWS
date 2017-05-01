@@ -17,8 +17,15 @@ class EnkiModelThread( model.Model ):
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )
 
+	#=== CONSTANTS ================================================================
+
+	THREAD_TITLE_LENGTH_MAX = 200
+
 	#=== QUERIES ==================================================================
 
 	@classmethod
 	def fetch_by_forum( cls, forum ):
 		return cls.query( cls.forum == forum ).order( -cls.sticky_order, -cls.time_updated ).fetch()
+
+	#=== UTILITIES ================================================================
+

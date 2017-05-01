@@ -27,3 +27,6 @@ class EnkiModelForum( model.Model ):
 	@classmethod
 	def fetch( cls ):
 		return cls.query().order( cls.group_order, cls.forum_order ).fetch()
+
+	#=== UTILITIES ================================================================
+

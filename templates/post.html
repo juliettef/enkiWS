@@ -38,7 +38,7 @@
 	                    {% if change != 'delete' and data.post.body != deleted_post %}- <a href="{{ data.post_page|joinurl({ 'change':'delete' }) }}">{{ _( "delete" ) }}</a>{% endif %}{% endif %}
                     </div>
                     <div class="panel-body">
-                        {% if data.post.body == deleted_post %}{{ deleted_post_display }}{% else %}{{ data.markdown_escaped( data.post.body ) }}{% endif %}
+                        {% if data.post.body == deleted_post %}{{ deleted_post_display }}{% else %}{{ data.markdown_escaped_nofollow( data.post.body ) }}{% endif %}
                     </div>
                 </div>
 
@@ -113,7 +113,7 @@
 			                                    {{ display_name }} - {{ _( "date and time submitted UTC" ) }} - {{ _( "permalink" ) }}
 			                                </div>
 			                                <div class="panel-body">
-			                                    {{ data.markdown_escaped( preview ) }}
+			                                    {{ data.markdown_escaped_nofollow( preview ) }}
 			                                </div>
 			                            </div>
 			                            <hr>

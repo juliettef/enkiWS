@@ -15,6 +15,21 @@ class EnkiModelPost( model.Model ):
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )
 
+	#=== CONSTANTS ================================================================
+
+	POST_LENGTH_MAX = 10000
+	POST_DELETED = '[deleted]'
+	POSTS_PER_PAGE = 10
+	POST_DEFAULT = 1
+	POST_LAST = 'last'
+	PAGES_BEFORE = 3
+	PAGES_AFTER = 3
+
+	ERROR_POST_LENGTH = -51
+	ERROR_POST_CREATION = -52
+	ERROR_POST_EDITION = -53
+	ERROR_POST_DELETION = -54
+
 	#=== QUERIES ==================================================================
 
 	@classmethod
@@ -28,3 +43,5 @@ class EnkiModelPost( model.Model ):
 	@classmethod
 	def fetch_key_by_author( cls, author ):
 		return cls.query( cls.author == author ).fetch( keys_only = True )
+
+	#=== UTILITIES ================================================================
