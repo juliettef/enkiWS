@@ -7,7 +7,6 @@ from google.appengine.ext import ndb
 import settings
 import enki.libutil
 from enki.authcryptcontext import pwd_context
-from enki.modeltokenauth import EnkiModelTokenAuth
 from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeltokenverify import EnkiModelTokenVerify
 
@@ -57,17 +56,6 @@ def delete_verifytoken_by_email( email, type ):
 		ndb.delete_multi( entities )
 
 
-def delete_session_token_auth( token_auth_id ):
-	ndb.Key( EnkiModelTokenAuth, int( token_auth_id )).delete()
-
-
-def revoke_user_authentications( user_id ):
-	tokens = fetch_keys_AuthToken( user_id )
-	if tokens:
-		# delete the token from the db
-		ndb.delete_multi( tokens )
-
-
 def add_roles( user, roles ):
 	for role in roles:
 		if role not in user.roles:
@@ -104,31 +92,7 @@ def has_permission( user, permission ):
 
 #=== QUERIES ==================================================================
 
-def fetch_keys_AuthToken_by_user_id_token( user_id, token ):
-	entity = EnkiModelTokenAuth.query( ndb.AND( EnkiModelTokenAuth.user_id == user_id,
-	                                            EnkiModelTokenAuth.token == token )).fetch( keys_only = True )
-	return entity
 
-
-def exist_AuthToken( user_id, token ):
-	count = EnkiModelTokenAuth.query( ndb.AND( EnkiModelTokenAuth.user_id == user_id,
-	                                           EnkiModelTokenAuth.token == token )).count( 1 )
-	return count > 0
-
-
-def count_AuthTokens( user_id ):
-	count = EnkiModelTokenAuth.query( EnkiModelTokenAuth.user_id == user_id ).count()
-	return count
-
-
-def fetch_AuthTokens( user_id ):
-	list = EnkiModelTokenAuth.query( EnkiModelTokenAuth.user_id == user_id ).order( -EnkiModelTokenAuth.time_created ).fetch()
-	return list
-
-
-def fetch_keys_AuthToken( user_id ):
-	keys = EnkiModelTokenAuth.query( EnkiModelTokenAuth.user_id == user_id ).fetch( keys_only = True )
-	return keys
 
 
 def get_EmailRollbackToken_by_user_id_email( user_id, email ):

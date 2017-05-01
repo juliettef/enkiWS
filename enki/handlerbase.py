@@ -130,7 +130,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		if self.just_logged_in:
 			return True
 		token = self.session.get( 'auth_token' )
-		if enki.libuser.exist_AuthToken( self.user_id, token ):
+		if EnkiModelTokenAuth.exist_by_user_id_token( self.user_id, token ):
 			return True
 		else:
 			return False
@@ -207,7 +207,7 @@ class HandlerBase( webapp2.RequestHandler ):
 	# log out the currently logged in user
 		if self.is_logged_in():
 			token = self.session.get( 'auth_token' )
-			token_key = enki.libuser.fetch_keys_AuthToken_by_user_id_token(self.user_id, token)
+			token_key = EnkiModelTokenAuth.fetch_keys_by_user_id_token(self.user_id, token)
 			if token_key:
 				# delete the token from the db
 				ndb.delete_multi( token_key )
@@ -700,7 +700,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		# log the deleted user out
 		if self.enki_user == user_to_delete.key.id():
 			self.log_out()
-		enki.libuser.revoke_user_authentications( user_to_delete.key.id())
+		EnkiModelTokenAuth.revoke_user_authentications( user_to_delete.key.id())
 
 	def cleanup_item( self ):
 		likelihood = 10 # occurs with a probability of 1%

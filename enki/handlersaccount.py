@@ -9,6 +9,7 @@ import enki.libutil
 import enki.libuser
 import enki.textmessages as MSG
 from enki.modelbackofftimer import EnkiModelBackoffTimer
+from enki.modeltokenauth import EnkiModelTokenAuth
 from enki.modeluser import EnkiModelUser
 from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelfriends import EnkiModelFriends
@@ -214,7 +215,7 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			friends = EnkiModelFriends.count_by_user_id( self.user_id )
 			messages = EnkiModelMessage.count_by_recipient( self.user_id )
 
-			sessions_browsers = enki.libuser.count_AuthTokens( self.user_id )
+			sessions_browsers = EnkiModelTokenAuth.count_by_user_id( self.user_id )
 			sessions_apps = EnkiModelRestAPITokenVerify.count_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
 
 			data = data( current_display_name, previous_display_names,
@@ -237,7 +238,7 @@ class HandlerSessions( enki.HandlerBaseReauthenticate ):
 		token_disconnect_browser = params.get( 'disconnect_browser' )
 		token_disconnect_app = params.get( 'disconnect_app' )
 		if token_disconnect_browser:
-			enki.libuser.delete_session_token_auth( token_disconnect_browser )
+			EnkiModelTokenAuth.delete( token_disconnect_browser )
 			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_SESSION())
 		elif token_disconnect_app:
 			EnkiModelRestAPITokenVerify.delete_token_by_id( token_disconnect_app )
@@ -250,7 +251,7 @@ class HandlerSessions( enki.HandlerBaseReauthenticate ):
 		data = collections.namedtuple( 'data', '''sessions_browsers, sessions_apps''' )
 		sessions_browsers = []
 		current_token = self.session.get( 'auth_token' )
-		auth_tokens = enki.libuser.fetch_AuthTokens( self.user_id )
+		auth_tokens = EnkiModelTokenAuth.fetch_by_user_id( self.user_id )
 		for item in auth_tokens:
 			current = False
 			if current_token == item.token:
