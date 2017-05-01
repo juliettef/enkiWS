@@ -1,5 +1,5 @@
-from google.appengine.ext.ndb import model
 import datetime
+from google.appengine.ext.ndb import model
 
 
 # define property subclass to store timedelta
@@ -20,6 +20,57 @@ class TimeDeltaProperty( model.IntegerProperty ):
 
 class EnkiModelBackoffTimer( model.Model ):
 # protect password entry against brute force attack
+
+	#=== MODEL ====================================================================
+
 	identifier = model.StringProperty()
 	last_failure = model.DateTimeProperty( )
 	backoff_duration = TimeDeltaProperty()
+
+	#=== QUERIES ==================================================================
+
+	@classmethod
+	def exist_by_identifier( cls, identifier ):
+		count = cls.query(cls.identifier == identifier).count(1)
+		return count > 0
+
+	@classmethod
+	def get_by_identifier( cls, identifier ):
+		return cls.query( cls.identifier == identifier ).get()
+
+	@classmethod
+	def fetch_keys_old( cls, days_old ):
+		return cls.query( cls.last_failure <= (datetime.datetime.now() - datetime.timedelta( days = days_old ))).fetch( keys_only = True )
+
+	#=== UTILITIES ================================================================
+
+	@classmethod
+	def add( cls, identifier ):
+		if not cls.exist_by_identifier( identifier ):
+			entity = cls( identifier = identifier, last_failure = datetime.datetime.now(), backoff_duration = datetime.timedelta( milliseconds = 15 ))
+			entity.put()
+
+	@classmethod
+	def get( cls, identifier, increment = False ):
+		entity = cls.get_by_identifier( identifier )
+		if entity:
+			result = entity.last_failure - datetime.datetime.now() + entity.backoff_duration
+			if result <= datetime.timedelta( 0 ):
+				# inactive backoff timer. Increase the delay.
+				if increment:
+					entity.backoff_duration += entity.backoff_duration
+					entity.last_failure = datetime.datetime.now()
+					entity.put()
+				return 0
+			else:
+				return result
+		else:
+			if increment:
+				cls.add( identifier )
+			return 0
+
+	@classmethod
+	def remove( cls, identifier ):
+		entity = cls.query( cls.identifier == identifier ).get()
+		if entity:
+			entity.key.delete()

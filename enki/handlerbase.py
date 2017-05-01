@@ -157,89 +157,40 @@ class HandlerBase( webapp2.RequestHandler ):
 			return False
 		return True
 
-
-	def get_backoff_timer( self, identifier, increment = False ):
-		entity = self.get_backofftimer(identifier)
-		if entity:
-			result = entity.last_failure - datetime.datetime.now() + entity.backoff_duration
-			if result <= datetime.timedelta( 0 ):
-				# inactive backoff timer. Increase the delay.
-				if increment:
-					entity.backoff_duration += entity.backoff_duration
-					entity.last_failure = datetime.datetime.now()
-					entity.put()
-				return 0
-			else:
-				return result
-		else:
-			if increment:
-				self.add_backoff_timer( identifier )
-			return 0
-
-
-	def add_backoff_timer( self, identifier ):
-		if not self.exist_backoff_timer( identifier ):
-			entity = EnkiModelBackoffTimer( identifier = identifier,
-			                                last_failure = datetime.datetime.now(),
-			                                backoff_duration = datetime.timedelta( milliseconds = 15 ))
-			entity.put()
-
-
-	def remove_backoff_timer( self, identifier ):
-		entity = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.identifier == identifier ).get()
-		if entity:
-			entity.key.delete()
-
-
-	def get_backofftimer( self, identifier ):
-		entity = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.identifier == identifier ).get()
-		return entity
-
-
-	def exist_backoff_timer( self, identifier ):
-		count = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.identifier == identifier ).count( 1 )
-		return count > 0
-
-
-	def fetch_old_backoff_timers( self, days_old ):
-		list = EnkiModelBackoffTimer.query( EnkiModelBackoffTimer.last_failure <= (datetime.datetime.now( ) - datetime.timedelta( days = days_old )) ).fetch( keys_only = True )
-		return list
-
-
 	def log_in_with_id( self, userId, password ):
 	# log the user in using their Id
 		enkiKey = ndb.Key( EnkiModelUser, userId )
 		if enkiKey:
 			user = enkiKey.get()
-			if self.get_backoff_timer( user.email, True ) == 0:
+			if EnkiModelBackoffTimer.get( user.email, True ) == 0:
 				validPassword = enki.authcryptcontext.pwd_context.verify( password, user.password )
 				if validPassword:
 					self.log_in_session_token_create( user )
-					self.remove_backoff_timer( user.email )
+					EnkiModelBackoffTimer.remove( user.email )
 					return True
 		return False
 
 	def log_in_with_email( self, email, password ):
 	# log the user in using their email
-		if self.get_backoff_timer( email, True ) == 0:
+		if EnkiModelBackoffTimer.get( email, True ) == 0:
 			user = enki.libuser.get_EnkiUser( email )
 			if user and user.password:
 				validPassword = enki.authcryptcontext.pwd_context.verify( password, user.password )
 				if validPassword:
 					self.log_in_session_token_create( user )
-					self.remove_backoff_timer( user.email )
+					EnkiModelBackoffTimer.remove( user.email )
 					return True
 		return False
 
 	def reauthenticate( self, email, password ):
 	# reauthenticate the user
-		if self.get_backoff_timer( email, True ) == 0:
+		if EnkiModelBackoffTimer.get( email, True ) == 0:
 			user = enki.libuser.get_EnkiUser( email )
 			if user and user.password:
 				validPassword = enki.authcryptcontext.pwd_context.verify( password, user.password )
 				if validPassword and self.is_logged_in() and self.user_id == user.key.id():
 					self.session[ 'reauth_time' ] = datetime.datetime.now()
-					self.remove_backoff_timer( user.email )
+					EnkiModelBackoffTimer.remove( user.email )
 					return True
 		return False
 
@@ -751,25 +702,17 @@ class HandlerBase( webapp2.RequestHandler ):
 			self.log_out()
 		enki.libuser.revoke_user_authentications( user_to_delete.key.id())
 
-
 	def cleanup_item( self ):
 		likelihood = 10 # occurs with a probability of 1%
 		number = random.randint( 1, 1000 )
 		if number < likelihood:
-			ndb.delete_multi_async( self.fetch_old_backoff_timers( 3 ))
-			ndb.delete_multi_async( self.fetch_old_auth_tokens( 3 ))
-			ndb.delete_multi_async( self.fetch_old_sessions( 3 ))
+			ndb.delete_multi_async( self.fetch_keys_old_sessions( 3 ))
+			ndb.delete_multi_async( EnkiModelBackoffTimer.fetch_keys_old( 3 ))
+			ndb.delete_multi_async( EnkiModelTokenAuth.fetch_keys_old( 3 ))
 			ndb.delete_multi_async( EnkiModelRestAPIConnectToken.fetch_expired())
 			ndb.delete_multi_async( EnkiModelRestAPIDataStore.fetch_expired())
-			ndb.delete_multi_async( EnkiModelTokenVerify.fetch_old_tokens_by_types( 0.007, [ 'loginaddconfirm_1', 'loginaddconfirm_2', 'loginaddconfirm_3' ]))
+			ndb.delete_multi_async( EnkiModelTokenVerify.fetch_keys_old_tokens_by_types( 0.007, [ 'loginaddconfirm_1', 'loginaddconfirm_2', 'loginaddconfirm_3' ]))
 			EnkiModelRestAPIDataStore.refresh_non_expiring()
 
-
-	def fetch_old_auth_tokens( self, days_old ):
-		list = EnkiModelTokenAuth.query( EnkiModelTokenAuth.time_created <= ( datetime.datetime.now() - datetime.timedelta( days = days_old ))).fetch( keys_only = True)
-		return list
-
-
-	def fetch_old_sessions( self, days_old ):
-		list = sessions_ndb.Session.query( sessions_ndb.Session.updated <= ( datetime.datetime.now() - datetime.timedelta( days = days_old ))).fetch( keys_only = True)
-		return list
+	def fetch_keys_old_sessions( self, days_old ):
+		return sessions_ndb.Session.query( sessions_ndb.Session.updated <= ( datetime.datetime.now() - datetime.timedelta( days = days_old ))).fetch( keys_only = True )

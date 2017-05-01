@@ -8,6 +8,7 @@ import enki
 import enki.libutil
 import enki.libuser
 import enki.textmessages as MSG
+from enki.modelbackofftimer import EnkiModelBackoffTimer
 from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
@@ -59,7 +60,7 @@ class HandlerLogin( enki.HandlerBase ):
 						self.add_debugmessage( '''Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.''' )
 						link = enki.libutil.get_local_url( 'passwordrecover' )
 						self.send_email( email, MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_SUBJECT( ), MSG.SEND_EMAIL_LOGIN_ATTEMPT_WITH_YOUR_EMAIL_NO_PW_BODY( link ))
-				backoff_timer = self.get_backoff_timer( email )
+				backoff_timer = EnkiModelBackoffTimer.get( email )
 				if backoff_timer != 0:
 					error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
 				self.render_tmpl( 'login.html',
@@ -97,7 +98,7 @@ class HandlerReauthenticate( enki.HandlerBase ):
 						self.redirect_to_relevant_page()
 					else:
 						error_message = MSG.WRONG_EMAIL_OR_PW()
-						backoff_timer = self.get_backoff_timer( self.enki_user.email )
+						backoff_timer = EnkiModelBackoffTimer.get( self.enki_user.email )
 						if backoff_timer != 0:
 							error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
 						self.render_tmpl( 'reauthenticate.html',
@@ -513,7 +514,7 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 					self.redirect_to_relevant_page()
 				else:
 					error_message = MSG.WRONG_EMAIL_OR_PW()
-					backoff_timer = self.get_backoff_timer( email )
+					backoff_timer = EnkiModelBackoffTimer.get( email )
 					if backoff_timer != 0:
 						error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
 					self.render_tmpl( 'login.html',
@@ -577,7 +578,7 @@ class HandlerPasswordChange( enki.HandlerBase ):
 							self.app.config.get( 'enki' ).get( 'user' ).get( 'PASSWORD_LENGTH_MIN' ) ) ] )
 			else:
 				error_password_message = MSG.WRONG_PW()
-				backoff_timer = self.get_backoff_timer( email )
+				backoff_timer = EnkiModelBackoffTimer.get( email )
 				if backoff_timer != 0:
 					error_password_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ) )
 			self.render_tmpl( 'passwordchange.html',
@@ -652,7 +653,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 				result = enki.libuser.set_password( user, password )
 				if result == enki.libutil.ENKILIB_OK:
 					enki.libuser.delete_verifytoken_by_email( email, 'passwordchange' )
-					self.remove_backoff_timer( user.email )
+					EnkiModelBackoffTimer.remove( user.email )
 					self.log_in_with_id( user.key.id(), password )
 					self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.PASSWORD_SET())
 					self.redirect( enki.libutil.get_local_url( 'profile' ))

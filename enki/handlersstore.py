@@ -4,8 +4,8 @@ import re
 import random
 
 import webapp2_extras
-from google.appengine.api import urlfetch
 from webapp2_extras import security
+from google.appengine.api import urlfetch
 
 import settings
 import enki
@@ -15,8 +15,9 @@ import enki.libenkiDL
 import enki.textmessages as MSG
 import enki.modelcounter
 
-from enki.modelproductkey import EnkiModelProductKey
+from enki.modelbackofftimer import EnkiModelBackoffTimer
 from enki.modeltokenverify import EnkiModelTokenVerify
+from enki.modelproductkey import EnkiModelProductKey
 from enki.extensions import Extension
 from enki.extensions import ExtensionPage
 
@@ -307,7 +308,7 @@ class HandlerLibrary( enki.HandlerBaseReauthenticate ):
 		licence_key_preset = params.get( 'licence_key_preset' )
 		licence_key_manual = params.get( 'licence_key_manual' )
 		user_id = self.enki_user.key.id()
-		if self.get_backoff_timer( str( user_id ), True ) == 0:
+		if EnkiModelBackoffTimer.get( str( user_id ), True ) == 0:
 			licence_key_preset = licence_key_preset.strip()[ :( EnkiModelProductKey.LICENCE_KEY_DASHES_LENGTH + 4 )] if licence_key_preset else '' # 4 allows for some leading and trailing characters
 			licence_key_manual = licence_key_manual.strip()[ :( EnkiModelProductKey.LICENCE_KEY_DASHES_LENGTH + 4 )] if licence_key_manual else ''
 			licence_key = licence_key_manual
@@ -339,7 +340,7 @@ class HandlerLibrary( enki.HandlerBaseReauthenticate ):
 								# activate the licence
 								item.activated_by_user = user_id
 								item.put()
-								self.remove_backoff_timer( str( user_id ))
+								EnkiModelBackoffTimer.remove( str( user_id ))
 								self.add_infomessage( 'success', MSG.SUCCESS(), MSG.PRODUCT_LICENCE_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
 						elif item.activated_by_user == user_id:
 							# the user has already activated this specific key
@@ -361,7 +362,7 @@ class HandlerLibrary( enki.HandlerBaseReauthenticate ):
 			elif is_manual:
 				self.session[ 'error_library' ] = MSG.LICENCE_MISSING()
 		else:
-			backoff_timer = self.get_backoff_timer( str( user_id ))
+			backoff_timer = EnkiModelBackoffTimer.get( str( user_id ))
 			if backoff_timer != 0:
 				self.session[ 'error_library' ] = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
 
