@@ -6,6 +6,7 @@ import google.appengine.api.users
 from google.appengine.ext import ndb
 
 import enki
+import enki.libutil
 import enki.libuser
 import enki.textmessages as MSG
 
@@ -25,9 +26,9 @@ class HandlerApps( enki.HandlerBaseReauthenticate ):
 	def get_logged_in( self ):
 		self.render_tmpl( 'apps.html',
 					  active_menu = 'profile',
-					  data = enki.librestapi.apps_list( self.user_id ),
-					  app_max = enki.librestapi.APP_MAX,
-					  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
+					  data = EnkiModelApp.apps_list( self.user_id ),
+					  app_max = EnkiModelApp.APP_MAX,
+					  app_max_name_length = EnkiModelApp.APP_MAX_NAME_LENGTH, )
 
 
 	def post_reauthenticated( self, params ):
@@ -37,25 +38,25 @@ class HandlerApps( enki.HandlerBaseReauthenticate ):
 		data = []
 		app_success = ''
 		if app_secret_set:
-			secret = enki.librestapi.generate_auth_token()
+			secret = enki.libutil.generate_auth_token()
 			app = EnkiModelApp.get_by_id( int( app_secret_set ))
 			app.secret = secret
 			app.put()
 			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.NEW_SECRET_GENERATED())
 			app_success = str( app.key.id())
-			data = enki.librestapi.apps_list( self.user_id )
+			data = EnkiModelApp.apps_list( self.user_id )
 		else:
-			data = enki.librestapi.apps_list( self.user_id )
+			data = EnkiModelApp.apps_list( self.user_id )
 			if not app_name:
 				error_message = MSG.NAME_NEEDED()
-			elif ( len( app_name ) > enki.librestapi.APP_MAX_NAME_LENGTH ):
-				error_message = MSG.APP_NAME_TOO_LONG( str( enki.librestapi.APP_MAX_NAME_LENGTH ))
+			elif ( len( app_name ) > EnkiModelApp.APP_MAX_NAME_LENGTH ):
+				error_message = MSG.APP_NAME_TOO_LONG( str( EnkiModelApp.APP_MAX_NAME_LENGTH ))
 			elif EnkiModelApp.exist_by_name( app_name ):
 				error_message = MSG.APP_NAME_ALREADY_EXISTS()
-			elif ( EnkiModelApp.count_by_user_id( self.user_id ) >= enki.librestapi.APP_MAX ):
+			elif ( EnkiModelApp.count_by_user_id( self.user_id ) >= EnkiModelApp.APP_MAX ):
 				error_message = MSG.APP_EXCEED_ALLOWED()
 			else:
-				secret = enki.librestapi.generate_auth_token()
+				secret = enki.libutil.generate_auth_token()
 				app = EnkiModelApp( user_id = self.user_id, name = app_name, secret = secret )
 				app.put()
 				data.append([ app_name, str( app.key.id()), secret, app.time_created ])
@@ -66,28 +67,29 @@ class HandlerApps( enki.HandlerBaseReauthenticate ):
 						  error = error_message,
 						  data = data,
 						  app_success = app_success,
-						  app_max = enki.librestapi.APP_MAX,
-						  app_max_name_length = enki.librestapi.APP_MAX_NAME_LENGTH, )
+						  app_max = EnkiModelApp.APP_MAX,
+						  app_max_name_length = EnkiModelApp.APP_MAX_NAME_LENGTH, )
+
 
 class HandlerAppDataStores( enki.HandlerBaseReauthenticate ):
 
 	def get_logged_in( self ):
-		data_list = enki.librestapi.user_data_list( self.user_id )
+		data_list = EnkiModelApp.user_data_list( self.user_id )
 		self.render_tmpl( 'appdatastores.html',
 		                  active_menu = 'profile',
 		                  data = data_list,
-		                  apps_list = enki.librestapi.user_apps_list( data_list ), )
+		                  apps_list = EnkiModelApp.user_apps_list( data_list ), )
 
 	def post_reauthenticated( self, params ):
 		app_id = params.get( 'delete' )
 		if app_id:
-			enki.librestapi.delete_user_app_data( self.user_id , app_id )
+			EnkiModelRestAPIDataStore.delete_user_app_data( self.user_id , app_id )
 			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.APP_DATA_DELETED())
-		data_list = enki.librestapi.user_data_list( self.user_id )
+		data_list = EnkiModelApp.user_data_list( self.user_id )
 		self.render_tmpl( 'appdatastores.html',
 		                  active_menu = 'profile',
 		                  data = data_list,
-		                  apps_list = enki.librestapi.user_apps_list( data_list ), )
+		                  apps_list = EnkiModelApp.user_apps_list( data_list ), )
 
 
 class HandlerPageRestAPI( enki.HandlerBase ):
@@ -120,7 +122,7 @@ class HandlerAPIv1Connect( webapp2.RequestHandler ):
 					if user_id:
 						entity = EnkiModelRestAPIConnectToken.get_by_user_id_token_valid_age( user_id, code )
 						if entity:
-							auth_token = enki.librestapi.generate_auth_token()
+							auth_token = enki.libutil.generate_auth_token()
 							entity.key.delete()     # single use token
 							verification_token = EnkiModelRestAPITokenVerify( token = auth_token, user_id = user_id, app_id = app_id, app_secret = app_secret, type = 'apiconnect' )
 							verification_token.put()    # persistent authentication token, a user may have several
@@ -148,7 +150,7 @@ class HandlerAPIv1Logout( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			app_secret = jsonobject.get( 'app_secret', '')
 			if user_id and auth_token and app_secret:
-				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
+				if EnkiModelApp.check_secret( user_id, auth_token, app_secret ):
 					if EnkiModelRestAPITokenVerify.delete_by_user_id_token( user_id, auth_token ):
 						success = True
 						error = ''
@@ -173,7 +175,7 @@ class HandlerAPIv1AuthValidate( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			app_secret = jsonobject.get( 'app_secret', '')
 			if user_id and auth_token and app_secret:
-				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
+				if EnkiModelApp.check_secret( user_id, auth_token, app_secret ):
 					if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 						user_displayname = EnkiModelDisplayName.get_display_name( user_id )
 						if user_displayname:
@@ -204,7 +206,7 @@ class HandlerAPIv1OwnsProducts( webapp2.RequestHandler ):
 			app_secret = jsonobject.get( 'app_secret', '')
 			products = jsonobject.get( 'products', '')
 			if user_id and auth_token and app_secret:
-				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
+				if EnkiModelApp.check_secret( user_id, auth_token, app_secret ):
 					if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 						if products:   # check which products in the list are activated by the user and return them
 							list_entities = EnkiModelProductKey.fetch_by_activator_products_list( user_id, products )
@@ -240,7 +242,7 @@ class HandlerAPIv1Friends( webapp2.RequestHandler ):
 			auth_token = jsonobject.get( 'auth_token', '')
 			app_secret = jsonobject.get( 'app_secret', '')
 			if user_id and auth_token and app_secret:
-				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
+				if EnkiModelApp.check_secret( user_id, auth_token, app_secret ):
 					if EnkiModelRestAPITokenVerify.exist_by_user_id_token( user_id, auth_token ):
 						friends = EnkiModelFriends.get_friends_user_id_display_name( user_id )
 						if friends:
@@ -273,20 +275,20 @@ class HandlerAPIv1DataStoreSet( webapp2.RequestHandler ):
 			data_id = jsonobject.get( 'data_id', '')
 			data_payload = jsonobject.get( 'data_payload' )
 			# set the expiry time
-			time_to_expiry = int(jsonobject.get( 'time_expires', enki.librestapi.DATASTORE_EXPIRY_DEFAULT ))  # default lifetime if unspecified: 24h
+			time_to_expiry = int(jsonobject.get( 'time_expires', EnkiModelRestAPIDataStore.DATASTORE_EXPIRY_DEFAULT ))  # default lifetime if unspecified
 			if time_to_expiry == 0: # non-expiring lifetime
-				time_to_expiry = enki.librestapi.DATASTORE_NON_EXPIRING   # 100 years
+				time_to_expiry = EnkiModelRestAPIDataStore.DATASTORE_NON_EXPIRING
 			time_expires = datetime.datetime.now() + datetime.timedelta( seconds = time_to_expiry )
 			read_access = jsonobject.get( 'read_access', '' )
 			if user_id and auth_token and app_secret and data_type and data_id and data_payload and time_expires:
-				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
+				if EnkiModelApp.check_secret( user_id, auth_token, app_secret ):
 					token_valid = EnkiModelRestAPITokenVerify.get_by_user_id_token( user_id, auth_token )
 					if token_valid:   # user is valid
 						# add optional calculated properties to the data payload
 						if 'calc_ip_addr' in data_payload:    # IP address of the request
 							remote_address = self.request.remote_addr
 							data_payload.update({ 'calc_ip_addr' : remote_address })
-						data_store = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id( user_id, token_valid.app_id, data_type, data_id )
+						data_store = EnkiModelRestAPIDataStore.get_by_user_id_app_id_data_type_data_id( user_id, token_valid.app_id, data_type, data_id )
 						if data_store:  # update
 							data_store.data_payload = data_payload
 							data_store.time_expires = time_expires  # update the expiry time
@@ -323,12 +325,12 @@ class HandlerAPIv1DataStoreGet( webapp2.RequestHandler ):
 			data_type = jsonobject.get( 'data_type', '')
 			data_id = jsonobject.get( 'data_id', '')
 			if user_id and auth_token and app_secret and data_type and data_id:
-				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
+				if EnkiModelApp.check_secret( user_id, auth_token, app_secret ):
 					token_valid = EnkiModelRestAPITokenVerify.get_by_user_id_token( user_id, auth_token )
 					if token_valid:   # user is valid
-						data_store_item = enki.librestapi.get_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id_not_expired( user_id, token_valid.app_id, data_type, data_id )
+						data_store_item = EnkiModelRestAPIDataStore.get_by_user_id_app_id_data_type_data_id_not_expired( user_id, token_valid.app_id, data_type, data_id )
 						if data_store_item:
-							answer.update({ 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.librestapi.seconds_from_epoch( data_store_item.time_expires ) , 'read_access' : data_store_item.read_access, 'server_time' : int( time.time())})
+							answer.update({ 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.libutil.seconds_from_epoch( data_store_item.time_expires ) , 'read_access' : data_store_item.read_access, 'server_time' : int( time.time())})
 							success = True
 							error = ''
 						else:
@@ -356,13 +358,13 @@ class HandlerAPIv1DataStoreGetList( webapp2.RequestHandler ):
 			data_type = jsonobject.get( 'data_type', '' )
 			read_access = jsonobject.get( 'read_access', '' )
 			if user_id and auth_token and app_secret and data_type and ( read_access == 'public' or read_access == 'private' or read_access == 'friends' ):
-				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
+				if EnkiModelApp.check_secret( user_id, auth_token, app_secret ):
 					token_valid = EnkiModelRestAPITokenVerify.get_by_user_id_token( user_id, auth_token )
 					if token_valid:   # user is valid
 						error = 'Not found'
 						data_store_list = []
 						if read_access == 'public':   # returns all data with read-access "public"
-							data_store_list = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_app_id_data_type_read_access_not_expired( token_valid.app_id, data_type, read_access )
+							data_store_list = EnkiModelRestAPIDataStore.fetch_by_app_id_data_type_read_access_not_expired( token_valid.app_id, data_type, read_access )
 						else:
 							people_list = []
 							if read_access == 'private':    # returns all user's data with read-access "private"
@@ -371,11 +373,11 @@ class HandlerAPIv1DataStoreGetList( webapp2.RequestHandler ):
 								people_list = EnkiModelFriends.get_friends_user_id( user_id )    # get the user's friends' ids
 							if people_list:
 								for person_id in people_list:   # get each persons' data
-									data_store_list = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_read_access_not_expired( person_id, token_valid.app_id, data_type, read_access )
+									data_store_list = EnkiModelRestAPIDataStore.fetch_by_user_id_app_id_data_type_read_access_not_expired( person_id, token_valid.app_id, data_type, read_access )
 						if data_store_list:
 							data_payloads = []
 							for data_store_item in data_store_list:
-								data_payloads.append({ 'user_id' : str( data_store_item.user_id ), 'data_id' : data_store_item.data_id, 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.librestapi.seconds_from_epoch( data_store_item.time_expires )})
+								data_payloads.append({ 'user_id' : str( data_store_item.user_id ), 'data_id' : data_store_item.data_id, 'data_payload' : data_store_item.data_payload, 'time_expires' : enki.libutil.seconds_from_epoch( data_store_item.time_expires )})
 							if data_payloads:
 								answer.update({ 'data_payloads' : data_payloads, 'server_time' : int( time.time())})
 								success = True
@@ -403,10 +405,10 @@ class HandlerAPIv1DataStoreDel( webapp2.RequestHandler ):
 			data_type = jsonobject.get( 'data_type', '')
 			data_id = jsonobject.get( 'data_id', '')
 			if user_id and auth_token and app_secret and data_type and data_id:
-				if enki.librestapi.check_secret( user_id, auth_token, app_secret ):
+				if EnkiModelApp.check_secret( user_id, auth_token, app_secret ):
 					token_valid = EnkiModelRestAPITokenVerify.get_by_user_id_token( user_id, auth_token )
 					if token_valid:   # user is valid
-						data_stores = enki.librestapi.fetch_EnkiModelRestAPIDataStore_by_user_id_app_id_data_type_data_id( user_id, token_valid.app_id, data_type, data_id )
+						data_stores = EnkiModelRestAPIDataStore.fetch_by_user_id_app_id_data_type_data_id( user_id, token_valid.app_id, data_type, data_id )
 						ndb.delete_multi( data_stores )
 						success = True
 						error = ''

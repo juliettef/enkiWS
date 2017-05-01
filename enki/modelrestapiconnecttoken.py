@@ -1,8 +1,9 @@
 import datetime
-import webapp2_extras.security
 
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
+
+import enki.libutil
 
 
 class EnkiModelRestAPIConnectToken( model.Model ):
@@ -41,12 +42,8 @@ class EnkiModelRestAPIConnectToken( model.Model ):
 			# delete any existing connect token for the user
 			ndb.delete_multi_async( cls.fetch_by_user( user_id ))
 			# create a new token and return it
-			token = cls.generate_connect_code()
+			token = enki.libutil.generate_connect_code()
 			entity = cls( token = token, user_id = int( user_id ))
 			entity.put()
 			return token
 		return None
-
-	@classmethod
-	def generate_connect_code( cls ):
-		return webapp2_extras.security.generate_random_string( length = 5, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC)

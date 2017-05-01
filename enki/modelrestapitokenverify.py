@@ -6,13 +6,16 @@ from enki.modeltokenverify import EnkiModelTokenVerify
 
 class EnkiModelRestAPITokenVerify( EnkiModelTokenVerify ):
 
+	#=== MODEL ====================================================================
+
 	app_id = model.StringProperty()
 	app_secret = model.StringProperty()
 
+	#=== QUERIES ==================================================================
+
 	@classmethod
 	def get_by_user_id_token( cls, user_id, token ):
-		entity = cls.query( ndb.AND( cls.user_id == user_id, cls.token == token )).get()
-		return entity
+		return cls.query( ndb.AND( cls.user_id == user_id, cls.token == token )).get()
 
 	@classmethod
 	def exist_by_user_id_token_app_secret( cls, user_id, token, app_secret ):

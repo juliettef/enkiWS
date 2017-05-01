@@ -21,9 +21,9 @@ from webapp2_extras import sessions_ndb
 import settings
 import enki
 import enki.authcryptcontext
-import enki.libforum
-import enki.libuser
 import enki.libutil
+import enki.libuser
+import enki.libforum
 import enki.modeltokenverify
 from enki import textmessages as MSG
 from enki.modelbackofftimer import EnkiModelBackoffTimer
@@ -36,6 +36,7 @@ from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
 from enki.modelproductkey import EnkiModelProductKey
 from enki.modelrestapiconnecttoken import EnkiModelRestAPIConnectToken
+from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
 
 
 ERROR_EMAIL_IN_USE = -13
@@ -797,9 +798,9 @@ class HandlerBase( webapp2.RequestHandler ):
 			ndb.delete_multi_async( self.fetch_old_auth_tokens( 3 ))
 			ndb.delete_multi_async( self.fetch_old_sessions( 3 ))
 			ndb.delete_multi_async( EnkiModelRestAPIConnectToken.fetch_expired())
-			ndb.delete_multi_async( enki.librestapi.fetch_EnkiModelRestAPIDataStore_expired())
+			ndb.delete_multi_async( EnkiModelRestAPIDataStore.fetch_expired())
 			ndb.delete_multi_async( EnkiModelTokenVerify.fetch_old_tokens_by_types( 0.007, [ 'loginaddconfirm_1', 'loginaddconfirm_2', 'loginaddconfirm_3' ]))
-			enki.librestapi.refresh_EnkiModelRestAPIConnectToken_non_expiring()
+			EnkiModelRestAPIDataStore.refresh_non_expiring()
 
 
 	def fetch_old_auth_tokens( self, days_old ):

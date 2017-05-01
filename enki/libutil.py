@@ -1,8 +1,11 @@
 import os
 import urllib
+import datetime
 
 import webapp2
 import webapp2_extras
+import webapp2_extras.i18n
+import webapp2_extras.security
 
 import settings
 import enki.textmessages as MSG
@@ -108,3 +111,12 @@ def xint( value ):
 		return 0
 	else:
 		return int( value )
+
+def seconds_from_epoch( date_time ):
+	return int(( date_time - datetime.datetime.utcfromtimestamp( 0 )).total_seconds())
+
+def generate_auth_token():
+	return webapp2_extras.security.generate_random_string( length = 42, pool = webapp2_extras.security.ALPHANUMERIC )
+
+def generate_connect_code():
+	return webapp2_extras.security.generate_random_string( length = 5, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
