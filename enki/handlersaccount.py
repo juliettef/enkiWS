@@ -10,6 +10,7 @@ import enki.libuser
 import enki.textmessages as MSG
 from enki.modelbackofftimer import EnkiModelBackoffTimer
 from enki.modeltokenauth import EnkiModelTokenAuth
+from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeluser import EnkiModelUser
 from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelfriends import EnkiModelFriends
@@ -784,7 +785,7 @@ class HandlerEmailRollback( enki.HandlerBase ):
 
 	def get( self, **kwargs ):
 		token = kwargs[ 'rollbacktoken' ]
-		tokenEntity = enki.libuser.get_RollbackToken_by_token( token )
+		tokenEntity = EnkiModelTokenEmailRollback.get_by_token( token )
 		if tokenEntity:
 			self.email_rollback( tokenEntity )
 			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.EMAIL_RESTORED())

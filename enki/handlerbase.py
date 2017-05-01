@@ -369,7 +369,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			# email the current, verified address in case they want to undo the change (useful if account has been hacked)
 			# skip this step if the current email is empty (case if user logged in with auth id without email with e.g. Steam) or "removed".
 			# If the email is already in use, mask the fact to prevent email checking.
-			tokenEntity = enki.libuser.get_EmailRollbackToken_by_user_id_email( userId, emailCurrent )
+			tokenEntity = EnkiModelTokenEmailRollback.get_by_user_id_email( userId, emailCurrent )
 			if tokenEntity:
 				# if the old email is already in the archive, use its token
 				token = tokenEntity.token
@@ -407,7 +407,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		if user:
 			# retrieve all rollback tokens that are more recent, including the current one, and delete them
 			tokenDateCreated = token.time_created
-			youngerTokens = enki.libuser.fetch_keys_RollbackToken_by_time( user_id, tokenDateCreated )
+			youngerTokens = EnkiModelTokenEmailRollback.fetch_keys_by_user_id_time( user_id, tokenDateCreated )
 			if youngerTokens:
 				ndb.delete_multi( youngerTokens )
 			# delete all potential remaining email verify tokens for that user
@@ -668,7 +668,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		verify_tokens_to_delete = EnkiModelTokenVerify.fetch_keys_by_user_id_except_type( user_to_delete.key.id(), token_to_save )
 		if verify_tokens_to_delete:
 			ndb.delete_multi( verify_tokens_to_delete )
-		email_rollback_tokens_to_delete = enki.libuser.fetch_keys_RollbackToken( user_to_delete.key.id())
+		email_rollback_tokens_to_delete = EnkiModelTokenEmailRollback.fetch_keys_by_user_id( user_to_delete.key.id())
 		if email_rollback_tokens_to_delete:
 			ndb.delete_multi( email_rollback_tokens_to_delete )
 		# Delete the user account and log them out.

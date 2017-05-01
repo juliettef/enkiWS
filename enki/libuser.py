@@ -7,7 +7,6 @@ from google.appengine.ext import ndb
 import settings
 import enki.libutil
 from enki.authcryptcontext import pwd_context
-from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeltokenverify import EnkiModelTokenVerify
 
 
@@ -89,29 +88,5 @@ def has_permission( user, permission ):
 					return True
 	return False
 
-
 #=== QUERIES ==================================================================
 
-
-
-
-def get_EmailRollbackToken_by_user_id_email( user_id, email ):
-	entity = EnkiModelTokenEmailRollback.query( ndb.AND( EnkiModelTokenEmailRollback.user_id == user_id,
-	                                                     EnkiModelTokenEmailRollback.email == email )).get()
-	return entity
-
-
-def get_RollbackToken_by_token( token ):
-	entity = EnkiModelTokenEmailRollback.query( EnkiModelTokenEmailRollback.token == token ).get()
-	return entity
-
-
-def fetch_keys_RollbackToken( user_id ):
-	keys = EnkiModelTokenEmailRollback.query( EnkiModelTokenEmailRollback.user_id == user_id ).fetch( keys_only = True )
-	return keys
-
-
-def fetch_keys_RollbackToken_by_time( user_id, time_created ):
-	keys = EnkiModelTokenEmailRollback.query( ndb.AND( EnkiModelTokenEmailRollback.time_created >= time_created ,
-	                                                   EnkiModelTokenEmailRollback.user_id == user_id )).fetch( keys_only = True )
-	return keys
