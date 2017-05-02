@@ -6,7 +6,6 @@ from webapp2_extras import security
 import settings
 import enki
 import enki.libutil
-import enki.libuser
 import enki.textmessages as MSG
 from enki.modelbackofftimer import EnkiModelBackoffTimer
 from enki.modeltokenauth import EnkiModelTokenAuth
@@ -48,7 +47,7 @@ class HandlerLogin( enki.HandlerBase ):
 		self.check_CSRF()
 		submit_type = self.request.get( 'submittype' )
 		email_unsafe = self.request.get( 'email' )
-		email, result = enki.libuser.validate_email( email_unsafe )
+		email, result = self.validate_email( email_unsafe )
 		if submit_type == 'login':
 			password = self.request.get( 'password' )
 			if result == enki.libutil.ENKILIB_OK and self.log_in_with_email( email, password ):
@@ -295,24 +294,24 @@ class HandlerRegister( enki.HandlerBase ):
 		self.check_CSRF()
 		submit_type = self.request.get( 'submittype' )
 		email_unsafe = self.request.get( 'email' )
-		email, result = enki.libuser.validate_email( email_unsafe )
+		email, result = self.validate_email( email_unsafe )
 		if submit_type == 'register':
 			if result == enki.libutil.ENKILIB_OK:
 				result = self.email_set_request( email )
 			error_message = ''
-			if result == enki.libutil.ENKILIB_OK or result == enki.handlerbase.ERROR_EMAIL_IN_USE:
+			if result == enki.libutil.ENKILIB_OK or result == self.ERROR_EMAIL_IN_USE:
 			# if email exists, pretend there was a registration (i.e. hide the fact that the email exists) to prevent email checking
 				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTRATION_INFO_EMAIL_SENT( email ))
-				if result == enki.handlerbase.ERROR_EMAIL_IN_USE:
+				if result == self.ERROR_EMAIL_IN_USE:
 					self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
 					link = enki.libutil.get_local_url( 'passwordrecover' )
 					self.send_email( email, MSG.SEND_EMAIL_REGISTER_ATTEMPT_WITH_YOUR_EMAIL_SUBJECT(), MSG.SEND_EMAIL_REGISTER_ATTEMPT_WITH_YOUR_EMAIL_BODY( link ))
 				self.redirect_to_relevant_page()
 				return
 			else:
-				if result == enki.libuser.ERROR_EMAIL_FORMAT_INVALID:
+				if result == self.ERROR_EMAIL_FORMAT_INVALID:
 					error_message = MSG.WRONG_EMAIL_FORMAT()
-				elif result == enki.libuser.ERROR_EMAIL_MISSING:
+				elif result == self.ERROR_EMAIL_MISSING:
 					error_message = MSG.MISSING_EMAIL()
 				self.render_tmpl( 'register.html',
 				                  active_menu = 'register',
@@ -349,7 +348,7 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 		if tokenEntity:
 			email = tokenEntity.email
 			password = self.request.get( 'password' )
-			result = enki.libuser.validate_password( password )
+			result = self.validate_password( password )
 			link = enki.libutil.get_local_url( 'registerconfirm', { 'verifytoken': token } )
 			if result == enki.libutil.ENKILIB_OK:
 				result = self.create_user_from_email_pw( email, password )
@@ -357,7 +356,7 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 					self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.ACCOUNT_CREATED())
 					self.log_in_with_email( email, password )
 					self.redirect_to_relevant_page()
-				elif result == enki.handlerbase.ERROR_USER_NOT_CREATED:
+				elif result == self.ERROR_USER_NOT_CREATED:
 					error_message = MSG.FAIL_REGISTRATION()
 					self.render_tmpl( 'register.html',
 					                  active_menu = 'register',
@@ -365,9 +364,9 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 					                  error = error_message )
 			else:
 				error_message = ''
-				if result == enki.libuser.ERROR_PASSWORD_BLANK:
+				if result == self.ERROR_PASSWORD_BLANK:
 					error_message = MSG.MISSING_PW()
-				elif result == enki.libuser.ERROR_PASSWORD_TOO_SHORT :
+				elif result == self.ERROR_PASSWORD_TOO_SHORT :
 					length = len( password )
 					error_message = " ".join( [ MSG.PW_TOO_SHORT( length ), MSG.PW_ENSURE_MIN_LENGTH( self.app.config.get( 'enki' ).get( 'user' ).get( 'PASSWORD_LENGTH_MIN' ))])
 				self.render_tmpl( 'registerconfirm.html',
@@ -423,18 +422,18 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 					self.log_in_session_token_create( user )
 					error_message = ''
 					success = False
-					email, result = enki.libuser.validate_email( email_unsafe )
+					email, result = self.validate_email( email_unsafe )
 					if result == enki.libutil.ENKILIB_OK:
 						result = self.email_change_request( email )	# send an email for verification. Since it's not verified at this point, create the account without the email.
 						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTER_AUTH_ADD_EMAIL_INFO_EMAIL_SENT( email ))
-						if result == enki.handlerbase.ERROR_EMAIL_IN_USE:
+						if result == self.ERROR_EMAIL_IN_USE:
 							self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
 						success = True
 						tokenEntity.key.delete()
 						self.session.pop( 'tokenregisterauth' )
-					elif result == enki.libuser.ERROR_EMAIL_FORMAT_INVALID:
+					elif result == self.ERROR_EMAIL_FORMAT_INVALID:
 							error_message = MSG.WRONG_EMAIL_FORMAT()
-					elif result == enki.libuser.ERROR_EMAIL_MISSING:
+					elif result == self.ERROR_EMAIL_MISSING:
 							error_message = MSG.MISSING_EMAIL()
 					self.render_tmpl( 'registeroauthconfirm.html',
 					                  active_menu = 'register',
@@ -567,15 +566,15 @@ class HandlerPasswordChange( enki.HandlerBase ):
 			error_passwordnew_message = ''
 			if self.log_in_with_id( self.enki_user.key.id(), password ):
 				password_new = self.request.get( 'passwordnew' )
-				result = enki.libuser.set_password( self.enki_user, password_new )
+				result = self.set_password( self.enki_user, password_new )
 				if result == enki.libutil.ENKILIB_OK:
 					self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.PASSWORD_UPDATED())
 					self.redirect( enki.libutil.get_local_url( 'profile' ) )
 					return
 				else:
-					if result == enki.libuser.ERROR_PASSWORD_BLANK:
+					if result == self.ERROR_PASSWORD_BLANK:
 						error_passwordnew_message = MSG.MISSING_NEW_PW()
-					elif result == enki.libuser.ERROR_PASSWORD_TOO_SHORT :
+					elif result == self.ERROR_PASSWORD_TOO_SHORT :
 						length = len( password_new )
 						error_passwordnew_message = " ".join( [ MSG.PW_TOO_SHORT( length ), MSG.PW_ENSURE_MIN_LENGTH(
 							self.app.config.get( 'enki' ).get( 'user' ).get( 'PASSWORD_LENGTH_MIN' ) ) ] )
@@ -604,21 +603,21 @@ class HandlerPasswordRecover( enki.HandlerBase ):
 		self.check_CSRF()
 		submit_type = self.request.get( 'submittype' )
 		email_unsafe = self.request.get( 'email' )
-		email, result = enki.libuser.validate_email( email_unsafe )
+		email, result = self.validate_email( email_unsafe )
 		if submit_type == 'recoverpass':
 			error_message = ''
 			if result == enki.libutil.ENKILIB_OK:
 				result = self.password_change_request( email )
-				if result == enki.libutil.ENKILIB_OK or result == enki.handlerbase.ERROR_EMAIL_NOT_EXIST:
+				if result == enki.libutil.ENKILIB_OK or result == self.ERROR_EMAIL_NOT_EXIST:
 					# The info displayed is identical whether the email corresponds to an existing account or not to prevent email checking.
 					self.add_infomessage( 'info' , MSG.INFORMATION(), MSG.PASSWORD_RESET_INFO_EMAIL_SENT( email ))
-					if result == enki.handlerbase.ERROR_EMAIL_NOT_EXIST:
+					if result == self.ERROR_EMAIL_NOT_EXIST:
 						self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
 					self.redirect_to_relevant_page()
 					return
-			elif result == enki.libuser.ERROR_EMAIL_FORMAT_INVALID:
+			elif result == self.ERROR_EMAIL_FORMAT_INVALID:
 				error_message = MSG.WRONG_EMAIL_FORMAT()
-			elif result == enki.libuser.ERROR_EMAIL_MISSING:
+			elif result == self.ERROR_EMAIL_MISSING:
 				error_message = MSG.MISSING_EMAIL()
 			self.render_tmpl( 'passwordrecover.html',
 			                  email = email,
@@ -653,7 +652,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 			user = EnkiModelUser.get_by_email( email )
 			if user:
 				password = self.request.get( 'password' )
-				result = enki.libuser.set_password( user, password )
+				result = self.set_password( user, password )
 				if result == enki.libutil.ENKILIB_OK:
 					EnkiModelTokenVerify.delete_by_email_type( email, 'passwordchange' )
 					EnkiModelBackoffTimer.remove( user.email )
@@ -663,9 +662,9 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 					return
 				else:
 					error_message = ''
-					if result == enki.libuser.ERROR_PASSWORD_BLANK :
+					if result == self.ERROR_PASSWORD_BLANK :
 						error_message = MSG.MISSING_PW()
-					elif result == enki.libuser.ERROR_PASSWORD_TOO_SHORT :
+					elif result == self.ERROR_PASSWORD_TOO_SHORT :
 						length = len( password )
 						error_message = " ".join( [ MSG.PW_TOO_SHORT( length ), MSG.PW_ENSURE_MIN_LENGTH( self.app.config.get( 'enki' ).get( 'user' ).get( 'PASSWORD_LENGTH_MIN' ) ) ] )
 					self.render_tmpl( 'passwordrecoverconfirm.html',
@@ -701,7 +700,7 @@ class HandlerDisplayName( enki.HandlerBaseReauthenticate ):
 		error_message = ''
 		result = EnkiModelDisplayName.make_unique_and_set_display_name( self.user_id, prefix )
 		if result == enki.libutil.ENKILIB_OK:
-			enki.libuser.add_roles( self.enki_user, [ 'RUC' ])
+			self.add_roles( self.enki_user, [ 'RUC' ])
 			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISPLAYNAME_SET())
 			self.session[ 'sessiondisplaynamerefpath' ] = self.session.pop( 'sessionreauth', self.request.referrer )
 			self.redirect_to_relevant_page()
@@ -737,9 +736,9 @@ class HandlerEmailChange( enki.HandlerBaseReauthenticate ):
 
 	def post_reauthenticated( self, params ):
 		email_unsafe = params.get( 'email' )
-		email, result = enki.libuser.validate_email( email_unsafe )
+		email, result = self.validate_email( email_unsafe )
 		error_message = ''
-		if result == enki.libutil.ENKILIB_OK or result == enki.libuser.ERROR_EMAIL_MISSING:
+		if result == enki.libutil.ENKILIB_OK or result == self.ERROR_EMAIL_MISSING:
 			result_of_change_request = self.email_change_request( email )
 			if result_of_change_request == 'same':
 				error_message = MSG.CURRENT_EMAIL()
@@ -751,13 +750,13 @@ class HandlerEmailChange( enki.HandlerBaseReauthenticate ):
 				if old_email_existed:
 					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_ROLLBACK_INFO_EMAIL_SENT())
 				self.redirect( enki.libutil.get_local_url( 'profile' ))
-			elif result_of_change_request == 'change' or result_of_change_request == enki.handlerbase.ERROR_EMAIL_IN_USE:
+			elif result_of_change_request == 'change' or result_of_change_request == self.ERROR_EMAIL_IN_USE:
 				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_CHANGE_CONFIRM_INFO_EMAIL_SENT( email ))
 				if self.enki_user.email and self.enki_user.email != 'removed':
 					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_CHANGE_UNDO_INFO_EMAIL_SENT())
 				self.redirect( enki.libutil.get_local_url( 'profile' ))
 				return
-		elif result == enki.libuser.ERROR_EMAIL_FORMAT_INVALID:
+		elif result == self.ERROR_EMAIL_FORMAT_INVALID:
 			error_message = MSG.WRONG_EMAIL_FORMAT()
 		if error_message:
 			self.render_tmpl( 'emailchange.html',
@@ -819,7 +818,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 		self.render_tmpl( 'accountdelete.html',
 						  active_menu = 'profile',
 						  data = data,
-						  is_active = True if ( enki.HandlerBase.account_is_active( self.enki_user.key.id()) or email ) else False )
+						  is_active = True if ( self.account_is_active( self.enki_user.key.id()) or email ) else False )
 
 	def post_reauthenticated( self, params ):
 		submit_type = params.get( 'submittype' )
@@ -827,7 +826,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 			self.redirect( enki.libutil.get_local_url( 'profile' ))
 		elif submit_type == 'delete':
 			delete_posts = False
-			if enki.HandlerBase.account_is_active( self.enki_user.key.id()):
+			if self.account_is_active( self.enki_user.key.id()):
 				has_posts = True if EnkiModelPost.fetch_by_author( self.enki_user.key.id()) else False
 				if has_posts and params.get( 'deleteposts' ) == 'on':
 					delete_posts = True

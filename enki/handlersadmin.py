@@ -2,7 +2,6 @@ import webapp2
 
 import enki
 import enki.libutil
-import enki.libuser
 import enki.modelcounter
 
 from enki.modeluser import EnkiModelUser

@@ -1,3 +1,4 @@
+import cgi
 import datetime
 import random
 import re
@@ -22,7 +23,6 @@ import settings
 import enki
 import enki.authcryptcontext
 import enki.libutil
-import enki.libuser
 import enki.modeltokenverify
 from enki import textmessages as MSG
 from enki.modelbackofftimer import EnkiModelBackoffTimer
@@ -37,21 +37,24 @@ from enki.modelproductkey import EnkiModelProductKey
 from enki.modelpost import EnkiModelPost
 from enki.modelrestapiconnecttoken import EnkiModelRestAPIConnectToken
 from enki.modelrestapidatastore import EnkiModelRestAPIDataStore
-
-
-ERROR_EMAIL_IN_USE = -13
-ERROR_EMAIL_NOT_EXIST = -14
-ERROR_USER_NOT_CREATED = -31
+from enki.authcryptcontext import pwd_context
 
 
 class HandlerBase( webapp2.RequestHandler ):
 
+	ERROR_USER_NOT_CREATED = -31
+	ERROR_PASSWORD_BLANK = -21
+	ERROR_PASSWORD_TOO_SHORT = -22
+	ERROR_PASSWORD_NOT_SET = -23
+	ERROR_EMAIL_IN_USE = -13
+	ERROR_EMAIL_NOT_EXIST = -14
+	ERROR_EMAIL_MISSING = -11
+	ERROR_EMAIL_FORMAT_INVALID = -12
 
 	def __init__( self, request, response ):
 		self.initialize( request, response )
 		self.just_logged_in = False
 		self.just_checked_CSRF = False
-
 
 	def dispatch( self ):
 
@@ -320,7 +323,7 @@ class HandlerBase( webapp2.RequestHandler ):
 	# request the creation of a new account based on an email address
 		result = enki.libutil.ENKILIB_OK
 		if EnkiModelUser.exist_by_email( email ):
-			result = ERROR_EMAIL_IN_USE
+			result = self.ERROR_EMAIL_IN_USE
 		else:
 			# create an email verify token, send it to the email address
 			token = security.generate_random_string( entropy = 256 )
@@ -340,7 +343,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			if emailCurrent == email:
 				result = 'same'
 			else:
-				result = ERROR_EMAIL_IN_USE
+				result = self.ERROR_EMAIL_IN_USE
 				# Note: send an email to emailcurrent regardless to prevent email checking (see below)
 		else:
 			if email == '':
@@ -378,7 +381,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				token = security.generate_random_string( entropy = 256 )
 				emailOldToken = EnkiModelTokenEmailRollback( token = token, email = emailCurrent, user_id = userId )
 				emailOldToken.put()
-			if result == ERROR_EMAIL_IN_USE:
+			if result == self.ERROR_EMAIL_IN_USE:
 				self.add_debugmessage( '''Comment - whether the email is available or not, the feedback through both the UI AND EMAIL is identical to prevent email checking.''' )
 			link = enki.libutil.get_local_url( 'emailrollback', { 'rollbacktoken': token } )
 			self.send_email( emailCurrent, MSG.SEND_EMAIL_EMAIL_CHANGE_UNDO_SUBJECT(), MSG.SEND_EMAIL_EMAIL_CHANGE_UNDO_BODY( link, emailCurrent ))
@@ -425,7 +428,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			self.send_email( email, MSG.SEND_EMAIL_PASSWORD_RESET_SUBJECT(), MSG.SEND_EMAIL_PASSWORD_RESET_BODY( link ))
 			result = enki.libutil.ENKILIB_OK
 		else:
-			result = ERROR_EMAIL_NOT_EXIST
+			result = self.ERROR_EMAIL_NOT_EXIST
 		return result
 
 	def create_user_from_email_pw( self, email, password ):
@@ -434,12 +437,12 @@ class HandlerBase( webapp2.RequestHandler ):
 		user = self.set_email( email )
 		if user:
 			# set the user's password
-			result = enki.libuser.set_password( user, password )
+			result = self.set_password( user, password )
 			if result == enki.libutil.ENKILIB_OK:
 				# cleanup: delete all verify tokens created when registering the email
 				EnkiModelTokenVerify.delete_by_email_type( email, 'register' )
 		else:
-			result = ERROR_USER_NOT_CREATED
+			result = self.ERROR_USER_NOT_CREATED
 		return result
 
 	@db.transactional
@@ -591,6 +594,64 @@ class HandlerBase( webapp2.RequestHandler ):
 						self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
 		else:
 			self.redirect_to_relevant_page()
+
+	def validate_email( self, email ):
+		result = enki.libutil.ENKILIB_OK
+		email_escaped = cgi.escape( email, quote = True )
+		if email and email == email_escaped:
+			if (( '.' not in email ) or ( not re.search( '[^@]+@[^@]+', email ))):
+				result = self.ERROR_EMAIL_FORMAT_INVALID
+		elif email == '':
+			result = self.ERROR_EMAIL_MISSING
+		else:
+			result = self.ERROR_EMAIL_FORMAT_INVALID
+		return email_escaped, result
+
+	def validate_password( self, password ):
+		result = enki.libutil.ENKILIB_OK
+		if password == '':
+			result = self.ERROR_PASSWORD_BLANK
+		elif len(password) < webapp2.get_app().config.get( 'enki' ).get( 'user' ).get( 'PASSWORD_LENGTH_MIN' ):
+			result = self.ERROR_PASSWORD_TOO_SHORT
+		return result
+
+	def set_password( self, user, password ):
+		result = self.validate_password( password )
+		if result == enki.libutil.ENKILIB_OK:
+			passwordHash = pwd_context.encrypt( password )
+			user.password = passwordHash
+			user.put()
+		return result
+
+	def add_roles( self, user, roles ):
+		for role in roles:
+			if role not in user.roles:
+				user.roles.append(role)
+		user.put()
+
+	def remove_roles( self, user, roles ):
+		for role in roles:
+			if role in user.roles:
+				user.roles.remove(role)
+		user.put()
+
+	def has_permission( self, user, permission ):
+		# check a user has a permission
+		if user and permission:
+			if user.roles:
+				for role in user.roles:
+					if permission in settings.ROLES_PERMISSIONS[ role ]:
+						return True
+		return False
+
+	def has_permissions( self, user, permissions ):
+		# check a user has all the permissions required
+		if user and permissions:
+			for permission in permissions:
+				if not self.has_permission( user, permission ):
+					return False
+			return True    # all permissions have tested true by this point
+		return False
 
 	def redirect_to_relevant_page( self, abort = False ):
 	# Redirect user to a previous page after login (& sign up) and logout,
