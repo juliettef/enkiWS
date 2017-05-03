@@ -13,18 +13,36 @@ Our website [enkisoftware.com](https://www.enkisoftware.com/) uses enkiWS, with 
 
 This is a work in progress and not yet ready for production use.
  
-__[ NEW in v0.12 ] Sticky threads and posts, Forum events email notifications to admin__  
-__[ NEW in v0.11 ] Added Admin tools page with free licence key generator, reporting cron, gcloud deployment script__  
-__[ NEW in v0.10 ] Added canonical host url, event counters for download and purchase, Store fixes and escaping, prevent remove auth method if user would only have email without pw left, email validation detects empty__  
-__[ NEW in v0.9 ] Security fixes and improvements__
+__[ NEW in v0.13 ] Added user roles; reworked the personal user profile page; moved  user's licences library and sessions management to dedicated pages; updated French translation; improved icons accessibility features; refactoring: moved library functions into related model classes.__  
+[ NEW in v0.12 ] Sticky threads and posts, Forum events email notifications to admin  
+[ NEW in v0.11 ] Added Admin tools page with free licence key generator, reporting cron, gcloud deployment script  
+[ NEW in v0.10 ] Added canonical host url, event counters for download and purchase, Store fixes and escaping, prevent remove auth method if user would only have email without pw left, email validation detects empty  
+[ NEW in v0.9 ] Security fixes and improvements  
 
 ## Functionality
 
 ### Current
 
-* User Accounts - email, display name
-* [Login through OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter-github) - Valve's Steam, Facebook, Google, Twitter, Github
+* User Accounts
+    * display name
+    * email
+    * password change and recovery
+    * login with email/password or with [OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter-github) - Facebook, Google, Twitter, Github, Steam
+    * manage licence keys
+    * manage sessions
+    * user roles
+    * account deletion
+* Security and privacy
+    * Backoff timer
+    * User enumeration prevention
+    * Account recovery via email (if account was breached and email changed by a third party)
+    * Minimum user personal information stored: user email and login credentials
+    * OAuth: minimum user info requested - user email and unique Id with the auth provider
+    * Passwords encrypted using [PassLib scheme pbkdf2_sha512](http://passlib.readthedocs.io/en/stable/lib/passlib.hash.sha512_crypt.html?highlight=512)
+    * User display name can be changed but the old display name(s) remain public
 * Forums
+    * Sticky threads and posts
+    * Posts can be edited or deleted by author
 * Localisation - English & French
 * Online store
     * Payment provider [FastSpring](https://www.fastspring.com/)  
@@ -40,6 +58,7 @@ __[ NEW in v0.9 ] Security fixes and improvements__
 * Admin tools
     * Reporting
     * Free licence keys generator
+    * Forum events email notifications
 
 ### Intended for release 1.0.0 
 
