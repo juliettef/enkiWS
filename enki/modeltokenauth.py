@@ -12,37 +12,50 @@ class EnkiModelTokenAuth( model.Model ):
 
 	token = model.StringProperty() # unique
 	user_id = model.IntegerProperty() # the ndb ID nr
+	keep_logged_in = model.BooleanProperty( default = False )
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )
 
 	#=== QUERIES ==================================================================
 
 	@classmethod
+	def query_by_user_id( cls, user_id ):
+		return cls.query( ndb.OR( ndb.AND( cls.user_id == user_id,
+										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE ))),
+								  ndb.AND( cls.user_id == user_id,
+										   cls.keep_logged_in == True,
+										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN_D)))))
+
+	@classmethod
+	def query_by_user_id_token( cls, user_id, token ):
+		return cls.query_by_user_id( user_id ).filter( cls.token == token )
+
+	@classmethod
 	def count_by_user_id( cls, user_id ):
-		count = cls.query( cls.user_id == user_id, cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( hours = settings.SESSION_MAX_IDLE_AGE ))).count()
-		return count
+		return cls.query_by_user_id(user_id).count()
 
 	@classmethod
 	def fetch_keys_by_user_id( cls, user_id ):
-		keys = cls.query( cls.user_id == user_id, cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( hours = settings.SESSION_MAX_IDLE_AGE ))).fetch(keys_only = True)
-		return keys
+		return cls.query_by_user_id(user_id).fetch(keys_only = True)
 
 	@classmethod
 	def fetch_by_user_id( cls, user_id ):
-		list = cls.query( cls.user_id == user_id, cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( hours = settings.SESSION_MAX_IDLE_AGE ))).order( -cls.time_updated ).fetch()
-		return list
+		return cls.query_by_user_id(user_id).order(-cls.time_updated).fetch()
 
 	@classmethod
 	def fetch_keys_by_user_id_token( cls, user_id, token ):
-		return cls.query( ndb.AND( cls.user_id == user_id, cls.token == token, cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( hours = settings.SESSION_MAX_IDLE_AGE )))).fetch( keys_only = True )
+		return cls.query_by_user_id_token( user_id, token ).fetch( keys_only = True )
 
 	@classmethod
 	def get_by_user_id_token( cls, user_id, token ):
-		return cls.query( ndb.AND( cls.user_id == user_id, cls.token == token, cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( hours = settings.SESSION_MAX_IDLE_AGE )))).get()
+		return cls.query_by_user_id_token( user_id, token ).get()
 
 	@classmethod
 	def fetch_keys_expired( cls ):
-		return cls.query( cls.time_updated < ( datetime.datetime.now() - datetime.timedelta( hours = settings.SESSION_MAX_IDLE_AGE ))).fetch( keys_only = True )
+		return cls.query( ndb.OR( cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN_D )),
+								  ndb.AND( cls.keep_logged_in == False,
+										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE ))))
+						  ).fetch( keys_only = True )
 
 	#=== UTILITIES ================================================================
 

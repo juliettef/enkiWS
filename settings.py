@@ -7,7 +7,8 @@ import enki.libutil
 ENKI_FORCE_DEBUG = False    # If True, behaves as if it's offline
 ENKI_EMULATE_STORE = True  # If True, use the store emulator
 
-SESSION_MAX_IDLE_AGE = 3600
+SESSION_MAX_IDLE_AGE = 3600 # seconds
+SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN_D = 30 # days
 REAUTH_EXPIRY = 5  # minutes
 
 LOCALES = [ 'en_US', 'en_EN', 'fr_FR' ]
