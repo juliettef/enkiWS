@@ -3,6 +3,8 @@ import datetime
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
 
+import settings
+
 
 class EnkiModelTokenAuth( model.Model ):
 
@@ -11,6 +13,7 @@ class EnkiModelTokenAuth( model.Model ):
 	token = model.StringProperty() # unique
 	user_id = model.IntegerProperty() # the ndb ID nr
 	time_created = model.DateTimeProperty( auto_now_add = True )
+	time_updated = model.DateTimeProperty( auto_now = True )
 
 	#=== QUERIES ==================================================================
 
@@ -30,13 +33,12 @@ class EnkiModelTokenAuth( model.Model ):
 		return list
 
 	@classmethod
-	def exist_by_user_id_token( cls, user_id, token ):
-		count = cls.query( ndb.AND( cls.user_id == user_id, cls.token == token )).count(1)
-		return count > 0
-
-	@classmethod
 	def fetch_keys_by_user_id_token( cls, user_id, token ):
 		return cls.query( ndb.AND( cls.user_id == user_id, cls.token == token )).fetch( keys_only = True )
+
+	@classmethod
+	def get_by_user_id_token( cls, user_id, token ):
+		return cls.query( ndb.AND( cls.user_id == user_id, cls.token == token )).get()
 
 	@classmethod
 	def fetch_keys_old( cls, days_old ):
@@ -53,3 +55,11 @@ class EnkiModelTokenAuth( model.Model ):
 		tokens = cls.fetch_keys_by_user_id( user_id )
 		if tokens:
 			ndb.delete_multi( tokens )
+
+	@classmethod
+	def get_user_authentications( cls, user_id, token ):
+		item = cls.get_by_user_id_token( user_id, token )
+		if item and ( datetime.datetime.now() - item.time_updated ) < datetime.timedelta( hours = settings.SESSION_MAX_IDLE_AGE ):
+			item.put_async()
+			return True
+		return False

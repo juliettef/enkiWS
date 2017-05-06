@@ -133,7 +133,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		if self.just_logged_in:
 			return True
 		token = self.session.get( 'auth_token' )
-		if EnkiModelTokenAuth.exist_by_user_id_token( self.user_id, token ):
+		if EnkiModelTokenAuth.get_user_authentications( self.user_id, token ):
 			return True
 		else:
 			return False
@@ -208,15 +208,14 @@ class HandlerBase( webapp2.RequestHandler ):
 
 	def log_out( self ):
 	# log out the currently logged in user
-		if self.is_logged_in():
-			token = self.session.get( 'auth_token' )
-			token_key = EnkiModelTokenAuth.fetch_keys_by_user_id_token(self.user_id, token)
-			if token_key:
-				# delete the token from the db
-				ndb.delete_multi( token_key )
-			#delete the session
-			self.session.clear()
-			self.just_logged_in = False
+		token = self.session.get( 'auth_token' )
+		token_key = EnkiModelTokenAuth.fetch_keys_by_user_id_token( self.user_id, token )
+		if token_key:
+			# delete the token from the db
+			ndb.delete_multi( token_key )
+		#delete the session
+		self.session.clear()
+		self.just_logged_in = False
 
 	@webapp2.cached_property
 	def enki_user( self ):

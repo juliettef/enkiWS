@@ -7,6 +7,7 @@ import enki.libutil
 ENKI_FORCE_DEBUG = False    # If True, behaves as if it's offline
 ENKI_EMULATE_STORE = True  # If True, use the store emulator
 
+SESSION_MAX_IDLE_AGE = 3600
 REAUTH_EXPIRY = 5  # minutes
 
 LOCALES = [ 'en_US', 'en_EN', 'fr_FR' ]
@@ -94,7 +95,7 @@ config = {}
 config[ 'enki' ] = { 'user' : { 'PASSWORD_LENGTH_MIN' : 4 }
                      }
 config[ 'webapp2_extras.sessions' ] = { 'secret_key': KEY_SESSION,
-										'session_max_age': 3600,
+										'session_max_age': SESSION_MAX_IDLE_AGE,
 										'cookie_args': { 'max_age' : None,
 														 'domain' : None,
 														 'secure' : ( None if enki.libutil.is_debug() else True ),

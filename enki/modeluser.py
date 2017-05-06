@@ -12,13 +12,10 @@ class EnkiModelUser( model.Model ):
 	# if logged in through external provider at least once, otherwise null. Format "provider:userId"
 	auth_ids_provider = model.StringProperty( repeated = True ) # unique
 
-	# Roles
 	roles = model.StringProperty( repeated = True )
 
-	# other
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )
-	# logged_in_last
 
 	#=== QUERIES ==================================================================
 
