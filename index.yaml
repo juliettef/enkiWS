@@ -144,8 +144,19 @@ indexes:
 
 - kind: EnkiModelTokenAuth
   properties:
+  - name: token
   - name: user_id
-  - name: time_created
+  - name: time_updated
+
+- kind: EnkiModelTokenAuth
+  properties:
+  - name: user_id
+  - name: time_updated
+
+- kind: EnkiModelTokenAuth
+  properties:
+  - name: user_id
+  - name: time_updated
     direction: desc
 
 - kind: EnkiModelTokenEmailRollback

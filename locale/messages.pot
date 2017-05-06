@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-29 18:49+0100\n"
+"POT-Creation-Date: 2017-05-06 18:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1579,8 +1579,8 @@ msgstr ""
 msgid "Browser sessions"
 msgstr ""
 
-#: templates/sessions.html:23 templates/sessions.html:39
-msgid "Connected"
+#: templates/sessions.html:23
+msgid "Last connected"
 msgstr ""
 
 #: templates/sessions.html:25
@@ -1589,6 +1589,10 @@ msgstr ""
 
 #: templates/sessions.html:27 templates/sessions.html:40
 msgid "Disconnect"
+msgstr ""
+
+#: templates/sessions.html:39
+msgid "Connected"
 msgstr ""
 
 #: templates/store.html:22

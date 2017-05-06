@@ -768,7 +768,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		if number < likelihood:
 			ndb.delete_multi_async( self.fetch_keys_old_sessions( 3 ))
 			ndb.delete_multi_async( EnkiModelBackoffTimer.fetch_keys_old( 3 ))
-			ndb.delete_multi_async( EnkiModelTokenAuth.fetch_keys_old( 3 ))
+			ndb.delete_multi_async(EnkiModelTokenAuth.fetch_keys_expired())
 			ndb.delete_multi_async( EnkiModelRestAPIConnectToken.fetch_expired())
 			ndb.delete_multi_async( EnkiModelRestAPIDataStore.fetch_expired())
 			ndb.delete_multi_async( EnkiModelTokenVerify.fetch_keys_old_tokens_by_types( 0.007, [ 'loginaddconfirm_1', 'loginaddconfirm_2', 'loginaddconfirm_3' ]))

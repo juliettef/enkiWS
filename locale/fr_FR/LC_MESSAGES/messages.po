@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-04-29 18:49+0100\n"
+"POT-Creation-Date: 2017-05-06 18:07+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -505,7 +505,6 @@ msgid "A licence key is needed."
 msgstr "Une licence est requise."
 
 #: enki/textmessages.py:138
-#, fuzzy
 msgid "Licence key is too short."
 msgstr "Clé de licence trop courte."
 
@@ -1581,9 +1580,9 @@ msgstr "Attention: votre adresse de courrier électronique devra être différen
 msgid "Browser sessions"
 msgstr "Sessions navigateur"
 
-#: templates/sessions.html:23 templates/sessions.html:39
-msgid "Connected"
-msgstr "Connecté.e"
+#: templates/sessions.html:23
+msgid "Last connected"
+msgstr "Dernière connexion"
 
 #: templates/sessions.html:25
 msgid "Current session"
@@ -1592,6 +1591,10 @@ msgstr "Session en cours"
 #: templates/sessions.html:27 templates/sessions.html:40
 msgid "Disconnect"
 msgstr "Déconnecter"
+
+#: templates/sessions.html:39
+msgid "Connected"
+msgstr "Connecté.e"
 
 #: templates/store.html:22
 msgid "Purchase"

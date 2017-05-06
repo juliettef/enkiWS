@@ -20,7 +20,7 @@
 					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 					<h2>{{ _( "Browser sessions" ) }}</h2>
 					{% for session in data.sessions_browsers %}
-						<p>{{ _( "Connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
+						<p>{{ _( "Last connected" ) }} {{ session[ 'time_created' ].strftime( "%a, %d %b %Y %H:%M:%S" ) }}
 							{% if session[ 'current' ] %}
 								&nbsp;<button class="btn btn-default disabled btn-xs">{{ _( "Current session" ) }}</button>
 							{% else %}
