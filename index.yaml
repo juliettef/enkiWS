@@ -144,6 +144,19 @@ indexes:
 
 - kind: EnkiModelTokenAuth
   properties:
+  - name: keep_logged_in
+  - name: token
+  - name: user_id
+  - name: time_updated
+
+- kind: EnkiModelTokenAuth
+  properties:
+  - name: keep_logged_in
+  - name: user_id
+  - name: time_updated
+
+- kind: EnkiModelTokenAuth
+  properties:
   - name: token
   - name: user_id
   - name: time_updated
