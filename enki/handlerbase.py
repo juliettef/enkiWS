@@ -133,7 +133,9 @@ class HandlerBase( webapp2.RequestHandler ):
 		if self.just_logged_in:
 			return True
 		token = self.session.get( 'auth_token' )
-		if EnkiModelTokenAuth.get_user_authentications( self.user_id, token ):
+		token_auth = EnkiModelTokenAuth.get_by_user_id_token( self.user_id, token )
+		if token_auth:
+			token_auth.put_async()
 			return True
 		else:
 			return False

@@ -24,7 +24,7 @@ class EnkiModelTokenAuth( model.Model ):
 										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE ))),
 								  ndb.AND( cls.user_id == user_id,
 										   cls.keep_logged_in == True,
-										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN_D)))))
+										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN )))))
 
 	@classmethod
 	def query_by_user_id_token( cls, user_id, token ):
@@ -32,15 +32,15 @@ class EnkiModelTokenAuth( model.Model ):
 
 	@classmethod
 	def count_by_user_id( cls, user_id ):
-		return cls.query_by_user_id(user_id).count()
+		return cls.query_by_user_id( user_id ).count()
 
 	@classmethod
 	def fetch_keys_by_user_id( cls, user_id ):
-		return cls.query_by_user_id(user_id).fetch(keys_only = True)
+		return cls.query_by_user_id( user_id ).fetch( keys_only = True )
 
 	@classmethod
 	def fetch_by_user_id( cls, user_id ):
-		return cls.query_by_user_id(user_id).order(-cls.time_updated).fetch()
+		return cls.query_by_user_id( user_id ).order( -cls.time_updated ).fetch()
 
 	@classmethod
 	def fetch_keys_by_user_id_token( cls, user_id, token ):
@@ -52,7 +52,7 @@ class EnkiModelTokenAuth( model.Model ):
 
 	@classmethod
 	def fetch_keys_expired( cls ):
-		return cls.query( ndb.OR( cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN_D )),
+		return cls.query( ndb.OR( cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN )),
 								  ndb.AND( cls.keep_logged_in == False,
 										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE ))))
 						  ).fetch( keys_only = True )
@@ -68,11 +68,3 @@ class EnkiModelTokenAuth( model.Model ):
 		tokens = cls.fetch_keys_by_user_id( user_id )
 		if tokens:
 			ndb.delete_multi( tokens )
-
-	@classmethod
-	def get_user_authentications( cls, user_id, token ):
-		item = cls.get_by_user_id_token( user_id, token )
-		if item:
-			item.put_async()
-			return True
-		return False
