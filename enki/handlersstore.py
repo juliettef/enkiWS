@@ -163,7 +163,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			user_id = ''
 			order_id = webapp2_extras.security.generate_random_string( length = 10, pool = webapp2_extras.security.DIGITS )
 
-			url = enki.libutil.get_local_url( 'generatelicencefastspring' )
+			url = webapp2.uri_for( 'generatelicencefastspring', _full = True )
 			form_fields = { 'secret': 'pretendsecret', 'quantity': str( quantity )}
 			form_data = urllib.urlencode( form_fields )
 			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )
@@ -197,7 +197,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			                            '<li>EnkiModelTokenVerify.type purchasebyuser referrer #{order.referrer} = <em>' + ( xstr( referrer ) if referrer else 'None' ) + '</em></li>' +
 			                        '</ul>' )
 
-			url = enki.libutil.get_local_url( 'ordercompletefastspring' )
+			url = webapp2.uri_for( 'generatelicencefastspring', _full = True )
 			form_fields = { 'licence_key' : licence_keys,
 			                'purchase_price' : purchase_price,
 			                'order_id' : order_id,
