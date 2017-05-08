@@ -229,7 +229,6 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 class HandlerSessions( enki.HandlerBaseReauthenticate ):
 
 	def get_logged_in( self ):
-		data = self.get_data()
 		self.render_tmpl( 'sessions.html',
 						  active_menu = 'profile',
 						  data = self.get_data())
