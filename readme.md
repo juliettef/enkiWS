@@ -13,7 +13,8 @@ Our website [enkisoftware.com](https://www.enkisoftware.com/) uses enkiWS, with 
 
 This is a work in progress and not yet ready for production use.
  
-__[ NEW in v0.13 ] Added user roles; reworked the personal user profile page; moved  user's licences library and sessions management to dedicated pages; updated French translation; improved icons accessibility features; refactoring: moved library functions into related model classes.__  
+__[ NEW in v0.14 ] Added stay logged in, fixed localised links in store emulator.__  
+[ NEW in v0.13 ] Added user roles; reworked the personal user profile page; moved  user's licences library and sessions management to dedicated pages; updated French translation; improved icons accessibility features; refactoring: moved library functions into related model classes.  
 [ NEW in v0.12 ] Sticky threads and posts, Forum events email notifications to admin  
 [ NEW in v0.11 ] Added Admin tools page with free licence key generator, reporting cron, gcloud deployment script  
 [ NEW in v0.10 ] Added canonical host url, event counters for download and purchase, Store fixes and escaping, prevent remove auth method if user would only have email without pw left, email validation detects empty  
@@ -30,6 +31,7 @@ __[ NEW in v0.13 ] Added user roles; reworked the personal user profile page; mo
     * login with email/password or with [OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter-github) - Facebook, Google, Twitter, Github, Steam
     * manage licence keys
     * manage sessions
+    * stay logged in
     * user roles
     * account deletion
 * Security and privacy
@@ -62,7 +64,6 @@ __[ NEW in v0.13 ] Added user roles; reworked the personal user profile page; mo
 
 ### Intended for release 1.0.0 
 
-* User roles    
 * Installation and usage documentation
 * REST API improvements:
     * datastore limits
