@@ -55,6 +55,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		self.initialize( request, response )
 		self.just_logged_in = False
 		self.just_checked_CSRF = False
+		self.keep_logged_in = False
 
 	def dispatch( self ):
 
@@ -79,7 +80,13 @@ class HandlerBase( webapp2.RequestHandler ):
 		try:
 			webapp2.RequestHandler.dispatch( self )
 		finally:
-			self.session_store.save_sessions( self.response )
+			if self.keep_logged_in:
+				self.session.container.session_args['max_age'] = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN
+				self.session_store.save_sessions(self.response)
+				# reset config it is a reference
+				self.session.container.session_args['max_age'] = None
+			else:
+				self.session_store.save_sessions( self.response )
 
 	@webapp2.cached_property
 	def session( self ): #  https://webapp-improved.appspot.com/api/webapp2_extras/sessions.html
@@ -135,6 +142,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		token = self.session.get( 'auth_token' )
 		token_auth = EnkiModelTokenAuth.get_by_user_id_token( self.user_id, token )
 		if token_auth:
+			self.keep_logged_in = token_auth.keep_logged_in
 			token_auth.put_async()
 			return True
 		else:

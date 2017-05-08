@@ -97,7 +97,7 @@ config = {}
 config[ 'enki' ] = { 'user' : { 'PASSWORD_LENGTH_MIN' : 4 }
                      }
 config[ 'webapp2_extras.sessions' ] = { 'secret_key': KEY_SESSION,
-										'session_max_age': SESSION_MAX_IDLE_AGE,
+										'session_max_age': SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN, # must be longest time a session can last
 										'cookie_args': { 'max_age' : None,
 														 'domain' : None,
 														 'secure' : ( None if enki.libutil.is_debug() else True ),
