@@ -197,7 +197,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			                            '<li>EnkiModelTokenVerify.type purchasebyuser referrer #{order.referrer} = <em>' + ( xstr( referrer ) if referrer else 'None' ) + '</em></li>' +
 			                        '</ul>' )
 
-			url = webapp2.uri_for( 'generatelicencefastspring', _full = True )
+			url = webapp2.uri_for( 'ordercompletefastspring', _full = True )
 			form_fields = { 'licence_key' : licence_keys,
 			                'purchase_price' : purchase_price,
 			                'order_id' : order_id,
