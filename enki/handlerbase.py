@@ -222,7 +222,7 @@ class HandlerBase( webapp2.RequestHandler ):
 	def log_out( self ):
 	# log out the currently logged in user
 		self._just_checked_logged_in = False
-		sekf._am_logged_in = False
+		self._am_logged_in = False
 		token = self.session.get( 'auth_token' )
 		token_key = EnkiModelTokenAuth.fetch_keys_by_user_id_token( self.user_id, token )
 		if token_key:
