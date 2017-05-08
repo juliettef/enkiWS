@@ -139,15 +139,15 @@ class HandlerBase( webapp2.RequestHandler ):
 	# returns true if a session exists and corresponds to a logged in user (i.e. a user with a valid auth token)
 		# get session info
 		if not self._just_checked_logged_in:
-			token = self.session.get( 'auth_token' )
-			token_auth = EnkiModelTokenAuth.get_by_user_id_token( self.user_id, token )
+			self._am_logged_in = False
 			self._just_checked_logged_in = True
-			if token_auth:
-				self._am_logged_in = True
-				self._keep_logged_in = token_auth.keep_logged_in
-				token_auth.put_async() # refresh time_updated
-			else:
-				self._am_logged_in = False
+			token = self.session.get( 'auth_token' )
+			if token:
+				token_auth = EnkiModelTokenAuth.get_by_user_id_token( self.user_id, token, retry = 3 )
+				if token_auth:
+					self._am_logged_in = True
+					self._keep_logged_in = token_auth.keep_logged_in
+					token_auth.put_async() # refresh time_updated
 		return self._am_logged_in
 
 	def ensure_is_logged_in( self ):

@@ -1,4 +1,5 @@
 import datetime
+import time
 
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
@@ -15,6 +16,10 @@ class EnkiModelTokenAuth( model.Model ):
 	keep_logged_in = model.BooleanProperty( default = False )
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )
+
+	#=== CONSTANTS ================================================================
+
+	TIMEOUT_S = 0.1
 
 	#=== QUERIES ==================================================================
 
@@ -47,8 +52,18 @@ class EnkiModelTokenAuth( model.Model ):
 		return cls.query_by_user_id_token( user_id, token ).fetch( keys_only = True )
 
 	@classmethod
-	def get_by_user_id_token( cls, user_id, token ):
-		return cls.query_by_user_id_token( user_id, token ).get()
+	def get_by_user_id_token( cls, user_id, token, retry = 0 ):
+		token_entity = cls.query_by_user_id_token( user_id, token ).get()
+		if retry and not token_entity:
+			timeout = cls.TIMEOUT_S
+			for i in range(retry):
+				token_entity = cls.query_by_user_id_token( user_id, token ).get()
+				if token_entity:
+					break
+				else:
+					time.sleep(timeout)
+					timeout *= 2
+		return token_entity
 
 	@classmethod
 	def fetch_keys_expired( cls ):
