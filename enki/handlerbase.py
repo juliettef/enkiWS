@@ -210,7 +210,7 @@ class HandlerBase( webapp2.RequestHandler ):
 	def log_in_session_token_create( self, user ):
 		# generate authentication token and add it to the db and the session
 		token = security.generate_random_string( entropy = 128 )
-		authtoken = EnkiModelTokenAuth( token = token, user_id = user.key.id() )
+		authtoken = EnkiModelTokenAuth( token = token, user_id = user.key.id(), keep_logged_in = self.keep_logged_in )
 		authtoken.put()
 		self.session[ 'auth_token' ] = token
 		self.session[ 'user_id' ] = user.key.id()
@@ -242,9 +242,10 @@ class HandlerBase( webapp2.RequestHandler ):
 			navbar_items = enki.ExtensionLibrary.get_navbar_items()
 			navbar_extensions = enki.ExtensionLibrary.get_navbar_extensions( self )
 			page_extensions = enki.ExtensionLibrary.get_page_extensions( self )
-			display_name = EnkiModelDisplayName.get_display_name( self.user_id ) if self.is_logged_in() else ''
+			user_is_logged_in = self.is_logged_in()
+			display_name = EnkiModelDisplayName.get_display_name( self.user_id ) if user_is_logged_in else ''
 			CSRFtoken = ''
-			if CSRFneeded:
+			if CSRFneeded or user_is_logged_in: # when user is logged in we always need CSRF for stay logged in navbar
 				CSRFtoken = self.create_CSRF( self.request.path )
 			self.response.write( self.jinja2.render_template(
 									template_file,
@@ -262,6 +263,7 @@ class HandlerBase( webapp2.RequestHandler ):
 									deleted_post_display = MSG.POST_DELETED_DISPLAY(),
 									deleted_dn = EnkiModelDisplayName.DELETED_PREFIX + EnkiModelDisplayName.DELETED_SUFFIX,
 									deleted_dn_display = MSG.DISPLAY_NAME_DELETED_DISPLAY(),
+									stay_logged_in = self.keep_logged_in,
 				                    **kwargs ))
 		except TemplateNotFound:
 			self.abort( 404 )
@@ -681,7 +683,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				relevant_pages |= { '/profile', '/accountconnect', '/displayname', '/emailchange',
 									'/passwordchange', '/friends', '/messages', '/admin/apps',
 									'/appdatastores', '/loginaddconfirm', '/accountdelete', '/library',
-									'/sessions' }
+									'/sessions', '/stayloggedin' }
 				# note: '/reauthenticate' not included in relevant_pages as users should only be sent there explicitely
 				relevant_paths |= { '/u/' }
 			# Choose the redirection

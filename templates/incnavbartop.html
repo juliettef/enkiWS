@@ -53,6 +53,14 @@
         </div>
         {% if is_logged_in %}
 	    <div class="text-right">
+            <form action="{{ 'stayloggedin'|local }}" method="post">
+	            <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+                <input type="hidden" name="request_url" value="{{ request_url }}">
+	            <button class="btn btn-info btn-xs" type="submit" name="stayloggedin" value="stayloggedin">
+	            	{{ _( "Stay logged in" ) }}&nbsp;
+	            	{% if stay_logged_in %}<i class="fa fa-check-square-o" aria-hidden="true" title="Selected"></i>{% else %}<i class="fa fa-square-o" aria-hidden="true" title="Deselected"></i>{% endif %}
+	            </button>
+            </form>
 			<span>
 		        {% if display_name %}
 		            <a href="{{ 'profile'|local }}" class="nochange"><small class="text-info">{{ _( "Logged in as" ) }} <b>{{display_name}}</b></small></a>
