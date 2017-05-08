@@ -1,7 +1,9 @@
+from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
 
 import settings
 import enki.libutil
+
 
 class EnkiModelForum( model.Model ):
 
