@@ -53,9 +53,10 @@ class HandlerBase( webapp2.RequestHandler ):
 
 	def __init__( self, request, response ):
 		self.initialize( request, response )
-		self.just_logged_in = False
-		self.just_checked_CSRF = False
-		self.keep_logged_in = False
+		self._just_checked_logged_in = False
+		self._am_logged_in = False
+		self._just_checked_CSRF = False
+		self._keep_logged_in = False
 
 	def dispatch( self ):
 
@@ -80,7 +81,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		try:
 			webapp2.RequestHandler.dispatch( self )
 		finally:
-			if self.keep_logged_in:
+			if self._keep_logged_in:
 				self.session.container.session_args['max_age'] = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN
 				self.session_store.save_sessions(self.response)
 				# reset config it is a reference
@@ -120,7 +121,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		return form_name + '-' + CSRFToken
 
 	def check_CSRF( self, query_name = 'CSRF' ):    # protect against forging login requests http://en.wikipedia.org/wiki/Cross-site_request_forgery http://www.ethicalhack3r.co.uk/login-cross-site-request-forgery-csrf/
-		if self.just_checked_CSRF:
+		if self._just_checked_CSRF:
 			return
 		if 'CSRF' in self.session:
 			request_token = self.request.get( query_name ).rsplit( '-', 1 )
@@ -130,23 +131,24 @@ class HandlerBase( webapp2.RequestHandler ):
 			sessionCSRF = sessionCSRFs.get( form_name )
 			if sessionCSRF == CSRFToken and CSRFToken:
 				del self.session[ 'CSRF' ][ form_name ]
-				self.just_checked_CSRF = True
+				self._just_checked_CSRF = True
 				return
 		self.redirect_to_relevant_page()
 
 	def is_logged_in( self ):
 	# returns true if a session exists and corresponds to a logged in user (i.e. a user with a valid auth token)
 		# get session info
-		if self.just_logged_in:
-			return True
-		token = self.session.get( 'auth_token' )
-		token_auth = EnkiModelTokenAuth.get_by_user_id_token( self.user_id, token )
-		if token_auth:
-			self.keep_logged_in = token_auth.keep_logged_in
-			token_auth.put_async()
-			return True
-		else:
-			return False
+		if not self._just_checked_logged_in:
+			token = self.session.get( 'auth_token' )
+			token_auth = EnkiModelTokenAuth.get_by_user_id_token( self.user_id, token )
+			self._just_checked_logged_in = True
+			if token_auth:
+				self._am_logged_in = True
+				self._keep_logged_in = token_auth.keep_logged_in
+				token_auth.put_async() # refresh time_updated
+			else:
+				self._am_logged_in = False
+		return self._am_logged_in
 
 	def ensure_is_logged_in( self ):
 	# force the user out if not logged in
@@ -207,18 +209,20 @@ class HandlerBase( webapp2.RequestHandler ):
 					return True
 		return False
 
-	def log_in_session_token_create( self, user ):
+	def log_in_session_token_create( self, user, keep_logged_in_ = False ):
 		# generate authentication token and add it to the db and the session
 		token = security.generate_random_string( entropy = 128 )
-		authtoken = EnkiModelTokenAuth( token = token, user_id = user.key.id(), keep_logged_in = self.keep_logged_in )
+		self._keep_logged_in = keep_logged_in_
+		authtoken = EnkiModelTokenAuth(token = token, user_id = user.key.id(), keep_logged_in = keep_logged_in_ )
 		authtoken.put()
 		self.session[ 'auth_token' ] = token
 		self.session[ 'user_id' ] = user.key.id()
-		self.just_logged_in = True
+		self._just_checked_logged_in = True
 
 	def log_out( self ):
 	# log out the currently logged in user
-		self.just_logged_in = False
+		self._just_checked_logged_in = False
+		sekf._am_logged_in = False
 		token = self.session.get( 'auth_token' )
 		token_key = EnkiModelTokenAuth.fetch_keys_by_user_id_token( self.user_id, token )
 		if token_key:
@@ -263,7 +267,7 @@ class HandlerBase( webapp2.RequestHandler ):
 									deleted_post_display = MSG.POST_DELETED_DISPLAY(),
 									deleted_dn = EnkiModelDisplayName.DELETED_PREFIX + EnkiModelDisplayName.DELETED_SUFFIX,
 									deleted_dn_display = MSG.DISPLAY_NAME_DELETED_DISPLAY(),
-									stay_logged_in = self.keep_logged_in,
+									stay_logged_in = self._keep_logged_in,
 				                    **kwargs ))
 		except TemplateNotFound:
 			self.abort( 404 )

@@ -119,13 +119,12 @@ class HandlerStayLoggedIn( enki.HandlerBaseReauthenticate ):
 
 	def toggle_keep_logged_in( self ):
 		token = self.session.get('auth_token')
-		old_token_auth = EnkiModelTokenAuth.get_by_user_id_token(self.user_id, token)
+		old_token_auth = EnkiModelTokenAuth.get_by_user_id_token( self.user_id, token )
 		if old_token_auth:
 			# create a new token with keep_logged_in set as async refresh of token can be overwrite old one
 			self.session.modified = True  # force session to be saved
-			current_user = self.enki_user  # must do this before changing keep_logged_in as is_logged_in checks key
-			self.keep_logged_in = not old_token_auth.keep_logged_in
-			self.log_in_session_token_create(current_user)
+			keep_logged_in = not old_token_auth.keep_logged_in
+			self.log_in_session_token_create( self.enki_user , keep_logged_in )
 			old_token_auth.key.delete_async()
 		self.redirect_to_relevant_page()
 
