@@ -218,6 +218,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		self.session[ 'auth_token' ] = token
 		self.session[ 'user_id' ] = user.key.id()
 		self._just_checked_logged_in = True
+		self._am_logged_in = True
 
 	def log_out( self ):
 	# log out the currently logged in user
