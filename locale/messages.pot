@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-06 18:07+0100\n"
+"POT-Creation-Date: 2017-05-08 19:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1171,11 +1171,15 @@ msgstr ""
 msgid "Languages"
 msgstr ""
 
-#: templates/incnavbartop.html:58 templates/incnavbartop.html:60
+#: templates/incnavbartop.html:61
+msgid "Stay logged in"
+msgstr ""
+
+#: templates/incnavbartop.html:69 templates/incnavbartop.html:71
 msgid "Logged in as"
 msgstr ""
 
-#: templates/incnavbartop.html:60
+#: templates/incnavbartop.html:71
 msgid "Please set up your display name"
 msgstr ""
 

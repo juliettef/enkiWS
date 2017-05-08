@@ -56,7 +56,7 @@ class HandlerBase( webapp2.RequestHandler ):
 		self._just_checked_logged_in = False
 		self._am_logged_in = False
 		self._just_checked_CSRF = False
-		self._keep_logged_in = False
+		self._stay_logged_in = False
 
 	def dispatch( self ):
 
@@ -81,8 +81,8 @@ class HandlerBase( webapp2.RequestHandler ):
 		try:
 			webapp2.RequestHandler.dispatch( self )
 		finally:
-			if self._keep_logged_in:
-				self.session.container.session_args['max_age'] = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN
+			if self._stay_logged_in:
+				self.session.container.session_args['max_age'] = settings.SESSION_MAX_IDLE_AGE_STAY_LOGGED_IN
 				self.session_store.save_sessions(self.response)
 				# reset config it is a reference
 				self.session.container.session_args['max_age'] = None
@@ -146,7 +146,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				token_auth = EnkiModelTokenAuth.get_by_user_id_token( self.user_id, token, retry = 3 )
 				if token_auth:
 					self._am_logged_in = True
-					self._keep_logged_in = token_auth.keep_logged_in
+					self._stay_logged_in = token_auth.stay_logged_in
 					token_auth.put_async() # refresh time_updated
 		return self._am_logged_in
 
@@ -209,11 +209,11 @@ class HandlerBase( webapp2.RequestHandler ):
 					return True
 		return False
 
-	def log_in_session_token_create( self, user, keep_logged_in_ = False ):
+	def log_in_session_token_create( self, user, stay_logged_in_ = False ):
 		# generate authentication token and add it to the db and the session
 		token = security.generate_random_string( entropy = 128 )
-		self._keep_logged_in = keep_logged_in_
-		authtoken = EnkiModelTokenAuth(token = token, user_id = user.key.id(), keep_logged_in = keep_logged_in_ )
+		self._stay_logged_in = stay_logged_in_
+		authtoken = EnkiModelTokenAuth( token = token, user_id = user.key.id(), stay_logged_in = stay_logged_in_ )
 		authtoken.put()
 		self.session[ 'auth_token' ] = token
 		self.session[ 'user_id' ] = user.key.id()
@@ -268,7 +268,7 @@ class HandlerBase( webapp2.RequestHandler ):
 									deleted_post_display = MSG.POST_DELETED_DISPLAY(),
 									deleted_dn = EnkiModelDisplayName.DELETED_PREFIX + EnkiModelDisplayName.DELETED_SUFFIX,
 									deleted_dn_display = MSG.DISPLAY_NAME_DELETED_DISPLAY(),
-									stay_logged_in = self._keep_logged_in,
+									stay_logged_in = self._stay_logged_in,
 				                    **kwargs ))
 		except TemplateNotFound:
 			self.abort( 404 )

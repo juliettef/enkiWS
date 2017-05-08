@@ -13,7 +13,7 @@ class EnkiModelTokenAuth( model.Model ):
 
 	token = model.StringProperty() # unique
 	user_id = model.IntegerProperty() # the ndb ID nr
-	keep_logged_in = model.BooleanProperty( default = False )
+	stay_logged_in = model.BooleanProperty( default = False )
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	time_updated = model.DateTimeProperty( auto_now = True )
 
@@ -28,8 +28,8 @@ class EnkiModelTokenAuth( model.Model ):
 		return cls.query( ndb.OR( ndb.AND( cls.user_id == user_id,
 										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE ))),
 								  ndb.AND( cls.user_id == user_id,
-										   cls.keep_logged_in == True,
-										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN )))))
+										   cls.stay_logged_in == True,
+										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE_STAY_LOGGED_IN )))))
 
 	@classmethod
 	def query_by_user_id_token( cls, user_id, token ):
@@ -67,8 +67,8 @@ class EnkiModelTokenAuth( model.Model ):
 
 	@classmethod
 	def fetch_keys_expired( cls ):
-		return cls.query( ndb.OR( cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN )),
-								  ndb.AND( cls.keep_logged_in == False,
+		return cls.query( ndb.OR( cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE_STAY_LOGGED_IN )),
+								  ndb.AND( cls.stay_logged_in == False,
 										   cls.time_updated > ( datetime.datetime.now() - datetime.timedelta( seconds = settings.SESSION_MAX_IDLE_AGE ))))
 						  ).fetch( keys_only = True )
 

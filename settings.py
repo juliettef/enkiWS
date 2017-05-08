@@ -8,8 +8,8 @@ ENKI_FORCE_DEBUG = False    # If True, behaves as if it's offline
 ENKI_EMULATE_STORE = True  # If True, use the store emulator
 
 SESSION_MAX_IDLE_AGE = 3600 # seconds
-SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN_D = 30  # days
-SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN = SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN_D * 24 * 60 * 60 # seconds
+SESSION_MAX_IDLE_AGE_STAY_LOGGED_IN_D = 30  # days
+SESSION_MAX_IDLE_AGE_STAY_LOGGED_IN = SESSION_MAX_IDLE_AGE_STAY_LOGGED_IN_D * 24 * 60 * 60 # seconds
 REAUTH_EXPIRY = 5  # minutes
 
 LOCALES = [ 'en_US', 'en_EN', 'fr_FR' ]
@@ -97,7 +97,7 @@ config = {}
 config[ 'enki' ] = { 'user' : { 'PASSWORD_LENGTH_MIN' : 4 }
                      }
 config[ 'webapp2_extras.sessions' ] = { 'secret_key': KEY_SESSION,
-										'session_max_age': SESSION_MAX_IDLE_AGE_KEEP_LOGGED_IN, # must be longest time a session can last
+										'session_max_age': SESSION_MAX_IDLE_AGE_STAY_LOGGED_IN, # must be longest time a session can last
 										'cookie_args': { 'max_age' : None,
 														 'domain' : None,
 														 'secure' : ( None if enki.libutil.is_debug() else True ),
