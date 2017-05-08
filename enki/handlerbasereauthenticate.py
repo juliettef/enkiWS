@@ -38,7 +38,12 @@ class HandlerBaseReauthenticate( enki.HandlerBase ):
 		if not self.is_reauthenticated():
 			self.save_user_page_data()
 			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REAUTHENTICATION_NEEDED())
-			self.redirect( enki.libutil.get_local_url( 'reauthenticate' ))
+			# rather than redirect to 'reauthenticate' we render here to prevent sessionrefpath being overwritten
+			self.session[ 'sessionrefpath' ] = self.request.path_url
+			self.render_tmpl( 'reauthenticate.html',
+			                  active_menu = 'profile',
+			                  authhandlers = self.get_user_auth_providers(),
+			                  email = self.enki_user.email if ( self.enki_user.email and self.enki_user.password ) else None )
 			return False
 		return True
 
