@@ -8,5 +8,6 @@ from handlersrestapi import ExtensionRestAPI
 from handlersfriends import ExtensionFriends
 from handlersinfo import routes_info
 from handlersadmin import routes_admin
+from handlersmedia import routes_media
 from handlersstatic import routes_static
 import jinjafilters

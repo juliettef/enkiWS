@@ -27,6 +27,7 @@ routes += enki.routes_account \
 		  + enki.ExtensionLibrary.get_routes() \
 		  + enki.routes_info \
 		  + enki.routes_admin \
+		  + enki.routes_media \
 		  + enki.routes_static \
 
 routes_copy = copy.deepcopy( routes )

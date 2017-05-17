@@ -33,13 +33,18 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
             <ul class="nav navbar-nav">
-               {% for href, id, caption in navigation_bar_top %}
-                    <li {% if id == active_menu %}class="active"{% endif %}>
-                        <a href="{{ href|e }}">
-                            {{ caption|e }}{% if id == active_menu %}<span class="sr-only">(current)</span>{% endif %}
-                        </a>
-                    </li>
-               {% endfor %}
+				{% for href, id, caption in navigation_bar_top %}
+					<li {% if id == active_menu %}class="active"{% endif %}>
+						<a href="{{ href|e }}">
+							{{ caption|e }}{% if id == active_menu %}<span class="sr-only">(current)</span>{% endif %}
+						</a>
+					</li>
+				{% endfor %}
+				<li {% if 'media' == active_menu %}class="active"{% endif %}>
+					<a href="{{ 'media'|local }}">
+						Media{% if 'media' == active_menu %}<span class="sr-only">(current)</span>{% endif %}
+					</a>
+				</li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% for href, id, caption in navigation_bar_top_right %}

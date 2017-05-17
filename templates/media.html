@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>{{ _( "Media" ) }}</title>
+		<meta name="description" content="{{ _( 'Media - images and videos' ) }}">
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incbanner.html" %}
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+            <h1>{{ _( "Media" ) }}</h1>
+
+			<h2>{{ _( "Images" ) }}</h2>
+
+			<div class="row">
+				<div class="col-xs-6">
+					<p><a href="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg">
+					<img alt="Avoyd screenshot" src="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree_thumb.jpg" width=100% class="img-rounded"></a></p>
+				</div>
+				<div class="col-xs-6">
+					<p><a href="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm.jpg">
+					<img alt="Avoyd screenshot" src="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm_thumb.jpg" width=100% class="img-rounded"></a></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<p><a href="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun.jpg">
+					<img alt="Avoyd screenshot" src="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun_thumb.jpg" width=100% class="img-rounded"></a></p>
+				</div>
+				<div class="col-xs-6">
+					<p><a href="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering.jpg">
+					<img alt="Avoyd screenshot" src="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering_thumb.jpg" width=100% class="img-rounded"></a></p>
+				</div>
+			</div>
+
+			<h2>{{ _( "Videos" ) }}</h2>
+
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="embed-responsive embed-responsive-16by9">
+						<iframe src="https://www.youtube.com/embed/videoseries?list=PLOV2v_nVCDf6dVdn8F4Lq45QfRcIozU3M" frameborder="0" allowfullscreen></iframe>
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="embed-responsive embed-responsive-16by9">
+						<iframe src="https://www.youtube.com/embed/tvWGWHuLGbE" frameborder="0" allowfullscreen></iframe>
+					</div>
+				</div>
+			</div>
+
+            {% include "incfooter.html" %}
+    	</div>
+    </body>
+</html>
