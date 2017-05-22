@@ -48,7 +48,7 @@ class HandlerMedia( enki.HandlerBase ):
 
 	@classmethod
 	def create_media_page( cls, media_json ):
-		# image and video galleries
+		# Create html for galleries of images and videos from json data
 		HTML_HEADER = '''\n\t\t\t<h2>{header}</h2>\n'''
 		HTML_GALLERY_TITLE = '''\n\t\t\t<h3>{gallery_title}</h3>\n'''
 		HTML_GALLERY_DESCRIPTION = '''\t\t\t<h4>{gallery_description}</h4>\n'''
@@ -65,6 +65,7 @@ class HandlerMedia( enki.HandlerBase ):
 					 HTML_COL_END
 		media_html = ''
 		media = media_json[ 'media' ]
+		# Galleries of images
 		galleries_of_images = media[ 'galleries_of_images' ]
 		if galleries_of_images:
 			media_html += HTML_HEADER.format( header = media[ 'HEADER_IMAGES' ]) if media[ 'HEADER_IMAGES' ] else ''
@@ -90,8 +91,12 @@ class HandlerMedia( enki.HandlerBase ):
 							if iter_image < num_images:
 								# cell contains an image
 								image = images[ iter_image ]
-								url = enki.libutil.get_local_url( 'media', { 'g' : str( iter_gallery ), 'i' : str( iter_image )})
-								media_html += HTML_IMAGE.format( col_width = column_width, url=url, img_alt = image[ 'img_alt' ], img_src = image[ 'img_src' ])
+								if image[ 'img_src' ]:
+									url = enki.libutil.get_local_url( 'media', { 'g' : str( iter_gallery ), 'i' : str( iter_image )})
+									media_html += HTML_IMAGE.format( col_width = column_width, url=url, img_alt = image[ 'img_alt' ], img_src = image[ 'img_src' ])
+								else:
+									# blank cell
+									media_html += HTML_COL_EMPTY.format( col_width = column_width )
 								iter_image += 1
 							else:
 								# blank cell
@@ -100,16 +105,11 @@ class HandlerMedia( enki.HandlerBase ):
 						# end row
 						media_html += HTML_ROW_END
 						iter_row += 1
-				else:
-					media_html += '''<p class="text-info">No images available.</p>'''
-				# increment gallery index
 				iter_gallery += 1
-		else:
-			media_html = '''<p class="text-info">No galleries of images available.</p>'''
-
+		# Galleries of videos
 		galleries_of_videos = media[ 'galleries_of_videos' ]
 		if galleries_of_videos:
-			media_html += HTML_HEADER.format(header = media[ 'HEADER_VIDEOS' ]) if media[ 'HEADER_VIDEOS' ] else ''
+			media_html += HTML_HEADER.format( header = media[ 'HEADER_VIDEOS' ]) if media[ 'HEADER_VIDEOS' ] else ''
 			for gallery in galleries_of_videos:
 				# set gallery title and description (if exist)
 				media_html += HTML_GALLERY_TITLE.format( gallery_title = gallery[ 'title' ]) if gallery[ 'title' ] else ''
@@ -131,7 +131,11 @@ class HandlerMedia( enki.HandlerBase ):
 							if iter_video < num_videos:
 								# cell contains an image
 								video = videos[ iter_video ]
-								media_html += HTML_VIDEO.format( col_width = column_width, url = video[ 'iframe_src' ])
+								if video[ 'iframe_src' ]:
+									media_html += HTML_VIDEO.format( col_width = column_width, url = video[ 'iframe_src' ])
+								else:
+									# blank cell
+									media_html += HTML_COL_EMPTY.format( col_width = column_width )
 								iter_video += 1
 							else:
 								# blank cell
@@ -140,10 +144,6 @@ class HandlerMedia( enki.HandlerBase ):
 						# end row
 						media_html += HTML_ROW_END
 						iter_row += 1
-				else:
-					media_html += '''<p class="text-info">No videos available.</p>'''
-		else:
-			media_html += '''<p class="text-info">No galleries of videos available.</p>'''
 
 		return media_html
 
