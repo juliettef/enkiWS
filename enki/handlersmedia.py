@@ -66,8 +66,8 @@ class HandlerMedia( enki.HandlerBase ):
 		media_html = ''
 		media = media_json[ 'media' ]
 		# Galleries of images
-		galleries_of_images = media[ 'galleries_of_images' ]
-		if galleries_of_images:
+		if 'galleries_of_images' in media:
+			galleries_of_images = media[ 'galleries_of_images' ]
 			media_html += HTML_HEADER.format( header = media[ 'HEADER_IMAGES' ]) if media[ 'HEADER_IMAGES' ] else ''
 			iter_gallery = 0
 			for gallery in galleries_of_images:
@@ -107,8 +107,8 @@ class HandlerMedia( enki.HandlerBase ):
 						iter_row += 1
 				iter_gallery += 1
 		# Galleries of videos
-		galleries_of_videos = media[ 'galleries_of_videos' ]
-		if galleries_of_videos:
+		if 'galleries_of_videos' in media:
+			galleries_of_videos = media[ 'galleries_of_videos' ]
 			media_html += HTML_HEADER.format( header = media[ 'HEADER_VIDEOS' ]) if media[ 'HEADER_VIDEOS' ] else ''
 			for gallery in galleries_of_videos:
 				# set gallery title and description (if exist)
