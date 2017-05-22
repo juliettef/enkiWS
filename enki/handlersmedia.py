@@ -58,7 +58,7 @@ class HandlerMedia( enki.HandlerBase ):
 		HTML_COL_END = '''\t\t\t\t</div>\n'''
 		HTML_COL_EMPTY = HTML_COL_START + HTML_COL_END
 		HTML_IMAGE = HTML_COL_START + \
-					 '''\t\t\t\t\t<p><a href="{url}">\n\t\t\t\t\t<img alt="{img_alt}" src="{img_src}" width=100% class="img-rounded"></a></p>\n''' + \
+					 '''\t\t\t\t\t<p><a href="{url}">\n\t\t\t\t\t<img alt="{img_alt}" src="{img_src}" width=100% class="img-rounded"></a><br><small>{caption}</small></p>\n''' + \
 					 HTML_COL_END
 		HTML_VIDEO = HTML_COL_START + \
 					 '''\t\t\t\t\t<div class="embed-responsive embed-responsive-16by9">\n\t\t\t\t\t\t<iframe src="{url}" frameborder="0" allowfullscreen></iframe>\n\t\t\t\t\t</div>\n''' + \
@@ -93,7 +93,7 @@ class HandlerMedia( enki.HandlerBase ):
 								image = images[ iter_image ]
 								if image[ 'img_src' ]:
 									url = enki.libutil.get_local_url( 'media', { 'g' : str( iter_gallery ), 'i' : str( iter_image )})
-									media_html += HTML_IMAGE.format( col_width = column_width, url=url, img_alt = image[ 'img_alt' ], img_src = image[ 'img_src' ])
+									media_html += HTML_IMAGE.format( col_width = column_width, url=url, img_alt = image[ 'img_alt' ], img_src = image[ 'img_src' ], caption = image[ 'caption' ])
 								else:
 									# blank cell
 									media_html += HTML_COL_EMPTY.format( col_width = column_width )

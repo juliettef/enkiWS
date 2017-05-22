@@ -8,33 +8,33 @@
 			{
 				"num_columns_override" : "",
 				"name" : "default",
-				"title" : "Default gallery of images title",
-				"description" : "Default gallery of default images description",
+				"title" : "Gallery of images title",
+				"description" : "Gallery of images description",
 				"images" :
 				[
 					{ "a_href" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg",
 					"img_src" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree_thumb.jpg",
-					"img_alt" : "Default image alt text",
-					"caption" : "Default image caption" },
+					"img_alt" : "Image alt text",
+					"caption" : "Image caption" },
 					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm.jpg",
 					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm_thumb.jpg",
 					"img_alt" : "Default image alt text",
-					"caption" : "Default image caption" },
+					"caption" : "Image caption" },
 					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun.jpg",
 					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun_thumb.jpg",
-					"img_alt" : "Default image alt text",
-					"caption" : "Default image caption" },
+					"img_alt" : "Image alt text",
+					"caption" : "Image caption" },
 					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering.jpg",
 					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering_thumb.jpg",
-					"img_alt" : "Default image alt text",
-					"caption" : "Default image caption" }
+					"img_alt" : "Image alt text",
+					"caption" : "Image caption" }
 				]
 			},
 			{
 				"num_columns_override" : "3",
 				"name" : "demo",
-				"title" : "Gallery with layout override",
-				"description" : "Example of Images layout override: three columns instead of default two",
+				"title" : "Gallery showing layout override",
+				"description" : "Three columns instead of the default two, no captions.",
 				"images" :
 				[
 					{ "a_href" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg",
@@ -63,8 +63,8 @@
 			{
 				"num_columns_override" : "",
 				"name" : "default",
-				"title" : "Default gallery of videos title",
-				"description" : "Default gallery of default videos description",
+				"title" : "Gallery of videos title",
+				"description" : "Gallery of videos description",
 				"videos" :
 				[
 					{ "iframe_src" : "https://www.youtube.com/embed/videoseries?list=PLOV2v_nVCDf6dVdn8F4Lq45QfRcIozU3M" },
