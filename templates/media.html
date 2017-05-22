@@ -8,6 +8,7 @@
     </head>
 
     <body>
+
         <div class="container">
 
             {% include "incbanner.html" %}
@@ -16,28 +17,28 @@
 
             <h1>{{ _( "Media" ) }}</h1>
 
+			{% if gallery and image %}
+				<div>
+					<p>
+						<a href="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg">
+						<img alt="Avoyd screenshot" src="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree_thumb.jpg" width=100% class="img-rounded">
+						</a>
+					</p>
+				</div>
+				<div>
+					<p align=center>
+						<a href="" style="text-decoration: none">&nbsp;&nbsp;<i class="fa fa-caret-left fa-2x" aria-hidden="true" aria-label="previous"></i>&nbsp;&nbsp;</a>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="" style="text-decoration: none"><i class="fa fa-close fa-2x" aria-hidden="true" aria-label="close"></i></a>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="" style="text-decoration: none">&nbsp;&nbsp;<i class="fa fa-caret-right fa-2x" aria-hidden="true" aria-label="next"></i>&nbsp;&nbsp;</a>
+					</p>
+				</div>
+			{% endif  %}
+
 			<h2>{{ _( "Images" ) }}</h2>
 
-			<div class="row">
-				<div class="col-xs-6">
-					<p><a href="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg">
-					<img alt="Avoyd screenshot" src="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree_thumb.jpg" width=100% class="img-rounded"></a></p>
-				</div>
-				<div class="col-xs-6">
-					<p><a href="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm.jpg">
-					<img alt="Avoyd screenshot" src="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm_thumb.jpg" width=100% class="img-rounded"></a></p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-6">
-					<p><a href="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun.jpg">
-					<img alt="Avoyd screenshot" src="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun_thumb.jpg" width=100% class="img-rounded"></a></p>
-				</div>
-				<div class="col-xs-6">
-					<p><a href="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering.jpg">
-					<img alt="Avoyd screenshot" src="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering_thumb.jpg" width=100% class="img-rounded"></a></p>
-				</div>
-			</div>
+{{ media_html }}
 
 			<h2>{{ _( "Videos" ) }}</h2>
 
