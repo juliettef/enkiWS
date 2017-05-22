@@ -1,56 +1,77 @@
 {
-	"galleries" :
-	[
-		{
-			"name" : "default",
-			"title" : "Default gallery title",
-			"description" : "Default gallery of default images description",
-			"num_columns" : "",
-			"images" :
-			[
-				{ "a_href" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg",
-				"img_src" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree_thumb.jpg",
-				"img_alt" : "Default image alt text",
-				"caption" : "Default image caption" },
-				{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm.jpg",
-				"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm_thumb.jpg",
-				"img_alt" : "Default image alt text",
-				"caption" : "Default image caption" },
-				{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun.jpg",
-				"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun_thumb.jpg",
-				"img_alt" : "Default image alt text",
-				"caption" : "Default image caption" },
-				{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering.jpg",
-				"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering_thumb.jpg",
-				"img_alt" : "Default image alt text",
-				"caption" : "Default image caption" }
-			]
-		},
-		{
-			"name" : "random",
-			"title" : "Random gallery",
-			"description" : "images over 4 columns",
-			"num_columns" : "4",
-			"images" :
-			[
-				{ "a_href" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg",
-				"img_src" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree_thumb.jpg",
-				"img_alt" : "",
-				"caption" : "" },
-				{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm.jpg",
-				"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm_thumb.jpg",
-				"img_alt": "",
-				"caption" : "" },
-				{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun.jpg",
-				"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun_thumb.jpg",
-				"img_alt": "",
-				"caption" : "" },
-				{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering.jpg",
-				"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering_thumb.jpg",
-				"img_alt": "",
-				"caption" : "" }
-			]
-		}
-	]
+	"media" :
+	{
+		"HEADER_IMAGES" : "Images",
+		"NUM_COLUMNS_IMAGES_DEFAULT" : "2",
+		"galleries_of_images" :
+		[
+			{
+				"num_columns_override" : "",
+				"name" : "default",
+				"title" : "Default gallery of images title",
+				"description" : "Default gallery of default images description",
+				"images" :
+				[
+					{ "a_href" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg",
+					"img_src" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree_thumb.jpg",
+					"img_alt" : "Default image alt text",
+					"caption" : "Default image caption" },
+					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm.jpg",
+					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm_thumb.jpg",
+					"img_alt" : "Default image alt text",
+					"caption" : "Default image caption" },
+					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun.jpg",
+					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun_thumb.jpg",
+					"img_alt" : "Default image alt text",
+					"caption" : "Default image caption" },
+					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering.jpg",
+					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering_thumb.jpg",
+					"img_alt" : "Default image alt text",
+					"caption" : "Default image caption" }
+				]
+			},
+			{
+				"num_columns_override" : "3",
+				"name" : "demo",
+				"title" : "Gallery with layout override",
+				"description" : "Example of Images layout override: three columns instead of default two",
+				"images" :
+				[
+					{ "a_href" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg",
+					"img_src" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree_thumb.jpg",
+					"img_alt" : "",
+					"caption" : "" },
+					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm.jpg",
+					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm_thumb.jpg",
+					"img_alt": "",
+					"caption" : "" },
+					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun.jpg",
+					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun_thumb.jpg",
+					"img_alt": "",
+					"caption" : "" },
+					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering.jpg",
+					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering_thumb.jpg",
+					"img_alt": "",
+					"caption" : "" }
+				]
+			}
+		],
+		"HEADER_VIDEOS" : "Videos",
+		"NUM_COLUMNS_VIDEOS_DEFAULT" : "2",
+		"galleries_of_videos" :
+		[
+			{
+				"num_columns_override" : "",
+				"name" : "default",
+				"title" : "Default gallery of videos title",
+				"description" : "Default gallery of default videos description",
+				"videos" :
+				[
+					{ "iframe_src" : "https://www.youtube.com/embed/videoseries?list=PLOV2v_nVCDf6dVdn8F4Lq45QfRcIozU3M" },
+					{ "iframe_src" : "https://www.youtube.com/embed/tvWGWHuLGbE" }
+				]
+			}
+		]
+	}
 }
 
