@@ -109,3 +109,5 @@ config[ 'webapp2_extras.jinja2' ] = { 'template_path': 'templates',
                                                    'joinurl' : enki.jinjafilters.join_url_param_char,
 												   'changelocale' : enki.jinjafilters.change_locale_url }
                                       }
+
+bucket = '/enkisoftware-webservices.appspot.com/'
