@@ -6,44 +6,100 @@ from google.appengine.api import memcache
 import settings
 import enki
 import enki.libutil
-
-
-GALLERIES_MAX = 100
-IMAGES_PER_GALLERY_MAX = 200
+from enki import textmessages as MSG
 
 
 class HandlerMedia( enki.HandlerBase ):
 
 	def get( self ):
-		gallery = abs( int( self.request.get( 'g' ))) if self.request.get( 'g' ) else 0
-		gallery = gallery if gallery <= GALLERIES_MAX else 0
-		image = abs( int( self.request.get( 'i' ))) if self.request.get( 'i' ) else 0
-		image = image if image <= IMAGES_PER_GALLERY_MAX else 0
-
+		# Galleries of images and videos
 		media_html = ''
 		if enki.libutil.is_debug():
 			with open( 'test\media.json', 'r' ) as f:
 				json_file = f.read()
 				f.close()
-			media_html = self.create_media_page( json.loads( json_file ))
+			media_json = json.loads( json_file )
+			media_html = self.create_media_page( media_json )
 		else:
 			cache_data = memcache.get( 'media_html' )
 			if cache_data is not None:
 				media_html = cache_data
 			else:
 				try:
-					f = gcs.open( settings.bucket + 'media.json')
+					f = gcs.open( settings.bucket + 'media.json' )
 					json_file = f.read()
 					f.close()
-					media_html = self.create_media_page( json.loads( json_file ))
+					media_json = json.loads( json_file )
+					media_html = self.create_media_page( media_json )
 					memcache.add( 'media_html' , media_html, 300 )
 				except:
 					pass
+		# Display enlarged image
+		url_image_previous = ''
+		url_image_next = ''
+		url_image_displayed = ''
+		src_image_displayed = ''
+		alt_image_displayed = ''
+		caption_image_displayed = ''
+		# if src_image_displayed is found, display the image. Otherwise abort.
+		while not src_image_displayed:
+			gallery = abs( int( self.request.get( 'g' ))) if self.request.get( 'g' ).isdigit() else -1
+			image = abs( int( self.request.get( 'i' ))) if self.request.get( 'i' ).isdigit() else -1
+			if gallery == -1 or image == -1:
+				break
+			media_json = ''
+			if enki.libutil.is_debug():
+				with open( 'test\media.json', 'r') as f:
+					json_file = f.read()
+					f.close()
+				media_json = json.loads( json_file )
+			else:
+				try:
+					f = gcs.open( settings.bucket + 'media.json' )
+					json_file = f.read()
+					f.close()
+					media_json = json.loads( json_file )
+				except:
+					break
+			if media_json and 'galleries_of_images' in media_json[ 'media' ]:
+				galleries_of_images = media_json[ 'media' ][ 'galleries_of_images' ]
+				if gallery >= len( galleries_of_images ):
+					break
+				else:
+					gallery_of_images = galleries_of_images[ gallery ][ 'images' ]
+					images_count = len( gallery_of_images )
+					if image >= images_count or 'img_src' not in gallery_of_images[ image ] or not gallery_of_images[ image ][ 'img_src' ]:
+						break
+					else:
+						if image == 0:
+							previous_image = images_count - 1
+						else:
+							previous_image = image - 1
+						if image < images_count - 1:
+							next_image = image + 1
+						else:
+							next_image = 0
+						url_image_previous = enki.libutil.get_local_url( 'media', { 'g':str( gallery ), 'i':str( previous_image )})
+						url_image_next = enki.libutil.get_local_url( 'media', { 'g' : str( gallery ), 'i' : str( next_image )})
+						url_image_displayed = gallery_of_images[ image ][ 'a_href' ]
+						src_image_displayed = gallery_of_images[ image ][ 'img_src' ]
+						alt_image_displayed = gallery_of_images[ image ][ 'img_alt' ]
+						caption_image_displayed = gallery_of_images[ image ][ 'caption' ]
+						break
+			else:
+				break
+		# user intended to display an enlarged image but it couldn't be retrieved
+		if self.request.query_string and not src_image_displayed:
+			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.IMAGE_UNAVAILABLE())
 
 		self.render_tmpl( 'media.html', False,
 						  active_menu = 'media',
-						  g = gallery,
-						  i = image,
+						  url_image_previous = url_image_previous,
+						  url_image_next = url_image_next,
+						  url_image_displayed = url_image_displayed,
+						  src_image_displayed = src_image_displayed,
+						  alt_image_displayed = alt_image_displayed,
+						  caption_image_displayed = caption_image_displayed,
 						  media_html = media_html )
 
 	@classmethod
@@ -91,7 +147,7 @@ class HandlerMedia( enki.HandlerBase ):
 							if iter_image < num_images:
 								# cell contains an image
 								image = images[ iter_image ]
-								if image[ 'img_src' ]:
+								if 'img_src' in image and image[ 'img_src' ]:
 									url = enki.libutil.get_local_url( 'media', { 'g' : str( iter_gallery ), 'i' : str( iter_image )})
 									media_html += HTML_IMAGE.format( col_width = column_width, url=url, img_alt = image[ 'img_alt' ], img_src = image[ 'img_src' ], caption = image[ 'caption' ])
 								else:
@@ -147,5 +203,15 @@ class HandlerMedia( enki.HandlerBase ):
 
 		return media_html
 
+	@classmethod
+	def create_media_image_data( cls, media_json ):
+		media = media_json[ 'media' ]
+		galleries_images = {}
+		if 'galleries_of_images' in media:
+			iterator_gallery = 0
+			for gallery in media[ 'galleries_of_images' ]:
+				for image in gallery[ 'images' ]:
+					galleries_images[ iterator_gallery ].append( image[ 'a_href' ] )
+				iterator_gallery += 1
 
 routes_media = [ webapp2.Route( '/media', HandlerMedia, name = 'media' )]

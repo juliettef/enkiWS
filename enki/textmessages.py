@@ -151,3 +151,5 @@ def APP_EXCEED_ALLOWED(): return _( "You have exceeded the number of application
 def NEW_SECRET_GENERATED(): return _( "New secret generated." )
 def APP_DATA_DELETED(): return _( "Application data deleted." )
 
+# Media
+def IMAGE_UNAVAILABLE(): return _( "Image unavailable" )

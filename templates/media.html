@@ -17,21 +17,24 @@
 
             <h1>{{ _( "Media" ) }}</h1>
 
-			{% if gallery and image %}
+			{% if src_image_displayed %}
 				<div>
 					<p>
-						<a href="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg">
-						<img alt="Avoyd screenshot" src="https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree_thumb.jpg" width=100% class="img-rounded">
+						<a href="{{url_image_displayed}}">
+						<img alt="{{alt_image_displayed}}" src="{{src_image_displayed}}" width=100% class="img-rounded">
 						</a>
+					</p>
+					<p align=center>
+						{{caption_image_displayed}}
 					</p>
 				</div>
 				<div>
 					<p align=center>
-						<a href="" style="text-decoration: none">&nbsp;&nbsp;<i class="fa fa-caret-left fa-2x" aria-hidden="true" aria-label="previous"></i>&nbsp;&nbsp;</a>
+						<a href="{{url_image_previous}}" style="text-decoration: none">&nbsp;&nbsp;<i class="fa fa-caret-left fa-2x" aria-hidden="true" aria-label="previous"></i>&nbsp;&nbsp;</a>
 						&nbsp;&nbsp;&nbsp;&nbsp;
-						<a href="" style="text-decoration: none"><i class="fa fa-close fa-2x" aria-hidden="true" aria-label="close"></i></a>
+						<a href="{{ 'media' | local }}" style="text-decoration: none"><i class="fa fa-close fa-2x" aria-hidden="true" aria-label="close"></i></a>
 						&nbsp;&nbsp;&nbsp;&nbsp;
-						<a href="" style="text-decoration: none">&nbsp;&nbsp;<i class="fa fa-caret-right fa-2x" aria-hidden="true" aria-label="next"></i>&nbsp;&nbsp;</a>
+						<a href="{{url_image_next}}" style="text-decoration: none">&nbsp;&nbsp;<i class="fa fa-caret-right fa-2x" aria-hidden="true" aria-label="next"></i>&nbsp;&nbsp;</a>
 					</p>
 				</div>
 			{% endif  %}
