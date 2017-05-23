@@ -82,7 +82,7 @@ class HandlerMedia( enki.HandlerBase ):
 						url_image_previous = enki.libutil.get_local_url( 'media', { 'g':str( gallery ), 'i':str( previous_image )})
 						url_image_next = enki.libutil.get_local_url( 'media', { 'g' : str( gallery ), 'i' : str( next_image )})
 						url_image_displayed = gallery_of_images[ image ][ 'a_href' ]
-						src_image_displayed = gallery_of_images[ image ][ 'img_src' ]
+						src_image_displayed = gallery_of_images[ image ][ 'a_href' ]	# use the higher resolution image
 						alt_image_displayed = gallery_of_images[ image ][ 'img_alt' ]
 						caption_image_displayed = gallery_of_images[ image ][ 'caption' ]
 						break
