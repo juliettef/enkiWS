@@ -2,14 +2,14 @@
 	"media" :
 	{
 		"HEADER_IMAGES" : "Images",
-		"NUM_COLUMNS_IMAGES_DEFAULT" : "2",
+		"NUM_COLUMNS_IMAGES_DEFAULT" : "3",
 		"galleries_of_images" :
 		[
 			{
 				"num_columns_override" : "",
 				"name" : "default",
-				"title" : "Gallery of images title",
-				"description" : "Gallery of images description",
+				"title" : "Gallery of images",
+				"description" : "Default layout three columns, with image alt text and captions. Click on an image to enlarge and browse the gallery.",
 				"images" :
 				[
 					{ "a_href" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg",
@@ -31,27 +31,27 @@
 				]
 			},
 			{
-				"num_columns_override" : "3",
+				"num_columns_override" : "2",
 				"name" : "demo",
 				"title" : "Gallery showing layout override",
-				"description" : "Three columns instead of the default two, no captions.",
+				"description" : "Example override of default layout: display images in two columns instead of three. No alt text nor captions (empty values).",
 				"images" :
 				[
-					{ "a_href" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree.jpg",
-					"img_src" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Tree_thumb.jpg",
+					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-01-27_Black_Triangle_Specular_2.jpg",
+					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-01-27_Black_Triangle_Specular_2_thumb.jpg",
 					"img_alt" : "",
 					"caption" : "" },
-					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm.jpg",
-					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-23_Chasm_thumb.jpg",
+					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-08-23_patterns_tree_1.jpg",
+					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-08-23_patterns_tree_1_thumb.jpg",
+					"img_alt" : "",
+					"caption" : "" },
+					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-01-25_Black_Triangle_3.jpg",
+					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-01-25_Black_Triangle_3_thumb.jpg",
 					"img_alt": "",
 					"caption" : "" },
-					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun.jpg",
-					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-29_Bolids_Sun_thumb.jpg",
-					"img_alt": "",
-					"caption" : "" },
-					{ "a_href": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering.jpg",
-					"img_src": "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-11-19_Coloured_Mie_Scattering_thumb.jpg",
-					"img_alt": "",
+					{ "a_href" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-07-29_Sphere_brush_8.jpg",
+					"img_src" : "https://storage.googleapis.com/enkisoftware-images/Avoyd_2014-07-29_Sphere_brush_8_thumb.jpg",
+					"img_alt" : "",
 					"caption" : "" }
 				]
 			}
