@@ -88,8 +88,8 @@ class HandlerMedia( enki.HandlerBase ):
 						break
 			else:
 				break
-		# user intended to display an enlarged image but it couldn't be retrieved
-		if self.request.query_string and not src_image_displayed:
+		# user intended to display an enlarged image that is not available
+		if self.request.get( 'g' ) and self.request.get( 'i' ) and not src_image_displayed:
 			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.IMAGE_UNAVAILABLE())
 
 		self.render_tmpl( 'media.html', False,
