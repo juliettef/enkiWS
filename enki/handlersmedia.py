@@ -88,7 +88,7 @@ class HandlerMedia( enki.HandlerBase ):
 						break
 			else:
 				break
-		# user intended to display an enlarged image that is not available
+		# info on attempt to display an unavailable image
 		if self.request.get( 'g' ) and self.request.get( 'i' ) and not src_image_displayed:
 			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.IMAGE_UNAVAILABLE())
 
@@ -200,18 +200,7 @@ class HandlerMedia( enki.HandlerBase ):
 						# end row
 						media_html += HTML_ROW_END
 						iter_row += 1
-
 		return media_html
 
-	@classmethod
-	def create_media_image_data( cls, media_json ):
-		media = media_json[ 'media' ]
-		galleries_images = {}
-		if 'galleries_of_images' in media:
-			iterator_gallery = 0
-			for gallery in media[ 'galleries_of_images' ]:
-				for image in gallery[ 'images' ]:
-					galleries_images[ iterator_gallery ].append( image[ 'a_href' ] )
-				iterator_gallery += 1
 
 routes_media = [ webapp2.Route( '/media', HandlerMedia, name = 'media' )]
