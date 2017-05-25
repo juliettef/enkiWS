@@ -44,17 +44,16 @@ class EnkiModelThread( model.Model ):
 		forums_url = enki.libutil.get_local_url( 'forums' )
 		forum = EnkiModelForum.get_by_id( int( forum_selected ))
 		num_posts = 0
-		list = cls.fetch_by_forum( int( forum_selected ))
-		if list:
-			for i, item in enumerate(list):
-				num_posts += item.num_posts
-				url = enki.libutil.get_local_url('thread', { 'thread':str(item.key.id()) })
-				item.url = url
-				item.author_data = EnkiModelDisplayName.get_user_id_display_name_url(
-					EnkiModelDisplayName.get_by_user_id_current(item.author))
-				item.sticky = True if (item.sticky_order > 0) else False
-				list[ i ] = item
-		forum_data = forumData(forums_url, forum, num_posts, list, enki.libutil.markdown_escaped_nofollow, forum_selected)
+		threads = cls.fetch_by_forum( int( forum_selected ))
+		if threads:
+			for i, thread in enumerate( threads ):
+				num_posts += thread.num_posts
+				url = enki.libutil.get_local_url( 'thread', { 'thread' : str( thread.key.id())})
+				thread.url = url
+				thread.author_data = EnkiModelDisplayName.get_user_id_display_name_url( EnkiModelDisplayName.get_by_user_id_current( thread.author ))
+				thread.sticky = True if ( thread.sticky_order > 0 ) else False
+				threads[ i ] = thread
+		forum_data = forumData( forums_url, forum, num_posts, threads, enki.libutil.markdown_escaped_nofollow, forum_selected )
 		return forum_data
 
 	@classmethod

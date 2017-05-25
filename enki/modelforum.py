@@ -58,26 +58,26 @@ class EnkiModelForum( model.Model ):
 	@classmethod
 	def get_forums_data( cls ):
 		forums_data = []
-		all_forums = cls.fetch()
-		if all_forums:
+		forums_list = cls.fetch()
+		if forums_list:
 			# get the groups from the list (ordered)
-			groups_temp = []
-			for item in all_forums:
-				if item.group not in groups_temp:
-					groups_temp.append( item.group )
+			groups = []
+			for forum in forums_list:
+				if forum.group not in groups:
+					groups.append( forum.group )
 			# get the forums for each group (ordered)
-			for group_name in groups_temp:
+			for group in groups:
 				group_num_threads = 0
 				group_num_posts = 0
 				forums = []
-				for item in all_forums:
-					if item.group == group_name:
-						group_num_threads += item.num_threads
-						group_num_posts += item.num_posts
-						url = enki.libutil.get_local_url( 'forum', { 'forum':str( item.key.id())})
-						forums.append({ 'title' : item.title, 'description' : item.description,
-										'num_threads' : item.num_threads, 'num_posts' : item.num_posts, 'url' : url })
-				forums_data.append({ 'name' : group_name, 'num_threads' : group_num_threads,
+				for forum in forums_list:
+					if forum.group == group:
+						group_num_threads += forum.num_threads
+						group_num_posts += forum.num_posts
+						url = enki.libutil.get_local_url( 'forum', { 'forum':str( forum.key.id())})
+						forums.append({ 'title' : forum.title, 'description' : forum.description, 'time_updated' : forum.time_updated,
+										'num_threads' : forum.num_threads, 'num_posts' : forum.num_posts, 'url' : url })
+				forums_data.append({ 'name' : group, 'num_threads' : group_num_threads,
 									 'num_posts' : group_num_posts, 'forums' : forums })
 		return forums_data
 

@@ -19,7 +19,8 @@
 
             <div class="row">
                 <div class="col-xs-2"><p><em>{{ _( "Title" ) }}</em></p></div>
-                <div class="col-xs-8"><p><em>{{ _( "Description" ) }}</em></p></div>
+                <div class="col-xs-6"><p><em>{{ _( "Description" ) }}</em></p></div>
+				<div class="col-xs-2"><p><em>{{ _( "Last activity" ) }}</em></p></div>
                 <div class="col-xs-1"><p><em>{{ _( "Threads" ) }}</em></p></div>
                 <div class="col-xs-1"><p><em>{{ _( "Posts" ) }}</em></p></div>
             </div>
@@ -36,7 +37,8 @@
 						<li class="list-group-item">
 							<div class="row">
 								<div class="col-xs-2"><a href="{{ forum.url }}">{{ forum.title }}</a></div>
-								<div class="col-xs-8">{{ forum.description }}</div>
+								<div class="col-xs-6">{{ forum.description }}</div>
+								<div class="col-xs-2">{{ forum.time_updated.strftime( "%a, %d %b %Y %H:%M:%S" )}} UTC</div>
 								<div class="col-xs-1"><span class="badge">{{ forum.num_threads }}</span></div>
 								<div class="col-xs-1"><span class="badge">{{ forum.num_posts }}</span></div>
 							</div>
