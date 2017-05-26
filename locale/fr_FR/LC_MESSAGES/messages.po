@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-08 19:08+0100\n"
+"POT-Creation-Date: 2017-05-26 11:34+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -552,6 +552,10 @@ msgstr "Nouveau secret généré."
 msgid "Application data deleted."
 msgstr "Données supprimées."
 
+#: enki/textmessages.py:155
+msgid "Image unavailable"
+msgstr "Image non disponible"
+
 #: templates/accountconnect.html:7 templates/accountconnect.html:17
 msgid "Connected accounts"
 msgstr "Comptes attachés"
@@ -704,7 +708,7 @@ msgstr "Envoyez-moi un message de courrier électronique pour supprimer mon comp
 msgid "Warning: deleting your account cannot be undone."
 msgstr "Attention: supprimer votre compte est irréversible."
 
-#: templates/accountdelete.html:78 templates/forum.html:117
+#: templates/accountdelete.html:78 templates/forum.html:119
 #: templates/loginaddconfirm.html:30 templates/post.html:59
 #: templates/post.html:101 templates/reauthenticate.html:61
 #: templates/registeroauthconfirm.html:51 templates/thread.html:105
@@ -865,7 +869,7 @@ msgid_plural "Past display names:"
 msgstr[0] "Ancien nom d'affichage :"
 msgstr[1] "Anciens noms d'affichage :"
 
-#: templates/displayname.html:32 templates/forum.html:143
+#: templates/displayname.html:32 templates/forum.html:145
 #: templates/post.html:125 templates/profile.html:38 templates/thread.html:129
 msgid "Set display name"
 msgstr "Créer mon nom d'affichage"
@@ -911,11 +915,11 @@ msgstr "Nouvelle adresse de courrier électronique"
 msgid "Forum"
 msgstr "Forum"
 
-#: templates/forum.html:27 templates/forums.html:23
+#: templates/forum.html:27 templates/forums.html:24
 msgid "Threads"
 msgstr "Sujets"
 
-#: templates/forum.html:27 templates/forums.html:24
+#: templates/forum.html:27 templates/forums.html:25
 #: templates/incuserposts.html:3 templates/thread.html:29
 msgid "Posts"
 msgstr "Messages"
@@ -932,121 +936,125 @@ msgstr "Publié par"
 msgid "Date"
 msgstr "Date"
 
-#: templates/forum.html:36
+#: templates/forum.html:36 templates/forums.html:23
+msgid "Last activity"
+msgstr "Dernière activité"
+
+#: templates/forum.html:37
 msgid "# posts"
 msgstr "# messages"
 
-#: templates/forum.html:55 templates/forum.html:64
+#: templates/forum.html:57 templates/forum.html:66
 msgid "Create a new thread"
 msgstr "Créer un nouveau sujet"
 
-#: templates/forum.html:66 templates/forums.html:21
+#: templates/forum.html:68 templates/forums.html:21
 msgid "Title"
 msgstr "Titre"
 
-#: templates/forum.html:68
+#: templates/forum.html:70
 msgid "Your thread title"
 msgstr "Intitulé de votre sujet"
 
-#: templates/forum.html:70
+#: templates/forum.html:72
 #, python-format
 msgid "Maximum thread title length: %(length)s character."
 msgid_plural "Maximum thread title length: %(length)s characters."
 msgstr[0] "Votre sujet peut contenir jusqu'à %(length)s caractère."
 msgstr[1] "Votre sujet peut contenir jusqu'à %(length)s caractères."
 
-#: templates/forum.html:75 templates/forum.html:99 templates/post.html:83
+#: templates/forum.html:77 templates/forum.html:101 templates/post.html:83
 #: templates/thread.html:87
 msgid "Sticky"
 msgstr "Coller"
 
-#: templates/forum.html:78 templates/forum.html:102 templates/post.html:86
+#: templates/forum.html:80 templates/forum.html:104 templates/post.html:86
 #: templates/thread.html:90
 msgid "0 - not sticky"
 msgstr "0 - décollé"
 
-#: templates/forum.html:79 templates/forum.html:103 templates/post.html:87
+#: templates/forum.html:81 templates/forum.html:105 templates/post.html:87
 #: templates/thread.html:91
 msgid "1 - sticky"
 msgstr "1 - collé"
 
-#: templates/forum.html:80 templates/forum.html:104 templates/post.html:88
+#: templates/forum.html:82 templates/forum.html:106 templates/post.html:88
 #: templates/thread.html:92
 msgid "2 - more sticky"
 msgstr "2 - plus collé"
 
-#: templates/forum.html:81 templates/forum.html:105 templates/post.html:89
+#: templates/forum.html:83 templates/forum.html:107 templates/post.html:89
 #: templates/thread.html:93
 msgid "3 - top sticky"
 msgstr "3 - le plus collé"
 
-#: templates/forum.html:85
+#: templates/forum.html:87
 msgid "To make a thread sticky, pick a number greater than 0. The larger the number, the higher up the list the stickied thread is."
 msgstr "Pour coller un sujet, choisissez un chiffre supérieur à 0. Plus le chiffre est élevé, plus le sujet a priorité. "
 
-#: templates/forum.html:90 templates/incuserposts.html:12 templates/post.html:8
+#: templates/forum.html:92 templates/incuserposts.html:12 templates/post.html:8
 #: templates/post.html:10 templates/post.html:26 templates/post.html:29
 #: templates/post.html:74 templates/thread.html:78
 msgid "Post"
 msgstr "Message"
 
-#: templates/forum.html:92 templates/post.html:76 templates/thread.html:80
+#: templates/forum.html:94 templates/post.html:76 templates/thread.html:80
 msgid "Your text"
 msgstr "Texte de votre message"
 
-#: templates/forum.html:94 templates/post.html:78 templates/thread.html:82
+#: templates/forum.html:96 templates/post.html:78 templates/thread.html:82
 #, python-format
 msgid "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting."
 msgstr "Utilisez <a href='%(url)s' target='_blank'>markdown</a> pour formater votre message."
 
-#: templates/forum.html:94 templates/post.html:78 templates/thread.html:82
+#: templates/forum.html:96 templates/post.html:78 templates/thread.html:82
 #, python-format
 msgid "Maximum post length: %(length)s character."
 msgid_plural "Maximum post length: %(length)s characters."
 msgstr[0] "Votre message peut contenir jusqu'à %(length)s caractère."
 msgstr[1] "Votre message peut contenir jusqu'à %(length)s caractères."
 
-#: templates/forum.html:109 templates/post.html:93 templates/thread.html:97
+#: templates/forum.html:111 templates/post.html:93 templates/thread.html:97
 msgid "To make a post sticky, pick a number greater than 0. The larger the number, the higher up the list the stickied post is."
 msgstr "Pour coller un message, choisissez un chiffre supérieur à 0. Plus le chiffre est élevé, plus le message a priorité."
 
-#: templates/forum.html:115 templates/post.html:99 templates/thread.html:103
+#: templates/forum.html:117 templates/post.html:99 templates/thread.html:103
 msgid "Preview"
 msgstr "Aperçu"
 
-#: templates/forum.html:116
+#: templates/forum.html:118
 msgid "Submit new thread"
 msgstr "Publier le nouveau sujet"
 
-#: templates/forum.html:125 templates/post.html:109 templates/thread.html:113
+#: templates/forum.html:127 templates/post.html:109 templates/thread.html:113
 msgid "PREVIEW"
 msgstr "APERÇU"
 
-#: templates/forum.html:127 templates/post.html:8 templates/post.html:25
+#: templates/forum.html:129 templates/post.html:8 templates/post.html:25
 #: templates/thread.html:8 templates/thread.html:10 templates/thread.html:25
 #: templates/thread.html:28
 msgid "Thread"
 msgstr "Sujet"
 
-#: templates/forum.html:130 templates/incuserposts.html:17
+#: templates/forum.html:132 templates/incuserposts.html:17
 #: templates/post.html:36 templates/post.html:113 templates/thread.html:38
 #: templates/thread.html:117
 msgid "permalink"
 msgstr "permalien"
 
-#: templates/forum.html:130 templates/post.html:113 templates/thread.html:117
+#: templates/forum.html:132 templates/post.html:113 templates/thread.html:117
 msgid "date and time submitted UTC"
 msgstr "Date et heure UTC de publication"
 
-#: templates/forum.html:142
+#: templates/forum.html:144
 msgid "Please set up your display name to start a new thread."
 msgstr "Veuillez créer votre nom d'affichage pour ajouter un nouveau sujet."
 
-#: templates/forum.html:149
+#: templates/forum.html:151
 msgid "Please log in or create an account to start a new thread."
 msgstr "Veuillez vous connecter ou créer un compte pour ajouter un nouveau sujet."
 
-#: templates/forum.html:150 templates/incnavbartop.html:10
+#: templates/forum.html:152 templates/incnavbartop.html:10
 #: templates/login.html:7 templates/login.html:61
 #: templates/passwordrecover.html:40 templates/post.html:133
 #: templates/register.html:57 templates/registeroauthwithexistingemail.html:68
@@ -1054,14 +1062,14 @@ msgstr "Veuillez vous connecter ou créer un compte pour ajouter un nouveau suje
 msgid "Log in"
 msgstr "Accéder à mon compte"
 
-#: templates/forum.html:151 templates/incnavbartop.html:9
+#: templates/forum.html:153 templates/incnavbartop.html:9
 #: templates/login.html:66 templates/passwordrecover.html:41
 #: templates/post.html:134 templates/register.html:7 templates/register.html:52
 #: templates/thread.html:137
 msgid "Sign up"
 msgstr "Créer mon compte"
 
-#: templates/forum.html:158 templates/post.html:142 templates/thread.html:144
+#: templates/forum.html:160 templates/post.html:142 templates/thread.html:144
 msgid "Go back to Forums"
 msgstr "Retourner aux forums"
 
@@ -1172,15 +1180,15 @@ msgstr "Déconnexion"
 msgid "Languages"
 msgstr "Langues"
 
-#: templates/incnavbartop.html:61
+#: templates/incnavbartop.html:66
 msgid "Stay logged in"
 msgstr "Demeurer connecté.e."
 
-#: templates/incnavbartop.html:69 templates/incnavbartop.html:71
+#: templates/incnavbartop.html:74 templates/incnavbartop.html:76
 msgid "Logged in as"
 msgstr "Connecté.e"
 
-#: templates/incnavbartop.html:71
+#: templates/incnavbartop.html:76
 msgid "Please set up your display name"
 msgstr "Veuillez créer votre nom d'affichage."
 
@@ -1304,6 +1312,14 @@ msgstr "Votre identifiant chez %(providername)s :"
 #: templates/loginaddconfirm.html:29
 msgid "Yes, add login method"
 msgstr "Oui, ajouter la nouvelle méthode de connexion"
+
+#: templates/media.html:6 templates/media.html:18
+msgid "Media"
+msgstr "Médias"
+
+#: templates/media.html:7
+msgid "Media - images and videos"
+msgstr "Médias - images et vidéos"
 
 #: templates/messages.html:16 templates/profile.html:102
 msgid "Messages"
