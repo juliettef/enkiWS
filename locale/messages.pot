@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-26 11:34+0100\n"
+"POT-Creation-Date: 2017-05-28 13:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -914,13 +914,13 @@ msgstr ""
 msgid "Forum"
 msgstr ""
 
-#: templates/forum.html:27 templates/forums.html:24
-msgid "Threads"
-msgstr ""
-
-#: templates/forum.html:27 templates/forums.html:25
+#: templates/forum.html:27 templates/forum.html:37 templates/forums.html:47
 #: templates/incuserposts.html:3 templates/thread.html:29
 msgid "Posts"
+msgstr ""
+
+#: templates/forum.html:27 templates/forums.html:46
+msgid "Threads"
 msgstr ""
 
 #: templates/forum.html:33
@@ -935,19 +935,15 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: templates/forum.html:36 templates/forums.html:23
+#: templates/forum.html:36 templates/forums.html:45
 msgid "Last activity"
-msgstr ""
-
-#: templates/forum.html:37
-msgid "# posts"
 msgstr ""
 
 #: templates/forum.html:57 templates/forum.html:66
 msgid "Create a new thread"
 msgstr ""
 
-#: templates/forum.html:68 templates/forums.html:21
+#: templates/forum.html:68 templates/forums.html:43
 msgid "Title"
 msgstr ""
 
@@ -1073,10 +1069,10 @@ msgid "Go back to Forums"
 msgstr ""
 
 #: templates/forums.html:18
-msgid "total thread views"
+msgid "Views"
 msgstr ""
 
-#: templates/forums.html:22
+#: templates/forums.html:44
 msgid "Description"
 msgstr ""
 

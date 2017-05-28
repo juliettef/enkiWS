@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-26 11:34+0100\n"
+"POT-Creation-Date: 2017-05-28 13:30+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -915,14 +915,14 @@ msgstr "Nouvelle adresse de courrier électronique"
 msgid "Forum"
 msgstr "Forum"
 
-#: templates/forum.html:27 templates/forums.html:24
-msgid "Threads"
-msgstr "Sujets"
-
-#: templates/forum.html:27 templates/forums.html:25
+#: templates/forum.html:27 templates/forum.html:37 templates/forums.html:47
 #: templates/incuserposts.html:3 templates/thread.html:29
 msgid "Posts"
 msgstr "Messages"
+
+#: templates/forum.html:27 templates/forums.html:46
+msgid "Threads"
+msgstr "Sujets"
 
 #: templates/forum.html:33
 msgid "Thread title"
@@ -936,19 +936,15 @@ msgstr "Publié par"
 msgid "Date"
 msgstr "Date"
 
-#: templates/forum.html:36 templates/forums.html:23
+#: templates/forum.html:36 templates/forums.html:45
 msgid "Last activity"
 msgstr "Dernière activité"
-
-#: templates/forum.html:37
-msgid "# posts"
-msgstr "# messages"
 
 #: templates/forum.html:57 templates/forum.html:66
 msgid "Create a new thread"
 msgstr "Créer un nouveau sujet"
 
-#: templates/forum.html:68 templates/forums.html:21
+#: templates/forum.html:68 templates/forums.html:43
 msgid "Title"
 msgstr "Titre"
 
@@ -1074,10 +1070,10 @@ msgid "Go back to Forums"
 msgstr "Retourner aux forums"
 
 #: templates/forums.html:18
-msgid "total thread views"
-msgstr "visites"
+msgid "Views"
+msgstr "Visites"
 
-#: templates/forums.html:22
+#: templates/forums.html:44
 msgid "Description"
 msgstr "Description"
 

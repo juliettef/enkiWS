@@ -15,14 +15,14 @@
 
             <h1>{{ _( "Forums" ) }}</h1>
 
-            <p><span class="badge">{{ thread_view_count }}</span> {{ _( "total thread views" ) }}</p>
+			<p><span class="badge">{{ thread_view_count }}</span> <b>{{ _( "Views" ) }}</b></palign>
 
-            <div class="row">
-                <div class="col-xs-2"><p><em>{{ _( "Title" ) }}</em></p></div>
-                <div class="col-xs-6"><p><em>{{ _( "Description" ) }}</em></p></div>
-				<div class="col-xs-2"><p><em>{{ _( "Last activity" ) }}</em></p></div>
-                <div class="col-xs-1"><p><em>{{ _( "Threads" ) }}</em></p></div>
-                <div class="col-xs-1"><p><em>{{ _( "Posts" ) }}</em></p></div>
+			<div class="row">
+                <div class="col-xs-2"><p><b>{{ _( "Title" ) }}</b></p></div>
+                <div class="col-xs-6"><p><b>{{ _( "Description" ) }}</b></p></div>
+				<div class="col-xs-2"><p><b>{{ _( "Last activity" ) }}</b></p></div>
+                <div class="col-xs-1"><p><b>{{ _( "Threads" ) }}</b></p></div>
+                <div class="col-xs-1"><p><b>{{ _( "Posts" ) }}</b></p></div>
             </div>
 
 			{% for group in forums_data %}
