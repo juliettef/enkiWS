@@ -71,7 +71,7 @@
 				"description" : "Gallery of videos description",
 				"videos" :
 				[
-					{ "iframe_src" : "https://www.youtube.com/embed/videoseries?list=PLOV2v_nVCDf6dVdn8F4Lq45QfRcIozU3M" },
+					{ "iframe_src" : "https://www.youtube.com/embed?listType=playlist&list=PLOV2v_nVCDf6dVdn8F4Lq45QfRcIozU3M" },
 					{ "iframe_src" : "https://www.youtube.com/embed/tvWGWHuLGbE" }
 				]
 			}
