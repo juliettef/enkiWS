@@ -41,7 +41,7 @@ class HandlerApps( enki.HandlerBaseReauthenticate ):
 			app = EnkiModelApp.get_by_id( int( app_secret_set ))
 			app.secret = secret
 			app.put()
-			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.NEW_SECRET_GENERATED())
+			self.add_infomessage( MSG.SUCCESS(), MSG.NEW_SECRET_GENERATED())
 			app_success = str( app.key.id())
 			data = EnkiModelApp.apps_list( self.user_id )
 		else:
@@ -59,7 +59,7 @@ class HandlerApps( enki.HandlerBaseReauthenticate ):
 				app = EnkiModelApp( user_id = self.user_id, name = app_name, secret = secret )
 				app.put()
 				data.append([ app_name, str( app.key.id()), secret, app.time_created ])
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.APP_CREATED())
+				self.add_infomessage( MSG.SUCCESS(), MSG.APP_CREATED())
 				app_success =  str( app.key.id())
 		self.render_tmpl( 'apps.html',
 						  active_menu = 'profile',
@@ -83,7 +83,7 @@ class HandlerAppDataStores( enki.HandlerBaseReauthenticate ):
 		app_id = params.get( 'delete' )
 		if app_id:
 			EnkiModelRestAPIDataStore.delete_user_app_data( self.user_id , app_id )
-			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.APP_DATA_DELETED())
+			self.add_infomessage( MSG.SUCCESS(), MSG.APP_DATA_DELETED())
 		data_list = EnkiModelApp.user_data_list( self.user_id )
 		self.render_tmpl( 'appdatastores.html',
 		                  active_menu = 'profile',
@@ -99,7 +99,7 @@ class HandlerPageRestAPI( enki.HandlerBase ):
 			self.check_CSRF()
 			user_id = self.enki_user.key.id()
 			token = EnkiModelRestAPIConnectToken.cleanup_and_get_new_connection_token( user_id )
-			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.GAME_CONNECTION_TOKEN( token, EnkiModelRestAPIConnectToken.MAX_AGE ))
+			self.add_infomessage( MSG.SUCCESS(), MSG.GAME_CONNECTION_TOKEN( token, EnkiModelRestAPIConnectToken.MAX_AGE ))
 			self.redirect_to_relevant_page()
 
 

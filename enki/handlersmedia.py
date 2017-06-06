@@ -90,7 +90,7 @@ class HandlerMedia( enki.HandlerBase ):
 				break
 		# info on attempt to display an unavailable image
 		if self.request.get( 'g' ) and self.request.get( 'i' ) and not src_image_displayed:
-			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.IMAGE_UNAVAILABLE())
+			self.add_infomessage( MSG.INFORMATION(), MSG.IMAGE_UNAVAILABLE())
 
 		self.render_tmpl( 'media.html', False,
 						  active_menu = 'media',

@@ -13,7 +13,7 @@ class HandlerInfo( enki.HandlerBase ):
 		if message and re.search('[a-z]{2}', message):
 			if message == 'dl':
 				# enkiDL error
-				self.add_infomessage( 'warning', MSG.WARNING(), MSG.DOWNLOAD_ERROR())
+				self.add_infomessage( MSG.WARNING(), MSG.DOWNLOAD_ERROR())
 		self.render_tmpl( 'info.html' )
 
 	def post( self ):

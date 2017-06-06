@@ -86,7 +86,7 @@ class HandlerForum( enki.HandlerBase ):
 							if EnkiModelTokenVerify.check_and_delete_preventmultipost_token( pmtoken, 'preventmultipost' ):
 								result = EnkiModelPost.add_thread_and_post( user_id, forum, thread_title, thread_sticky_order, post_body, post_sticky_order )
 								if result == enki.libutil.ENKILIB_OK:
-									self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.THREAD_PUBLISHED())
+									self.add_infomessage( MSG.SUCCESS( ), MSG.THREAD_PUBLISHED())
 									url = enki.libutil.get_local_url( 'forum', { 'forum':forum })
 									self.send_email_admin( 'FTPA', url )
 									self.redirect( url )
@@ -181,7 +181,7 @@ class HandlerThread( enki.HandlerBase ):
 							if EnkiModelTokenVerify.check_and_delete_preventmultipost_token( pmtoken, 'preventmultipost' ):
 								result = EnkiModelPost.add_post( user, thread, post_body, post_sticky_order )
 								if result == enki.libutil.ENKILIB_OK:
-									self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_PUBLISHED())
+									self.add_infomessage( MSG.SUCCESS( ), MSG.POST_PUBLISHED())
 									post_requested = EnkiModelPost.get_first_post_on_page( EnkiModelPost.get_page( EnkiModelThread.get_by_id( int( thread )), EnkiModelPost.POST_LAST, int( post_count )), int( post_count ))
 									url = enki.libutil.get_local_url( 'thread', { 'thread': thread, 'start': str( post_requested ), 'count': str( post_count )})
 									self.send_email_admin( 'FPA', url )
@@ -259,7 +259,7 @@ class HandlerPost( enki.HandlerBase ):
 					self.check_CSRF()
 					result = EnkiModelPost.delete_post( user, post )
 					if result[ 0 ] == enki.libutil.ENKILIB_OK:
-						self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_DELETED())
+						self.add_infomessage( MSG.SUCCESS( ), MSG.POST_DELETED())
 						url = enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})
 						self.send_email_admin( 'FPD', url )
 						self.redirect( url ) # redirect to parent thread
@@ -284,7 +284,7 @@ class HandlerPost( enki.HandlerBase ):
 						self.check_CSRF()
 						result = EnkiModelPost.edit_post( user, post, post_body, post_sticky_order )
 						if result[ 0 ] == enki.libutil.ENKILIB_OK:
-							self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.POST_MODIFIED())
+							self.add_infomessage( MSG.SUCCESS( ), MSG.POST_MODIFIED())
 							url = enki.libutil.get_local_url( 'thread', { 'thread' : result[ 1 ]})
 							self.send_email_admin( 'FPE', url )
 							self.redirect( url ) # redirect to parent thread

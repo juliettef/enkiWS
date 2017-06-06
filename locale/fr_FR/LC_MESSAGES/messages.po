@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-28 13:30+0100\n"
+"POT-Creation-Date: 2017-06-06 16:36+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -18,541 +18,545 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
 
-#: enki/textmessages.py:7
+#: enki/textmessages.py:8
 msgid "Success"
 msgstr "Succès"
 
-#: enki/textmessages.py:8 templates/info.html:6
+#: enki/textmessages.py:9 templates/info.html:6
 msgid "Information"
 msgstr "Information"
 
-#: enki/textmessages.py:9
+#: enki/textmessages.py:10
 msgid "Warning"
 msgstr "Attention"
 
 #: enki/textmessages.py:11
+msgid "Danger"
+msgstr "Danger"
+
+#: enki/textmessages.py:13
 msgid "You are logged out."
 msgstr "Vous êtes déconnecté.e."
 
-#: enki/textmessages.py:12
+#: enki/textmessages.py:14
 msgid "Please log in to access the page you requested."
 msgstr "Veuillez vous connecter afin d'accéder à la page demandée."
 
-#: enki/textmessages.py:13
+#: enki/textmessages.py:15
 msgid "You are logged in."
 msgstr "Vous êtes connecté.e."
 
-#: enki/textmessages.py:14
+#: enki/textmessages.py:16
 msgid "Please reauthenticate yourself to continue."
 msgstr "Veuillez renouveler votre authentification."
 
-#: enki/textmessages.py:15
+#: enki/textmessages.py:17
 msgid "You are reauthenticated."
 msgstr "Vous avez renouvelé votre authentification."
 
-#: enki/textmessages.py:16
+#: enki/textmessages.py:18
 msgid "Session disconnected."
 msgstr "Session déconnectée."
 
-#: enki/textmessages.py:17
+#: enki/textmessages.py:19
 msgid "Application disconnected."
 msgstr "Application déconnectée."
 
-#: enki/textmessages.py:19
+#: enki/textmessages.py:21
 msgid "Sign up aborted."
 msgstr "Création de compte interrompue."
 
-#: enki/textmessages.py:20
+#: enki/textmessages.py:22
 #, python-format
 msgid "If email address %(email)s is available, a registration email was sent to it. Please check your inbox and follow the instructions in the email to <b>confirm your registration</b>."
 msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de finaliser la création de votre compte utilisateur.trice."
 
-#: enki/textmessages.py:21
+#: enki/textmessages.py:23
 #, python-format
 msgid "Please provide an email address different from <b>%(email)s</b>"
 msgstr "Veuillez fournir une adresse de courrier électronique différente de <b>%(email)s</b>"
 
-#: enki/textmessages.py:23
+#: enki/textmessages.py:25
 msgid "Your account is created."
 msgstr "Votre compte est créé."
 
-#: enki/textmessages.py:25
+#: enki/textmessages.py:27
 msgid "Login failed, please try again."
 msgstr "Votre authentification a échoué. Veuillez renouveler votre tentative."
 
-#: enki/textmessages.py:26
+#: enki/textmessages.py:28
 #, python-format
 msgid "Login with %(provider)s failed, please try again."
 msgstr "Votre authentification par l'intermédiaire de %(provider)s a échoué. Veuillez renouveler votre tentative."
 
-#: enki/textmessages.py:27
+#: enki/textmessages.py:29
 #, python-format
 msgid "If email address %(email)s is available, an email was sent to it. Please check your inbox and follow the instructions in the email to <b>add it to your account</b>."
 msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin d'ajouter l'adresse à votre compte."
 
-#: enki/textmessages.py:29
+#: enki/textmessages.py:31
 msgid "Your account is deleted."
 msgstr "Votre compte est supprimé."
 
-#: enki/textmessages.py:30
+#: enki/textmessages.py:32
 #, python-format
 msgid "An email was sent to your email address %(email)s. Please check your inbox and follow the instructions in the email to delete your account."
 msgstr "Un courrier électronique a été envoyé à l'adresse %(email)s. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de supprimer votre compte."
 
-#: enki/textmessages.py:31
+#: enki/textmessages.py:33
 msgid "Your account and forum posts are deleted"
 msgstr "Votre compte et les messages que vous avez publiés dans le forum sont supprimés."
 
-#: enki/textmessages.py:32
+#: enki/textmessages.py:34
 #, python-format
 msgid "An email was sent to your email address %(email)s. Please check your inbox and follow the instructions in the email to delete your account and forum posts."
 msgstr "Un courrier électronique a été envoyé à l'adresse %(email)s. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de supprimer votre compte ainsi que les messages que vous avez publiés dans le forum."
 
-#: enki/textmessages.py:34
+#: enki/textmessages.py:36
 msgid "Your email address is set."
 msgstr "Votre adresse de courrier électronique est enregistrée."
 
-#: enki/textmessages.py:35
+#: enki/textmessages.py:37
 msgid "Your email is removed."
 msgstr "Votre adresse de courrier électronique est supprimée de notre système."
 
-#: enki/textmessages.py:36
+#: enki/textmessages.py:38
 msgid "Your email address is restored."
 msgstr "Votre adresse de courrier électronique est rétablie."
 
-#: enki/textmessages.py:37
+#: enki/textmessages.py:39
 msgid "An email was sent to your previous address in case you want to <b>undo</b> the change."
 msgstr "Un courrier électronique a été envoyé à votre adresse précédente. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de rétablir l'adresse."
 
-#: enki/textmessages.py:38
+#: enki/textmessages.py:40
 #, python-format
 msgid "If email address %(email)s is available, an email was sent to it. Please check your inbox and follow the instructions in the message to <b>confirm</b> the change."
 msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de <b>confirmer</b> le changement d'adresse."
 
-#: enki/textmessages.py:39
+#: enki/textmessages.py:41
 msgid "An email was sent to your current address in case you want to <b>undo</b> the change."
 msgstr "Un courrier électronique a été envoyé à votre adresse actuelle. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin d'<b>annuler</b> le changement d'adresse."
 
-#: enki/textmessages.py:41
+#: enki/textmessages.py:43
 #, python-format
 msgid "Authentication method %(provider)s is added."
 msgstr "La méthode d'authentification par l'intermédiaire de %(provider)s est ajoutée à votre compte."
 
-#: enki/textmessages.py:42
+#: enki/textmessages.py:44
 #, python-format
 msgid "Authentication method %(provider)s cannot be added to your account. It is already registered to another user."
 msgstr "La méthode d'authentification par l'intermédiaire de %(provider)s ne peut pas être ajoutée à votre compte. Elle est déjà attribuée à un.e autre utilisateur.trice."
 
-#: enki/textmessages.py:43
+#: enki/textmessages.py:45
 #, python-format
 msgid "Authentication method %(provider)s is removed."
 msgstr "La méthode d'authentification par l'intermédiaire de %(provider)s est supprimée de votre compte."
 
-#: enki/textmessages.py:45
+#: enki/textmessages.py:47
 msgid "Your password is updated."
 msgstr "Votre mot de passe est modifié."
 
-#: enki/textmessages.py:46
+#: enki/textmessages.py:48
 msgid "Your password is set."
 msgstr "Votre mot de passe est enregistré."
 
-#: enki/textmessages.py:47
+#: enki/textmessages.py:49
 #, python-format
 msgid "If email address %(email)s matches an existing account, an email was sent to it. Please check your inbox and follow the instructions in the email to reset you password.<br> If you don't receive an email, it means you don't have an account regitered with that email address."
 msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de réinitialiser votre mot de passe.<br> Si vous n'avez pas reçu de message, cela signifie que vous n'avez pas de compte correspondant à cette adresse de courrier électronique."
 
-#: enki/textmessages.py:49
+#: enki/textmessages.py:51
 msgid "Please set your display name to continue."
 msgstr "Veuillez créer votre nom d'affichage."
 
-#: enki/textmessages.py:50
+#: enki/textmessages.py:52
 msgid "Your display name is set."
 msgstr "Votre nom d'affichage est enregistré."
 
-#: enki/textmessages.py:52
+#: enki/textmessages.py:54
 msgid "Your thread is published."
 msgstr "Votre sujet est publié dans le forum."
 
-#: enki/textmessages.py:53
+#: enki/textmessages.py:55
 msgid "Your post is published."
 msgstr "Votre message est publié dans le forum."
 
-#: enki/textmessages.py:54
+#: enki/textmessages.py:56
 msgid "Your post is modified."
 msgstr "Votre message de forum est modifié."
 
-#: enki/textmessages.py:55
+#: enki/textmessages.py:57
 msgid "Your post is deleted."
 msgstr "Votre message de forum est supprimé."
 
-#: enki/textmessages.py:58
+#: enki/textmessages.py:60
 msgid "Wrong email or password."
 msgstr "Adresse électronique ou mot de passe erroné.e."
 
-#: enki/textmessages.py:59
+#: enki/textmessages.py:61
 msgid "Invalid password."
 msgstr "Adresse électronique ou mot de passe erroné.e."
 
-#: enki/textmessages.py:60
+#: enki/textmessages.py:62
 #, python-format
 msgid "Timeout. Please wait %(timeout)s before you try again."
 msgstr "Délai de temporisation. Merci d'attendre %(timeout)s avant de recommencer."
 
-#: enki/textmessages.py:61
+#: enki/textmessages.py:63
 msgid "Invalid email address format."
 msgstr "Le format de votre adresse de courrier électronique est incorrect."
 
-#: enki/textmessages.py:62
+#: enki/textmessages.py:64
 msgid "An email address is needed."
 msgstr "Une adresse de courrier électronique est requise."
 
-#: enki/textmessages.py:63
+#: enki/textmessages.py:65
 msgid "A password is needed."
 msgstr "Un mot de passe est requis."
 
-#: enki/textmessages.py:64
+#: enki/textmessages.py:66
 msgid "Please enter your new password."
 msgstr "Veuiller entrer votre nouveau mot de passe"
 
-#: enki/textmessages.py:65
+#: enki/textmessages.py:67
 msgid "User creation failed, please retry."
 msgstr "La création de votre compte utilisateur.trice a échoué. Veuillez renouveler votre tentative."
 
-#: enki/textmessages.py:66
+#: enki/textmessages.py:68
 #, python-format
 msgid "Your password is %(length)s character long: it is too short."
 msgid_plural "Your password is %(length)s characters long: it is too short."
 msgstr[0] "Votre mot de passe contient %(length)s caractère : il est trop court."
 msgstr[1] "Votre mot de passe contient %(length)s caractères : il est trop court."
 
-#: enki/textmessages.py:67
+#: enki/textmessages.py:69
 #, python-format
 msgid "Please ensure your password is at least %(length)s character long."
 msgid_plural "Please ensure your password is at least %(length)s characters long."
 msgstr[0] "Veuillez vous assurer que la longueur de votre mot de passe excède %(length)s caractère."
 msgstr[1] "Veuillez vous assurer que la longueur de votre mot de passe excède %(length)s caractères."
 
-#: enki/textmessages.py:68
+#: enki/textmessages.py:70
 msgid "This is your current email."
 msgstr "Ceci est votre adresse de courrier électronique actuelle."
 
-#: enki/textmessages.py:69
+#: enki/textmessages.py:71
 msgid "You cannot delete your email address: you need an email address to connect to your account."
 msgstr "Vous devez entrer une adresse électronique : cela est nécessaire pour pouvoir vous connecter à votre compte."
 
-#: enki/textmessages.py:71
+#: enki/textmessages.py:73
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "seconde"
 msgstr[1] "secondes"
 
-#: enki/textmessages.py:72
+#: enki/textmessages.py:74
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minute"
 msgstr[1] "minutes"
 
-#: enki/textmessages.py:73
+#: enki/textmessages.py:75
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "heure"
 msgstr[1] "heures"
 
-#: enki/textmessages.py:74
+#: enki/textmessages.py:76
 msgid "day"
 msgid_plural "days"
 msgstr[0] "jour"
 msgstr[1] "jours"
 
-#: enki/textmessages.py:76
+#: enki/textmessages.py:78
 msgid "You must have Admin rights to perform this action."
 msgstr "Vous devez posséder des droits d'administrateur pour exécuter cette action."
 
-#: enki/textmessages.py:79
-msgid "Attempt to log in with your email"
-msgstr "Tentative de connexion"
-
-#: enki/textmessages.py:80
-#, python-format
-msgid "An attempt was made to log in to your account using this email address. If you'd like to use your email to log in, you need to set a password for it: %(link)s (click or copy and paste in your browser)"
-msgstr "Une tentative de connexion à votre compte en utilisant cette adresse de courrier électronique a été détectée. Si vous désirez utiliser votre adresse de courrier électronique pour vous connecter, vous devez créer un mot de passe: %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
-
 #: enki/textmessages.py:81
-msgid "Attempt to register with your email"
+msgid "Attempt to log in with your email"
 msgstr "Tentative de connexion"
 
 #: enki/textmessages.py:82
 #, python-format
+msgid "An attempt was made to log in to your account using this email address. If you'd like to use your email to log in, you need to set a password for it: %(link)s (click or copy and paste in your browser)"
+msgstr "Une tentative de connexion à votre compte en utilisant cette adresse de courrier électronique a été détectée. Si vous désirez utiliser votre adresse de courrier électronique pour vous connecter, vous devez créer un mot de passe: %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
+
+#: enki/textmessages.py:83
+msgid "Attempt to register with your email"
+msgstr "Tentative de connexion"
+
+#: enki/textmessages.py:84
+#, python-format
 msgid "An attempt was made to sign up to your account using this email address. If you've forgotten your password, you can reset it: %(link)s (click or copy and paste in your browser)"
 msgstr "Une tentative de connexion à votre compte en utilisant cette adresse de courrier électronique a été détectée. Si vous avez oublié votre mot de passe, vous pouvez le réinitialiser : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
 
-#: enki/textmessages.py:83 templates/registerconfirm.html:6
+#: enki/textmessages.py:85 templates/registerconfirm.html:6
 msgid "Registration confirmation"
 msgstr "Confirmation de la création de votre compte"
 
-#: enki/textmessages.py:84
+#: enki/textmessages.py:86
 #, python-format
 msgid "Follow this link to confirm your registration: %(link)s (click or copy and paste in your browser)"
 msgstr "Suivez ce lien pour confirmer la création de votre compte utilisateur.trice : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
 
-#: enki/textmessages.py:85
+#: enki/textmessages.py:87
 msgid "Confirm new email"
 msgstr "Confirmation de votre nouvelle adresse de courrier électronique"
 
-#: enki/textmessages.py:86
+#: enki/textmessages.py:88
 #, python-format
 msgid "A request to change the email address linked to your account was made. Follow this link to confirm the change to address %(email)s: %(link)s (click or copy and paste in your browser)"
 msgstr "Vous avez demandé de changer l'adresse de courrier électronique associée à votre compte. Suivez ce lien pour confirmer votre nouvelle adresse %(email)s : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
 
-#: enki/textmessages.py:87
+#: enki/textmessages.py:89
 msgid "Undo change email"
 msgstr "Annuler le changement d'adresse de courrier électronique"
 
-#: enki/textmessages.py:88
+#: enki/textmessages.py:90
 #, python-format
 msgid "A request to change the email address linked to your account was made. Follow this link to cancel the change and ensure the current address %(email)s remains linked to your account: %(link)s (click or copy and paste in your browser)"
 msgstr "Vous avez demandé de changer l'adresse de courrier électronique associée à votre compte. Suivez ce lien pour annuler le changement et conserver l'adresse %(email)s : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
 
-#: enki/textmessages.py:89
+#: enki/textmessages.py:91
 msgid "Password reset"
 msgstr "Nouveau mot de passe."
 
-#: enki/textmessages.py:90
+#: enki/textmessages.py:92
 #, python-format
 msgid "A request to reset your password was made. Follow this link to reset your password and set a new one: %(link)s (click or copy and paste in your browser)"
 msgstr "Vous avez demandé de changer votre mot de passe. Suivez ce lien pour réinitialiser votre mot de passe et en entrer un nouveau : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
 
-#: enki/textmessages.py:91
+#: enki/textmessages.py:93
 msgid "Account deletion"
 msgstr "Suppression de votre compte"
 
-#: enki/textmessages.py:92
+#: enki/textmessages.py:94
 #, python-format
 msgid "A request to delete your account was made. Follow this link to confirm deletion - WARNING: this cannot be undone! - %(link)s (click or copy and paste in your browser)"
 msgstr "Vous avez demandé de supprimer votre compte. Suivez ce lien pour confirmer - ATTENTION: la suppression est définitive ! - %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
 
-#: enki/textmessages.py:93
+#: enki/textmessages.py:95
 msgid "Account and forum posts deletion"
 msgstr "Suppression de votre compte et de vos messages de forum"
 
-#: enki/textmessages.py:94
+#: enki/textmessages.py:96
 #, python-format
 msgid "A request to delete your account and your forum posts was made. Follow this link to confirm deletion - WARNING: this cannot be undone! - %(link)s (click or copy and paste in your browser)"
 msgstr "Vous avez demandé de supprimer votre compte et les messages que vous avez publiés dans le forum. Suivez ce lien pour confirmer - ATTENTION: la suppression est définitive ! - %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
 
-#: enki/textmessages.py:97
+#: enki/textmessages.py:99
 msgid "[Deleted user]"
 msgstr "[Utilisateur.trice supprimé.e]"
 
-#: enki/textmessages.py:98
+#: enki/textmessages.py:100
 msgid "Your display name is your public Id. You must have a display name to post in the forums, invite friends and join games."
 msgstr "Votre nom d'affichage est votre identité publique. Il est nécessaire pour poster des messages dans le forum, inviter des ami.e.s et jouer."
 
-#: enki/textmessages.py:99
+#: enki/textmessages.py:101
 msgid "(The display name above was randomly generated, feel free to change it.)"
 msgstr "Le nom d'affichage ci-dessus a été généré au hasard, n'hésitez pas à le modifier."
 
-#: enki/textmessages.py:100
+#: enki/textmessages.py:102
 msgid "The name you have chosen is already in use. Please enter a new name."
 msgstr "Le nom que vous avez choisi est déjà utilisé. Veuillez en choisir un autre."
 
-#: enki/textmessages.py:101
+#: enki/textmessages.py:103
 msgid "Your name contains forbidden symbols. Please ensure it contains only letters or digits."
 msgstr "Votre nom contient des symboles interdits. Veuillez vous assurer qu'il ne contient que des chiffres et/ou des lettres."
 
-#: enki/textmessages.py:102
+#: enki/textmessages.py:104
 #, python-format
 msgid "Your name is %(length)s character long."
 msgid_plural "Your name is %(length)s characters long."
 msgstr[0] "Votre nom contient %(length)s caractère."
 msgstr[1] "Votre nom contient %(length)s caractères."
 
-#: enki/textmessages.py:103
+#: enki/textmessages.py:105
 #, python-format
 msgid "It is too short. Please ensure it is at least %(length)s character long."
 msgid_plural "It is too short. Please ensure it is at least %(length)s characters long."
 msgstr[0] "Il est trop court. Veuillez vous assurer que votre nom d'affichage contient plus de %(length)s caractère."
 msgstr[1] "Il est trop court. Veuillez vous assurer que votre nom d'affichage contient plus de %(length)s caractères."
 
-#: enki/textmessages.py:104
+#: enki/textmessages.py:106
 #, python-format
 msgid "It is too long. Please ensure it is maximum %(length)s character long."
 msgid_plural "It is too long. Please ensure it is maximum %(length)s characters long."
 msgstr[0] "Il est trop long. Veuillez vous assurer que votre nom d'affichage n'excède pas %(length)s caractère."
 msgstr[1] "Il est trop long. Veuillez vous assurer que votre nom d'affichage n'excède pas %(length)s caractères."
 
-#: enki/textmessages.py:107 templates/forums.html:6 templates/forums.html:16
+#: enki/textmessages.py:109 templates/forums.html:6 templates/forums.html:16
 #: templates/incuserposts.html:8
 msgid "Forums"
 msgstr "Forums"
 
-#: enki/textmessages.py:108
+#: enki/textmessages.py:110
 msgid "[Deleted post]"
 msgstr "[Message supprimé]"
 
-#: enki/textmessages.py:109
+#: enki/textmessages.py:111
 msgid "The user you requested does not exist or was deleted."
 msgstr "L'utilisateur.trice que vous avez demandé n'existe pas ou a été supprimé.e."
 
-#: enki/textmessages.py:110
+#: enki/textmessages.py:112
 msgid "The forum you requested does not exist or was deleted."
 msgstr "Le forum que vous avez demandé n'existe pas ou a été supprimé."
 
-#: enki/textmessages.py:111
+#: enki/textmessages.py:113
 msgid "The post or thread you requested does not exist or was deleted."
 msgstr "Le message ou sujet que vous avez demandé n'existe pas ou a été supprimé."
 
-#: enki/textmessages.py:112
+#: enki/textmessages.py:114
 msgid "The post you requested does not exist or was deleted."
 msgstr "Le message que vous avez demandé n'existe pas ou a été supprimé."
 
-#: enki/textmessages.py:113
+#: enki/textmessages.py:115
 msgid "Your thread needs a title."
 msgstr "Votre sujet doit avoir un titre."
 
-#: enki/textmessages.py:114
+#: enki/textmessages.py:116
 msgid "Your post needs to contain some text."
 msgstr "Votre message ne peut être vide."
 
-#: enki/textmessages.py:115
+#: enki/textmessages.py:117
 #, python-format
 msgid "Your thread title is too long by %(exceed)s character."
 msgid_plural "Your thread title is too long by %(exceed)s characters."
 msgstr[0] "Votre sujet est trop long. Il dépasse la longueur maximale de %(exceed)s caractère."
 msgstr[1] "Votre sujet est trop long. Il dépasse la longueur maximale de %(exceed)s caractères."
 
-#: enki/textmessages.py:116
+#: enki/textmessages.py:118
 #, python-format
 msgid "Your post is too long by %(exceed)s character."
 msgid_plural "Your post is too long by %(exceed)s characters."
 msgstr[0] "Votre message est trop long. Il dépasse la longueur maximale de %(exceed)s caractère."
 msgstr[1] "Votre message est trop long. Il dépasse la longueur maximale de %(exceed)s caractères."
 
-#: enki/textmessages.py:117
+#: enki/textmessages.py:119
 msgid "Thread submission failed. Please try again."
 msgstr "La création de votre sujet de forum a échoué. Veuillez renouveler votre tentative."
 
-#: enki/textmessages.py:118
+#: enki/textmessages.py:120
 msgid "Post submission failed. Please try again."
 msgstr "La création de votre message a échoué. Veuillez renouveler votre tentative."
 
-#: enki/textmessages.py:119
+#: enki/textmessages.py:121
 msgid "Post modification failed. Please try again."
 msgstr "La modification de votre message a échoué. Veuillez renouveler votre tentative."
 
-#: enki/textmessages.py:120
+#: enki/textmessages.py:122
 msgid "Post deletion failed. Please try again."
 msgstr "La suppression de votre message a échoué. Veuillez renouveler votre tentative."
 
-#: enki/textmessages.py:123
+#: enki/textmessages.py:125
 msgid "The display name you entered is invalid."
 msgstr "Le nom d'affichage que vous avez fourni est incorrect."
 
-#: enki/textmessages.py:124
+#: enki/textmessages.py:126
 msgid "The display name you entered does not exist or the user is already in your friends list."
 msgstr "Le nom d'affichage que vous avez fourni n'existe pas ou l'utilisateur.trice fait déjà partie de votre liste d'ami.e.s."
 
-#: enki/textmessages.py:125
+#: enki/textmessages.py:127
 msgid "A display name is needed"
 msgstr "Un nom d'affichage est requis."
 
-#: enki/textmessages.py:126
+#: enki/textmessages.py:128
 #, python-format
 msgid "An invitation to join your friends list has been sent to %(name)s."
 msgstr "Une invitation à joindre votre liste d'ami.e.s été envoyée à %(name)s."
 
-#: enki/textmessages.py:127
+#: enki/textmessages.py:129
 #, python-format
 msgid "%(name)s has been added to your friends list."
 msgstr "%(name)s a été ajouté.e à votre liste d'ami.e.s."
 
-#: enki/textmessages.py:128
+#: enki/textmessages.py:130
 #, python-format
 msgid "%(name)s has been removed from your friends list."
 msgstr "%(name)s a été retiré.e de votre liste d'ami.e.s."
 
-#: enki/textmessages.py:131 templates/store.html:6 templates/store.html:16
+#: enki/textmessages.py:133 templates/store.html:6 templates/store.html:16
 #: templates/storeemulatefastspring.html:6
 msgid "Store"
 msgstr "Magasin"
 
-#: enki/textmessages.py:132
+#: enki/textmessages.py:134
 #, python-format
 msgid "Product %(product)s licence %(licence)s activated."
 msgstr "La clé de licence %(licence)s du produit %(product)s est activée."
 
-#: enki/textmessages.py:133
+#: enki/textmessages.py:135
 #, python-format
 msgid "You already activated %(product)s."
 msgstr "Vous avez déjà activé le produit %(product)s."
 
-#: enki/textmessages.py:134
+#: enki/textmessages.py:136
 #, python-format
 msgid "You already activated %(product)s. Your spare licence key can be given away."
 msgstr "Vous avez déjà activé le produit %(product)s. Vous pouvez donner cette clé de licence."
 
-#: enki/textmessages.py:135
+#: enki/textmessages.py:137
 #, python-format
 msgid "Another user already activated %(product)s licence %(licence)s."
 msgstr "Un.e autre utilisateur.trice a déjà activé la clé de licence %(licence)s du produit %(product)s."
 
-#: enki/textmessages.py:136
+#: enki/textmessages.py:138
 msgid "Invalid licence key."
 msgstr "Clé de licence non valable."
 
-#: enki/textmessages.py:137
+#: enki/textmessages.py:139
 msgid "A licence key is needed."
 msgstr "Une licence est requise."
 
-#: enki/textmessages.py:138
+#: enki/textmessages.py:140
 msgid "Licence key is too short."
 msgstr "Clé de licence trop courte."
 
-#: enki/textmessages.py:139
+#: enki/textmessages.py:141
 msgid "Licence key is too long."
 msgstr "Clé de licence trop longue."
 
-#: enki/textmessages.py:142
+#: enki/textmessages.py:144
 msgid "Download error"
 msgstr "Erreur téléchargement"
 
-#: enki/textmessages.py:145
+#: enki/textmessages.py:147
 #, python-format
 msgid "Your single-use game connect code is valid for <b>%(minutes)s minute</b>. <h1><b><font face=\"monospace\">%(token)s</font></b></h1>"
 msgid_plural "Your single-use game connect code is valid for <b>%(minutes)s minutes</b>. <h1><b><font face=\"monospace\">%(token)s</font></b></h1>"
 msgstr[0] "Votre jeton de connexion à usage unique est valide pendant <b>%(minutes)s minute</b>. <h1><b><font face=\"monospace\">%(token)s</font></b></h1>"
 msgstr[1] "Votre jeton de connexion à usage unique est valide pendant <b>%(minutes)s minutes</b>. <h1><b><font face=\"monospace\">%(token)s</font></b></h1>"
 
-#: enki/textmessages.py:146
+#: enki/textmessages.py:148
 msgid "A name is needed"
 msgstr "Un nom est requis."
 
-#: enki/textmessages.py:147
+#: enki/textmessages.py:149
 msgid "Application created."
 msgstr "Application créée."
 
-#: enki/textmessages.py:148
+#: enki/textmessages.py:150
 #, python-format
 msgid "The application name is too long. Please ensure it is maximum %(length)s characters long."
 msgstr "Le nom de l'application est trop long. Veuillez vous assurer qu'il n'excède pas %(length)s caractères."
 
-#: enki/textmessages.py:149
+#: enki/textmessages.py:151
 msgid "This application name already exists. Please choose a different name."
 msgstr "Ce nom d'application existe déjà. Veuillez en choisir un nouveau."
 
-#: enki/textmessages.py:150
+#: enki/textmessages.py:152
 msgid "You have exceeded the number of applications allowed per user."
 msgstr "Vous avez dépassé le nombre d'appplications authorisées par utilisateur."
 
-#: enki/textmessages.py:151
+#: enki/textmessages.py:153
 msgid "New secret generated."
 msgstr "Nouveau secret généré."
 
-#: enki/textmessages.py:152
+#: enki/textmessages.py:154
 msgid "Application data deleted."
 msgstr "Données supprimées."
 
-#: enki/textmessages.py:155
+#: enki/textmessages.py:157
 msgid "Image unavailable"
 msgstr "Image non disponible"
 
@@ -915,12 +919,12 @@ msgstr "Nouvelle adresse de courrier électronique"
 msgid "Forum"
 msgstr "Forum"
 
-#: templates/forum.html:27 templates/forum.html:37 templates/forums.html:47
+#: templates/forum.html:27 templates/forum.html:37 templates/forums.html:25
 #: templates/incuserposts.html:3 templates/thread.html:29
 msgid "Posts"
 msgstr "Messages"
 
-#: templates/forum.html:27 templates/forums.html:46
+#: templates/forum.html:27 templates/forums.html:24
 msgid "Threads"
 msgstr "Sujets"
 
@@ -936,7 +940,7 @@ msgstr "Publié par"
 msgid "Date"
 msgstr "Date"
 
-#: templates/forum.html:36 templates/forums.html:45
+#: templates/forum.html:36 templates/forums.html:23
 msgid "Last activity"
 msgstr "Dernière activité"
 
@@ -944,7 +948,7 @@ msgstr "Dernière activité"
 msgid "Create a new thread"
 msgstr "Créer un nouveau sujet"
 
-#: templates/forum.html:68 templates/forums.html:43
+#: templates/forum.html:68 templates/forums.html:21
 msgid "Title"
 msgstr "Titre"
 
@@ -1073,7 +1077,7 @@ msgstr "Retourner aux forums"
 msgid "Views"
 msgstr "Visites"
 
-#: templates/forums.html:44
+#: templates/forums.html:22
 msgid "Description"
 msgstr "Description"
 

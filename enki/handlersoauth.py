@@ -61,7 +61,7 @@ class HandlerOAuthBase( enki.HandlerBase ):
 			haveError = True
 
 		if haveError:
-			self.add_infomessage('info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+			self.add_infomessage( MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
 			self.redirect_to_relevant_page( True )
 		return result
 
@@ -147,7 +147,7 @@ class HandlerOAuthOpenIDConnect( HandlerOAuthOAUTH2 ):
 	def process_token_result( self, result ): # select the processing function
 		jdoc = self.process_result_as_JSON( result )
 		if 'error' in jdoc or 'id_token' not in jdoc:  # failed
-			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+			self.add_infomessage( MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
 			self.redirect_to_relevant_page()
 			return
 		id_token = jdoc[ 'id_token' ]
@@ -162,7 +162,7 @@ class HandlerOAuthOpenIDConnect( HandlerOAuthOAUTH2 ):
 		jwt = json.loads( base64.urlsafe_b64decode( jwtencoded ).decode( 'utf-8' ))
 
 		if not self.validate_token_doc( jwt ):
-			self.add_infomessage('info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+			self.add_infomessage( MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
 			self.redirect_to_relevant_page()
 			return
 
@@ -257,7 +257,7 @@ class HandlerOAuthFacebook( HandlerOAuthOAUTH2 ):
 	def process_token_result( self, result ): # select the processing function
 		data = self.process_result_as_query_string( result )
 		if not data: # failed
-			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+			self.add_infomessage( MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
 			self.redirect_to_relevant_page()
 			return
 		token = data[ 'access_token' ]
@@ -318,7 +318,7 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 	def process_token_result( self, result ): # select the processing function
 		data = self.process_result_as_query_string( result )
 		if not data: # failed
-			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+			self.add_infomessage( MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
 			self.redirect_to_relevant_page()
 			return
 		token = data[ 'access_token' ]

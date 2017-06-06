@@ -34,13 +34,13 @@ class HandlerFriends( enki.HandlerBase ):
 			if friend_id_invite: # send invitation to user to become friend
 				outcome = EnkiModelFriends.send_friend_request( user_id, int( friend_id_invite ))
 				if outcome == EnkiModelFriends.INFO_FRIENDS:
-					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_ADDED( EnkiModelDisplayName.get_display_name( int( friend_id_invite ))))
+					self.add_infomessage( MSG.SUCCESS(), MSG.FRIEND_ADDED( EnkiModelDisplayName.get_display_name( int( friend_id_invite ))))
 				elif outcome == enki.libutil.ENKILIB_OK:
-					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_INVITATION_SENT( EnkiModelDisplayName.get_display_name( int( friend_id_invite ))))
+					self.add_infomessage( MSG.SUCCESS(), MSG.FRIEND_INVITATION_SENT( EnkiModelDisplayName.get_display_name( int( friend_id_invite ))))
 			elif friend_id_remove: # unfriend
 				EnkiModelFriends.remove_friend( user_id, int( friend_id_remove ))
 				has_friends = EnkiModelFriends.exist_by_user_id( user_id )
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_REMOVED( EnkiModelDisplayName.get_display_name( int( friend_id_remove ))))
+				self.add_infomessage( MSG.SUCCESS(), MSG.FRIEND_REMOVED( EnkiModelDisplayName.get_display_name( int( friend_id_remove ))))
 			elif friend_name_search: # search for user to invite
 				users_ids_to_ignore = [ user_id ]
 				if has_friends:
@@ -82,7 +82,7 @@ class HandlerMessages( enki.HandlerBase ):
 				sender_id = EnkiModelMessage.get_by_id( int( message_accept )).sender
 				if sender_id:
 					EnkiModelFriends.add_friend( user_id, sender_id )
-					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.FRIEND_ADDED( EnkiModelDisplayName.get_display_name( sender_id )))
+					self.add_infomessage( MSG.SUCCESS(), MSG.FRIEND_ADDED( EnkiModelDisplayName.get_display_name( sender_id )))
 			elif message_decline:
 				sender_id = EnkiModelMessage.get_by_id( int( message_decline )).sender
 				if sender_id:

@@ -37,7 +37,7 @@ class HandlerBaseReauthenticate( enki.HandlerBase ):
 	def ensure_is_reauthenticated( self ):
 		if not self.is_reauthenticated():
 			self.save_user_page_data()
-			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REAUTHENTICATION_NEEDED())
+			self.add_infomessage( MSG.INFORMATION(), MSG.REAUTHENTICATION_NEEDED())
 			# rather than redirect to 'reauthenticate' we render here to prevent sessionrefpath being overwritten
 			self.session[ 'sessionrefpath' ] = self.request.path_url
 			self.render_tmpl( 'reauthenticate.html',

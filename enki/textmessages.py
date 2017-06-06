@@ -4,9 +4,11 @@ from webapp2_extras.i18n import gettext as _
 from webapp2_extras.i18n import ngettext
 
 
+# info messages headers and bodies
 def SUCCESS(): return _( "Success" )
 def INFORMATION(): return _( "Information" )
 def WARNING(): return _( "Warning" )
+def DANGER(): return _( "Danger" )
 
 def LOGGED_OUT(): return _( "You are logged out." )
 def LOGIN_NEEDED(): return _( "Please log in to access the page you requested." )

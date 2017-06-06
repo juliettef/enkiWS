@@ -24,7 +24,7 @@ class HandlerLogout( enki.HandlerBase ):
 
 	def get( self ):
 		self.log_out()
-		self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_OUT())
+		self.add_infomessage( MSG.SUCCESS(), MSG.LOGGED_OUT())
 		self.redirect_to_relevant_page()
 
 
@@ -34,7 +34,7 @@ class HandlerLogin( enki.HandlerBase ):
 		email = self.session.pop( 'email_prefill', '' )
 		# Get referal path to return the user to the page they were on after they've logged in
 		if 'sessionloginrefpath' in self.session:
-			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LOGIN_NEEDED())
+			self.add_infomessage( MSG.INFORMATION(), MSG.LOGIN_NEEDED())
 		self.session[ 'sessionrefpath' ] = self.session.pop( 'sessionloginrefpath', self.request.referrer )
 		self.render_tmpl( 'login.html',
 		                  active_menu = 'login',
@@ -51,7 +51,7 @@ class HandlerLogin( enki.HandlerBase ):
 		if submit_type == 'login':
 			password = self.request.get( 'password' )
 			if result == enki.libutil.ENKILIB_OK and self.log_in_with_email( email, password ):
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
+				self.add_infomessage( MSG.SUCCESS(), MSG.LOGGED_IN())
 				self.redirect_to_relevant_page()
 			else:
 				error_message = MSG.WRONG_EMAIL_OR_PW()
@@ -96,7 +96,7 @@ class HandlerReauthenticate( enki.HandlerBase ):
 				if self.enki_user.password and submit_type == 'reauthenticate':
 					password = self.request.get( 'password' )
 					if self.reauthenticate( self.enki_user.email, password ):
-						self.add_infomessage( 'success', MSG.SUCCESS(), MSG.REAUTHENTICATED())
+						self.add_infomessage( MSG.SUCCESS(), MSG.REAUTHENTICATED())
 						self.redirect_to_relevant_page()
 					else:
 						error_message = MSG.WRONG_EMAIL_OR_PW()
@@ -180,7 +180,7 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 					break
 		elif deregister:
 			self.remove_auth_id( deregister)
-			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_REMOVED( deregister ))
+			self.add_infomessage( MSG.SUCCESS(), MSG.AUTH_PROVIDER_REMOVED( deregister ))
 			self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
 
@@ -207,7 +207,7 @@ class HandlerLoginAddConfirm( enki.HandlerBaseReauthenticate ):
 			tokenEntity = EnkiModelTokenVerify.get_by_user_id_auth_id_type( user_id = self.user_id, auth_id = choice, type = 'loginaddconfirm_3' )
 			if tokenEntity:
 				self.set_auth_id( tokenEntity.auth_ids_provider, self.user_id )
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.AUTH_PROVIDER_ADDED( str( tokenEntity.auth_ids_provider )))
+				self.add_infomessage( MSG.SUCCESS(), MSG.AUTH_PROVIDER_ADDED( str( tokenEntity.auth_ids_provider )))
 			tokenEntity.key.delete()
 		self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
@@ -262,10 +262,10 @@ class HandlerSessions( enki.HandlerBaseReauthenticate ):
 		token_disconnect_app = params.get( 'disconnect_app' )
 		if token_disconnect_browser:
 			EnkiModelTokenAuth.delete( token_disconnect_browser )
-			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_SESSION())
+			self.add_infomessage( MSG.SUCCESS(), MSG.DISCONNECTED_SESSION())
 		elif token_disconnect_app:
 			EnkiModelRestAPITokenVerify.delete_token_by_id( token_disconnect_app )
-			self.add_infomessage( 'success', MSG.SUCCESS(), MSG.DISCONNECTED_APP())
+			self.add_infomessage( MSG.SUCCESS(), MSG.DISCONNECTED_APP())
 		self.render_tmpl( 'sessions.html',
 						  active_menu = 'profile',
 						  data = self.get_data())
@@ -296,7 +296,7 @@ class HandlerProfilePublic( enki.HandlerBase ):
 			if useridnumber.isdigit and EnkiModelUser.get_by_id( int( useridnumber )):
 				display_name_data = EnkiModelDisplayName.get_display_name_data( int( useridnumber ))
 			else:
-				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.USER_NOT_EXIST())
+				self.add_infomessage( MSG.INFORMATION(), MSG.USER_NOT_EXIST())
 			self.render_tmpl( 'profilepublic.html', False,
 			                  active_menu = 'home',
 			                  display_name_data = display_name_data )
@@ -324,7 +324,7 @@ class HandlerRegister( enki.HandlerBase ):
 			error_message = ''
 			if result == enki.libutil.ENKILIB_OK or result == self.ERROR_EMAIL_IN_USE:
 			# if email exists, pretend there was a registration (i.e. hide the fact that the email exists) to prevent email checking
-				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTRATION_INFO_EMAIL_SENT( email ))
+				self.add_infomessage( MSG.INFORMATION(), MSG.REGISTRATION_INFO_EMAIL_SENT( email ))
 				if result == self.ERROR_EMAIL_IN_USE:
 					self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
 					link = enki.libutil.get_local_url( 'passwordrecover' )
@@ -376,7 +376,7 @@ class HandlerRegisterConfirm( enki.HandlerBase ):
 			if result == enki.libutil.ENKILIB_OK:
 				result = self.create_user_from_email_pw( email, password )
 				if result == enki.libutil.ENKILIB_OK:
-					self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.ACCOUNT_CREATED())
+					self.add_infomessage( MSG.SUCCESS(), MSG.ACCOUNT_CREATED())
 					self.log_in_with_email( email, password )
 					self.redirect_to_relevant_page()
 				elif result == self.ERROR_USER_NOT_CREATED:
@@ -431,9 +431,9 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 					user = self.get_or_create_user_from_authid( authId, auth_email )
 					if user: # login the user through auth
 						self.log_in_session_token_create( user )
-						self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
+						self.add_infomessage( MSG.SUCCESS(), MSG.LOGGED_IN())
 					else: # user creation failed (timeout etc.)
-						self.add_infomessage( 'warning', MSG.WARNING(), MSG.AUTH_LOGIN_FAILED( provider_name ))
+						self.add_infomessage( MSG.WARNING(), MSG.AUTH_LOGIN_FAILED( provider_name ))
 					self.redirect_to_relevant_page()
 					tokenEntity.key.delete()
 					self.session.pop( 'tokenregisterauth' )
@@ -448,7 +448,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 					email, result = self.validate_email( email_unsafe )
 					if result == enki.libutil.ENKILIB_OK:
 						result = self.email_change_request( email )	# send an email for verification. Since it's not verified at this point, create the account without the email.
-						self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTER_AUTH_ADD_EMAIL_INFO_EMAIL_SENT( email ))
+						self.add_infomessage( MSG.INFORMATION(), MSG.REGISTER_AUTH_ADD_EMAIL_INFO_EMAIL_SENT( email ))
 						if result == self.ERROR_EMAIL_IN_USE:
 							self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
 						success = True
@@ -466,7 +466,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 					                  error = error_message,
 					                  success = success )
 			elif choice == 'cancel':
-				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
+				self.add_infomessage( MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
 				self.redirect_to_relevant_page()
 				tokenEntity.key.delete()
 				self.session.pop( 'tokenregisterauth' )
@@ -535,7 +535,7 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 				tokenEntity.key.delete()
 				password = self.request.get( 'password' )
 				if self.log_in_with_email( email, password ):
-					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
+					self.add_infomessage( MSG.SUCCESS(), MSG.LOGGED_IN())
 					self.redirect_to_relevant_page()
 				else:
 					error_message = MSG.WRONG_EMAIL_OR_PW()
@@ -557,11 +557,11 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 				email = tokenEntity.email
 				tokenEntity.email = ''
 				tokenEntity.put()
-				self.add_infomessage( 'info', MSG.INFORMATION() , MSG.REGISTRATION_INFO_EMAIL_CANNOT_USE( email ))
+				self.add_infomessage( MSG.INFORMATION() , MSG.REGISTRATION_INFO_EMAIL_CANNOT_USE( email ))
 				self.redirect( enki.libutil.get_local_url( 'registeroauthconfirm' ))
 			else:
 				tokenEntity.key.delete()
-				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LOGIN_FAILED())
+				self.add_infomessage( MSG.INFORMATION(), MSG.LOGIN_FAILED())
 				self.redirect( enki.libutil.get_local_url( 'home' ))
 		else:
 			self.abort(404)
@@ -591,7 +591,7 @@ class HandlerPasswordChange( enki.HandlerBase ):
 				password_new = self.request.get( 'passwordnew' )
 				result = self.set_password( self.enki_user, password_new )
 				if result == enki.libutil.ENKILIB_OK:
-					self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.PASSWORD_UPDATED())
+					self.add_infomessage( MSG.SUCCESS( ), MSG.PASSWORD_UPDATED())
 					self.redirect( enki.libutil.get_local_url( 'profile' ) )
 					return
 				else:
@@ -633,7 +633,7 @@ class HandlerPasswordRecover( enki.HandlerBase ):
 				result = self.password_change_request( email )
 				if result == enki.libutil.ENKILIB_OK or result == self.ERROR_EMAIL_NOT_EXIST:
 					# The info displayed is identical whether the email corresponds to an existing account or not to prevent email checking.
-					self.add_infomessage( 'info' , MSG.INFORMATION(), MSG.PASSWORD_RESET_INFO_EMAIL_SENT( email ))
+					self.add_infomessage( MSG.INFORMATION(), MSG.PASSWORD_RESET_INFO_EMAIL_SENT( email ))
 					if result == self.ERROR_EMAIL_NOT_EXIST:
 						self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
 					self.redirect_to_relevant_page()
@@ -680,7 +680,7 @@ class HandlerPasswordRecoverConfirm( enki.HandlerBase ):
 					EnkiModelTokenVerify.delete_by_email_type( email, 'passwordchange' )
 					EnkiModelBackoffTimer.remove( user.email )
 					self.log_in_with_id( user.key.id(), password )
-					self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.PASSWORD_SET())
+					self.add_infomessage( MSG.SUCCESS( ), MSG.PASSWORD_SET())
 					self.redirect( enki.libutil.get_local_url( 'profile' ))
 					return
 				else:
@@ -724,7 +724,7 @@ class HandlerDisplayName( enki.HandlerBaseReauthenticate ):
 		result = EnkiModelDisplayName.make_unique_and_set_display_name( self.user_id, prefix )
 		if result == enki.libutil.ENKILIB_OK:
 			self.add_roles( self.enki_user, [ 'RUC' ])
-			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.DISPLAYNAME_SET())
+			self.add_infomessage( MSG.SUCCESS( ), MSG.DISPLAYNAME_SET())
 			self.session[ 'sessiondisplaynamerefpath' ] = self.session.pop( 'sessionreauth', self.request.referrer )
 			self.redirect_to_relevant_page()
 			return
@@ -768,15 +768,15 @@ class HandlerEmailChange( enki.HandlerBaseReauthenticate ):
 			elif result_of_change_request == 'cannot_remove':
 				error_message = MSG.CANNOT_DELETE_EMAIL()
 			elif result_of_change_request == 'removed':
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.EMAIL_REMOVED())
+				self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_REMOVED())
 				old_email_existed = True if (self.enki_user.email and self.enki_user.email != 'removed') else False
 				if old_email_existed:
-					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_ROLLBACK_INFO_EMAIL_SENT())
+					self.add_infomessage( MSG.INFORMATION(), MSG.EMAIL_ROLLBACK_INFO_EMAIL_SENT())
 				self.redirect( enki.libutil.get_local_url( 'profile' ))
 			elif result_of_change_request == 'change' or result_of_change_request == self.ERROR_EMAIL_IN_USE:
-				self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_CHANGE_CONFIRM_INFO_EMAIL_SENT( email ))
+				self.add_infomessage( MSG.INFORMATION(), MSG.EMAIL_CHANGE_CONFIRM_INFO_EMAIL_SENT( email ))
 				if self.enki_user.email and self.enki_user.email != 'removed':
-					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.EMAIL_CHANGE_UNDO_INFO_EMAIL_SENT())
+					self.add_infomessage( MSG.INFORMATION(), MSG.EMAIL_CHANGE_UNDO_INFO_EMAIL_SENT())
 				self.redirect( enki.libutil.get_local_url( 'profile' ))
 				return
 		elif result == self.ERROR_EMAIL_FORMAT_INVALID:
@@ -796,7 +796,7 @@ class HandlerEmailChangeConfirm( enki.HandlerBase ):
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'emailchange' )
 		if tokenEntity:
 			self.email_change( tokenEntity )
-			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.EMAIL_SET())
+			self.add_infomessage( MSG.SUCCESS( ), MSG.EMAIL_SET())
 			self.redirect( enki.libutil.get_local_url( 'profile' ) )
 		else:
 			self.abort( 404 )
@@ -810,7 +810,7 @@ class HandlerEmailRollback( enki.HandlerBase ):
 		tokenEntity = EnkiModelTokenEmailRollback.get_by_token( token )
 		if tokenEntity:
 			self.email_rollback( tokenEntity )
-			self.add_infomessage( 'success', MSG.SUCCESS( ), MSG.EMAIL_RESTORED())
+			self.add_infomessage( MSG.SUCCESS( ), MSG.EMAIL_RESTORED())
 			self.redirect( enki.libutil.get_local_url( 'profile' ) )
 		else:
 			self.abort( 404 )
@@ -857,16 +857,16 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 				# if the user has an email, send a confirmation email
 				self.account_deletion_request( delete_posts )
 				if delete_posts:
-					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.ACCOUNT_AND_POSTS_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
+					self.add_infomessage( MSG.INFORMATION(), MSG.ACCOUNT_AND_POSTS_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
 				else:
-					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.ACCOUNT_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
+					self.add_infomessage( MSG.INFORMATION(), MSG.ACCOUNT_DELETE_INFO_EMAIL_SENT( self.enki_user.email ))
 			else:
 				# otherwise just delete the account
 				self.delete_account( delete_posts )
 				if delete_posts:
-					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_AND_POSTS_DELETED())
+					self.add_infomessage( MSG.SUCCESS(), MSG.ACCOUNT_AND_POSTS_DELETED())
 				else:
-					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_DELETED())
+					self.add_infomessage( MSG.SUCCESS(), MSG.ACCOUNT_DELETED())
 			self.redirect( enki.libutil.get_local_url())
 
 
@@ -884,9 +884,9 @@ class HandlerAccountDeleteConfirm( enki.HandlerBase ):
 		if tokenExists:
 			result = self.delete_account( delete_posts, token )
 			if delete_posts:
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_AND_POSTS_DELETED())
+				self.add_infomessage( MSG.SUCCESS(), MSG.ACCOUNT_AND_POSTS_DELETED())
 			else:
-				self.add_infomessage( 'success', MSG.SUCCESS(), MSG.ACCOUNT_DELETED())
+				self.add_infomessage( MSG.SUCCESS(), MSG.ACCOUNT_DELETED())
 			self.redirect( enki.libutil.get_local_url())
 		else:
 			self.abort( 404 )

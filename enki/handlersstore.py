@@ -53,12 +53,12 @@ class HandlerStore( enki.HandlerBase ):
 						break
 				if url_fetcher and url_fetcher.error:
 					self.response.status_int = 500
-					self.add_infomessage( 'warning', MSG.WARNING(), MSG.DOWNLOAD_ERROR())
+					self.add_infomessage( MSG.WARNING(), MSG.DOWNLOAD_ERROR())
 					self.redirect( 'info' )
 					return
 				url = url_fetcher.download_url
 			else:
-				self.add_infomessage( 'warning', MSG.WARNING(), MSG.DOWNLOAD_ERROR())
+				self.add_infomessage( MSG.WARNING(), MSG.DOWNLOAD_ERROR())
 				self.redirect( 'info' )
 				return
 		# -------
@@ -178,7 +178,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			for item in licence_keys.split():
 				item_dash = EnkiModelProductKey.insert_dashes_5_10( item )
 				licence_key_display.append( item_dash )
-			self.add_infomessage( 'info', MSG.INFORMATION(),'<h3>FastSpring Store Emulator - Step 1</h3>'+
+			self.add_infomessage( MSG.INFORMATION(), '<h3>FastSpring Store Emulator - Step 1</h3>' +
 									'<h4>Emulated purchase details</h4>' +
 									'<ul>' +
 										'<li>&lt;EnkiModelProductKey&gt; #{FastSpring variable} = <em>&lt;emulated value&gt;</em></li>' +
@@ -215,9 +215,9 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 				message_view_library = ''
 				if self.is_logged_in():
 					message_view_library = '<p><a href="/profile" class="alert-link">View and activate licence keys</a>.</p>'
-				self.add_infomessage(  'info', MSG.INFORMATION(),'<h3>FastSpring Store Emulator - Step 2</h3><p>Purchase records created<p>' + message_view_library )
+				self.add_infomessage( MSG.INFORMATION(),'<h3>FastSpring Store Emulator - Step 2</h3><p>Purchase records created<p>' + message_view_library )
 			else:
-				self.add_infomessage( 'warning', MSG.WARNING(),'<h3>FastSpring Store Emulator - Step 2 FAILED: Purchase records not created</h3>' )
+				self.add_infomessage( MSG.WARNING(),'<h3>FastSpring Store Emulator - Step 2 FAILED: Purchase records not created</h3>' )
 
 			self.redirect_to_relevant_page()
 
@@ -255,15 +255,14 @@ class HandlerGenerateLicenceFree( enki.HandlerBase ):
 		for item in licence_keys:
 			item_dash = EnkiModelProductKey.insert_dashes_5_10( item )
 			licence_key_display.append( item_dash )
-		self.add_infomessage( 'info', MSG.INFORMATION(),
-								 '<h3>Licence keys generated</h3>' +
+		self.add_infomessage( MSG.INFORMATION(), '<h3>Licence keys generated</h3>' +
 								 '<ul>' +
 									'<li>product_name = <em>' + product + '</em></li>' +
 									'<li>order_type = <em>' + order_type + '</em></li>' +
 									'<li>order_id = <em>' + order_id + '</em></li>' +
 									'<li>quantity = <em>' + xstr( quantity ) + '</em></li>' +
-							  		'<li>Recipient mail (purchaser_email) = <em>' + ( purchaser_email if purchaser_email else 'none' )  + '</em></li>' +
-							  		'<li>Recipient user id (purchaser_user_id) = <em>' + ( xstr( purchaser_user_id) if purchaser_user_id else 'none' ) + '</em></li>' +
+									'<li>Recipient mail (purchaser_email) = <em>' + ( purchaser_email if purchaser_email else 'none' )  + '</em></li>' +
+									'<li>Recipient user id (purchaser_user_id) = <em>' + ( xstr( purchaser_user_id) if purchaser_user_id else 'none' ) + '</em></li>' +
 									'<li>info = <em>' + ( info if info else 'none' ) + '</em></li>' +
 									'<li>licence_key(s) = <br><em>' + '<br>'.join( licence_key_display ) + '</em></li>' +
 								 '</ul>' )
@@ -340,21 +339,21 @@ class HandlerLibrary( enki.HandlerBaseReauthenticate ):
 								item.activated_by_user = user_id
 								item.put()
 								EnkiModelBackoffTimer.remove( str( user_id ))
-								self.add_infomessage( 'success', MSG.SUCCESS(), MSG.PRODUCT_LICENCE_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
+								self.add_infomessage( MSG.SUCCESS(), MSG.PRODUCT_LICENCE_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
 						elif item.activated_by_user == user_id:
 							# the user has already activated this specific key
 							if is_manual:
 								self.session[ 'error_library' ] = MSG.PRODUCT_ALREADY_ACTIVATED( settings.product_displayname[ item.product_name ])
 								self.session[ 'error_library_licence' ] = licence_key_formatted
 							else:
-								self.add_infomessage( 'info', MSG.INFORMATION(), MSG.PRODUCT_ALREADY_ACTIVATED( settings.product_displayname[ item.product_name ]))
+								self.add_infomessage( MSG.INFORMATION(), MSG.PRODUCT_ALREADY_ACTIVATED( settings.product_displayname[ item.product_name ]))
 						else:
 							# another user has activated the key
 							if is_manual:
 								self.session[ 'error_library' ] = MSG.LICENCE_ANOTHER_USER_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted )
 								self.session[ 'error_library_licence' ] = licence_key_formatted
 							else:
-								self.add_infomessage( 'info', MSG.INFORMATION(), MSG.LICENCE_ANOTHER_USER_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
+								self.add_infomessage( MSG.INFORMATION(), MSG.LICENCE_ANOTHER_USER_ACTIVATED( settings.product_displayname[ item.product_name ], licence_key_formatted ))
 				else:
 					self.session[ 'error_library' ] = MSG.LICENCE_TOO_LONG()
 					self.session[ 'error_library_licence' ] = licence_key

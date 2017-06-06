@@ -167,7 +167,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				url = self.request.url
 			# get referal path to return the user to it after they've set their display name
 			self.session[ 'sessiondisplaynamerefpath' ] = url
-			self.add_infomessage( 'info', MSG.INFORMATION(), MSG.DISPLAYNAME_NEEDED())
+			self.add_infomessage( MSG.INFORMATION(), MSG.DISPLAYNAME_NEEDED())
 			self.redirect( enki.libutil.get_local_url( 'displayname' ))
 			return False
 		return True
@@ -277,9 +277,18 @@ class HandlerBase( webapp2.RequestHandler ):
 		if enki.libutil.is_debug():
 			self.session[ 'debugmessage' ] = self.session.pop( 'debugmessage', '' ) + message_body + '<hr>'
 
-	def add_infomessage( self, message_type, message_header, message_body ):
+	def add_infomessage( self, message_header, message_body ):
 	# reference: http://bootswatch.com/flatly/#indicators
 	# message_type values: 'success', 'info', 'warning', 'danger'
+		if message_header == MSG.SUCCESS():
+			message_type = 'success'
+		elif message_header == MSG.INFORMATION():
+			message_type = 'info'
+		elif message_header == MSG.WARNING():
+			message_type = 'warning'
+		else:
+			message_header = MSG.DANGER()
+			message_type = 'danger'
 		self.session[ 'infomessage' ] = self.session.pop( 'infomessage', [] ) + [[ message_type, message_header, message_body ]]
 
 	def debug_output_email( self, email_address, email_subject, email_body ):
@@ -574,7 +583,7 @@ class HandlerBase( webapp2.RequestHandler ):
 					LoginAddToken.put()
 					self.redirect( enki.libutil.get_local_url( 'loginaddconfirm' ))
 				else:
-					self.add_infomessage( 'info', MSG.INFORMATION(), MSG.AUTH_PROVIDER_CANNOT_BE_ADDED( str( auth_id )))
+					self.add_infomessage( MSG.INFORMATION(), MSG.AUTH_PROVIDER_CANNOT_BE_ADDED( str( auth_id )))
 					self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 				return
 			else:
@@ -584,12 +593,12 @@ class HandlerBase( webapp2.RequestHandler ):
 					if self.is_logged_in() and self.user_id == user.key.id():
 						# Refresh the reauthenticated status
 						self.session[ 'reauth_time' ] = datetime.datetime.now()
-						self.add_infomessage( 'success', MSG.SUCCESS(), MSG.REAUTHENTICATED())
+						self.add_infomessage( MSG.SUCCESS(), MSG.REAUTHENTICATED())
 						self.redirect_to_relevant_page()
 						return
 					# Login
 					self.log_in_session_token_create( user )
-					self.add_infomessage( 'success', MSG.SUCCESS(), MSG.LOGGED_IN())
+					self.add_infomessage( MSG.SUCCESS(), MSG.LOGGED_IN())
 					self.redirect_to_relevant_page()
 				else:
 					# New authentication method
