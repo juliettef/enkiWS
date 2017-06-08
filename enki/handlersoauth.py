@@ -255,7 +255,7 @@ class HandlerOAuthFacebook( HandlerOAuthOAUTH2 ):
 		return 'public_profile email' # https://developers.facebook.com/docs/facebook-login/permissions/v2.2#reference
 
 	def process_token_result( self, result ): # select the processing function
-		data = self.process_result_as_query_string( result )
+		data = self.process_result_as_JSON( result )
 		if not data: # failed
 			self.add_infomessage( MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
 			self.redirect_to_relevant_page()
