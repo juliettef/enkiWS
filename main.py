@@ -37,12 +37,12 @@ routes += enki.routes_account \
 		  + enki.routes_info \
 		  + enki.routes_admin \
 		  + enki.routes_media \
-		  + enki.routes_static \
-		  + [ webapp2.Route( '<:.*>', HandlerCustom404, name = 'custom_404' )]
+		  + enki.routes_static
 
 routes_copy = copy.deepcopy( routes )
-locale_routes = [ webapp2_extras.routes.PathPrefixRoute('/<locale:[a-z]{2}_[A-Z]{2}>',  [ webapp2_extras.routes.NamePrefixRoute('locale-', routes ) ] ) ]
-locale_routes += routes_copy + settings.get_routes_oauth()
+locale_routes = [ webapp2_extras.routes.PathPrefixRoute( '/<locale:[a-z]{2}_[A-Z]{2}>', [ webapp2_extras.routes.NamePrefixRoute( 'locale-', routes )])]
+custom_404_routes = [ webapp2.Route('/<locale:[a-z]{2}_[A-Z]{2}><:.*>', HandlerCustom404, name = 'locale-custom_404'), webapp2.Route( '<:.*>', HandlerCustom404, name = 'custom_404' )]
+locale_routes += routes_copy + settings.get_routes_oauth() + custom_404_routes
 
 
 app = webapp2.WSGIApplication( routes = locale_routes, debug = enki.libutil.is_debug(), config = settings.config )
