@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-06-06 16:36+0100\n"
+"POT-Creation-Date: 2017-06-08 11:41+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -1336,6 +1336,15 @@ msgstr "Accepter"
 #: templates/messages.html:30
 msgid "Decline"
 msgstr "Décliner"
+
+#: templates/notfound.html:6 templates/notfound.html:7
+#: templates/notfound.html:17
+msgid "Page not found"
+msgstr "Page non trouvée"
+
+#: templates/notfound.html:18
+msgid "Error code: 404"
+msgstr "Code de statut : 404"
 
 #: templates/passwordchange.html:24 templates/passwordchange.html:26
 msgid "Current password"

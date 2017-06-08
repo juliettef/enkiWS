@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-06-06 16:36+0100\n"
+"POT-Creation-Date: 2017-06-08 11:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1334,6 +1334,15 @@ msgstr ""
 
 #: templates/messages.html:30
 msgid "Decline"
+msgstr ""
+
+#: templates/notfound.html:6 templates/notfound.html:7
+#: templates/notfound.html:17
+msgid "Page not found"
+msgstr ""
+
+#: templates/notfound.html:18
+msgid "Error code: 404"
 msgstr ""
 
 #: templates/passwordchange.html:24 templates/passwordchange.html:26
