@@ -79,7 +79,7 @@
                                             <div class="col-lg-11">
                                                 <textarea class="form-control" rows="6" id="textArea" name="post_body" placeholder="{{ _( "Your text" ) }}">{{ postbody }}</textarea>
                                                 {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
-                                                <p class="text-info">{{ _( "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting.", url = "https://daringfireball.net/projects/markdown/syntax" ) }} {{ ngettext( "Maximum post length: %(length)s character.", "Maximum post length: %(length)s characters.", maxpostlength, length = maxpostlength ) }}</p>
+                                                <p class="text-info">{{ _( "Use markdown for formatting - <a href='%(url_syntax)s' target='_blank'>Syntax</a> - <a href='%(url_cheatsheet)s' target='_blank'>Cheatsheet</a>.", url_syntax = "https://daringfireball.net/projects/markdown/syntax", url_cheatsheet = "https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" ) }} {{ ngettext( "Maximum post length: %(length)s character.", "Maximum post length: %(length)s characters.", maxpostlength, length = maxpostlength ) }}</p>
                                             </div>
                                         </div>
 										{% if has_permission_sticky %}
