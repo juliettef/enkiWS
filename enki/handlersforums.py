@@ -52,37 +52,36 @@ class HandlerForum( enki.HandlerBase ):
 				user_id = self.user_id
 				thread_title = self.request.get( 'thread_title' )
 				post_body = self.request.get( 'post_body' )
+				thread_sticky_order = xint( self.request.get( 'sticky_order_thread' ))
+				post_sticky_order = xint( self.request.get( 'sticky_order_post' ))
 				submit_type = self.request.get( 'submittype' )
 				error_message_threadtitle = ''
 				error_message_postbody = ''
-				preview_threadtitle = ''
-				preview_post = ''
 				pmtoken = self.request.get( 'preventmultitoken' )
 				show_input = True
-				if submit_type == 'input':
+				if submit_type == 'cancel' or submit_type == 'input':
 					thread_title = ''
 					post_body = ''
-					pmtoken = EnkiModelTokenVerify.add_preventmultipost_token( 'preventmultipost' )
+					thread_sticky_order = 0
+					post_sticky_order = 0
+					if submit_type == 'input':
+						pmtoken = EnkiModelTokenVerify.add_preventmultipost_token( 'preventmultipost' )
 				else:
 					self.check_CSRF()
-					if submit_type != 'cancel':
-						if not thread_title:
-							error_message_threadtitle = MSG.THREAD_TITLE_NEEDED( )
-						else:
-							exceed = len( thread_title ) - EnkiModelThread.THREAD_TITLE_LENGTH_MAX
-							if exceed > 0:
-								error_message_threadtitle = MSG.THREAD_TITLE_TOO_LONG( exceed )
-						if not post_body:
-							error_message_postbody = MSG.POST_BODY_NEEDED()
-						else:
-							exceed = len( post_body ) - EnkiModelPost.POST_LENGTH_MAX
-							if exceed > 0:
-								error_message_postbody = MSG.POST_BODY_TOO_LONG( exceed )
-
+					if not thread_title:
+						error_message_threadtitle = MSG.THREAD_TITLE_NEEDED( )
+					else:
+						exceed = len( thread_title ) - EnkiModelThread.THREAD_TITLE_LENGTH_MAX
+						if exceed > 0:
+							error_message_threadtitle = MSG.THREAD_TITLE_TOO_LONG( exceed )
+					if not post_body:
+						error_message_postbody = MSG.POST_BODY_NEEDED()
+					else:
+						exceed = len( post_body ) - EnkiModelPost.POST_LENGTH_MAX
+						if exceed > 0:
+							error_message_postbody = MSG.POST_BODY_TOO_LONG( exceed )
 					if not error_message_threadtitle and not error_message_postbody:
 						if submit_type == 'submit':
-							thread_sticky_order = xint( self.request.get( 'sticky_order_thread' ))
-							post_sticky_order = xint( self.request.get( 'sticky_order_post' ))
 							if EnkiModelTokenVerify.check_and_delete_preventmultipost_token( pmtoken, 'preventmultipost' ):
 								result = EnkiModelPost.add_thread_and_post( user_id, forum, thread_title, thread_sticky_order, post_body, post_sticky_order )
 								if result == enki.libutil.ENKILIB_OK:
@@ -96,12 +95,6 @@ class HandlerForum( enki.HandlerBase ):
 							else:
 								thread_title = ''
 								post_body = ''
-						elif submit_type == 'preview':
-							preview_threadtitle = thread_title
-							preview_post = post_body
-						elif submit_type == 'cancel':
-							thread_title = ''
-							post_body = ''
 
 				self.render_tmpl( 'forum.html', CSRFneeded = show_input,
 				                  active_menu = 'forums',
@@ -115,8 +108,9 @@ class HandlerForum( enki.HandlerBase ):
 				                  maxthreadtitlelength = EnkiModelThread.THREAD_TITLE_LENGTH_MAX,
 				                  threadtitle = thread_title,
 				                  postbody = post_body,
-				                  previewthreadtitle = preview_threadtitle,
-				                  previewpost = preview_post )
+								  threadstickyorder = thread_sticky_order,
+								  poststickyorder = post_sticky_order,
+				                  preview = True if ( submit_type == 'preview' and thread_title and post_body ) else False)
 
 
 class HandlerThread( enki.HandlerBase ):

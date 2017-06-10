@@ -77,10 +77,10 @@
 											<label for="sticky_order_thread" class="col-md-1 control-label">{{ _( "Sticky" ) }}</label>
 												<div class="col-md-3">
 													<select class="form-control" name="sticky_order_thread">
-														<option value="0">{{ _( "0 - not sticky" ) }}</option>
-														<option value="1">{{ _( "1 - sticky" ) }}</option>
-														<option value="2">{{ _( "2 - more sticky" ) }}</option>
-														<option value="3">{{ _( "3 - top sticky" ) }}</option>
+														<option value="0" {% if threadstickyorder == 0 %}selected{% endif %}>{{ _( "0 - not sticky" ) }}</option>
+														<option value="1" {% if threadstickyorder == 1 %}selected{% endif %}>{{ _( "1 - sticky" ) }}</option>
+														<option value="2" {% if threadstickyorder == 2 %}selected{% endif %}>{{ _( "2 - more sticky" ) }}</option>
+														<option value="3" {% if threadstickyorder == 3 %}selected{% endif %}>{{ _( "3 - top sticky" ) }}</option>
 													</select>
 												</div>
 												<div class="col-md-5">
@@ -101,10 +101,10 @@
 											<label for="sticky_order_post" class="col-md-1 control-label">{{ _( "Sticky" ) }}</label>
 												<div class="col-md-3">
 													<select class="form-control" name="sticky_order_post">
-														<option value="0">{{ _( "0 - not sticky" ) }}</option>
-														<option value="1">{{ _( "1 - sticky" ) }}</option>
-														<option value="2">{{ _( "2 - more sticky" ) }}</option>
-														<option value="3">{{ _( "3 - top sticky" ) }}</option>
+														<option value="0" {% if poststickyorder == 0 %}selected{% endif %}>{{ _( "0 - not sticky" ) }}</option>
+														<option value="1" {% if poststickyorder == 1 %}selected{% endif %}>{{ _( "1 - sticky" ) }}</option>
+														<option value="2" {% if poststickyorder == 2 %}selected{% endif %}>{{ _( "2 - more sticky" ) }}</option>
+														<option value="3" {% if poststickyorder == 3 %}selected{% endif %}>{{ _( "3 - top sticky" ) }}</option>
 													</select>
 												</div>
 												<div class="col-md-5">
@@ -123,21 +123,21 @@
                                 </form>
                             </div>
 
-                            {% if previewpost and previewthreadtitle %}
+                            {% if preview %}
                                 <h4 class="text-info">{{ _( "PREVIEW" ) }}</h4>
                                 <hr>
-                                <h3 class="text-info">{{ _( "Thread" ) }} - {{ previewthreadtitle|e }}</h3>
+                                <h3 class="text-info">{{ _( "Thread" ) }} - {{ threadtitle|e }}</h3>
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
                                         {{ display_name }} - {{ _( "date and time submitted UTC" ) }} - {{ _( "permalink" ) }}
                                     </div>
                                     <div class="panel-body">
-                                        {{ data.markdown_escaped_nofollow( previewpost ) }}
+                                        {{ data.markdown_escaped_nofollow( postbody ) }}
                                     </div>
                                 </div>
                                 <hr>
-                                <a href id="bottom"></a> {# <!-- scroll to bottom if there's a preview --> #}
                             {% endif %}
+							<a href id="bottom"></a> {# <!-- scroll to bottom if creating a new thread  --> #}
 
                         {% else %}
                             <form class="form-horizontal" action="{{ 'forum'|local({ 'forum': data.forum_selected }) }}" method="post" id="mainform">
