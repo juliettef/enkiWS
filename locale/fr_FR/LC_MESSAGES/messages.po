@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-06-08 11:41+0100\n"
+"POT-Creation-Date: 2017-06-10 20:46+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -1004,8 +1004,8 @@ msgstr "Texte de votre message"
 
 #: templates/forum.html:96 templates/post.html:78 templates/thread.html:82
 #, python-format
-msgid "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting."
-msgstr "Utilisez <a href='%(url)s' target='_blank'>markdown</a> pour formater votre message."
+msgid "Use markdown for formatting - <a href='%(url_syntax)s' target='_blank'>Syntax</a> - <a href='%(url_cheatsheet)s' target='_blank'>Cheatsheet</a>."
+msgstr "Utilisez markdown - <a href='%(url_syntax)s' target='_blank'>Syntaxe</a> - <a href='%(url_cheatsheet)s' target='_blank'>Référence rapide</a>."
 
 #: templates/forum.html:96 templates/post.html:78 templates/thread.html:82
 #, python-format
@@ -1692,4 +1692,7 @@ msgstr "Veuillez créer votre nom d'affichage pour répondre."
 #: templates/thread.html:135
 msgid "Please log in or create an account to post an answer."
 msgstr "Veuillez vous connecter ou créer un compte pour répondre."
+
+#~ msgid "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting."
+#~ msgstr "Utilisez <a href='%(url)s' target='_blank'>markdown</a> pour formater votre message."
 
