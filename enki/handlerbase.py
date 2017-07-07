@@ -4,7 +4,6 @@ import random
 import re
 import urlparse
 import webapp2
-import urllib
 import base64
 
 from google.appengine.api import app_identity
@@ -318,7 +317,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			url_mailgun = settings.secrets.URL_API_MAILGUN
 			data = { 'from': settings.secrets.NOREPLY_SEND_MAILGUN, 'to': email_address,
 					 'subject': email_subject, 'text': email_body }
-			form_data = urllib.urlencode( data )
+			form_data = enki.libutil.urlencode( data )
 			send_success = True
 			try:
 				result = urlfetch.fetch(
