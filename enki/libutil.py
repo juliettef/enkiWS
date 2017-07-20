@@ -123,6 +123,6 @@ def generate_auth_token():
 def generate_connect_code():
 	return webapp2_extras.security.generate_random_string( length = 5, pool = webapp2_extras.security.UPPERCASE_ALPHANUMERIC )
 
-def markdown_escaped_nofollow( text ):
+def markdown_escaped_extras( text ):
 	# safe version of markdown
-	return markdown2.markdown( text, safe_mode='escape', extras=["nofollow"])
+	return markdown2.markdown( text, safe_mode = 'escape', extras = { 'nofollow' : {}, 'html-classes' : { 'img' : 'img-responsive' }})

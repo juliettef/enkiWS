@@ -10,9 +10,9 @@ from enki.modelforum import EnkiModelForum
 from enki.modelthread import EnkiModelThread
 
 
-threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown_escaped_nofollow, thread_selected' )
-postData = collections.namedtuple( 'postData', 'forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, markdown_escaped_nofollow' )
-authorpostsData = collections.namedtuple( 'authorpostsData', 'forums_url, author_data, list, markdown_escaped_nofollow' )
+threadData = collections.namedtuple( 'threadData', 'forums_url, forum, forum_url, thread, thread_url, list, markdown_escaped_extras, thread_selected' )
+postData = collections.namedtuple( 'postData', 'forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, markdown_escaped_extras' )
+authorpostsData = collections.namedtuple( 'authorpostsData', 'forums_url, author_data, list, markdown_escaped_extras' )
 pagination = collections.namedtuple( 'pagination', 'page_first, page_previous, page_current, page_list, page_next, page_last' )
 
 
@@ -80,7 +80,7 @@ class EnkiModelPost( model.Model ):
 				item.post_page = enki.libutil.get_local_url( 'post', { 'post': str( item.key.id())})
 				item.sticky = True if ( item.sticky_order > 0 ) else False
 				list[ i ] = item
-		thread_data = threadData( forums_url, forum, forum_url, thread, thread_url, list, enki.libutil.markdown_escaped_nofollow, thread_selected )
+		thread_data = threadData( forums_url, forum, forum_url, thread, thread_url, list, enki.libutil.markdown_escaped_extras, thread_selected )
 		return thread_data
 
 	@classmethod
@@ -95,7 +95,7 @@ class EnkiModelPost( model.Model ):
 		forum = EnkiModelForum.get_by_id( thread.forum )
 		forum_url = enki.libutil.get_local_url('forum', { 'forum':str( forum.key.id())})
 		author_data = EnkiModelDisplayName.get_user_id_display_name_url( EnkiModelDisplayName.get_by_user_id_current( post.author ))
-		post_data = postData( forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, enki.libutil.markdown_escaped_nofollow, )
+		post_data = postData( forums_url, forum, forum_url, thread, thread_url, post, sticky, post_page, author_data, enki.libutil.markdown_escaped_extras )
 		return post_data
 
 	@classmethod
@@ -118,7 +118,7 @@ class EnkiModelPost( model.Model ):
 					item.post_page = enki.libutil.get_local_url( 'post', { 'post':str( item.key.id()) })
 					item.sticky = True if ( item.sticky_order > 0 ) else False
 					list[ i ] = item
-			author_posts_data = authorpostsData( forums_url, author_data, list, enki.libutil.markdown_escaped_nofollow )
+			author_posts_data = authorpostsData( forums_url, author_data, list, enki.libutil.markdown_escaped_extras )
 			return author_posts_data
 
 	@classmethod

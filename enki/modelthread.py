@@ -8,7 +8,7 @@ from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelforum import EnkiModelForum
 
 
-forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown_escaped_nofollow, forum_selected' )
+forumData = collections.namedtuple( 'forumData', 'forums_url, forum, num_posts, list, markdown_escaped_extras, forum_selected' )
 
 
 class EnkiModelThread( model.Model ):
@@ -53,7 +53,7 @@ class EnkiModelThread( model.Model ):
 				thread.author_data = EnkiModelDisplayName.get_user_id_display_name_url( EnkiModelDisplayName.get_by_user_id_current( thread.author ))
 				thread.sticky = True if ( thread.sticky_order > 0 ) else False
 				threads[ i ] = thread
-		forum_data = forumData( forums_url, forum, num_posts, threads, enki.libutil.markdown_escaped_nofollow, forum_selected )
+		forum_data = forumData( forums_url, forum, num_posts, threads, enki.libutil.markdown_escaped_extras, forum_selected )
 		return forum_data
 
 	@classmethod
