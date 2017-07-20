@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-06-10 20:46+0100\n"
+"POT-Creation-Date: 2017-07-20 13:40+0200\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -1182,7 +1182,7 @@ msgstr "Langues"
 
 #: templates/incnavbartop.html:66
 msgid "Stay logged in"
-msgstr "Demeurer connecté.e."
+msgstr "Rester connecté.e"
 
 #: templates/incnavbartop.html:74 templates/incnavbartop.html:76
 msgid "Logged in as"
