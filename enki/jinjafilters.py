@@ -1,8 +1,7 @@
-import urllib
 import urlparse
 import jinja2
 
-import enki
+import enki.libutil
 
 
 @jinja2.contextfilter
@@ -27,7 +26,7 @@ def change_locale_url( context, input_url, input_locale = '' ):
 		output_url = urlparse.urlunparse(parsed_url_list)
 	return output_url
 
-def join_url_param_char( input_url, parameters = {} ):
+def join_url_param_char( input_url, parameters = {}):
 	output_url = input_url
 	# add or modify parameters in a url
 	if parameters:
@@ -41,7 +40,7 @@ def join_url_param_char( input_url, parameters = {} ):
 		parsed_url_query.update( parameters )
 		# turn the parsed url result into a list, update it with the new query parameters (encoded)
 		parsed_url_list = list( parsed_url )
-		parsed_url_list[ 4 ] = urllib.urlencode( parsed_url_query )
+		parsed_url_list[ 4 ] = enki.libutil.urlencode( parsed_url_query )
 		# build the new url with the updated parameters
 		output_url = urlparse.urlunparse( parsed_url_list )
 	return output_url

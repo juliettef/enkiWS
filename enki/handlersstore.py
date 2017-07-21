@@ -1,5 +1,4 @@
 import webapp2
-import urllib
 import re
 import random
 
@@ -142,7 +141,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 
 	def get( self ):
 		self.render_tmpl( 'storeemulatefastspring.html',
-						  referrer = xstr( self.request.get('referrer') ),
+						  referrer = xstr( self.request.get( 'referrer' )),
 		                  active_menu = 'store',
 						  purchase_price = '$3.00',
 						  purchaser_email = 'user_email@provided_to_fastspring.com',
@@ -151,11 +150,11 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 						  order_type = 'test' )
 
 	def post( self ):
-		if not settings.SECRET_FASTSPRING or enki.libutil.is_debug( ) or settings.ENKI_EMULATE_STORE:
+		if not settings.SECRET_FASTSPRING or enki.libutil.is_debug() or settings.ENKI_EMULATE_STORE:
 			self.check_CSRF()
 
 			product = xstr( self.request.get( 'product' ))
-			quantity = xint( self.request.get('quantity'))
+			quantity = xint( self.request.get( 'quantity' ))
 			purchase_price = xstr( self.request.get( 'purchase_price' ))
 			purchaser_email = xstr( self.request.get( 'purchaser_email' ))
 			order_type = xstr( self.request.get( 'order_type' ))
@@ -165,7 +164,7 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 
 			url = webapp2.uri_for( 'generatelicencefastspring', _full = True )
 			form_fields = { 'secret': 'pretendsecret', 'quantity': str( quantity )}
-			form_data = urllib.urlencode( form_fields )
+			form_data = enki.libutil.urlencode( form_fields )
 			result = urlfetch.fetch( url = url, payload = form_data, method = urlfetch.POST )
 			if result.status_code == 200:
 				licence_keys = result.content.replace( '-', '' )
