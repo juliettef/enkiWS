@@ -83,12 +83,12 @@ def urlencode( fields ):
 			fields_non_unicode[ i ] = item
 	# ordered (list of tuples)
 	elif isinstance( fields, list ):
-		fields_non_unicode = [( None, None )] * len( fields )
+		fields_non_unicode = []
 		for i in range( len( fields )):
 			item = fields[ i ][ 1 ]
 			if isinstance( item, unicode ):
 				item = item.encode( 'utf8' )
-			fields_non_unicode[ i ] = fields[ i ][ 0 ], item
+			fields_non_unicode.append(( fields[ i ][ 0 ], item ))
 	return urllib.urlencode( fields_non_unicode )
 
 
