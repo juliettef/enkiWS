@@ -135,4 +135,4 @@ def generate_connect_code():
 
 def markdown_escaped_extras( text ):
 	# safe version of markdown
-	return markdown2.markdown( text, safe_mode = 'escape', extras = { 'nofollow' : {}, 'html-classes' : { 'img' : 'img-responsive' }})
+	return markdown2.markdown( text, safe_mode = 'escape', extras = { 'nofollow' : {}, 'fenced-code-blocks' : {}, 'html-classes' : { 'img' : 'img-responsive' }})
