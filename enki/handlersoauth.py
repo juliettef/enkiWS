@@ -14,6 +14,7 @@ from google.appengine.api import urlfetch
 
 import settings
 import enki
+import enki.libutil
 import enki.textmessages as MSG
 
 
@@ -75,7 +76,7 @@ class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 					'redirect_uri': self.domain_name[ :-1 ] + self.get_auth_callback(),
 				   }
 		params.update( self.get_optional_params( ) )
-		urlParams = urllib.urlencode( params )
+		urlParams = enki.libutil.urlencode( params )
 		fullURL = str( self.auth_endpoint() + '?' + urlParams )  # note: casting to string so works online with permissions restricted to Admin (app.yaml) as this was generating a unicode error
 		self.redirect( fullURL )
 
@@ -89,7 +90,7 @@ class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 				   'redirect_uri': self.domain_name[ :-1 ] + self.get_auth_callback(),
 				   'grant_type': 'authorization_code',
 				   }
-		urlParams = urllib.urlencode( params )
+		urlParams = enki.libutil.urlencode( params )
 		url = self.token_endpoint()
 
 		result = self.urlfetch_safe( url = url,
@@ -102,7 +103,7 @@ class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 
 	def get_profile( self, token, params = {} ):
 		params.update( { 'access_token': token } )
-		fullUrl = self.profile_endpoint() + '?' + urllib.urlencode( params )
+		fullUrl = self.profile_endpoint() + '?' + enki.libutil.urlencode( params )
 		profile = self.urlfetch_safe( url = fullUrl )
 		return profile
 
@@ -325,7 +326,7 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 		profile = self.get_profile( token )
 		jdoc = self.process_result_as_JSON( profile )
 
-		emailUrl ='https://api.github.com/user/emails?' + urllib.urlencode({ 'access_token': token })
+		emailUrl ='https://api.github.com/user/emails?' + enki.libutil.urlencode({ 'access_token': token })
 		emailDoc = self.urlfetch_safe( url = emailUrl )
 		jemails = self.process_result_as_JSON( emailDoc )
 		for item in jemails:
@@ -379,7 +380,7 @@ class HandlerOAuthSteam( HandlerOAuthBase ):
 					'openid.return_to': self.domain_name[ :-1 ] + self.get_auth_callback( ) + '?state=' + self.create_CSRF( 'oauth' ),
 					'openid.realm': self.domain_name[ :-1 ] + self.get_auth_callback( ),
 					}
-		urlParams = urllib.urlencode( params )
+		urlParams = enki.libutil.urlencode( params )
 		fullURL = 'https://steamcommunity.com/openid/login?' + urlParams
 		self.redirect( fullURL )
 
@@ -405,7 +406,7 @@ class HandlerOAuthSteam( HandlerOAuthBase ):
 		              'email': '',
 		              'email_verified': '' }
 
-		urlParams = urllib.urlencode( params )
+		urlParams = enki.libutil.urlencode( params )
 		fullURL = 'https://steamcommunity.com/openid/login'
 		result = self.urlfetch_safe( url = fullURL, payload = urlParams, method = urlfetch.POST )
 		if 'ns:http://specs.openid.net/auth/2.0\nis_valid:true\n' in result.content: # only if is_valid do we trust the loginInfo
@@ -459,12 +460,12 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 
 	def auth_sign( self, normalised_url, ordered_params, token_secret = '', method_get = False ):
 		# note: create signature see https://dev.twitter.com/oauth/overview/creating-signatures
-		params_to_sign = urllib.urlencode( ordered_params )
+		params_to_sign = enki.libutil.urlencode( ordered_params )
 		oauth_signature_string = ''
 		if method_get:
-			oauth_signature_string = 'GET&' + percent_encode(normalised_url) + '&' + percent_encode(params_to_sign)
+			oauth_signature_string = 'GET&' + percent_encode( normalised_url ) + '&' + percent_encode( params_to_sign )
 		else:
-			oauth_signature_string = 'POST&' + percent_encode(normalised_url) + '&' + percent_encode(params_to_sign)
+			oauth_signature_string = 'POST&' + percent_encode( normalised_url ) + '&' + percent_encode( params_to_sign )
 		key = percent_encode( settings.secrets.CLIENT_SECRET_TWITTER ) + '&' + token_secret
 		hmac_hash = hmac.new( key, oauth_signature_string, hashlib.sha1 )
 		oauth_signature = base64.b64encode( hmac_hash.digest())
@@ -472,7 +473,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 
 	def auth_request( self ):
 		# STEP 1
-		# note: these parameters need to be sorted alphabetically by key
+		# note: these parameters need to be sorted alphabetically by key. They are therefore a list of tuples and not a dictionary.
 		params = [( 'oauth_callback' , self.domain_name[ :-1 ] + self.get_auth_callback()),
 		          ( 'oauth_consumer_key' , settings.secrets.CLIENT_ID_TWITTER ),
 		          ( 'oauth_nonce' , webapp2_extras.security.generate_random_string( length = 42, pool = webapp2_extras.security.ALPHANUMERIC ).encode( 'utf-8' )),
@@ -482,7 +483,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 		normalised_url = 'https://api.twitter.com/oauth/request_token/'
 		oauth_signature = self.auth_sign( normalised_url, params )
 		params.append(( 'oauth_signature', oauth_signature ))
-		url_params = urllib.urlencode( params )
+		url_params = enki.libutil.urlencode( params )
 		result = self.urlfetch_safe( url = normalised_url, payload = url_params, method = urlfetch.POST )
 		response = self.process_result_as_query_string( result )
 		# STEP 2
@@ -493,7 +494,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 			oauth_token = response.get( 'oauth_token' )
 			self.session[ 'twitter_oauth_token' ] = oauth_token
 			self.session[ 'twitter_oauth_token_secret' ] = response.get( 'oauth_token_secret' )
-			url_redirect_params = urllib.urlencode([( 'oauth_token', oauth_token )])
+			url_redirect_params = enki.libutil.urlencode([( 'oauth_token', oauth_token )])
 			url_redirect = 'https://api.twitter.com/oauth/authenticate?' + url_redirect_params
 			self.redirect( url_redirect )
 		return
@@ -511,7 +512,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 		oauth_signature = self.auth_sign( normalised_url, params, self.session.get( 'twitter_oauth_token_secret') )
 		params.append(( 'oauth_signature', oauth_signature ))
 		params.append(( 'oauth_verifier', oauth_verifier ))
-		url_params = urllib.urlencode( params )
+		url_params = enki.libutil.urlencode( params )
 		result = self.urlfetch_safe( url = normalised_url, payload = url_params, method = urlfetch.POST )
 		response = self.process_result_as_query_string( result )
 		oauth_token = response.get( 'oauth_token' )
@@ -530,7 +531,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 							 ('skip_status', 'true')]
 			verify_oauth_signature = self.auth_sign('https://api.twitter.com/1.1/account/verify_credentials.json', verify_params,oauth_token_secret, method_get=True )
 			verify_params.append(('oauth_signature', verify_oauth_signature))
-			verify_url_params = urllib.urlencode( verify_params )
+			verify_url_params = enki.libutil.urlencode( verify_params )
 			full_url = 'https://api.twitter.com/1.1/account/verify_credentials.json?' + verify_url_params
 			verify_credentials_result_json = self.urlfetch_safe( url = full_url, method = urlfetch.GET )
 			verify_credentials_result = self.process_result_as_JSON(verify_credentials_result_json)
