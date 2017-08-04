@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-07-20 13:40+0200\n"
+"POT-Creation-Date: 2017-08-04 14:58+0200\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -1003,9 +1003,9 @@ msgid "Your text"
 msgstr "Texte de votre message"
 
 #: templates/forum.html:96 templates/post.html:78 templates/thread.html:82
-#, python-format
-msgid "Use markdown for formatting - <a href='%(url_syntax)s' target='_blank'>Syntax</a> - <a href='%(url_cheatsheet)s' target='_blank'>Cheatsheet</a>."
-msgstr "Utilisez markdown - <a href='%(url_syntax)s' target='_blank'>Syntaxe</a> - <a href='%(url_cheatsheet)s' target='_blank'>Référence rapide</a>."
+#, fuzzy, python-format
+msgid "Use markdown for formatting - <a href='%(url_syntax)s' target='_blank'>Syntax</a> - <a href='%(url_cheatsheet)s' target='_blank'>Cheatsheet</a> - embed videos and images with the following syntax: ![alt text](url)."
+msgstr "Utilisez markdown - <a href='%(url_syntax)s' target='_blank'>Syntaxe</a> - <a href='%(url_cheatsheet)s' target='_blank'>Référence rapide</a> - intégrez vidéos et images en utilisant la syntaxe suivante : ![alt text](url)."
 
 #: templates/forum.html:96 templates/post.html:78 templates/thread.html:82
 #, python-format

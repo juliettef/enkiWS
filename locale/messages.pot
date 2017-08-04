@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-07-20 13:40+0200\n"
+"POT-Creation-Date: 2017-08-04 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1003,7 +1003,7 @@ msgstr ""
 
 #: templates/forum.html:96 templates/post.html:78 templates/thread.html:82
 #, python-format
-msgid "Use markdown for formatting - <a href='%(url_syntax)s' target='_blank'>Syntax</a> - <a href='%(url_cheatsheet)s' target='_blank'>Cheatsheet</a>."
+msgid "Use markdown for formatting - <a href='%(url_syntax)s' target='_blank'>Syntax</a> - <a href='%(url_cheatsheet)s' target='_blank'>Cheatsheet</a> - embed videos and images with the following syntax: ![alt text](url)."
 msgstr ""
 
 #: templates/forum.html:96 templates/post.html:78 templates/thread.html:82
