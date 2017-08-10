@@ -5,15 +5,14 @@
 
 A permissively licensed Python web service for games developers. enkiWS is a library for setting up a website and ancillary services for games on [Google App Engine](https://github.com/juliettef/enkiWS#why-use-google-app-engine).
 
-[Online demo](https://enkisoftware-webservices.appspot.com) *(may be out of sync with the source code)* 
-
-Our website [enkisoftware.com](https://www.enkisoftware.com/) uses enkiWS, with the addition of static pages and a custom blog.
+[Online demo](https://enkisoftware-webservices.appspot.com) - *may be out of sync with the source code* 
 
 ## Status
 
 This is a work in progress and not yet ready for production use.
  
-__[ NEW in v0.14 ] Added stay logged in, fixed localised links in store emulator.__  
+__[ NEW in v0.15 ] Added forums responsive images and video embedding and code syntax highlighting (pygment); added media gallery page; added custom 404 page not found.__  
+[ NEW in v0.14 ] Added stay logged in, fixed localised links in store emulator.  
 [ NEW in v0.13 ] Added user roles; reworked the personal user profile page; moved  user's licences library and sessions management to dedicated pages; updated French translation; improved icons accessibility features; refactoring: moved library functions into related model classes.  
 [ NEW in v0.12 ] Sticky threads and posts, Forum events email notifications to admin  
 [ NEW in v0.11 ] Added Admin tools page with free licence key generator, reporting cron, gcloud deployment script  
@@ -24,7 +23,7 @@ __[ NEW in v0.14 ] Added stay logged in, fixed localised links in store emulator
 
 ### Current
 
-* User Accounts
+* User Accounts - [demo](https://enkisoftware-webservices.appspot.com/profile)
     * display name
     * email
     * password change and recovery
@@ -34,22 +33,29 @@ __[ NEW in v0.14 ] Added stay logged in, fixed localised links in store emulator
     * stay logged in
     * user roles
     * account deletion
-* Security and privacy
+* Security and privacy - [demo](https://enkisoftware-webservices.appspot.com/login)
     * Backoff timer
     * User enumeration prevention
     * Account recovery via email (if account was breached and email changed by a third party)
     * Minimum user personal information stored: user email and login credentials
     * OAuth: minimum user info requested - user email and unique Id with the auth provider
     * Passwords encrypted using [PassLib scheme pbkdf2_sha512](http://passlib.readthedocs.io/en/stable/lib/passlib.hash.sha512_crypt.html?highlight=512)
+    * User display name (alias)
     * User display name can be changed but the old display name(s) remain public
-* Forums
-    * Sticky threads and posts
-    * Posts can be edited or deleted by author
-* Localisation - English & French
-* Online store
+* Online store - [demo](https://enkisoftware-webservices.appspot.com/store)
     * Payment provider [FastSpring](https://www.fastspring.com/)  
     * Licence key generation and activation
     * Store emulator
+* Forums - [demo](https://enkisoftware-webservices.appspot.com/forums)
+    * Posts can be edited or deleted by author
+    * Sticky threads and posts
+    * Posts formatting using [Markdown2](https://github.com/trentm/python-markdown2), including:
+        * video embedding: Youtube, Vimeo, mp4, using the image syntax `![alt text](url)`
+        * code syntax highlighting using [Pygments](http://pygments.org/)
+* Media - [demo](https://enkisoftware-webservices.appspot.com/media)
+    * Gallery of images and videos
+    * Enlarge and browse images - [demo](https://enkisoftware-webservices.appspot.com/en_EN/media?g=0&i=0)
+    * Data-Driven contents and layout using JSON
 * Friends
     * Search by display name and invite
     * Message alert for friend invite
@@ -61,6 +67,8 @@ __[ NEW in v0.14 ] Added stay logged in, fixed localised links in store emulator
     * Reporting
     * Free licence keys generator
     * Forum events email notifications
+* Localisation - English & French - [demo](https://enkisoftware-webservices.appspot.com/fr_FR/)
+* Custom 404 Page not Found - [demo](https://enkisoftware-webservices.appspot.com/show_404)
 
 ### Intended for release 1.0.0 
 
@@ -75,7 +83,7 @@ __[ NEW in v0.14 ] Added stay logged in, fixed localised links in store emulator
 
 * Issues reporting and tracking
 * Static blogging tool integration
-* Integration [presskit() for GAE](https://www.enkisoftware.com/devlogpost-20140123-1-Presskit_for_Google_App_Engine.html), 
+* Integration [presskit()](http://dopresskit.com/), 
 [distribute()](https://dodistribute.com/), 
 [Promoter](https://www.promoterapp.com/)
 
@@ -96,8 +104,8 @@ You can run enkiWS on your machine using the Google App Engine Launcher:
 
 ### Debugging enkiWS locally using PyCharm CE
 
-A *.idea* directory is included in the project. It is preconfigured to enable the use of the free Pycharm Community Edition as an IDE for debugging python GAE code, with one modification to make manually. 
-Note: if you'd prefer to configure PyCharm CE yourself see the [detailed tutorial](https://www.enkisoftware.com/devlogpost-20141231-1-Python_Google_App_Engine_debugging_with_PyCharm_CE.html). Otherwise follow the simplified instructions below:
+A *[.idea](https://github.com/juliettef/enkiWS/tree/master/.idea)* directory is included in the project. It is preconfigured to enable the use of the free [PyCharm Community Edition](https://www.jetbrains.com/pycharm/) as an IDE for debugging python GAE code, with one modification to make manually. 
+Note: if you'd prefer to configure PyCharm CE yourself see the [detailed tutorial](https://www.enkisoftware.com/devlogpost-20141231-1-Python_Google_App_Engine_debugging_with_PyCharm_CE). Otherwise follow the simplified instructions below:
 
 1. Ensure you have python 2.7 and Google app Engine installed. To check it works, try running the enkiWS website locally.  
 1. Download and install [Pycharm CE](https://www.jetbrains.com/pycharm/download/)  
@@ -315,21 +323,54 @@ Once an app has authenticated the user, it can use the auth_token and user_id to
     </tbody>
 </table>
 
+## Third Party dependencies
+
+Most of the third party libraries, code and tools used in this project are included in the GitHub repository. The others are installed with Google App Engine and Python 2.7 or linked to.
+
+  * [Babel](http://babel.pocoo.org/) - internationalisation - in this repository: [../babel](https://github.com/juliettef/enkiWS/tree/master/babel)  
+  
+  * [Bootswatch](https://bootswatch.com/) - CSS theme [Flatly](https://bootswatch.com/flatly/) for [Bootstrap](https://getbootstrap.com/) - in this repository: [../static/css](https://github.com/juliettef/enkiWS/tree/master/static/css) and [../static/js](https://github.com/juliettef/enkiWS/tree/master/static/js)
+
+  * [Font Awesome](http://fontawesome.io/) - icon fonts
+
+  * [Markdown2](https://github.com/trentm/python-markdown2) - forum posts formatting - in this repository: [../markdown2](https://github.com/juliettef/enkiWS/tree/master/markdown2)  
+  
+  * [Passlib](https://pypi.python.org/pypi/passlib) - password hashing - in this repository: [../passlib](https://github.com/juliettef/enkiWS/tree/master/passlib)  
+  
+  * [PyCharm Community Edition](https://www.jetbrains.com/pycharm/) - python IDE project files - in this repository: [../.idea](https://github.com/juliettef/enkiWS/tree/master/.idea)  
+  
+  * [Pygments](http://pygments.org/) - code highlighting for Markdown2 - in this repository: [../pygments](https://github.com/juliettef/enkiWS/tree/master/pygments) and [../static/css/vs.css](https://github.com/juliettef/enkiWS/tree/master/static/css/vs.css) (modified) 
+  
+  * [Pytz](https://pypi.python.org/pypi/pytz) - timezones - in this repository: [../pytz](https://github.com/juliettef/enkiWS/tree/master/pytz)  
+  
+  * [Google App Engine Standard Environment using Python 2.7](https://cloud.google.com/appengine/docs/standard/python/)  
+    * [Jinja2](http://jinja.pocoo.org/docs/2.9/) - html templates  
+    * [Webapp2](https://webapp2.readthedocs.io/) - web framework  
+
+  * [Google Cloud Storage](https://cloud.google.com/appengine/docs/standard/python/googlecloudstorageclient/setting-up-cloud-storage) - [source code on GitHub](https://github.com/GoogleCloudPlatform/appengine-gcs-client/tree/master/python/src/cloudstorage) - cloud storage buckets to store and serve files - in this repository: [../cloudstorage](https://github.com/juliettef/enkiWS/tree/master/cloudstorage)  
+  
+  * [Google App Engine sharded counter](https://cloud.google.com/appengine/articles/sharding_counters) - in this repository: [../enki/modelcounter.py](https://github.com/juliettef/enkiWS/blob/master/enki/modelcounter.py)  
+
+
+## Demo of enkiWS
+
+[Online demo](https://enkisoftware-webservices.appspot.com) - *may be out of sync with the source code* 
+
+## Projects using enkiWS
+
+Our website [enkisoftware.com](https://www.enkisoftware.com/) uses enkiWS, with the addition of static pages and a custom blog.
 
 ## FAQ
 
 ### Why use Google App Engine?
-
-Small games developers like ourselves typically have very irregular backend requirements - website and service traffic are typically relatively low, but spike when there's a new release or if some content goes viral. Google App Engine (GAE) provides a low cost scalable solution for this scenario. For more information see our article on [Implementing a static website in Google App Engine](https://www.enkisoftware.com/devlogpost-20130823-1-Implementing_a_static_website_in_Google_App_Engine.html) or [Wolfire's article on GAE for indie developers](http://blog.wolfire.com/2009/03/google-app-engine-for-indie-developers/) as well as [Wolfire's article on hosting the Humble Indie Bundle](http://blog.wolfire.com/2010/06/Hosting-the-Humble-Indie-Bundle-on-App-Engine).
-
+Small games developers like ourselves typically have very irregular backend requirements - website and service traffic are typically relatively low, but spike when there's a new release or if some content goes viral. Google App Engine (GAE) provides a low cost scalable solution for this scenario. For more information see our article on [Implementing a static website in Google App Engine](https://www.enkisoftware.com/devlogpost-20130823-1-Implementing_a_static_website_in_Google_App_Engine.html) or [Wolfire's article on GAE for indie developers](http://blog.wolfire.com/2009/03/google-app-engine-for-indie-developers/) as well as [Wolfire's article on hosting the Humble Indie Bundle](http://blog.wolfire.com/2010/06/Hosting-the-Humble-Indie-Bundle-on-App-Engine).  
 Note that if you don't want to use Google App Engine, you can use [the open source AppScale](https://www.appscale.com/) environment to run this code on other platforms.
 
 ### Why Python?
-
 Python is sufficiently popular and easy to use that it made a convenient choice of language from those available on Google App Engine. We considered Google's Go language, but although it has many benefits we thought it would be less widely known in the game development community.
 
-### EU Cookie law?
-According to the [EU legislation on cookies](http://ec.europa.eu/ipg/basics/legal/cookies/index_en.htm#section_2), the cookies used in enkiWS are exempt from consent.
+### does enkiWS comply with the EU Cookie law?
+Cookies used in enkiWS are exempt from consent according to [EU legislation](http://ec.europa.eu/ipg/basics/legal/cookies/index_en.htm#section_2).
 
 
 ## Credits
