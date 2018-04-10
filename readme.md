@@ -54,7 +54,7 @@ __[ NEW in v0.15 ] Added forums responsive images and video embedding and code s
         * code syntax highlighting using [Pygments](http://pygments.org/)
 * Media - [demo](https://enkisoftware-webservices.appspot.com/media)
     * Gallery of images and videos
-    * Enlarge and browse images - [demo](https://enkisoftware-webservices.appspot.com/en_EN/media?g=0&i=0)
+    * Enlarge and browse images - [demo](https://enkisoftware-webservices.appspot.com/media?g=0&i=0)
     * Data-Driven contents and layout using JSON
 * Friends
     * Search by display name and invite
