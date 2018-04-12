@@ -13,7 +13,12 @@ from enki.modelmailing import EnkiModelMailing
 class HandlerMailing( enki.HandlerBase ):
 
 	def get( self ):
-		return 0
+		has_subscriptions = 0
+		if self.ensure_is_logged_in() and self.enki_user.email:
+			has_subscriptions = EnkiModelMailing.exist_by_email( self.enki_user.email )
+		self.render_tmpl( 'mailing.html',
+						  data = has_subscriptions,
+						 )
 
 	def post( self ):
 		return 0
@@ -25,10 +30,10 @@ class ExtensionPageMailing( ExtensionPage ):
 		ExtensionPage.__init__( self, route_name = 'profile', template_include = 'incmailing.html' )
 
 	def get_data( self, handler ):
-		data = 0
+		count_subscriptions = 0
 		if handler.is_logged_in() and handler.enki_user.email:
-			data = EnkiModelMailing.count_by_email( handler.enki_user.email )
-		return data
+			count_subscriptions = EnkiModelMailing.count_by_email( handler.enki_user.email )
+		return count_subscriptions
 
 
 class ExtensionMailing( Extension ):

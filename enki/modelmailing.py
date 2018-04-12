@@ -14,10 +14,10 @@ class EnkiModelMailing( model.Model ):
 
 	#=== QUERIES ==================================================================
 
-	# @classmethod
-	# def exist_by_email( cls, email ):
-	# 	count = cls.query( cls.mail == email ).count( 1 )
-	# 	return count > 0
+	@classmethod
+	def exist_by_email( cls, email ):
+		count = cls.query( cls.mail == email ).count( 1 )
+		return count > 0
 
 	@classmethod
 	def count_by_email( cls, email ):
