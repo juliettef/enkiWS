@@ -28,6 +28,7 @@ enki.ExtensionLibrary.set_extensions([ enki.ExtensionStore(),
                                        enki.ExtensionForums(),
                                        enki.ExtensionRestAPI(),
                                        enki.ExtensionFriends(),
+									   enki.ExtensionMailing(),
                                        ])
 
 

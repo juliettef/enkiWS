@@ -6,6 +6,7 @@ from handlersforums import ExtensionForums
 from handlersstore import ExtensionStore
 from handlersrestapi import ExtensionRestAPI
 from handlersfriends import ExtensionFriends
+from handlersmailing import ExtensionMailing
 from handlersinfo import routes_info
 from handlersadmin import routes_admin
 from handlersmedia import routes_media

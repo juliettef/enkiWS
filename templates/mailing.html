@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>Mailing</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incbanner.html" %}
+			{% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+            <h1>{{ _( "Mailing" )}}</h1>
+
+            {% if data %}
+
+	        {% else %}
+
+            {% endif %}
+
+            {% include "incfooter.html" %}
+        </div>
+    </body>
+</html>
