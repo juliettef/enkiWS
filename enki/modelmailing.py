@@ -14,31 +14,31 @@ class EnkiModelMailing( model.Model ):
 
 	#=== QUERIES ==================================================================
 
-	@classmethod
-	def exist_by_email( cls, email ):
-		count = cls.query( cls.mail[ 0 ] == email ).count( 1 )
-		return count > 0
+	# @classmethod
+	# def exist_by_email( cls, email ):
+	# 	count = cls.query( cls.mail == email ).count( 1 )
+	# 	return count > 0
 
 	@classmethod
 	def count_by_email( cls, email ):
-		count = cls.query( cls.mail[ 0 ] == email ).count()
+		count = cls.query( cls.mail == email ).count()
 
-	@classmethod
-	def fetch_by_email( cls, email ):
-		return cls.query( cls.mail[ 0 ] == email ).fetch()
-
-	@classmethod
-	def exist_by_mail_list( cls, mail_list ):
-		count = cls.query( cls.mail[ 1 ] == mail_list ).count( 1 )
-		return count > 0
-
-	@classmethod
-	def count_by_mail_list( cls, mail_list ):
-		return cls.query( cls.mail[ 1 ] == mail_list ).count()
-
-	@classmethod
-	def get_key_by_mail_list( cls, mail_list ):
-		return cls.query( cls.mail[ 1 ] == mail_list ).get( keys_only = True )
+	# @classmethod
+	# def fetch_by_email( cls, email ):
+	# 	return cls.query( cls.mail == email ).fetch()
+	#
+	# @classmethod
+	# def exist_by_mail_list( cls, mail_list ):
+	# 	count = cls.query( cls.mail == mail_list ).count( 1 )
+	# 	return count > 0
+	#
+	# @classmethod
+	# def count_by_mail_list( cls, mail_list ):
+	# 	return cls.query( cls.mail == mail_list ).count()
+	#
+	# @classmethod
+	# def get_key_by_mail_list( cls, mail_list ):
+	# 	return cls.query( cls.mail == mail_list ).get( keys_only = True )
 
 	#=== UTILITIES ================================================================
 

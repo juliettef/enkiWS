@@ -24,6 +24,12 @@ class ExtensionPageMailing( ExtensionPage ):
 	def __init__( self ):
 		ExtensionPage.__init__( self, route_name = 'profile', template_include = 'incmailing.html' )
 
+	def get_data( self, handler ):
+		data = 0
+		if handler.is_logged_in() and handler.enki_user.email:
+			data = EnkiModelMailing.count_by_email( handler.enki_user.email )
+		return data
+
 
 class ExtensionMailing( Extension ):
 
