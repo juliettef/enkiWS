@@ -15,24 +15,55 @@
 
             <h1>{{ _( "Mailing" )}}</h1>
 
-			{# <!-- IF is_logged_in --> #}
-			{% if data[0] %}
-				{# <!-- IF has_subscriptions --> #}
-				{% if data[1] %}
-					{# <!-- UNSUBSCRIBE --> #}
-					UNSUBSCRIBE
-			 	{# <!-- IF NOT has_subscriptions AND has_email --> #}
-				{% elif data[2] %}
-					{# <!-- SUBSCRIBE with user email --> #}
-					SUBSCRIBE with user email
-				{% endif %}
-			{% endif %}
+			<div class="well bs-component">
+                <form class="form-horizontal" action="{{ 'mailing'|local }}" method="post">
+                    <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+                    <fieldset>
 
-			{# <!-- IF NOT is_logged_in OR ( is_logged_in AND NOT has_subscriptions AND NOT has_email)--> #}
-			{% if (( not data[0] ) or ( data[0] and ( not data[1] and not data[2] ))) %}
-				{# <!-- SUBSCRIBE with ENTERED email --> #}
-				SUBSCRIBE with ENTERED email
-			{% endif %}
+                        <legend>{{ _( "Newsletter subscription" ) }}</legend>
+
+						{# <!-- IF is_logged_in --> #}
+						{% if data[0] %}
+							{# <!-- IF has_subscriptions --> #}
+							{% if data[1] %}
+								{# <!-- UNSUBSCRIBE --> #}
+								<div class="form-group">
+									<div class="col-lg-10">
+										<button class="btn btn-primary" type="submit">{{ _( "Unsubscribe" ) }}</button>
+									</div>
+								</div>
+							{# <!-- IF NOT has_subscriptions AND has_email --> #}
+							{% elif data[2] %}
+								{# <!-- SUBSCRIBE with user email --> #}
+								<div class="form-group">
+									<div class="col-lg-10">
+										<button class="btn btn-primary" type="submit">{{ _( "Subscribe" ) }}</button>
+									</div>
+								</div>
+							{% endif %}
+						{% endif %}
+
+						{# <!-- IF NOT is_logged_in OR ( is_logged_in AND NOT has_subscriptions AND NOT has_email)--> #}
+						{% if ( not data[0] or ( data[0] and not data[1] and not data[2] )) %}
+							{# <!-- SUBSCRIBE with ENTERED email --> #}
+							<div class="form-group {% if error %}has-error{% endif%}">
+								<label for="email" class="col-lg-2 control-label">{{ _( "Email" ) }}</label>
+								 <div class="col-lg-10">
+									 <input class="form-control" type="text" name="email" placeholder="{{ _( "email" ) }}" value = "{{ email }}"/> {# <!-- email escaped in the handler --> #}
+									 {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
+								 </div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-lg-10 col-lg-offset-2">
+									<button class="btn btn-primary" type="submit">{{ _( "Subscribe" ) }}</button>
+								</div>
+							</div>
+						{% endif %}
+
+					</fieldset>
+                </form>
+            </div>
 
             {% include "incfooter.html" %}
         </div>
