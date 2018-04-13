@@ -13,11 +13,15 @@ from enki.modelmailing import EnkiModelMailing
 class HandlerMailing( enki.HandlerBase ):
 
 	def get( self ):
+		is_logged_in = False
 		has_subscriptions = 0
-		if self.ensure_is_logged_in() and self.enki_user.email:
+		has_email = ''
+		if self.is_logged_in() and self.enki_user.email:
+			is_logged_in = True
 			has_subscriptions = EnkiModelMailing.exist_by_email( self.enki_user.email )
+			has_email = self.enki_user.email if ( self.enki_user.email != 'removed' ) else ''
 		self.render_tmpl( 'mailing.html',
-						  data = has_subscriptions,
+						  data = [ is_logged_in, has_subscriptions, has_email ]
 						 )
 
 	def post( self ):
