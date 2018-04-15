@@ -29,7 +29,7 @@
 								{# <!-- UNSUBSCRIBE --> #}
 								<div class="form-group">
 									<div class="col-lg-10">
-										<button class="btn btn-primary" type="submit">{{ _( "Unsubscribe" ) }}</button>
+										<button class="btn btn-primary" type="submit" name="submittype" value="unsubscribe">{{ _( "Unsubscribe" ) }}</button>
 									</div>
 								</div>
 							{# <!-- IF NOT has_subscriptions AND has_email --> #}
@@ -37,7 +37,7 @@
 								{# <!-- SUBSCRIBE with user email --> #}
 								<div class="form-group">
 									<div class="col-lg-10">
-										<button class="btn btn-primary" type="submit">{{ _( "Subscribe" ) }}</button>
+										<button class="btn btn-primary" type="submit" name="submittype" value="subscribe">{{ _( "Subscribe" ) }}</button>
 									</div>
 								</div>
 							{% endif %}
@@ -56,7 +56,7 @@
 
 							<div class="form-group">
 								<div class="col-lg-10 col-lg-offset-2">
-									<button class="btn btn-primary" type="submit">{{ _( "Subscribe" ) }}</button>
+									<button class="btn btn-primary" type="submit" name="submittype" value="subscribeemail">{{ _( "Subscribe" ) }}</button>
 								</div>
 							</div>
 						{% endif %}

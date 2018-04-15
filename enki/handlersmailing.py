@@ -13,6 +13,23 @@ from enki.modelmailing import EnkiModelMailing
 class HandlerMailing( enki.HandlerBase ):
 
 	def get( self ):
+		self.render_tmpl( 'mailing.html',
+						  active_menu = 'profile',
+						  data = self.get_mailing_data() )
+
+	def post( self ):
+		self.check_CSRF()
+		data = self.get_mailing_data()
+		submit_type = self.request.get('submittype')
+		if self.is_logged_in() and submit_type == 'subscribe' or submit_type == 'unsubscribe':
+			pass #TODO
+		elif submit_type == 'subscribe_email':
+			pass #TODO
+		self.render_tmpl( 'mailing.html',
+						  active_menu = 'profile',
+						  data = data )
+
+	def get_mailing_data( self ):
 		is_logged_in = False
 		has_subscriptions = 0
 		has_email = ''
@@ -20,12 +37,7 @@ class HandlerMailing( enki.HandlerBase ):
 			is_logged_in = True
 			has_subscriptions = EnkiModelMailing.exist_by_email( self.enki_user.email )
 			has_email = self.enki_user.email if ( self.enki_user.email != 'removed' ) else ''
-		self.render_tmpl( 'mailing.html',
-						  data = [ is_logged_in, has_subscriptions, has_email ]
-						 )
-
-	def post( self ):
-		return 0
+		return [ is_logged_in, has_subscriptions, has_email ]
 
 
 class ExtensionPageMailing( ExtensionPage ):
