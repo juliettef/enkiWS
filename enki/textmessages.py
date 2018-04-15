@@ -155,3 +155,7 @@ def APP_DATA_DELETED(): return _( "Application data deleted." )
 
 # Media
 def IMAGE_UNAVAILABLE(): return _( "Image unavailable" )
+
+# Mailing
+def MAILING_SUBSCRIBED( mailing_list ): return _( "You are subscribed to the %(mailing_list)s newsletter.", mailing_list = mailing_list )
+def MAILING_UNSUBSCRIBED( mailing_list ): return _( "You are unsubscribed from the %(mailing_list)s newsletter.", mailing_list = mailing_list )
