@@ -35,13 +35,13 @@ class EnkiModelMailing( model.Model ):
 	#=== UTILITIES ================================================================
 
 	@classmethod
-	def add_email_mailing( cls, email, mailing_list ):
+	def add( cls, email, mailing_list ):
 		if not cls.exist_by_email_mailing_list( email, mailing_list ):
 			mailing = cls( mail = [ email, mailing_list ])
 			mailing.put()
 
 	@classmethod
-	def remove_email_mailing( cls, email, mailing_list ):
+	def remove( cls, email, mailing_list ):
 		entities = cls.fetch_keys_by_email_mailing_list( email, mailing_list )
 		if entities:
 			ndb.delete_multi( entities )

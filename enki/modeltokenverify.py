@@ -28,6 +28,10 @@ class EnkiModelTokenVerify( model.Model ):
 		return cls.query( cls.token == token ).get()
 
 	@classmethod
+	def get_by_email_type( cls, email, type ):
+		return cls.query( ndb.AND( cls.email == email, cls.type == type )).get()
+
+	@classmethod
 	def get_by_user_id_email_type( cls, user_id, email, type ):
 		return cls.query( ndb.AND( cls.user_id == user_id, cls.email == email, cls.type == type )).get()
 
