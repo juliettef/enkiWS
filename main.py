@@ -3,7 +3,6 @@ import webapp2_extras.routes
 import copy
 
 import settings
-import enki
 import enki.libutil
 import enki.textmessages as MSG
 
@@ -25,7 +24,7 @@ class HandlerCustom404( enki.HandlerBase ):
 
 
 enki.ExtensionLibrary.set_extensions([ enki.ExtensionStore(),
-									   enki.ExtensionMailing(),
+									   enki.ExtensionEmailSubscriptions(),
 									   enki.ExtensionFriends(),
 									   enki.ExtensionForums(),
 									   enki.ExtensionRestAPI(),

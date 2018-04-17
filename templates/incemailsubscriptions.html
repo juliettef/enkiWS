@@ -1,0 +1,17 @@
+<div class="well">
+	<h2><a href id="emailsubscriptions"></a>{{ _( "Email subscriptions" )}}</h2>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4>{{ _( "Email subscriptions" ) }} &nbsp;&nbsp;&nbsp;<a href="{{ 'emailsubscriptions'|local }}" class="btn btn-default btn-sm">{{ _( "Manage" ) }}</a></h4>
+		</div>
+		<div class="panel-body">
+			<p><b>{{ _( "Email subscriptions" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+				{% if data %}
+					{{ data }}
+				{% else %}
+					{{ _( "None" ) }}
+				{% endif %}
+			</p>
+		</div>
+	</div>
+</div>

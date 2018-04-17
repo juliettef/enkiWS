@@ -156,9 +156,9 @@ def APP_DATA_DELETED(): return _( "Application data deleted." )
 # Media
 def IMAGE_UNAVAILABLE(): return _( "Image unavailable" )
 
-# Mailing
-def MAILING_SUBSCRIBED( mailing_list ): return _( "You are subscribed to the %(mailing_list)s newsletter.", mailing_list = mailing_list )
-def MAILING_UNSUBSCRIBED( mailing_list ): return _( "You are unsubscribed from the %(mailing_list)s newsletter.", mailing_list = mailing_list )
-def SUBSCRIBE_CONFIRM_EMAIL_SENT( email ): return _( "If email address %(email)s is available, a subscription confirmation email was sent to it. Please check your inbox and follow the instructions in the email to confirm your subscription.", email = email )
-def SEND_EMAIL_SUBSCRIBE_CONFIRM_SUBJECT(): return _( "Subscription confirmation" )
-def SEND_EMAIL_SUBSCRIBE_CONFIRM_BODY( link ): return _( "Follow this link to confirm your subscription: %(link)s (click or copy and paste in your browser)", link = link )
+# Email subscriptions
+def EMAIL_SUBSCRIBED( newsletter ): return _("You are subscribed to the %(newsletter)s newsletter.", newsletter = newsletter)
+def EMAIL_UNSUBSCRIBED( newsletter ): return _("You are unsubscribed from the %(newsletter)s newsletter.", newsletter = newsletter)
+def EMAIL_SUBSCRIBE_CONFIRM_EMAIL_SENT( email, newsletter ): return _("If email address %(email)s is available, a subscription confirmation email was sent to it. Please check your inbox and follow the instructions in the email to confirm your subscription to the %(newsletter)s newsletter", email = email, newsletter = newsletter)
+def SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_SUBJECT( ): return _("Newsletter subscription confirmation")
+def SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_BODY( link, newsletter ): return _("Follow this link to confirm your subscription to the %(newsletter)s newsletter: %(link)s (click or copy and paste in your browser)", link = link, newsletter = newsletter)

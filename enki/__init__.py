@@ -2,11 +2,11 @@ from extensions import ExtensionLibrary
 from handlerbase import HandlerBase
 from handlerbasereauthenticate import HandlerBaseReauthenticate
 from handlersaccount import routes_account
-from handlersforums import ExtensionForums
 from handlersstore import ExtensionStore
-from handlersrestapi import ExtensionRestAPI
+from handlersemailsubscriptions import ExtensionEmailSubscriptions
 from handlersfriends import ExtensionFriends
-from handlersmailing import ExtensionMailing
+from handlersforums import ExtensionForums
+from handlersrestapi import ExtensionRestAPI
 from handlersinfo import routes_info
 from handlersadmin import routes_admin
 from handlersmedia import routes_media

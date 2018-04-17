@@ -690,7 +690,7 @@ class HandlerBase( webapp2.RequestHandler ):
 			ref_path = urlparse.urlparse( ref ).path
 			ref_path = enki.libutil.strip_current_locale_from_path( ref_path )
 			# Create the list of pages the user can be sent to (relevant pages)
-			relevant_pages = { '/forums', '/store', '/media', '/mailing' }
+			relevant_pages = { '/forums', '/store', '/media', '/emailsubscriptions' }
 			relevant_paths = { '/f/', '/t/', '/p/' }
 			if self.is_logged_in():
 				relevant_pages |= { '/profile', '/accountconnect', '/displayname', '/emailchange',
