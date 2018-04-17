@@ -60,11 +60,12 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 				self.send_email(email, MSG.SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_SUBJECT(), MSG.SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_BODY(link, 'default'))
 				self.add_infomessage(MSG.INFORMATION(), MSG.EMAIL_SUBSCRIBE_CONFIRM_EMAIL_SENT(email, 'default'))
 				self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
+				email = ''
 		self.render_tmpl( 'emailsubscriptions.html',
-						  active_menu = 'profile',
-						  data = data,
-						  email = email,
-						  error = error_message )
+							  active_menu = 'profile',
+							  data = data,
+							  email = email,
+							  error = error_message )
 
 	def get_email_subscriptions_data( self ):
 		is_logged_in = False
@@ -85,7 +86,7 @@ class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 		if tokenEntity:
 			EnkiModelEmailSubscriptions.add( tokenEntity.email, tokenEntity.state )
 			self.add_infomessage(MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED(tokenEntity.state))
-			self.redirect(enki.libutil.get_local_url( 'home' ))
+			self.redirect( enki.libutil.get_local_url( 'home' ))
 			tokenEntity.key.delete()
 		else:
 			self.abort(404)
