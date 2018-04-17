@@ -25,10 +25,10 @@ class HandlerCustom404( enki.HandlerBase ):
 
 
 enki.ExtensionLibrary.set_extensions([ enki.ExtensionStore(),
-                                       enki.ExtensionForums(),
-                                       enki.ExtensionRestAPI(),
-                                       enki.ExtensionFriends(),
 									   enki.ExtensionMailing(),
+									   enki.ExtensionFriends(),
+									   enki.ExtensionForums(),
+									   enki.ExtensionRestAPI(),
                                        ])
 
 

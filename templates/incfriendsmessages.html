@@ -1,0 +1,29 @@
+<div class="well">
+	<h2><a href id="friends"></a>{{ _( "Friends and Messaging" )}}</h2>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4>{{ _("Friends") }} &nbsp;&nbsp;&nbsp;<a href="{{ 'friends'|local }}" class="btn btn-default btn-sm">{{ _( "Manage" ) }}</a></h4>
+		</div>
+		<div class="panel-body">
+			<p><b>{{ ngettext( "Friend", "Friends", data[0] ) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+				{% if data[0] %}
+					{{ data[0] }}
+				{% else %}
+					{{ _( "None" ) }}
+				{% endif %}
+			</p>
+		</div>
+		<div class="panel-heading">
+			<h4>{{ _( "Messages" ) }} &nbsp;&nbsp;&nbsp;<a href="{{ 'messages'|local }}" class="btn btn-default btn-sm">{{ _( "Manage" ) }}</a></h4>
+		</div>
+		<div class="panel-body">
+			<p><b>{{ ngettext( "Message", "Messages", data[1] ) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+				{% if data[1] %}
+					{{ data[1] }}
+				{% else %}
+					{{ _( "None" ) }}
+				{% endif %}
+			</p>
+		</div>
+	</div>
+</div>

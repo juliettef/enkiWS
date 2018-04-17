@@ -218,7 +218,7 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 		if self.ensure_is_logged_in():
 			data = collections.namedtuple( 'data', '''current_display_name, previous_display_names,
 													email, has_password, has_auth_id_providers
-												   friends, messages, sessions_browsers, sessions_apps''' )
+												   sessions_browsers, sessions_apps''' )
 			current_display_name = ''
 			previous_display_names = ''
 			user_display_name = EnkiModelDisplayName.get_by_user_id_current( self.user_id )
@@ -236,15 +236,12 @@ class HandlerProfile( enki.HandlerBaseReauthenticate ):
 			if self.enki_user.auth_ids_provider:
 				has_auth_id_providers = True
 
-			friends = EnkiModelFriends.count_by_user_id( self.user_id )
-			messages = EnkiModelMessage.count_by_recipient( self.user_id )
-
 			sessions_browsers = EnkiModelTokenAuth.count_by_user_id( self.user_id )
 			sessions_apps = EnkiModelRestAPITokenVerify.count_by_user_id_type( user_id = self.user_id, type = 'apiconnect' )
 
 			data = data( current_display_name, previous_display_names,
 						 email, has_password, has_auth_id_providers,
-						 friends, messages, sessions_browsers, sessions_apps )
+						 sessions_browsers, sessions_apps )
 			self.render_tmpl( 'profile.html',
 			                  active_menu = 'profile',
 			                  data = data )

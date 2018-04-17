@@ -92,6 +92,19 @@ class HandlerMessages( enki.HandlerBase ):
 			                  data = EnkiModelMessage.get_messages( self.user_id ) )
 
 
+class ExtensionPageFriendsMessages( ExtensionPage ):
+
+	def __init__( self ):
+		ExtensionPage.__init__( self, route_name = 'profile', template_include = 'incfriendsmessages.html' )
+
+	def get_data( self, handler ):
+		if handler.ensure_is_logged_in():
+			friends = EnkiModelFriends.count_by_user_id( handler.user_id )
+			messages = EnkiModelMessage.count_by_recipient( handler.user_id )
+			data = [ friends, messages ]
+			return data
+
+
 class ExtensionPageMessageAlert( ExtensionPage ):
 
 	def __init__( self ):
@@ -113,4 +126,4 @@ class ExtensionFriends( Extension ):
 		         ]
 
 	def get_page_extensions( self ):
-		return [ ExtensionPageMessageAlert()]
+		return [ ExtensionPageFriendsMessages(), ExtensionPageMessageAlert()]

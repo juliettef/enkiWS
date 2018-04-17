@@ -98,7 +98,6 @@ class ExtensionPageMailing( ExtensionPage ):
 
 	def get_data( self, handler ):
 		count_subscriptions = 0
-		count_subscriptions = EnkiModelMailing.count_by_email(handler.enki_user.email)
 		if handler.is_logged_in() and handler.enki_user.email:
 			count_subscriptions = EnkiModelMailing.count_by_email( handler.enki_user.email )
 		return count_subscriptions
