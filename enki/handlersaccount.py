@@ -174,7 +174,7 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 			for authhandler in settings.HANDLERS:
 				if register == authhandler.get_provider_name():
 					token = security.generate_random_string( entropy = 256 )
-					LoginAddToken = EnkiModelTokenVerify( token = token, user_id = self.user_id, auth_ids_provider = register, type = 'loginaddconfirm_1' )
+					LoginAddToken = EnkiModelTokenVerify( token = token, user_id = self.user_id, state = register, type = 'loginaddconfirm_1' )
 					LoginAddToken.put()
 					self.redirect( authhandler.get_button().href )
 					break
@@ -189,7 +189,7 @@ class HandlerLoginAddConfirm( enki.HandlerBaseReauthenticate ):
 	def get_logged_in( self ):
 		tokenEntity = EnkiModelTokenVerify.get_by_user_id_type( self.user_id, 'loginaddconfirm_2' )
 		if tokenEntity:
-			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
+			provider_name, provider_uid = tokenEntity.state.partition( ':' )[ ::2 ]
 			tokenEntity.type = 'loginaddconfirm_3'
 			tokenEntity.put()
 			self.render_tmpl( 'loginaddconfirm.html',
@@ -204,10 +204,10 @@ class HandlerLoginAddConfirm( enki.HandlerBaseReauthenticate ):
 	def post_reauthenticated( self, params ):
 		choice = params.get( 'choice' )
 		if choice != 'cancel':
-			tokenEntity = EnkiModelTokenVerify.get_by_user_id_auth_id_type( user_id = self.user_id, auth_id = choice, type = 'loginaddconfirm_3' )
+			tokenEntity = EnkiModelTokenVerify.get_by_user_id_state_type( self.user_id, choice, 'loginaddconfirm_3')
 			if tokenEntity:
-				self.set_auth_id( tokenEntity.auth_ids_provider, self.user_id )
-				self.add_infomessage( MSG.SUCCESS(), MSG.AUTH_PROVIDER_ADDED( str( tokenEntity.auth_ids_provider )))
+				self.set_auth_id( tokenEntity.state, self.user_id )
+				self.add_infomessage( MSG.SUCCESS(), MSG.AUTH_PROVIDER_ADDED( str( tokenEntity.state )))
 			tokenEntity.key.delete()
 		self.redirect( enki.libutil.get_local_url( 'accountconnect' ))
 
@@ -407,7 +407,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 		token = self.session.get( 'tokenregisterauth' )
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register', retry = 3 )
 		if tokenEntity:
-			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
+			provider_name, provider_uid = tokenEntity.state.partition( ':' )[ ::2 ]
 			self.render_tmpl( 'registeroauthconfirm.html',
 			                  active_menu = 'register',
 			                  token = tokenEntity,
@@ -422,7 +422,7 @@ class HandlerRegisterOAuthConfirm( enki.HandlerBase ):
 		if choice == 'create' or choice == 'cancel':
 			token = self.session.get( 'tokenregisterauth' )
 			tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register' )
-			authId = tokenEntity.auth_ids_provider
+			authId = tokenEntity.state
 			provider_name, provider_uid = authId.partition( ':' )[ ::2 ]
 			auth_email = tokenEntity.email if tokenEntity.email else None
 			if choice == 'create':
@@ -492,7 +492,7 @@ class HandlerRegisterOAuthWithExistingEmail( enki.HandlerBase ):
 		token = self.session.get( 'tokenregisterauth' )
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'register', retry = 3 )
 		if tokenEntity:
-			provider_name, provider_uid = tokenEntity.auth_ids_provider.partition( ':' )[ ::2 ]
+			provider_name, provider_uid = tokenEntity.state.partition( ':' )[ ::2 ]
 			provider_email = tokenEntity.email
 			provider_authhandler = ''
 			for handler in settings.HANDLERS:

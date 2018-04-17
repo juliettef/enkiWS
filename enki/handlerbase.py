@@ -572,12 +572,12 @@ class HandlerBase( webapp2.RequestHandler ):
 		if auth_id:
 			# Modify existing or create user
 			# check if it's an add login method request
-			LoginAddToken = EnkiModelTokenVerify.get_by_user_id_auth_id_type( user_id = self.user_id, auth_id = loginInfo[ 'provider_name' ], type = 'loginaddconfirm_1' )
+			LoginAddToken = EnkiModelTokenVerify.get_by_user_id_state_type( self.user_id,  loginInfo[ 'provider_name' ], 'loginaddconfirm_1')
 			if LoginAddToken:
 				# Add a login method
 				if not EnkiModelUser.exist_by_auth_id( auth_id ):
 					# store the new auth prov + id in the session
-					LoginAddToken.auth_ids_provider = auth_id
+					LoginAddToken.state = auth_id
 					LoginAddToken.type = 'loginaddconfirm_2'
 					LoginAddToken.put()
 					self.redirect( enki.libutil.get_local_url( 'loginaddconfirm' ))
@@ -601,7 +601,7 @@ class HandlerBase( webapp2.RequestHandler ):
 					self.redirect_to_relevant_page()
 				else:
 					# New authentication method
-					register_token =  EnkiModelTokenVerify.get_by_auth_id_type( auth_id, 'register' )
+					register_token =  EnkiModelTokenVerify.get_by_state_type( auth_id, 'register' )
 					if register_token:
 						# If a token already exists, get the token value and update the email
 						token = register_token.token
@@ -609,7 +609,7 @@ class HandlerBase( webapp2.RequestHandler ):
 					else:
 						# Create a new token
 						token = security.generate_random_string( entropy = 256 )
-						register_token = EnkiModelTokenVerify( token = token, email = email, auth_ids_provider = auth_id, type = 'register' )
+						register_token = EnkiModelTokenVerify( token = token, email = email, state = auth_id, type = 'register' )
 					register_token.put()
 					self.session[ 'tokenregisterauth' ] = token
 					if EnkiModelUser.exist_by_email( email ):

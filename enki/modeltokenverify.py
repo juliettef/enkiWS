@@ -13,9 +13,9 @@ class EnkiModelTokenVerify( model.Model ):
 	token = model.StringProperty()
 	email = model.StringProperty()
 	user_id = model.IntegerProperty() # ndb user ID
+	state = model.StringProperty() # store misc info
 	time_created = model.DateTimeProperty( auto_now_add = True )
 	type = model.StringProperty()
-	auth_ids_provider = model.StringProperty() # store auth Id info for registration
 
 	#=== CONSTANTS ================================================================
 
@@ -28,24 +28,24 @@ class EnkiModelTokenVerify( model.Model ):
 		return cls.query( cls.token == token ).get()
 
 	@classmethod
-	def get_by_email_type( cls, email, type ):
-		return cls.query( ndb.AND( cls.email == email, cls.type == type )).get()
-
-	@classmethod
 	def get_by_user_id_email_type( cls, user_id, email, type ):
 		return cls.query( ndb.AND( cls.user_id == user_id, cls.email == email, cls.type == type )).get()
 
 	@classmethod
-	def get_by_user_id_auth_id_type( cls, user_id, auth_id, type ):
-		return cls.query( ndb.AND( cls.user_id == user_id, cls.auth_ids_provider == auth_id, cls.type == type )).get()
+	def get_by_user_id_state_type( cls, user_id, state, type ):
+		return cls.query( ndb.AND( cls.user_id == user_id, cls.state == state, cls.type == type )).get()
 
 	@classmethod
 	def get_by_user_id_type( cls, user_id, type ):
 		return cls.query( ndb.AND( cls.user_id == user_id, cls.type == type )).get( )
 
 	@classmethod	
-	def get_by_auth_id_type( cls, auth_id, type ):
-		return cls.query( ndb.AND( cls.auth_ids_provider == auth_id, cls.type == type )).get()
+	def get_by_state_type( cls, state, type ):
+		return cls.query( ndb.AND( cls.state == state, cls.type == type )).get()
+
+	@classmethod
+	def get_by_email_state_type( cls, email, state, type ):
+		return cls.query( ndb.AND( cls.email == email, cls.state == state, cls.type == type )).get()
 
 	@classmethod
 	def count_by_user_id_type( cls, user_id, type ):

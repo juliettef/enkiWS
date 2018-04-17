@@ -46,14 +46,14 @@ class HandlerMailing( enki.HandlerBase ):
 				error_message = MSG.MISSING_EMAIL()
 			elif result == enki.libutil.ENKILIB_OK:
 				# email the address with a link to allow the user to confirm their subscription
-				tokenEntity = EnkiModelTokenVerify.get_by_email_type( email, 'subscriptionconfirm')
+				tokenEntity = EnkiModelTokenVerify.get_by_email_state_type( email, 'default', 'subscriptionconfirm')
 				if tokenEntity:
 					# if a verify token for the same new email address and user already exists, use its token
 					token = tokenEntity.token
 				else:
 					# otherwise create a new token
 					token = security.generate_random_string(entropy = 256)
-					emailToken = EnkiModelTokenVerify( token = token, email = email, type = 'subscriptionconfirm' )  # TODO add the mailing list name
+					emailToken = EnkiModelTokenVerify( token = token, email = email, state = 'default', type = 'subscriptionconfirm' )
 					emailToken.put()
 				# TODO add backoff timer
 				link = enki.libutil.get_local_url( 'subscriptionconfirm', { 'verifytoken':token })
@@ -83,8 +83,8 @@ class HandlerSubscriptionConfirm( enki.HandlerBase ):
 		token = kwargs[ 'verifytoken' ]
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'subscriptionconfirm' )
 		if tokenEntity:
-			EnkiModelMailing.add( tokenEntity.email, 'default' )
-			self.add_infomessage(MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED('default'))
+			EnkiModelMailing.add( tokenEntity.email, tokenEntity.state )
+			self.add_infomessage( MSG.SUCCESS(), MSG.MAILING_SUBSCRIBED( tokenEntity.state ))
 			self.redirect(enki.libutil.get_local_url( 'home' ))
 			tokenEntity.key.delete()
 		else:
