@@ -46,20 +46,17 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 				error_message = MSG.MISSING_EMAIL()
 			elif result == enki.libutil.ENKILIB_OK:
 				if EnkiModelBackoffTimer.get( 'es:' + email, True ) == 0:
-					# email the address with a link to allow the user to confirm their subscription
-					tokenEntity = EnkiModelTokenVerify.get_by_email_state_type( email, 'default', 'emailsubscriptionconfirm')
-					if tokenEntity:
-						# if a verify token for the same new email address and user already exists, use its token
-						token = tokenEntity.token
-					else:
-						# otherwise create a new token
-						token = security.generate_random_string( entropy = 256 )
-						emailToken = EnkiModelTokenVerify( token = token, email = email, state = 'default', type = 'emailsubscriptionconfirm' )
-						emailToken.put()
-					link = enki.libutil.get_local_url( 'emailsubscriptionconfirm', { 'verifytoken':token })
-					self.send_email( email, MSG.SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_SUBJECT(), MSG.SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_BODY( link, 'default' ))
+					if not EnkiModelEmailSubscriptions.exist_by_email_newsletter( email, 'default' ):
+						# if not already subscribed, create a token and send email with a link to allow the user to confirm their subscription
+						if not EnkiModelTokenVerify.get_by_email_state_type( email, 'default', 'emailsubscriptionconfirm'):
+							# if a verify token already exists, skip as an email was already sent.
+							token = security.generate_random_string( entropy = 256 )
+							emailToken = EnkiModelTokenVerify( token = token, email = email, state = 'default', type = 'emailsubscriptionconfirm' )
+							emailToken.put()
+							link = enki.libutil.get_local_url( 'emailsubscriptionconfirm', { 'verifytoken':token })
+							self.send_email( email, MSG.SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_SUBJECT(), MSG.SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_BODY( link, 'default' ))
 					self.add_infomessage( MSG.INFORMATION(), MSG.EMAIL_SUBSCRIBE_CONFIRM_EMAIL_SENT( email, 'default' ))
-					self.add_debugmessage( 'Comment - whether the email is available or not, the feedback through the UI is identical to prevent email checking.' )
+					self.add_debugmessage( 'Comment - whether the email is sent or not, the feedback through the UI is identical to prevent email checking.' )
 					email = ''
 				else:
 					backoff_timer = EnkiModelBackoffTimer.get( 'es:' + email )
