@@ -788,16 +788,17 @@ class HandlerBase( webapp2.RequestHandler ):
 		EnkiModelTokenAuth.revoke_user_authentications( user_to_delete.key.id())
 
 	def cleanup_item( self ):
-		likelihood = 10 # occurs with a probability of 1%
 		number = random.randint( 1, 1000 )
+		likelihood = 10 # occurs with a probability of 1%
 		if number < likelihood:
 			ndb.delete_multi_async( self.fetch_keys_old_sessions( 3 ))
 			ndb.delete_multi_async( EnkiModelBackoffTimer.fetch_keys_old( 3 ))
-			ndb.delete_multi_async(EnkiModelTokenAuth.fetch_keys_expired())
+			ndb.delete_multi_async( EnkiModelTokenAuth.fetch_keys_expired())
 			ndb.delete_multi_async( EnkiModelRestAPIConnectToken.fetch_expired())
 			ndb.delete_multi_async( EnkiModelRestAPIDataStore.fetch_expired())
 			ndb.delete_multi_async( EnkiModelTokenVerify.fetch_keys_old_tokens_by_types( 0.007, [ 'loginaddconfirm_1', 'loginaddconfirm_2', 'loginaddconfirm_3' ]))
 			EnkiModelRestAPIDataStore.refresh_non_expiring()
+			ndb.delete_multi_async( EnkiModelTokenVerify.fetch_keys_old_tokens_by_types( 1, [ 'emailsubscriptionconfirm' ]))
 
 	def fetch_keys_old_sessions( self, days_old ):
 		return sessions_ndb.Session.query( sessions_ndb.Session.updated <= ( datetime.datetime.now() - datetime.timedelta( days = days_old ))).fetch( keys_only = True )
