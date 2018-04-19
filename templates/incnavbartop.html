@@ -83,6 +83,13 @@
                 {% endfor %}
             </form>
     	</div>
+		{% else %}
+		<div class="text-right">
+			{% for navbar_extension in navbar_extensions %}
+			<span>{% set data = navbar_extension[ 1 ] %}
+			{% include navbar_extension[ 0 ] %}</span>
+			{% endfor %}
+		</div>
 	    {% endif %}
 
     </div>

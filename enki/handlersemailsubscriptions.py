@@ -106,6 +106,12 @@ class ExtensionPageEmailSubscriptions(ExtensionPage):
 		return count_email_subscriptions
 
 
+class ExtensionPageEmailSubscriptionsLink(ExtensionPage):
+
+	def __init__( self ):
+		ExtensionPage.__init__( self, route_name = 'navbar', template_include = 'incemailsubscriptionslink.html' )
+
+
 class ExtensionEmailSubscriptions(Extension):
 
 	def get_routes( self ):
@@ -113,4 +119,4 @@ class ExtensionEmailSubscriptions(Extension):
 				 webapp2.Route( '/es/<verifytoken>', HandlerEmailSubscriptionConfirm, name = 'emailsubscriptionconfirm'),]
 
 	def get_page_extensions( self ):
-		return [ ExtensionPageEmailSubscriptions() ]
+		return [ ExtensionPageEmailSubscriptions(), ExtensionPageEmailSubscriptionsLink() ]
