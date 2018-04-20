@@ -94,6 +94,30 @@ class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 			self.abort(404)
 
 
+class HandlerEmailBatchSending( enki.HandlerBase ):
+
+	def get( self ):
+		self.render_tmpl( 'emailbatchsending.html',
+						  data = '')
+
+	def post( self ):
+		self.check_CSRF()
+		newsletter = self.request.get( 'newsletter' )
+		subject = self.request.get( 'subject' )
+		body = self.request.get( 'body' )
+		email_list = self.get_subscribers( newsletter )
+		self.send_email( email_list, subject, body )
+		self.add_infomessage( MSG.SUCCESS(), 'Batch email sent' )
+		self.render_tmpl( 'emailbatchsending.html',
+						  newsletter = newsletter,
+						  subject = subject,
+						  body = body, )
+
+	def get_subscribers( self, newsletter ):
+		# TODO create lists of max 1000 subscribers
+		return []
+
+
 class ExtensionPageEmailSubscriptions(ExtensionPage):
 
 	def __init__( self ):
@@ -115,8 +139,10 @@ class ExtensionPageEmailSubscriptionsLink(ExtensionPage):
 class ExtensionEmailSubscriptions(Extension):
 
 	def get_routes( self ):
-		return [ webapp2.Route( '/emailsubscriptions', HandlerEmailSubscriptions, name = 'emailsubscriptions'),
-				 webapp2.Route( '/es/<verifytoken>', HandlerEmailSubscriptionConfirm, name = 'emailsubscriptionconfirm'),]
+		return [ webapp2.Route( '/emailsubscriptions', HandlerEmailSubscriptions, name = 'emailsubscriptions' ),
+				 webapp2.Route( '/es/<verifytoken>', HandlerEmailSubscriptionConfirm, name = 'emailsubscriptionconfirm' ),
+				 webapp2.Route( '/admin/emailbatchsending', HandlerEmailBatchSending, name = 'emailbatchsending' ),
+				 ]
 
 	def get_page_extensions( self ):
 		return [ ExtensionPageEmailSubscriptions(), ExtensionPageEmailSubscriptionsLink() ]

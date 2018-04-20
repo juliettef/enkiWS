@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        {% include "inchead.html" %}
+        <title>{{ _( "Batch emails sending" )}}</title>
+    </head>
+
+    <body>
+        <div class="container">
+
+            {% include "incbanner.html" %}
+            {% include "incnavbartop.html" %}
+            {% include "incmessageinfo.html" %}
+
+			<h1 class="text-danger">{{ _( "Batch emails sending" ) }}</h1>
+
+			<div class="well bs-component">
+				<form class="form-horizontal" action="{{ 'emailbatchsending'|local }}" method="post">
+					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
+					<fieldset>
+						<legend>{{ _( "Compose and send a newsletter" ) }}</legend>
+
+						<div class="form-group">
+							<label for="newsletter" class="col-lg-2 control-label">{{ _( 'Newsletter' ) }}</label>
+							<div class="col-lg-10">
+								<select class="form-control" type="text" name="newsletter" value = "{{ newsletter }}">
+									<option>default</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="subject" class="col-lg-2 control-label">{{ _( 'Subject' ) }}</label>
+							<div class="col-lg-10">
+								<input class="form-control" type="text" name="subject" value = "{{ subject }}">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="body" class="col-lg-2 control-label">{{ _( 'Body' ) }}</label>
+							<div class="col-lg-10">
+								<textarea class="form-control" rows="10" id="body" name="body">{{ body }}</textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-lg-10 col-lg-offset-2">
+								<button class="btn btn-primary" type="submit" name="buy" value="{{ send }}">{{ _( "Send" ) }}</button>
+							</div>
+						</div>
+
+					</fieldset>
+				</form>
+			</div>
+
+            {% include "incfooter.html" %}
+    	</div>
+    </body>
+</html>
