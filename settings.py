@@ -24,11 +24,10 @@ COMPANY_NAME = "Company"
 
 email_newsletter_name = [ 'Default' ]
 
-
 # lists of user roles and permissions
 ROLES = { 'RUC':'User, Confirmed',
 		  'RFM':'Forum Moderator', }
-PERMISSIONS = { 'PFTS' :'Permission to set/unset Forum Thread Sticky',
+PERMISSIONS = { 'PFTS' : 'Permission to set/unset Forum Thread Sticky',
 				'PFPS' : 'Permission to set/unset Forum Post Sticky', }
 # permissions granted to each role
 ROLES_PERMISSIONS = { 'RUC' : [],

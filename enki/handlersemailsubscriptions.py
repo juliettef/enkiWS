@@ -31,11 +31,15 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 		error_message = ''
 		if data[ 0 ]:	# is_logged_in
 			if submit_type == 'subscribe':
-				EnkiModelEmailSubscriptions.add( self.enki_user.email, settings.email_newsletter_name[ 0 ])
+				# delete eventual verification tokens for this email and newsletter
+				tokenEntity = EnkiModelTokenVerify.get_by_email_state_type( self.enki_user.email, settings.email_newsletter_name[ 0 ],'emailsubscriptionconfirm' )
+				if tokenEntity:
+					tokenEntity.key.delete()
+				EnkiModelEmailSubscriptions.add_newsletter( self.enki_user.email, settings.email_newsletter_name[ 0 ])
 				self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED( settings.email_newsletter_name[ 0 ]))
 				data[ 1 ] = True	# has_email_subscriptions
 			elif submit_type == 'unsubscribe':
-				EnkiModelEmailSubscriptions.remove( self.enki_user.email, settings.email_newsletter_name[ 0 ])
+				EnkiModelEmailSubscriptions.remove_newsletter_by_email( self.enki_user.email, settings.email_newsletter_name[ 0 ])
 				self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_UNSUBSCRIBED( settings.email_newsletter_name[ 0 ]))
 				data[ 1 ] = False	# has_email_subscriptions - ASSUMPTION: ONLY ONE NEWSLETTER AVAILABLE
 		elif submit_type == 'subscribeemail':
@@ -75,8 +79,9 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 		has_email = ''
 		if self.is_logged_in() and self.enki_user.email:
 			is_logged_in = True
-			has_email_subscriptions = EnkiModelEmailSubscriptions.exist_by_email( self.enki_user.email )
 			has_email = self.enki_user.email if ( self.enki_user.email != 'removed' ) else ''
+			if has_email:
+				has_email_subscriptions = True if EnkiModelEmailSubscriptions.count_newsletters_by_email( self.enki_user.email ) else False
 		return [ is_logged_in, has_email_subscriptions, has_email ]
 
 
@@ -87,8 +92,8 @@ class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'emailsubscriptionconfirm' )
 		if tokenEntity:
 			EnkiModelBackoffTimer.remove( 'es:' + tokenEntity.email )
-			EnkiModelEmailSubscriptions.add( tokenEntity.email, tokenEntity.state )
-			self.add_infomessage(MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED(tokenEntity.state))
+			EnkiModelEmailSubscriptions.add_newsletter( tokenEntity.email, tokenEntity.state )
+			self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED( tokenEntity.state ))
 			self.redirect( enki.libutil.get_local_url( 'home' ))
 			tokenEntity.key.delete()
 		else:
@@ -126,8 +131,8 @@ class ExtensionPageEmailSubscriptions(ExtensionPage):
 
 	def get_data( self, handler ):
 		count_email_subscriptions = 0
-		if handler.is_logged_in() and handler.enki_user.email:
-			count_email_subscriptions = EnkiModelEmailSubscriptions.count_by_email( handler.enki_user.email )
+		if handler.is_logged_in() and handler.enki_user.email: # TODO if email is removed -> delete subscriptions
+			count_email_subscriptions = EnkiModelEmailSubscriptions.count_newsletters_by_email( handler.enki_user.email )
 		return count_email_subscriptions
 
 
