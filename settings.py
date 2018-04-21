@@ -22,6 +22,8 @@ product_displayname = { 'product_a' : 'Product A',
 
 COMPANY_NAME = "Company"
 
+email_newsletter_name = [ 'Default' ]
+
 
 # lists of user roles and permissions
 ROLES = { 'RUC':'User, Confirmed',

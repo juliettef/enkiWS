@@ -2,6 +2,7 @@ import webapp2
 
 from webapp2_extras import security
 
+import settings
 import enki
 import enki.libutil
 import enki.textmessages as MSG
@@ -30,12 +31,12 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 		error_message = ''
 		if data[ 0 ]:	# is_logged_in
 			if submit_type == 'subscribe':
-				EnkiModelEmailSubscriptions.add( self.enki_user.email, 'default' )
-				self.add_infomessage(MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED('default'))
+				EnkiModelEmailSubscriptions.add( self.enki_user.email, settings.email_newsletter_name[ 0 ])
+				self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED( settings.email_newsletter_name[ 0 ]))
 				data[ 1 ] = True	# has_email_subscriptions
 			elif submit_type == 'unsubscribe':
-				EnkiModelEmailSubscriptions.remove( self.enki_user.email, 'default' )
-				self.add_infomessage(MSG.SUCCESS(), MSG.EMAIL_UNSUBSCRIBED('default'))
+				EnkiModelEmailSubscriptions.remove( self.enki_user.email, settings.email_newsletter_name[ 0 ])
+				self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_UNSUBSCRIBED( settings.email_newsletter_name[ 0 ]))
 				data[ 1 ] = False	# has_email_subscriptions - ASSUMPTION: ONLY ONE NEWSLETTER AVAILABLE
 		elif submit_type == 'subscribeemail':
 			email_unsafe = self.request.get( 'email' )
@@ -46,16 +47,16 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 				error_message = MSG.MISSING_EMAIL()
 			elif result == enki.libutil.ENKILIB_OK:
 				if EnkiModelBackoffTimer.get( 'es:' + email, True ) == 0:
-					if not EnkiModelEmailSubscriptions.exist_by_email_newsletter( email, 'default' ):
+					if not EnkiModelEmailSubscriptions.exist_by_email_newsletter( email, settings.email_newsletter_name[ 0 ]):
 						# if not already subscribed, create a token and send email with a link to allow the user to confirm their subscription
-						if not EnkiModelTokenVerify.get_by_email_state_type( email, 'default', 'emailsubscriptionconfirm'):
+						if not EnkiModelTokenVerify.get_by_email_state_type( email, settings.email_newsletter_name[ 0 ], 'emailsubscriptionconfirm'):
 							# if a verify token already exists, skip as an email was already sent.
 							token = security.generate_random_string( entropy = 256 )
-							emailToken = EnkiModelTokenVerify( token = token, email = email, state = 'default', type = 'emailsubscriptionconfirm' )
+							emailToken = EnkiModelTokenVerify( token = token, email = email, state = settings.email_newsletter_name[ 0 ], type = 'emailsubscriptionconfirm' )
 							emailToken.put()
 							link = enki.libutil.get_local_url( 'emailsubscriptionconfirm', { 'verifytoken':token })
-							self.send_email( email, MSG.SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_SUBJECT(), MSG.SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_BODY( link, 'default' ))
-					self.add_infomessage( MSG.INFORMATION(), MSG.EMAIL_SUBSCRIBE_CONFIRM_EMAIL_SENT( email, 'default' ))
+							self.send_email( email, MSG.SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_SUBJECT(), MSG.SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_BODY( link, settings.email_newsletter_name[ 0 ]))
+					self.add_infomessage( MSG.INFORMATION(), MSG.EMAIL_SUBSCRIBE_CONFIRM_EMAIL_SENT( email, settings.email_newsletter_name[ 0 ]))
 					self.add_debugmessage( 'Comment - whether the email is sent or not, the feedback through the UI is identical to prevent email checking.' )
 					email = ''
 				else:
@@ -98,7 +99,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 
 	def get( self ):
 		self.render_tmpl( 'emailbatchsending.html',
-						  data = '')
+						  newsletter = settings.email_newsletter_name[ 0 ])
 
 	def post( self ):
 		self.check_CSRF()
