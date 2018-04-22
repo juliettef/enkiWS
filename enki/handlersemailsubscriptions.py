@@ -42,7 +42,7 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 				EnkiModelEmailSubscriptions.remove_newsletter_by_email( self.enki_user.email, settings.email_newsletter_name[ 0 ])
 				self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_UNSUBSCRIBED( settings.email_newsletter_name[ 0 ]))
 				data[ 1 ] = False	# has_email_subscriptions - ASSUMPTION: ONLY ONE NEWSLETTER AVAILABLE
-		elif submit_type == 'subscribeemail':
+		if submit_type == 'subscribeemail':
 			email_unsafe = self.request.get( 'email' )
 			email, result = self.validate_email( email_unsafe )
 			if result == self.ERROR_EMAIL_FORMAT_INVALID:
@@ -67,7 +67,10 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 					backoff_timer = EnkiModelBackoffTimer.get( 'es:' + email )
 					if backoff_timer != 0:
 						error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
-		self.render_tmpl( 'emailsubscriptions.html',
+		if data[ 0 ]:	# is_logged_in
+			self.redirect(enki.libutil.get_local_url('profile'))
+		else:
+			self.render_tmpl( 'emailsubscriptions.html',
 							  active_menu = 'profile',
 							  data = data,
 							  email = email,
