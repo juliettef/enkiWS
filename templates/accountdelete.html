@@ -27,6 +27,7 @@
 										{% if data.auth_provider %}<li><p>{{ _( "Your third party authentication provider(s) and unique identifier(s):" ) }}</p>
 											<ul>{% for item in data.auth_provider %}<li><p><em>{{ item.provider_name }}</em> | <em>{{ item.provider_uid }}</em></p></li>{% endfor %}</ul>
 										</li>{% endif %}
+										{% if data.has_email_subscriptions %}<li><p>{{ _( "Your email subscriptions are cancelled." )}}</p></li>{% endif %}
 									</ul>
 								{% endif %}
 								{% if data.current_display_name %}<li><p>{{ _( "Your <b>public information is anonymised</b>:" ) }}</p></li>

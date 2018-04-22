@@ -30,6 +30,7 @@ from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeltokenverify import EnkiModelTokenVerify
 from enki.modeluser import EnkiModelUser
 from enki.modeldisplayname import EnkiModelDisplayName
+from enki.modelemailsubscriptions import EnkiModelEmailSubscriptions
 from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
 from enki.modelproductkey import EnkiModelProductKey
@@ -712,7 +713,11 @@ class HandlerBase( webapp2.RequestHandler ):
 		has_messages = True if EnkiModelMessage.exist_sent_or_received( user_id ) else False
 		has_forum_posts = True if EnkiModelPost.fetch_by_author( user_id ) else False
 		has_product = True if EnkiModelProductKey.exist_by_purchaser_or_activator( user_id ) else False
-		if has_friends or has_messages or has_forum_posts or has_product:
+		has_email_subscriptions = False
+		email = ndb.Key( EnkiModelUser, user_id ).get().email
+		if email:
+			has_email_subscriptions = True if EnkiModelEmailSubscriptions.exist_by_email( email ) else False
+		if has_friends or has_messages or has_forum_posts or has_product or has_email_subscriptions:
 			result = True
 		return result
 
@@ -766,6 +771,8 @@ class HandlerBase( webapp2.RequestHandler ):
 		else:
 			# anonymise the user
 			if user_to_delete.email:
+				# delete email subscriptions
+				EnkiModelEmailSubscriptions.remove_by_email( user_to_delete.email )
 				user_to_delete.email = None
 			if user_to_delete.password:
 				user_to_delete.password = None

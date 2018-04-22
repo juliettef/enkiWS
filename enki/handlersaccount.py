@@ -12,6 +12,7 @@ from enki.modeltokenauth import EnkiModelTokenAuth
 from enki.modeltokenemailrollback import EnkiModelTokenEmailRollback
 from enki.modeluser import EnkiModelUser
 from enki.modeldisplayname import EnkiModelDisplayName
+from enki.modelemailsubscriptions import EnkiModelEmailSubscriptions
 from enki.modelfriends import EnkiModelFriends
 from enki.modelmessage import EnkiModelMessage
 from enki.modelproductkey import EnkiModelProductKey
@@ -751,13 +752,21 @@ class HandlerEmailChange( enki.HandlerBaseReauthenticate ):
 # user requests an email change. Current email stored in rollback db
 
 	def get_logged_in( self ):
+		has_email_subscriptions = False
+		email = self.enki_user.email if (self.enki_user.email and self.enki_user.email != 'removed') else ''
+		if email:
+			has_email_subscriptions = True if EnkiModelEmailSubscriptions.exist_by_email( email ) else False
 		self.render_tmpl( 'emailchange.html',
-		                  active_menu = 'profile' )
+		                  active_menu = 'profile',
+						  has_email_subscriptions = has_email_subscriptions )
 
 	def post_reauthenticated( self, params ):
 		email_unsafe = params.get( 'email' )
 		email, result = self.validate_email( email_unsafe )
 		error_message = ''
+		has_email_subscriptions = False
+		if self.enki_user.email:
+			has_email_subscriptions = True if EnkiModelEmailSubscriptions.exist_by_email( self.enki_user.email ) else False
 		if result == enki.libutil.ENKILIB_OK or result == self.ERROR_EMAIL_MISSING:
 			result_of_change_request = self.email_change_request( email )
 			if result_of_change_request == 'same':
@@ -766,7 +775,10 @@ class HandlerEmailChange( enki.HandlerBaseReauthenticate ):
 				error_message = MSG.CANNOT_DELETE_EMAIL()
 			elif result_of_change_request == 'removed':
 				self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_REMOVED())
-				old_email_existed = True if (self.enki_user.email and self.enki_user.email != 'removed') else False
+				if has_email_subscriptions:
+					EnkiModelEmailSubscriptions.remove_by_email( self.enki_user.email )
+					self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_UNSUBSCRIBED_ALL())
+				old_email_existed = True if ( self.enki_user.email and self.enki_user.email != 'removed' ) else False
 				if old_email_existed:
 					self.add_infomessage( MSG.INFORMATION(), MSG.EMAIL_ROLLBACK_INFO_EMAIL_SENT())
 				self.redirect( enki.libutil.get_local_url( 'profile' ))
@@ -782,7 +794,8 @@ class HandlerEmailChange( enki.HandlerBaseReauthenticate ):
 			self.render_tmpl( 'emailchange.html',
 			                  active_menu = 'profile',
 			                  email = email,
-			                  error = error_message )
+			                  error = error_message,
+							  has_email_subscriptions = has_email_subscriptions )
 
 
 class HandlerEmailChangeConfirm( enki.HandlerBase ):
@@ -817,7 +830,7 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 # delete user account
 
 	def get_logged_in( self ):
-		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated' )
+		data = collections.namedtuple( 'data', 'current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated, has_email_subscriptions' )
 		current_display_name = ''
 		if EnkiModelDisplayName.exist_by_user_id( self.user_id ):
 			user_display_name = EnkiModelDisplayName.get_by_user_id_current( self.user_id )
@@ -834,7 +847,10 @@ class HandlerAccountDelete( enki.HandlerBaseReauthenticate ):
 		has_friends = True if EnkiModelFriends.exist_by_user_id( self.user_id ) else False
 		has_product_purchased_unactivated = True if EnkiModelProductKey.exist_by_purchaser_not_activated( self.user_id ) else False
 		has_product_activated = True if EnkiModelProductKey.exist_by_activator( self.user_id ) else False
-		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated )
+		has_email_subscriptions = False
+		if email:
+			has_email_subscriptions = True if EnkiModelEmailSubscriptions.exist_by_email( self.enki_user.email) else False
+		data = data( current_display_name, previous_display_names, email, password, auth_provider, has_posts, has_messages, has_friends, has_product_purchased_unactivated, has_product_activated, has_email_subscriptions )
 		self.render_tmpl( 'accountdelete.html',
 						  active_menu = 'profile',
 						  data = data,

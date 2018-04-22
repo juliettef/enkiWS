@@ -17,6 +17,11 @@ class EnkiModelEmailSubscriptions(model.Model):
 	#=== QUERIES ==================================================================
 
 	@classmethod
+	def exist_by_email( cls, email ):
+		count = cls.query(cls.email == email).count( 1 )
+		return count > 0
+
+	@classmethod
 	def get_by_email( cls, email ):
 		return cls.query(cls.email == email).get()
 
@@ -33,6 +38,10 @@ class EnkiModelEmailSubscriptions(model.Model):
 	def exist_by_token_newsletter( cls, token, newsletter ):
 		count = cls.query( ndb.AND( cls.token == token, cls.newsletters == newsletter )).count( 1 )
 		return count > 0
+
+	@classmethod
+	def fetch_keys_by_email( cls, email ):
+		return cls.query( cls.email == email ).fetch( keys_only = True )
 
 	@classmethod
 	def fetch_keys_by_email_newsletter( cls, email, newsletter ):
@@ -83,6 +92,12 @@ class EnkiModelEmailSubscriptions(model.Model):
 				index = entity.newsletters.index( newsletter )
 				del entity.newsletters[ index ]
 				entity.put()
+
+	@classmethod
+	def remove_by_email( cls, email ):
+		entities = cls.fetch_keys_by_email( email )
+		if entities:
+			ndb.delete_multi_async( entities )
 
 	@classmethod
 	def count_newsletters_by_email( cls, email ):

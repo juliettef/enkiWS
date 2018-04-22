@@ -24,7 +24,9 @@
                             <label for="email" class="col-lg-2 control-label">{{ _( "New email" ) }}</label>
                              <div class="col-lg-10">
                                  <input class="form-control" type="text" name="email" placeholder="{{ _( "New email" ) }}" value = "{{ email }}"/> {# <!-- email escaped in the handler --> #}
-                                 {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
+                              	{% if error %}<label class="control-label">{{ error }}</label>{% endif%}
+								 <p class="text-info">{{ _( "To delete your email, leave the field blank. (You need to be able to log in with third party authentication to delete your email.)" ) }}
+								 {% if has_email_subscriptions %}<br><span class="text-warning">{{ _( "Deleting your email cancels your email newsletters subscriptions." ) }}</span>{% endif %}</p>
                              </div>
                         </div>
 
