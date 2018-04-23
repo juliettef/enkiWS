@@ -107,6 +107,12 @@ class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 			self.abort(404)
 
 
+class HandlerEmailUnsubscribe( enki.HandlerBase ):
+
+	def get( self, **kwargs ):
+		pass # TODO
+
+
 class HandlerEmailBatchSending( enki.HandlerBase ):
 
 	def get( self ):
@@ -117,8 +123,8 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 						  newsletter = default_newsletter,
 						  subject = default_subject,
 						  body_text = default_body_text,
-						  footer = self.get_email_footer_template(),
-						  ready_to_send = 'off' )
+						  footer = self.get_mailgun_email_footer_template(),
+						  ready_to_send = 'off')
 
 	def post( self ):
 		self.check_CSRF()
@@ -130,7 +136,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 			newsletter = self.request.get( 'newsletter' )
 			subject = self.request.get( 'subject' )
 			body_text = self.request.get( 'body_text' )
-			footer_template = self.get_email_footer_template()
+			footer_template = self.get_mailgun_email_footer_template()
 			if submit_type == 'sendtest':
 				self.send_email( self.enki_user.email, subject, body_text + footer_template )
 				self.add_infomessage( MSG.INFORMATION(), 'Test email sent to ' +  self.enki_user.email )
@@ -150,9 +156,17 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 							  footer = footer_template,
 							  ready_to_send = ready_to_send )
 
-	def get_email_footer_template( self, newsletter = '' ):
-		return ( "{unsubscribe from newsletter}{unsubscribe from all}{contact us}" )	# TODO
-
+	def get_mailgun_email_footer_template( self, newsletter = '' ):
+		link_unsubscribe_all = webapp2.uri_for( 'home', _full = True ) # TODO check
+		link_unsubscribe_all += '/eu/%recipient.token%'
+		link_unsubscribe_newsletter = link_unsubscribe_all + '?newsletter = ' + newsletter
+		text = "/n/nThis newsletter was sent to you by enkiWS. Contact us at %(contact)s /n" + \
+			   "To unsubscribe from this newsletter follow this link: %(unsubscribe_newsletter)s (click or copy and paste in your browser). /n" + \
+			   "To unsubscribe from all newsletter follow this link: %(unsubscribe_all)s /n".format(
+				   contact = settings.COMPANY_CONTACT,
+				   unsubscribe_newsletter = link_unsubscribe_newsletter,
+				   unsubscribe_all = link_unsubscribe_all )
+		return text
 
 	def send_mailgun_batch_email( self, email_addresses, email_subject, email_body, email_footer_template, recipient_variables ):
 		if enki.libutil.is_debug():
@@ -189,6 +203,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 						body = email_body + email_footer_template )
 		return
 
+
 class ExtensionPageEmailSubscriptions(ExtensionPage):
 
 	def __init__( self ):
@@ -212,6 +227,7 @@ class ExtensionEmailSubscriptions(Extension):
 	def get_routes( self ):
 		return [ webapp2.Route( '/emailsubscriptions', HandlerEmailSubscriptions, name = 'emailsubscriptions' ),
 				 webapp2.Route( '/es/<verifytoken>', HandlerEmailSubscriptionConfirm, name = 'emailsubscriptionconfirm' ),
+				 webapp2.Route( '/eu/<verifytoken>', HandlerEmailUnsubscribe, name = 'emailunsubscribe'),
 				 webapp2.Route( '/admin/emailbatchsending', HandlerEmailBatchSending, name = 'emailbatchsending' ),
 				 ]
 

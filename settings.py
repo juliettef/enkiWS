@@ -21,6 +21,7 @@ product_displayname = { 'product_a' : 'Product A',
                         'product_d' : 'Product D', }
 
 COMPANY_NAME = "Company"
+COMPANY_CONTACT = "contact@company.com"
 
 email_newsletter_name = [ 'Default' ]
 
