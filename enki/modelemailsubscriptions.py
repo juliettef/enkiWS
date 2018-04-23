@@ -106,3 +106,29 @@ class EnkiModelEmailSubscriptions(model.Model):
 		if entity:
 			count = len( entity.newsletters )
 		return count
+
+	@classmethod
+	def get_mailgun_email_batches( cls, newsletter ):
+		# get batches of email addresses and their respective recipient variables (unsubscribe tokens) for a given newsletter.
+		BATCH_SIZE = 1000
+		batches_emails = []
+		batches_emails_recipient_variables = []
+		results, next_cursor, more = cls.query( cls.newsletters == newsletter ).fetch_page( BATCH_SIZE )
+		batch_emails = []
+		batch_emails_recipient_variables = {}
+		for result in results:
+			batch_emails.append( result.email )
+			batch_emails_recipient_variables[ result.email ] = { 'token' : result.token }
+		batches_emails.append( batch_emails )
+		batches_emails_recipient_variables.append( batch_emails_recipient_variables )
+		while( more and next_cursor ):
+			cursor = next_cursor
+			results, next_cursor, more = cls.query( cls.newsletters == newsletter ).fetch_page( BATCH_SIZE, start_cursor = cursor )
+			batch_emails = [ ]
+			batch_emails_recipient_variables = { }
+			for result in results:
+				batch_emails.append(result.email)
+				batch_emails_recipient_variables[ result.email ] = { 'token':result.token }
+			batches_emails.append(batch_emails)
+			batches_emails_recipient_variables.append(batch_emails_recipient_variables)
+		return batches_emails, batches_emails_recipient_variables

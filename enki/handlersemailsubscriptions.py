@@ -1,5 +1,9 @@
 import webapp2
+import base64
 
+from google.appengine.api import app_identity
+from google.appengine.api import mail
+from google.appengine.api import urlfetch
 from webapp2_extras import security
 
 import settings
@@ -106,26 +110,69 @@ class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 class HandlerEmailBatchSending( enki.HandlerBase ):
 
 	def get( self ):
+		default_newsletter = settings.email_newsletter_name[ 0 ]
+		default_subject = settings.email_newsletter_name[ 0 ] + ' newsletter - <subject>'
+		default_body_text = 'Hello,\n\n<your text>'
 		self.render_tmpl( 'emailbatchsending.html',
-						  newsletter = settings.email_newsletter_name[ 0 ])
+						  newsletter = default_newsletter,
+						  subject = default_subject,
+						  body_text = default_body_text,
+						  footer = self.get_email_footer_template())
 
 	def post( self ):
 		self.check_CSRF()
 		newsletter = self.request.get( 'newsletter' )
 		subject = self.request.get( 'subject' )
-		body = self.request.get( 'body' )
-		email_list = self.get_subscribers( newsletter )
-		self.send_email( email_list, subject, body )
+		body_text = self.request.get( 'body_text' )
+		footer_template = self.get_email_footer_template()
+		batches_emails, batches_emails_recipient_variables = EnkiModelEmailSubscriptions.get_mailgun_email_batches( newsletter )
+		for batch_emails, batch_emails_recipient_variables in zip( batches_emails, batches_emails_recipient_variables ):
+			self.send_mailgun_batch_email( batch_emails, subject, body_text, footer_template, batch_emails_recipient_variables )
 		self.add_infomessage( MSG.SUCCESS(), 'Batch email sent' )
 		self.render_tmpl( 'emailbatchsending.html',
 						  newsletter = newsletter,
 						  subject = subject,
-						  body = body, )
+						  body_text = body_text,
+						  footer = footer_template )
 
-	def get_subscribers( self, newsletter ):
-		# TODO create lists of max 1000 subscribers
-		return []
+	def get_email_footer_template( self, newsletter = '' ):
+		return ( "{unsubscribe from newsletter}{unsubscribe from all}{contact us}" )	# TODO
 
+
+	def send_mailgun_batch_email( self, email_addresses, email_subject, email_body, email_footer_template, recipient_variables ):
+		if enki.libutil.is_debug():
+			self.debug_output_email(( "Batch of " + str( len( email_addresses )) + " email addresses" ), email_subject, email_body + email_footer_template )
+			return
+		# Sends an email and displays a message in the browser. If running locally an additional message is displayed in the browser.
+		if settings.SECRET_API_KEY_MAILGUN:
+			# use mailgun to send, this has higher limits than Google App Engine send_mail
+			headers = { 'Authorization' : 'Basic ' + base64.b64encode( 'api:' + settings.SECRET_API_KEY_MAILGUN )}
+			url_mailgun = settings.secrets.URL_API_MAILGUN
+			data = { 'from' : settings.secrets.NOREPLY_SEND_MAILGUN,
+					 'to' : email_addresses,
+					 'subject' : email_subject,
+					 'text' : email_body + email_footer_template,
+					 'recipient-variables' : recipient_variables }
+			form_data = enki.libutil.urlencode( data )
+			send_success = True
+			try:
+				result = urlfetch.fetch( url=url_mailgun,
+										 payload=form_data,
+										 method=urlfetch.POST,
+										 headers=headers)
+				if result.status_code != 200:
+					send_success = False
+			except:
+				send_success = False
+			if send_success:
+				return
+		# we use app engine email if either we failed to send with mailgun or have no mailgun account
+		email_sender = settings.COMPANY_NAME + " no reply <noreply@" + app_identity.get_application_id() + ".appspotmail.com>"
+		mail.send_mail( sender = email_sender,
+						to = ( str( len( email_addresses )) + " email addresses" ),
+						subject = email_subject,
+						body = email_body + email_footer_template )
+		return
 
 class ExtensionPageEmailSubscriptions(ExtensionPage):
 
