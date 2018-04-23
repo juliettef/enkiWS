@@ -134,7 +134,7 @@ class ExtensionPageEmailSubscriptions(ExtensionPage):
 
 	def get_data( self, handler ):
 		count_email_subscriptions = 0
-		if handler.is_logged_in() and handler.enki_user.email: # TODO if email is removed -> delete subscriptions
+		if handler.is_logged_in() and handler.enki_user.email and handler.enki_user.email != 'removed':
 			count_email_subscriptions = EnkiModelEmailSubscriptions.count_newsletters_by_email( handler.enki_user.email )
 		return count_email_subscriptions
 
