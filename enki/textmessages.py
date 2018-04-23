@@ -161,5 +161,5 @@ def EMAIL_SUBSCRIBED( newsletter ): return _( "You are subscribed to the %(newsl
 def EMAIL_UNSUBSCRIBED( newsletter ): return _( "You are unsubscribed from the %(newsletter)s email newsletter.", newsletter = newsletter )
 def EMAIL_UNSUBSCRIBED_ALL(): return _( "You are unsubscribed from all email newsletters." )
 def EMAIL_SUBSCRIBE_CONFIRM_EMAIL_SENT( email, newsletter ): return _( "If email address %(email)s is available, a subscription confirmation email was sent to it. Please check your inbox and follow the instructions in the email to confirm your subscription to the %(newsletter)s email newsletter", email = email, newsletter = newsletter )
-def SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_SUBJECT( ): return _( "Email newsletter subscription confirmation" )
+def SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_SUBJECT(): return _( "Email newsletter subscription confirmation" )
 def SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_BODY( link, newsletter ): return _( "Follow this link to confirm your subscription to the %(newsletter)s email newsletter: %(link)s (click or copy and paste in your browser). \nIf you do not wish to subscribe, ignore this message.", link = link, newsletter = newsletter )

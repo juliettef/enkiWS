@@ -16,7 +16,7 @@
 			<h1 class="text-danger">{{ _( "Batch emails sending" ) }}</h1>
 
 			<div class="well bs-component">
-				<form class="form-horizontal" action="{{ 'emailbatchsending'|local }}" method="post">
+				<form class="form-horizontal" action="{{ 'emailbatchsending'|local }}" method="post" id="mainform">
 					<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 					<fieldset>
 						<legend>{{ _( "Compose and send a newsletter" ) }}</legend>
@@ -38,15 +38,29 @@
 						</div>
 
 						<div class="form-group">
-							<label for="body" class="col-lg-2 control-label">{{ _( 'Body' ) }}</label>
+							<label for="body_text" class="col-lg-2 control-label">{{ _( 'Body text' ) }}</label>
 							<div class="col-lg-10">
-								<textarea class="form-control" rows="10" id="body" name="body">{{ body }}</textarea>
+								<textarea class="form-control" rows="10" id="body_text" name="body_text">{{ body_text }}</textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="footer" class="col-lg-2 control-label">{{ _( 'Footer' ) }}</label>
+							<div class="col-lg-10">
+								<textarea class="form-control" rows="4" id="footer" name="footer" readonly="">{{ footer }}</textarea>
 							</div>
 						</div>
 
 						<div class="form-group">
 							<div class="col-lg-10 col-lg-offset-2">
-								<button class="btn btn-primary" type="submit" name="buy" value="{{ send }}">{{ _( "Send" ) }}</button>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="readytosend"><p class={% if ready_to_send %}"text-primary"{% else %}"text-info"{% endif %}>{{ _( "Ready to send batch email?" ) }}</p>
+									</label>
+								</div>
+								<button class="btn btn-primary" type="submit" name="submittype" value="send">{{ _( "Send" ) }}</button>
+								<button class="btn btn-info" type="submit" name="submittype" value="sendtest">{{ _( "Send me a test email" ) }}</button>
+								<button class="btn btn-default" type="submit" name="submittype" value="reset">{{ _( "Reset" ) }}</button>
 							</div>
 						</div>
 
