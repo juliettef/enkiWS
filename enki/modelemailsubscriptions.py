@@ -44,12 +44,6 @@ class EnkiModelEmailSubscriptions(model.Model):
 		return cls.query( cls.email == email ).fetch( keys_only = True )
 
 	@classmethod
-	def fetch_keys_by_email_newsletter( cls, email, newsletter ):
-		return cls.query( ndb.AND( cls.email == email, cls.newsletters == newsletter )).fetch( keys_only = True )
-
-	@classmethod
-	def fetch_keys_by_token( cls, token ):
-		return cls.query( cls.token == token ).fetch( keys_only = True )
 
 	#=== UTILITIES ================================================================
 
@@ -110,6 +104,7 @@ class EnkiModelEmailSubscriptions(model.Model):
 	@classmethod
 	def get_mailgun_email_batches( cls, newsletter ):
 		# get batches of email addresses and their respective recipient variables (unsubscribe tokens) for a given newsletter.
+		# reference: https://documentation.mailgun.com/en/latest/user_manual.html#batch-sending
 		BATCH_SIZE = 1000
 		batches_emails = []
 		batches_emails_recipient_variables = []
