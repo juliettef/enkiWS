@@ -1,3 +1,4 @@
+# coding=utf-8
 import webapp2
 import base64
 
@@ -17,6 +18,7 @@ from enki.modelemailsubscriptions import EnkiModelEmailSubscriptions
 from enki.modelbackofftimer import EnkiModelBackoffTimer
 from enki.modeltokenverify import EnkiModelTokenVerify
 
+from enki.libutil import xstr as xstr
 
 # subscription settings users (users may be unconfirmed, logged in or not)
 # NOTE - implemented for only one 'default' newsletter
@@ -108,8 +110,21 @@ class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 
 class HandlerEmailUnsubscribe( enki.HandlerBase ):
 
-	def get( self, verifytoken ):
-		pass # TODO
+	def get( self, unsubscribetoken ):
+		unsubscribetoken = xstr( unsubscribetoken )
+		tokenEntity = EnkiModelEmailSubscriptions.get_by_token( unsubscribetoken )
+		newsletter = self.request.get( xstr( 'newsletter' ))
+		if not newsletter:	# unsubscribe from all newsletters (or was already unsubscribed)
+			if tokenEntity:
+				EnkiModelEmailSubscriptions.remove_by_email( tokenEntity.email )
+			self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_UNSUBSCRIBED_ALL() )
+		elif newsletter in settings.email_newsletter_name: 	# unsubscribe from a specific newsletter (or was already unsubscribed)
+			if tokenEntity:
+				EnkiModelEmailSubscriptions.remove_newsletter_by_token( tokenEntity.token, newsletter )
+			self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_UNSUBSCRIBED( newsletter ))
+		else:	# newsletter doesn't exist hence the user's already unsubscribed
+			self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_UNSUBSCRIBED( '' ))
+		self.redirect( enki.libutil.get_local_url( 'emailsubscriptions' ))
 
 
 class HandlerEmailBatchSending( enki.HandlerBase ):
@@ -156,13 +171,14 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 							  ready_to_send = ready_to_send )
 
 	def get_mailgun_email_footer_template( self, newsletter = '' ):
-		link_unsubscribe_all = webapp2.uri_for( 'emailunsubscribe', verifytoken='%recipient.token%',  _full = True )
+		link_home = webapp2.uri_for( 'home', _full = True )
+		link_unsubscribe_all = webapp2.uri_for( 'emailunsubscribe', unsubscribetoken='%recipient.token%',  _full = True )
 		link_unsubscribe_newsletter = link_unsubscribe_all + '?newsletter=' + newsletter
-		text = '/n/nThis newsletter was sent to you by enkiWS. Contact us at {contact} /nTo unsubscribe from this newsletter follow this link: {link_unsubscribe_newsletter} (click or copy and paste in your browser). /nTo unsubscribe from all newsletters follow this link: {link_unsubscribe_all} /n'.format(
-			contact = settings.COMPANY_CONTACT, link_unsubscribe_newsletter = link_unsubscribe_newsletter, link_unsubscribe_all = link_unsubscribe_all )
+		text = u'''\n\n\nThis newsletter was sent to you by enkiWS. Visit our website {link_home} or contact us at {contact}\nTo unsubscribe from this newsletter follow this link: {link_unsubscribe_newsletter}\nTo unsubscribe from all newsletters follow this link: {link_unsubscribe_all} (click or copy and paste in your browser)\n\nCe bulletin d'information vous a été envoyée par enkiWS. Visitez notre site {link_home} ou contactez-nous à {contact}\nPour vous désabonner de ce bulletin suivez ce lien : {link_unsubscribe_newsletter}\nPour vous désabonner de tous les bulletins suivez ce lien : {link_unsubscribe_all} (cliquez ou copiez-collez le lien dans votre navigateur)'''.format( link_home = link_home, contact = settings.COMPANY_CONTACT, link_unsubscribe_newsletter = link_unsubscribe_newsletter, link_unsubscribe_all = link_unsubscribe_all )
 		return text
 
 	def send_mailgun_batch_email( self, email_addresses, email_subject, email_body, email_footer_template, recipient_variables ):
+		# reference: https://documentation.mailgun.com/en/latest/user_manual.html#batch-sending
 		if enki.libutil.is_debug():
 			self.debug_output_email(( "Batch of " + str( len( email_addresses )) + " email addresses" ), email_subject, email_body + email_footer_template )
 			return
@@ -221,7 +237,7 @@ class ExtensionEmailSubscriptions(Extension):
 	def get_routes( self ):
 		return [ webapp2.Route( '/emailsubscriptions', HandlerEmailSubscriptions, name = 'emailsubscriptions' ),
 				 webapp2.Route( '/es/<verifytoken>', HandlerEmailSubscriptionConfirm, name = 'emailsubscriptionconfirm' ),
-				 webapp2.Route( '/eu/<verifytoken>', HandlerEmailUnsubscribe, name = 'emailunsubscribe'),
+				 webapp2.Route( '/unsubscribe/<unsubscribetoken>', HandlerEmailUnsubscribe, name = 'emailunsubscribe'),
 				 webapp2.Route( '/admin/emailbatchsending', HandlerEmailBatchSending, name = 'emailbatchsending' ),
 				 ]
 
