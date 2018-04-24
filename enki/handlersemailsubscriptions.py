@@ -94,9 +94,8 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 
 class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 
-	def get( self, **kwargs ):
-		token = kwargs[ 'verifytoken' ]
-		tokenEntity = EnkiModelTokenVerify.get_by_token_type( token, 'emailsubscriptionconfirm' )
+	def get( self, verifytoken ):
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( verifytoken, 'emailsubscriptionconfirm' )
 		if tokenEntity:
 			EnkiModelBackoffTimer.remove( 'es:' + tokenEntity.email )
 			EnkiModelEmailSubscriptions.add_newsletter( tokenEntity.email, tokenEntity.state )
@@ -109,7 +108,7 @@ class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 
 class HandlerEmailUnsubscribe( enki.HandlerBase ):
 
-	def get( self, **kwargs ):
+	def get( self, verifytoken ):
 		pass # TODO
 
 
@@ -123,7 +122,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 						  newsletter = default_newsletter,
 						  subject = default_subject,
 						  body_text = default_body_text,
-						  footer = self.get_mailgun_email_footer_template(),
+						  footer = self.get_mailgun_email_footer_template( default_newsletter ),
 						  ready_to_send = 'off')
 
 	def post( self ):
@@ -136,7 +135,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 			newsletter = self.request.get( 'newsletter' )
 			subject = self.request.get( 'subject' )
 			body_text = self.request.get( 'body_text' )
-			footer_template = self.get_mailgun_email_footer_template()
+			footer_template = self.get_mailgun_email_footer_template( newsletter )
 			if submit_type == 'sendtest':
 				self.send_email( self.enki_user.email, subject, body_text + footer_template )
 				self.add_infomessage( MSG.INFORMATION(), 'Test email sent to ' +  self.enki_user.email )
@@ -157,15 +156,10 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 							  ready_to_send = ready_to_send )
 
 	def get_mailgun_email_footer_template( self, newsletter = '' ):
-		link_unsubscribe_all = webapp2.uri_for( 'home', _full = True ) # TODO check
-		link_unsubscribe_all += '/eu/%recipient.token%'
-		link_unsubscribe_newsletter = link_unsubscribe_all + '?newsletter = ' + newsletter
-		text = "/n/nThis newsletter was sent to you by enkiWS. Contact us at %(contact)s /n" + \
-			   "To unsubscribe from this newsletter follow this link: %(unsubscribe_newsletter)s (click or copy and paste in your browser). /n" + \
-			   "To unsubscribe from all newsletter follow this link: %(unsubscribe_all)s /n".format(
-				   contact = settings.COMPANY_CONTACT,
-				   unsubscribe_newsletter = link_unsubscribe_newsletter,
-				   unsubscribe_all = link_unsubscribe_all )
+		link_unsubscribe_all = webapp2.uri_for( 'emailunsubscribe', verifytoken='%recipient.token%',  _full = True )
+		link_unsubscribe_newsletter = link_unsubscribe_all + '?newsletter=' + newsletter
+		text = '/n/nThis newsletter was sent to you by enkiWS. Contact us at {contact} /nTo unsubscribe from this newsletter follow this link: {link_unsubscribe_newsletter} (click or copy and paste in your browser). /nTo unsubscribe from all newsletters follow this link: {link_unsubscribe_all} /n'.format(
+			contact = settings.COMPANY_CONTACT, link_unsubscribe_newsletter = link_unsubscribe_newsletter, link_unsubscribe_all = link_unsubscribe_all )
 		return text
 
 	def send_mailgun_batch_email( self, email_addresses, email_subject, email_body, email_footer_template, recipient_variables ):
