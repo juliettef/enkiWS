@@ -2,8 +2,6 @@
 import webapp2
 import base64
 
-from google.appengine.api import app_identity
-from google.appengine.api import mail
 from google.appengine.api import urlfetch
 from webapp2_extras import security
 
@@ -205,12 +203,6 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 				send_success = False
 			if send_success:
 				return
-		# we use app engine email if either we failed to send with mailgun or have no mailgun account
-		email_sender = settings.COMPANY_NAME + " no reply <noreply@" + app_identity.get_application_id() + ".appspotmail.com>"
-		mail.send_mail( sender = email_sender,
-						to = ( str( len( email_addresses )) + " email addresses" ),
-						subject = email_subject,
-						body = email_body + email_footer_template )
 		return
 
 
