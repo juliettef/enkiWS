@@ -12,6 +12,9 @@ class EnkiModelEmailSubscriptions(model.Model):
 	newsletters = model.StringProperty( repeated = True )
 	token = model.StringProperty()	# unsubscribe token
 
+	time_created = model.DateTimeProperty( auto_now_add = True )
+	time_updated = model.DateTimeProperty( auto_now = True )
+
 	#=== CONSTANTS ================================================================
 
 	#=== QUERIES ==================================================================
@@ -42,8 +45,6 @@ class EnkiModelEmailSubscriptions(model.Model):
 	@classmethod
 	def fetch_keys_by_email( cls, email ):
 		return cls.query( cls.email == email ).fetch( keys_only = True )
-
-	@classmethod
 
 	#=== UTILITIES ================================================================
 

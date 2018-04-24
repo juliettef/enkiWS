@@ -97,7 +97,7 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 
 	def get( self, verifytoken ):
-		tokenEntity = EnkiModelTokenVerify.get_by_token_type( verifytoken, 'emailsubscriptionconfirm' )
+		tokenEntity = EnkiModelTokenVerify.get_by_token_type( xstr( verifytoken ), 'emailsubscriptionconfirm' )
 		if tokenEntity:
 			EnkiModelBackoffTimer.remove( 'es:' + tokenEntity.email )
 			EnkiModelEmailSubscriptions.add_newsletter( tokenEntity.email, tokenEntity.state )
