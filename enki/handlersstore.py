@@ -221,7 +221,10 @@ class HandlerStoreEmulateFastSpring( enki.HandlerBase ):
 			self.redirect_to_relevant_page()
 
 
-class HandlerGenerateLicenceFree( enki.HandlerBase ):
+class HandlerLicencesGenerateFree(enki.HandlerBase):
+
+	def get( self ):
+		self.render_tmpl( 'licencesgeneratefree.html' )
 
 	def post( self ):
 		self.check_CSRF()
@@ -265,7 +268,7 @@ class HandlerGenerateLicenceFree( enki.HandlerBase ):
 									'<li>info = <em>' + ( info if info else 'none' ) + '</em></li>' +
 									'<li>licence_key(s) = <br><em>' + '<br>'.join( licence_key_display ) + '</em></li>' +
 								 '</ul>' )
-		self.redirect( 'admin' )
+		self.redirect( 'licencesgeneratefree' )
 
 
 class ExtensionPageProducts( ExtensionPage ):
@@ -403,7 +406,7 @@ class ExtensionStore( Extension ):
 		          webapp2.Route( '/generatelicencefastspring', HandlerGenerateLicenceFastSpring, name = 'generatelicencefastspring' ),
 		          webapp2.Route( '/ordercompletefastspring', HandlerOrderCompleteFastSpring, name = 'ordercompletefastspring' ),
 		          webapp2.Route( '/storeemulatefastspring', HandlerStoreEmulateFastSpring, name = 'storeemulatefastspring' ),
-				  webapp2.Route( '/admin/generatelicencefree', HandlerGenerateLicenceFree, name = 'generatelicencefree'),
+				  webapp2.Route( '/admin/licencesgeneratefree', HandlerLicencesGenerateFree, name = 'licencesgeneratefree' ),
 		          webapp2.Route( '/library', HandlerLibrary, name = 'library' )
 		          ]
 

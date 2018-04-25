@@ -35,80 +35,16 @@
 				</tbody>
 			</table>
 			
-			<a href="/admin/report"><button class="btn btn-primary">{{ _( 'Open csv report' ) }}</button></a>
+			<a href="/admin/report"><button class="btn btn-default">{{ _( 'Open csv report' ) }}</button></a>
 
-			<h2 class="text-danger">{{ _( "Licences" ) }}</h2>
-				<div class="well bs-component">
-					<form class="form-horizontal" action="{{ 'generatelicencefree'|local }}" method="post">
-						<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
-						<fieldset>
-							<legend>{{ _( "Licence Key Generator" ) }}</legend>
-
-							<div class="form-group">
-								<label for="product" class="col-lg-2 control-label">{{ _( 'Product' ) }}</label>
-								<div class="col-lg-10">
-									<select class="form-control" type="text" name="product">
-										<option>product_a</option>
-										<option>product_b</option>
-										<option>product_c</option>
-										<option>product_d</option>
-									</select>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="quantity" class="col-lg-2 control-label">{{ _( 'Quantity' ) }}</label>
-								<div class="col-lg-10">
-									<input class="form-control" type="text" name="quantity" value="1">
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="order_type" class="col-lg-2 control-label">{{ _( 'Order type' ) }}</label>
-								<div class="col-lg-10">
-									<select class="form-control" type="text" name="order_type">
-										<option>free-gift</option>
-										<option>free-promo</option>
-										<option>free-press</option>
-									</select>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="purchaser_email" class="col-lg-2 control-label">{{ _( 'Recipient email (optional)' ) }}</label>
-								<div class="col-lg-10">
-									<input class="form-control" type="text" name="purchaser_email" placeholder="{{ _( "Email" ) }}">
-								</div>
-							</div>
 			<h2 class="text-danger">{{ _( "Email batch sending" )}}</h2>
 			<a href="/admin/emailbatchsending"><button class="btn btn-default">{{ _( 'Compose and send newsletters' ) }}</button></a>
 
-							<div class="form-group">
-								<label for="purchaser_user_id" class="col-lg-2 control-label">{{ _( 'Recipient user Id (optional)' ) }}</label>
-								<div class="col-lg-10">
-									<input class="form-control" type="text" name="purchaser_user_id" placeholder="5066549580791808">
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="info" class="col-lg-2 control-label">{{ _( 'Information (optional)' ) }}</label>
-								<div class="col-lg-10">
-									<textarea class="form-control" rows="2" id="info" name="info"></textarea>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<div class="col-lg-10 col-lg-offset-2">
-									<button class="btn btn-primary" type="submit" name="buy" value="{{ product }}">{{ _( "Generate" ) }}</button>
-								</div>
-							</div>
-
-						</fieldset>
-					</form>
-				</div>
+			<h2 class="text-danger">{{ _( "Licences" ) }}</h2>
+			<a href="/admin/licencesgeneratefree"><button class="btn btn-default">{{ _( 'Generate free licence keys' ) }}</button></a>
 
 			<h2 class="text-danger">API</h2>
-			<p><a href="/admin/apps">Applications</a></p>
+			<a href="/admin/apps"><button class="btn btn-default">{{ _( 'Register an application' ) }}</button></a>
 
             {% include "incfooter.html" %}
     	</div>
