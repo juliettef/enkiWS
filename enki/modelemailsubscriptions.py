@@ -110,21 +110,21 @@ class EnkiModelEmailSubscriptions(model.Model):
 		batches_emails = []
 		batches_emails_recipient_variables = []
 		results, next_cursor, more = cls.query( cls.newsletters == newsletter ).fetch_page( BATCH_SIZE )
-		batch_emails = []
+		batch_emails = ''
 		batch_emails_recipient_variables = {}
 		for result in results:
-			batch_emails.append( result.email )
+			batch_emails += result.email + ', '
 			batch_emails_recipient_variables[ result.email ] = { 'token' : result.token }
-		batches_emails.append( batch_emails )
+		batches_emails.append( batch_emails[:-2] )
 		batches_emails_recipient_variables.append( batch_emails_recipient_variables )
 		while( more and next_cursor ):
 			cursor = next_cursor
 			results, next_cursor, more = cls.query( cls.newsletters == newsletter ).fetch_page( BATCH_SIZE, start_cursor = cursor )
-			batch_emails = [ ]
+			batch_emails = ''
 			batch_emails_recipient_variables = { }
 			for result in results:
-				batch_emails.append(result.email)
+				batch_emails += result.email + ', '
 				batch_emails_recipient_variables[ result.email ] = { 'token':result.token }
-			batches_emails.append(batch_emails)
-			batches_emails_recipient_variables.append(batch_emails_recipient_variables)
+			batches_emails.append( batch_emails[:-2] )
+			batches_emails_recipient_variables.append( batch_emails_recipient_variables )
 		return batches_emails, batches_emails_recipient_variables

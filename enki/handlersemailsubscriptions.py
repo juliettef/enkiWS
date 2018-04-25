@@ -1,6 +1,7 @@
 # coding=utf-8
 import webapp2
 import base64
+import json
 
 from google.appengine.api import urlfetch
 from webapp2_extras import security
@@ -170,7 +171,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 
 	def get_mailgun_email_footer_template( self, newsletter = '' ):
 		link_home = webapp2.uri_for( 'home', _full = True )
-		link_unsubscribe_all = webapp2.uri_for( 'emailunsubscribe', unsubscribetoken='%recipient.token%',  _full = True )
+		link_unsubscribe_all = webapp2.uri_for( 'emailunsubscribe', unsubscribetoken='PLACEHOLDER_MAILGUN_RECIPIENT_TOKEN', _full = True ).replace( 'PLACEHOLDER_MAILGUN_RECIPIENT_TOKEN', '%recipient.token%' )
 		link_unsubscribe_newsletter = link_unsubscribe_all + '?newsletter=' + newsletter
 		text = u'''\n\n\nThis newsletter was sent to you by enkiWS. Visit our website {link_home} or contact us at {contact}\nTo unsubscribe from this newsletter follow this link: {link_unsubscribe_newsletter}\nTo unsubscribe from all newsletters follow this link: {link_unsubscribe_all} (click or copy and paste in your browser)\n\nCe bulletin d'information vous a été envoyée par enkiWS. Visitez notre site {link_home} ou contactez-nous à {contact}\nPour vous désabonner de ce bulletin suivez ce lien : {link_unsubscribe_newsletter}\nPour vous désabonner de tous les bulletins suivez ce lien : {link_unsubscribe_all} (cliquez ou copiez-collez le lien dans votre navigateur)'''.format( link_home = link_home, contact = settings.COMPANY_CONTACT, link_unsubscribe_newsletter = link_unsubscribe_newsletter, link_unsubscribe_all = link_unsubscribe_all )
 		return text
@@ -178,7 +179,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 	def send_mailgun_batch_email( self, email_addresses, email_subject, email_body, email_footer_template, recipient_variables ):
 		# reference: https://documentation.mailgun.com/en/latest/user_manual.html#batch-sending
 		if enki.libutil.is_debug():
-			self.debug_output_email(( "Batch of " + str( len( email_addresses )) + " email addresses" ), email_subject, email_body + email_footer_template )
+			self.debug_output_email( email_addresses, email_subject, email_body + email_footer_template + '<hr><b>Debug - MAILGUN recipient-variables:</b><br>'+ json.dumps( recipient_variables, separators=( ',', ':' )) )
 			return
 		# Sends an email and displays a message in the browser. If running locally an additional message is displayed in the browser.
 		if settings.SECRET_API_KEY_MAILGUN:
@@ -189,14 +190,14 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 					 'to' : email_addresses,
 					 'subject' : email_subject,
 					 'text' : email_body + email_footer_template,
-					 'recipient-variables' : recipient_variables }
+					 'recipient-variables' : json.dumps( recipient_variables, separators=( ',', ':' ))}
 			form_data = enki.libutil.urlencode( data )
 			send_success = True
 			try:
 				result = urlfetch.fetch( url=url_mailgun,
-										 payload=form_data,
-										 method=urlfetch.POST,
-										 headers=headers)
+ 										 payload=form_data,
+ 										 method=urlfetch.POST,
+ 										 headers=headers )
 				if result.status_code != 200:
 					send_success = False
 			except:
