@@ -157,11 +157,15 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 				ready_to_send = self.request.get('readytosend')
 				if ready_to_send == 'on':
 					batches_emails, batches_emails_recipient_variables = EnkiModelEmailSubscriptions.get_mailgun_email_batches( newsletter )
+					send_success = False
 					for batch_emails, batch_emails_recipient_variables in zip( batches_emails, batches_emails_recipient_variables ):
-						self.send_mailgun_batch_email( batch_emails, subject, body_text, footer_template, batch_emails_recipient_variables )
-					self.add_infomessage( MSG.SUCCESS(), 'Batch email sent' )
-					self.redirect( enki.libutil.get_local_url('emailbatchsending'))
-					return
+						send_success = self.send_mailgun_batch_email( batch_emails, subject, body_text, footer_template, batch_emails_recipient_variables )
+					if send_success:
+						self.add_infomessage( MSG.SUCCESS(), 'Batch email sent' )
+						self.redirect(enki.libutil.get_local_url('emailbatchsending'))
+						return
+					else:
+						self.add_infomessage( MSG.WARNING(), 'Batch email sending failed' )
 			self.render_tmpl( 'emailbatchsending.html',
 							  newsletter = newsletter,
 							  subject = subject,
@@ -178,9 +182,11 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 
 	def send_mailgun_batch_email( self, email_addresses, email_subject, email_body, email_footer_template, recipient_variables ):
 		# reference: https://documentation.mailgun.com/en/latest/user_manual.html#batch-sending
+		send_success = False
 		if enki.libutil.is_debug():
 			self.debug_output_email( email_addresses, email_subject, email_body + email_footer_template + '<hr><b>Debug - MAILGUN recipient-variables:</b><br>'+ json.dumps( recipient_variables, separators=( ',', ':' )) )
-			return
+			send_success = True
+			return send_success
 		# Sends an email and displays a message in the browser. If running locally an additional message is displayed in the browser.
 		if settings.SECRET_API_KEY_MAILGUN:
 			# use mailgun to send, this has higher limits than Google App Engine send_mail
@@ -202,9 +208,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 					send_success = False
 			except:
 				send_success = False
-			if send_success:
-				return
-		return
+		return send_success
 
 
 class ExtensionPageEmailSubscriptions(ExtensionPage):
