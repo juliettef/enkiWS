@@ -117,7 +117,7 @@ class HandlerEmailUnsubscribe( enki.HandlerBase ):
 			if tokenEntity:
 				EnkiModelEmailSubscriptions.remove_by_email( tokenEntity.email )
 			self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_UNSUBSCRIBED_ALL() )
-		elif newsletter in settings.email_newsletter_name: 	# unsubscribe from a specific newsletter (or was already unsubscribed)
+		elif ( newsletter in settings.email_newsletter_name ) or ( newsletter in tokenEntity.newsletters ): 	# unsubscribe from a specific newsletter (or was already unsubscribed)
 			if tokenEntity:
 				EnkiModelEmailSubscriptions.remove_newsletter_by_token( tokenEntity.token, newsletter )
 			self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_UNSUBSCRIBED( newsletter ))
