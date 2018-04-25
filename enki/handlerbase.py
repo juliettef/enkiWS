@@ -5,6 +5,7 @@ import re
 import urlparse
 import webapp2
 import base64
+import string
 
 from google.appengine.api import app_identity
 from google.appengine.api import mail
@@ -622,6 +623,7 @@ class HandlerBase( webapp2.RequestHandler ):
 
 	def validate_email( self, email ):
 		result = enki.libutil.ENKILIB_OK
+		email = str( email ).translate( None, string.whitespace )
 		email_escaped = cgi.escape( email, quote = True )
 		if email and email == email_escaped:
 			if (( '.' not in email ) or ( not re.search( '[^@]+@[^@]+', email ))):
