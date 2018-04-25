@@ -162,7 +162,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 						send_success = self.send_mailgun_batch_email( batch_emails, subject, body_text, footer_template, batch_emails_recipient_variables )
 					if send_success:
 						self.add_infomessage( MSG.SUCCESS(), 'Batch email sent' )
-						self.redirect(enki.libutil.get_local_url('emailbatchsending'))
+						self.redirect(enki.libutil.get_local_url( 'emailbatchsending' ))
 						return
 					else:
 						self.add_infomessage( MSG.WARNING(), 'Batch email sending failed' )
@@ -211,7 +211,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 		return send_success
 
 
-class ExtensionPageEmailSubscriptions(ExtensionPage):
+class ExtensionPageEmailSubscriptions( ExtensionPage ):
 
 	def __init__( self ):
 		ExtensionPage.__init__( self, route_name = 'profile', template_include = 'incemailsubscriptions.html' )
@@ -223,7 +223,7 @@ class ExtensionPageEmailSubscriptions(ExtensionPage):
 		return count_email_subscriptions
 
 
-class ExtensionPageEmailSubscriptionsLink(ExtensionPage):
+class ExtensionPageEmailSubscriptionsLink( ExtensionPage ):
 
 	def __init__( self ):
 		ExtensionPage.__init__( self, route_name = 'navbar', template_include = 'incemailsubscriptionslink.html' )

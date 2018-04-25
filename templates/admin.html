@@ -80,6 +80,8 @@
 									<input class="form-control" type="text" name="purchaser_email" placeholder="{{ _( "Email" ) }}">
 								</div>
 							</div>
+			<h2 class="text-danger">{{ _( "Email batch sending" )}}</h2>
+			<a href="/admin/emailbatchsending"><button class="btn btn-default">{{ _( 'Compose and send newsletters' ) }}</button></a>
 
 							<div class="form-group">
 								<label for="purchaser_user_id" class="col-lg-2 control-label">{{ _( 'Recipient user Id (optional)' ) }}</label>
@@ -107,9 +109,6 @@
 
 			<h2 class="text-danger">API</h2>
 			<p><a href="/admin/apps">Applications</a></p>
-
-			{# <!-- Extensions --> #}
-            {% include "incpageextensions.html" %}
 
             {% include "incfooter.html" %}
     	</div>
