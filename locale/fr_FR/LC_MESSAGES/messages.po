@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-08-04 14:58+0200\n"
+"POT-Creation-Date: 2018-04-26 18:22+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -36,7 +36,7 @@ msgstr "Danger"
 
 #: enki/textmessages.py:13
 msgid "You are logged out."
-msgstr "Vous êtes déconnecté.e."
+msgstr "Vous êtes déconnecté·e."
 
 #: enki/textmessages.py:14
 msgid "Please log in to access the page you requested."
@@ -44,7 +44,7 @@ msgstr "Veuillez vous connecter afin d'accéder à la page demandée."
 
 #: enki/textmessages.py:15
 msgid "You are logged in."
-msgstr "Vous êtes connecté.e."
+msgstr "Vous êtes connecté·e."
 
 #: enki/textmessages.py:16
 msgid "Please reauthenticate yourself to continue."
@@ -69,7 +69,7 @@ msgstr "Création de compte interrompue."
 #: enki/textmessages.py:22
 #, python-format
 msgid "If email address %(email)s is available, a registration email was sent to it. Please check your inbox and follow the instructions in the email to <b>confirm your registration</b>."
-msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de finaliser la création de votre compte utilisateur.trice."
+msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de finaliser la création de votre compte utilisateur·trice."
 
 #: enki/textmessages.py:23
 #, python-format
@@ -145,7 +145,7 @@ msgstr "La méthode d'authentification par l'intermédiaire de %(provider)s est 
 #: enki/textmessages.py:44
 #, python-format
 msgid "Authentication method %(provider)s cannot be added to your account. It is already registered to another user."
-msgstr "La méthode d'authentification par l'intermédiaire de %(provider)s ne peut pas être ajoutée à votre compte. Elle est déjà attribuée à un.e autre utilisateur.trice."
+msgstr "La méthode d'authentification par l'intermédiaire de %(provider)s ne peut pas être ajoutée à votre compte. Elle est déjà attribuée à un·e autre utilisateur·trice."
 
 #: enki/textmessages.py:45
 #, python-format
@@ -191,11 +191,11 @@ msgstr "Votre message de forum est supprimé."
 
 #: enki/textmessages.py:60
 msgid "Wrong email or password."
-msgstr "Adresse électronique ou mot de passe erroné.e."
+msgstr "Adresse électronique ou mot de passe erroné·e."
 
 #: enki/textmessages.py:61
 msgid "Invalid password."
-msgstr "Adresse électronique ou mot de passe erroné.e."
+msgstr "Adresse électronique ou mot de passe erroné·e."
 
 #: enki/textmessages.py:62
 #, python-format
@@ -220,7 +220,7 @@ msgstr "Veuiller entrer votre nouveau mot de passe"
 
 #: enki/textmessages.py:67
 msgid "User creation failed, please retry."
-msgstr "La création de votre compte utilisateur.trice a échoué. Veuillez renouveler votre tentative."
+msgstr "La création de votre compte utilisateur·trice a échoué. Veuillez renouveler votre tentative."
 
 #: enki/textmessages.py:68
 #, python-format
@@ -297,7 +297,7 @@ msgstr "Confirmation de la création de votre compte"
 #: enki/textmessages.py:86
 #, python-format
 msgid "Follow this link to confirm your registration: %(link)s (click or copy and paste in your browser)"
-msgstr "Suivez ce lien pour confirmer la création de votre compte utilisateur.trice : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
+msgstr "Suivez ce lien pour confirmer la création de votre compte utilisateur·trice : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur)."
 
 #: enki/textmessages.py:87
 msgid "Confirm new email"
@@ -346,11 +346,11 @@ msgstr "Vous avez demandé de supprimer votre compte et les messages que vous av
 
 #: enki/textmessages.py:99
 msgid "[Deleted user]"
-msgstr "[Utilisateur.trice supprimé.e]"
+msgstr "[Utilisateur·trice supprimé·e]"
 
 #: enki/textmessages.py:100
 msgid "Your display name is your public Id. You must have a display name to post in the forums, invite friends and join games."
-msgstr "Votre nom d'affichage est votre identité publique. Il est nécessaire pour poster des messages dans le forum, inviter des ami.e.s et jouer."
+msgstr "Votre nom d'affichage est votre identité publique. Il est nécessaire pour poster des messages dans le forum, inviter des ami·e·s et jouer."
 
 #: enki/textmessages.py:101
 msgid "(The display name above was randomly generated, feel free to change it.)"
@@ -396,7 +396,7 @@ msgstr "[Message supprimé]"
 
 #: enki/textmessages.py:111
 msgid "The user you requested does not exist or was deleted."
-msgstr "L'utilisateur.trice que vous avez demandé n'existe pas ou a été supprimé.e."
+msgstr "L'utilisateur·trice que vous avez demandé n'existe pas ou a été supprimé·e."
 
 #: enki/textmessages.py:112
 msgid "The forum you requested does not exist or was deleted."
@@ -454,7 +454,7 @@ msgstr "Le nom d'affichage que vous avez fourni est incorrect."
 
 #: enki/textmessages.py:126
 msgid "The display name you entered does not exist or the user is already in your friends list."
-msgstr "Le nom d'affichage que vous avez fourni n'existe pas ou l'utilisateur.trice fait déjà partie de votre liste d'ami.e.s."
+msgstr "Le nom d'affichage que vous avez fourni n'existe pas ou l'utilisateur·trice fait déjà partie de votre liste d'ami·e·s."
 
 #: enki/textmessages.py:127
 msgid "A display name is needed"
@@ -463,17 +463,17 @@ msgstr "Un nom d'affichage est requis."
 #: enki/textmessages.py:128
 #, python-format
 msgid "An invitation to join your friends list has been sent to %(name)s."
-msgstr "Une invitation à joindre votre liste d'ami.e.s été envoyée à %(name)s."
+msgstr "Une invitation à joindre votre liste d'ami·e·s été envoyée à %(name)s."
 
 #: enki/textmessages.py:129
 #, python-format
 msgid "%(name)s has been added to your friends list."
-msgstr "%(name)s a été ajouté.e à votre liste d'ami.e.s."
+msgstr "%(name)s a été ajouté·e à votre liste d'ami·e·s."
 
 #: enki/textmessages.py:130
 #, python-format
 msgid "%(name)s has been removed from your friends list."
-msgstr "%(name)s a été retiré.e de votre liste d'ami.e.s."
+msgstr "%(name)s a été retiré·e de votre liste d'ami·e·s."
 
 #: enki/textmessages.py:133 templates/store.html:6 templates/store.html:16
 #: templates/storeemulatefastspring.html:6
@@ -498,7 +498,7 @@ msgstr "Vous avez déjà activé le produit %(product)s. Vous pouvez donner cett
 #: enki/textmessages.py:137
 #, python-format
 msgid "Another user already activated %(product)s licence %(licence)s."
-msgstr "Un.e autre utilisateur.trice a déjà activé la clé de licence %(licence)s du produit %(product)s."
+msgstr "Un·e autre utilisateur·trice a déjà activé la clé de licence %(licence)s du produit %(product)s."
 
 #: enki/textmessages.py:138
 msgid "Invalid licence key."
@@ -560,6 +560,38 @@ msgstr "Données supprimées."
 msgid "Image unavailable"
 msgstr "Image non disponible"
 
+#: enki/textmessages.py:160
+#, python-format
+msgid "You are subscribed to the %(newsletter)s email newsletter."
+msgstr "Vous êtes abonné·e à la lettre d'information %(newsletter)s."
+
+#: enki/textmessages.py:161
+#, python-format
+msgid "You are unsubscribed from the %(newsletter)s email newsletter."
+msgstr "Vous êtes désabonné·e de la lettre d'information %(newsletter)s."
+
+#: enki/textmessages.py:162
+msgid "You are unsubscribed from all email newsletters."
+msgstr "Vous êtes désabonné·e de toutes les lettres d'information."
+
+#: enki/textmessages.py:163
+#, python-format
+msgid "If email address %(email)s is available, a subscription confirmation email was sent to it. Please check your inbox and follow the instructions in the email to confirm your subscription to the %(newsletter)s email newsletter"
+msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de confirmer votre abonnement à la lettre d'information %(newsletter)s."
+
+#: enki/textmessages.py:164
+msgid "Email newsletter subscription confirmation"
+msgstr "Confirmation abonnement lettre d'information"
+
+#: enki/textmessages.py:165
+#, python-format
+msgid ""
+"Follow this link to confirm your subscription to the %(newsletter)s email newsletter: %(link)s (click or copy and paste in your browser). \n"
+"If you do not wish to subscribe, ignore this message."
+msgstr ""
+"Suivez ce lien pour confirmer votre abonnement à la lettre d'information %(newsletter)s. : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur). \n"
+"Si vous ne souhaitez pas vous abonner, ignorez ce message."
+
 #: templates/accountconnect.html:7 templates/accountconnect.html:17
 msgid "Connected accounts"
 msgstr "Comptes attachés"
@@ -573,7 +605,7 @@ msgid "Email:"
 msgstr "Adresse de courrier électronique :"
 
 #: templates/accountconnect.html:22 templates/emailchange.html:6
-#: templates/emailchange.html:21 templates/emailchange.html:33
+#: templates/emailchange.html:21 templates/emailchange.html:41
 msgid "Change email"
 msgstr "Modifier mon adresse de courrier électronique"
 
@@ -635,84 +667,88 @@ msgstr "Votre <em>mot de passe</em>."
 msgid "Your third party authentication provider(s) and unique identifier(s):"
 msgstr "Vos fournisseur(s) et identité(s) d'authentification :"
 
-#: templates/accountdelete.html:32
+#: templates/accountdelete.html:30
+msgid "Your email subscriptions are cancelled."
+msgstr "Vos abonnements aux lettre d'information sont annulés."
+
+#: templates/accountdelete.html:33
 msgid "Your <b>public information is anonymised</b>:"
 msgstr "Vos données publiques sont anonymisées :"
 
-#: templates/accountdelete.html:34
+#: templates/accountdelete.html:35
 #, python-format
 msgid "Your display name <em>%(display_name)s</em> is replaced with <em>%(deleted_dn)s</em> throughout."
 msgstr "Votre nom d'affichage <em>%(display_name)s</em> est remplacé par <em>%(deleted_dn)s</em>."
 
-#: templates/accountdelete.html:35
+#: templates/accountdelete.html:36
 #, python-format
 msgid "Your old display name <em>%(previous_display_names)s</em> is removed from your <a href='%(user_page_url)s'>user page</a>."
 msgid_plural "Your old display names <em>%(previous_display_names)s</em> are removed from your <a href='%(user_page_url)s'>user page</a>."
-msgstr[0] "Votre ancien nom d'affichage <em>%(previous_display_names)s</em> est supprimé de votre <a href='%(user_page_url)s'>page utilisateur.trice</a>."
-msgstr[1] "Vos anciens noms d'affichage <em>%(previous_display_names)s</em> sont supprimés de votre <a href='%(user_page_url)s'>page utilisateur.trice</a>."
-
-#: templates/accountdelete.html:36
-msgid "Your <em>friend invitations</em> are deleted."
-msgstr "Les demandes d'ajout à votre liste d'ami.e.s sont supprimées."
+msgstr[0] "Votre ancien nom d'affichage <em>%(previous_display_names)s</em> est supprimé de votre <a href='%(user_page_url)s'>page utilisateur·trice</a>."
+msgstr[1] "Vos anciens noms d'affichage <em>%(previous_display_names)s</em> sont supprimés de votre <a href='%(user_page_url)s'>page utilisateur·trice</a>."
 
 #: templates/accountdelete.html:37
-#, python-format
-msgid "Your <em>friends</em> keep a link to your anonymised <a href='%(user_page_url)s'>public page</a> in their friends list.<br>If you prefer to remove the links, <a href='%(friends_page_url)s'>remove your friends manually</a> before deleting your account."
-msgstr "Vos <em>ami.e.s</em> conservent un lien vers votre <a href='%(user_page_url)s'>page publique</a> anonymisées dans leur liste d'ami.e.s.<br>Si vous préférez que ces liens soient supprimés, <a href='%(friends_page_url)s'>retirez vos ami.e.s de votre liste</a> avant de supprimer votre compte."
+msgid "Your <em>friend invitations</em> are deleted."
+msgstr "Les demandes d'ajout à votre liste d'ami·e·s sont supprimées."
 
 #: templates/accountdelete.html:38
 #, python-format
-msgid "Your <em>Forum threads and posts</em> remain visible with the author set to <em>%(deleted_dn)s</em>.<br>You can <a href='%(user_page_url)s'>edit or delete individual posts from your user page</a> before deleting your account. Alternatively, check the option below to delete all your posts."
-msgstr "Vos <em>messages de forum</em> demeurent visibles mais leur auteur devient <em>%(deleted_dn)s</em>. Vous pouvez <a href='%(user_page_url)s'>éditer ou supprimer des messages de forum individuellement à partir de votre page utilisateur.trice</a> ou cocher l'option ci-dessous pour effacer tous vos messages."
+msgid "Your <em>friends</em> keep a link to your anonymised <a href='%(user_page_url)s'>public page</a> in their friends list.<br>If you prefer to remove the links, <a href='%(profile_page_url)s'>remove your friends manually</a> before deleting your account."
+msgstr "Vos <em>ami·e·s</em> conservent un lien vers votre <a href='%(user_page_url)s'>page publique</a> anonymisées dans leur liste d'ami·e·s.<br>Si vous préférez que ces liens soient supprimés, <a href='%(friends_page_url)s'>retirez vos ami·e·s de votre liste</a> avant de supprimer votre compte."
 
 #: templates/accountdelete.html:39
+#, python-format
+msgid "Your <em>Forum threads and posts</em> remain visible with the author set to <em>%(deleted_dn)s</em>.<br>You can <a href='%(user_page_url)s'>edit or delete individual posts from your user page</a> before deleting your account. Alternatively, check the option below to delete all your posts."
+msgstr "Vos <em>messages de forum</em> demeurent visibles mais leur auteur devient <em>%(deleted_dn)s</em>. Vous pouvez <a href='%(user_page_url)s'>éditer ou supprimer des messages de forum individuellement à partir de votre page utilisateur·trice</a> ou cocher l'option ci-dessous pour effacer tous vos messages."
+
+#: templates/accountdelete.html:40
 msgid "Warning: once your account is deleted, you will be <b>unable to edit nor delete your posts</b>."
 msgstr "Attention: après avoir supprimé votre compte, <b>vous ne pourrez plus éditer ni supprimer vos messages de forum</b>."
 
-#: templates/accountdelete.html:43
+#: templates/accountdelete.html:44
 msgid "Your <b>licence keys</b>:"
 msgstr "Vos <b>clés de licence</b>:"
 
-#: templates/accountdelete.html:45
+#: templates/accountdelete.html:46
 #, python-format
 msgid "Your <em>unactivated licence keys</em> remain valid. You can <a href='%(profile_library_url)s'>retrieve the keys from your library</a>."
 msgstr "Vos <em>clés de licence non activées</em> demeurent valides. Vous en trouverez la liste dans votre <a href='%(profile_library_url)s'>bibliothèque</a>."
 
-#: templates/accountdelete.html:46
+#: templates/accountdelete.html:47
 msgid "Warning: once your account is deleted, you won't be able to view the licence keys on our system. <b>Make sure you back them up</b>."
 msgstr "Attention: après avoir supprimé votre compte, vous ne pourrez plus accéder à vos clés sur notre sytème. <b>Assurez-vous de sauvegarder vos clés</b>."
 
-#: templates/accountdelete.html:47
+#: templates/accountdelete.html:48
 msgid "Your <em>activated licence keys</em> are no longer available."
 msgstr "Vos <em>clés de licence activées</em> ne sont plus disponibles."
 
-#: templates/accountdelete.html:48
+#: templates/accountdelete.html:49
 msgid "Warning: activated licence keys cannot be transferred. Once your account is deleted, <b>you won't be able tu use them anymore</b>."
 msgstr "Attention: les clés de licence activées ne peuvent pas être transferrées. Après avoir supprimé votre compte, <b>vous ne pourrez plus les utiliser</b>."
 
-#: templates/accountdelete.html:61 templates/accountdelete.html:76
+#: templates/accountdelete.html:62 templates/accountdelete.html:77
 #: templates/profile.html:81
 msgid "Delete my account"
 msgstr "Supprimer mon compte"
 
-#: templates/accountdelete.html:67
+#: templates/accountdelete.html:68
 msgid "Delete all my forum posts permanently"
 msgstr "Supprimer définitivement tous mes messages de forum."
 
-#: templates/accountdelete.html:72
+#: templates/accountdelete.html:73
 #, python-format
 msgid "You will receive an email at address %(email)s. Your account will be deleted once you've confirmed through the link in the email."
 msgstr "Vous recevrez un message de courrier électronique à l'adresse %(email)s. Votre compte ne sera supprimé que lorsque vous l'aurez confirmé en suivant le lien contenu dans le message."
 
-#: templates/accountdelete.html:73
+#: templates/accountdelete.html:74
 msgid "Send me an email to delete my account"
 msgstr "Envoyez-moi un message de courrier électronique pour supprimer mon compte"
 
-#: templates/accountdelete.html:75
+#: templates/accountdelete.html:76
 msgid "Warning: deleting your account cannot be undone."
 msgstr "Attention: supprimer votre compte est irréversible."
 
-#: templates/accountdelete.html:78 templates/forum.html:119
+#: templates/accountdelete.html:79 templates/forum.html:119
 #: templates/loginaddconfirm.html:30 templates/post.html:59
 #: templates/post.html:101 templates/reauthenticate.html:61
 #: templates/registeroauthconfirm.html:51 templates/thread.html:105
@@ -727,50 +763,26 @@ msgstr "Admin"
 msgid "Open csv report"
 msgstr "Ouvrir rapport csv"
 
-#: templates/admin.html:40 templates/inclibrary.html:5
+#: templates/admin.html:40 templates/emailbatchsending.html:6
+#: templates/emailbatchsending.html:16
+msgid "Email batch sending"
+msgstr "Envoi de courrier électronique en masse"
+
+#: templates/admin.html:41
+msgid "Compose and send newsletters"
+msgstr "Composer et envoyer des lettres d'information"
+
+#: templates/admin.html:43 templates/inclibrary.html:5
 msgid "Licences"
 msgstr "Clés de licence"
 
-#: templates/admin.html:45
-msgid "Licence Key Generator"
-msgstr "Générateur de clés de licence"
+#: templates/admin.html:44 templates/licencesgeneratefree.html:22
+msgid "Generate free licence keys"
+msgstr "Générer des clés de licence gratuites"
 
-#: templates/admin.html:48
-msgid "Product"
-msgstr "Produit"
-
-#: templates/admin.html:60 templates/storeemulatefastspring.html:54
-msgid "Quantity"
-msgstr "Quantité"
-
-#: templates/admin.html:67 templates/storeemulatefastspring.html:61
-msgid "Order type"
-msgstr "Type de commande"
-
-#: templates/admin.html:78
-msgid "Recipient email (optional)"
-msgstr "Courrier électronique destinataire (facultatif)"
-
-#: templates/admin.html:80 templates/login.html:45 templates/login.html:47
-#: templates/passwordrecover.html:24 templates/passwordrecover.html:26
-#: templates/profile.html:58 templates/reauthenticate.html:44
-#: templates/register.html:43 templates/register.html:45
-#: templates/registerconfirm.html:24 templates/registeroauthconfirm.html:36
-#: templates/registeroauthwithexistingemail.html:52
-msgid "Email"
-msgstr "Adresse de courrier électronique"
-
-#: templates/admin.html:85
-msgid "Recipient user Id (optional)"
-msgstr "Identifiant destinataire (facultatif)"
-
-#: templates/admin.html:92
-msgid "Information (optional)"
-msgstr "Information (facultatif)"
-
-#: templates/admin.html:100
-msgid "Generate"
-msgstr "Générer"
+#: templates/admin.html:47 templates/apps.html:50
+msgid "Register an application"
+msgstr "Enregistrer une application"
 
 #: templates/appdatastores.html:6
 msgid "User data"
@@ -841,10 +853,6 @@ msgstr "Créé"
 msgid "Generate new"
 msgstr "Générer nouveau"
 
-#: templates/apps.html:50
-msgid "Register an application"
-msgstr "Enregistrer une application"
-
 #: templates/apps.html:53 templates/apps.html:55
 msgid "Application name"
 msgstr "Nom de l'application"
@@ -864,14 +872,14 @@ msgid "Display name"
 msgstr "Nom d'affichage"
 
 #: templates/displayname.html:18
-msgid "Current display name:"
-msgstr "Nom d'affichage actuel :"
+msgid "Current display name"
+msgstr "Nom d'affichage actuel"
 
-#: templates/displayname.html:22
-msgid "Past display name:"
-msgid_plural "Past display names:"
-msgstr[0] "Ancien nom d'affichage :"
-msgstr[1] "Anciens noms d'affichage :"
+#: templates/displayname.html:22 templates/profilepublic.html:23
+msgid "Previous display name"
+msgid_plural "Previous display names"
+msgstr[0] "Nom d'affichage précédent"
+msgstr[1] "Noms d'affichage précédents"
 
 #: templates/displayname.html:32 templates/forum.html:145
 #: templates/post.html:125 templates/profile.html:38 templates/thread.html:129
@@ -903,15 +911,95 @@ msgstr "Votre nom d'affichage ne doit pas nécessairement être unique. Un nombr
 
 #: templates/displayname.html:53
 msgid "Once saved, your display name <b>cannot be deleted</b>, but you can add a new name to use instead. <b>Current and old display name(s) are public</b> and visible on the user page."
-msgstr "Une fois enregistré, votre nom d'affichage <b>ne peut pas être effacé</b>, mais vous pouvez le remplacer par un nouveau nom. <b>Les noms d'affichage actuel et ancien(s) sont publics</b> et visibles sur la page de l'utilsateur."
+msgstr "Une fois enregistré, votre nom d'affichage <b>ne peut pas être effacé</b>, mais vous pouvez le remplacer par un nouveau nom. <b>Les noms d'affichage actuel et ancien(s) sont publics</b> et visibles sur la page de l'utilsateur·trice."
 
 #: templates/displayname.html:59
 msgid "Save my new display name"
 msgstr "Enregistrer mon nouveau nom d'affichage"
 
+#: templates/emailbatchsending.html:22
+msgid "Compose and send a newsletter"
+msgstr "Composer et envoyer une lettre d'information"
+
+#: templates/emailbatchsending.html:25
+msgid "Newsletter"
+msgstr "Lettre d'information"
+
+#: templates/emailbatchsending.html:34
+msgid "Subject"
+msgstr "Sujet"
+
+#: templates/emailbatchsending.html:41
+msgid "Body text"
+msgstr "Texte de votre message"
+
+#: templates/emailbatchsending.html:48
+msgid "Footer"
+msgstr "Pied de page"
+
+#: templates/emailbatchsending.html:58
+msgid "Ready to send batch email?"
+msgstr "Prêt·e à envoyer la lettre d'information ?"
+
+#: templates/emailbatchsending.html:61
+msgid "Send"
+msgstr "Envoyer"
+
+#: templates/emailbatchsending.html:62
+msgid "Send me a test email"
+msgstr "Envoyer un courrier test à mon adresse"
+
+#: templates/emailbatchsending.html:63
+msgid "Reset"
+msgstr "Réinitialiser"
+
 #: templates/emailchange.html:24 templates/emailchange.html:26
 msgid "New email"
 msgstr "Nouvelle adresse de courrier électronique"
+
+#: templates/emailchange.html:28
+msgid "To delete your email, leave the field blank. (You need to be able to log in with third party authentication to delete your email.)"
+msgstr "Pour supprimer votre adresse de courrier électronique, n'indiquez rien. (Vous devez pouvoir vous authentifier auprès d'au moins une tierce partie pour supprimer votre adresse.)"
+
+#: templates/emailchange.html:30 templates/emailsubscriptions.html:16
+#: templates/incemailsubscriptions.html:2
+msgid "Email subscriptions"
+msgstr "Abonnements"
+
+#: templates/emailchange.html:32
+msgid "Changing your login email address doesn't affect your email subscriptions. Newsletters will continue being sent to your old address. Once your email change is confirmed you won't be able to manage those subscriptions through your account profile page."
+msgstr "Modifier votre adresse de courrier électronique n'affecte pas vos abonnement. Les lettres d'informations continueront à être envoyées à votre ancienne adresse. À partir du moment oú votre nouvelle adresse est confirmée, vous n'aurez plus la possibilité de gérer vos abonnements par l'intermédiaire de votre compte."
+
+#: templates/emailchange.html:33
+msgid "Deleting your email address cancels all your subscriptions."
+msgstr "Supprimer votre adresse de courrier électronique annule tous vos abonnements aux lettres d'information."
+
+#: templates/emailsubscriptions.html:23
+msgid "Subscribe to newsletter"
+msgstr "S'abonner à une lettre d'information"
+
+#: templates/emailsubscriptions.html:32
+msgid "Unsubscribe"
+msgstr "Se désabonner"
+
+#: templates/emailsubscriptions.html:40 templates/emailsubscriptions.html:60
+msgid "Subscribe"
+msgstr "S'abonner"
+
+#: templates/emailsubscriptions.html:50 templates/emailsubscriptions.html:52
+#: templates/licencesgeneratefree.html:57 templates/login.html:45
+#: templates/login.html:47 templates/passwordrecover.html:24
+#: templates/passwordrecover.html:26 templates/profile.html:58
+#: templates/reauthenticate.html:44 templates/register.html:43
+#: templates/register.html:45 templates/registerconfirm.html:24
+#: templates/registeroauthconfirm.html:36
+#: templates/registeroauthwithexistingemail.html:52
+msgid "Email"
+msgstr "Adresse de courrier électronique"
+
+#: templates/emailsubscriptions.html:54
+msgid "You will receive an email to confirm your subscription. If you don't, please try again after a delay and otherwise contact us."
+msgstr "Vous recevrez un courrier électronique pour confirmer votre abonnement. Si vous ne le recevez pas, réessayez après un délai ou contactez-nous."
 
 #: templates/forum.html:7 templates/forum.html:9 templates/forum.html:23
 #: templates/forum.html:26 templates/post.html:8 templates/post.html:24
@@ -1003,7 +1091,7 @@ msgid "Your text"
 msgstr "Texte de votre message"
 
 #: templates/forum.html:96 templates/post.html:78 templates/thread.html:82
-#, fuzzy, python-format
+#, python-format
 msgid "Use markdown for formatting - <a href='%(url_syntax)s' target='_blank'>Syntax</a> - <a href='%(url_cheatsheet)s' target='_blank'>Cheatsheet</a> - embed videos and images with the following syntax: ![alt text](url)."
 msgstr "Utilisez markdown - <a href='%(url_syntax)s' target='_blank'>Syntaxe</a> - <a href='%(url_cheatsheet)s' target='_blank'>Référence rapide</a> - intégrez vidéos et images en utilisant la syntaxe suivante : ![alt text](url)."
 
@@ -1081,13 +1169,13 @@ msgstr "Visites"
 msgid "Description"
 msgstr "Description"
 
-#: templates/friends.html:16 templates/profile.html:90
+#: templates/friends.html:16 templates/incfriendsmessages.html:5
 msgid "Friends"
-msgstr "Ami.e.s"
+msgstr "Ami·e·s"
 
 #: templates/friends.html:40
 msgid "Invite someone to join your friends list"
-msgstr "Inviter quelqu'un à joindre votre liste d'ami.e.s"
+msgstr "Inviter quelqu'un à joindre votre liste d'ami·e·s"
 
 #: templates/friends.html:45
 msgid "display name"
@@ -1095,7 +1183,7 @@ msgstr "Nom d'affichage"
 
 #: templates/friends.html:47
 msgid "Enter the display name of the person you would like to add to your friends. The display name is a string of 3 to 12 alphanumeric characters (prefix), followed by '#' and 4 digits (suffix). You can enter the full display name or just the prefix. The search is case insensitive."
-msgstr "Veuillez entrer le nom d'affichage de la personne que vous voudriez ajouter à votre liste d'ami.e.s. Le nom d'affichage contient 3 à 12 caractères alphanumériques (préfixe), suivis d'un '#'et de 4 chiffres (suffixe). Vous pouvez entrer le nom complet ou uniquement le préfixe. La recherche est insensible à la casse."
+msgstr "Veuillez entrer le nom d'affichage de la personne que vous voudriez ajouter à votre liste d'ami·e·s. Le nom d'affichage contient 3 à 12 caractères alphanumériques (préfixe), suivis d'un '#'et de 4 chiffres (suffixe). Vous pouvez entrer le nom complet ou uniquement le préfixe. La recherche est insensible à la casse."
 
 #: templates/friends.html:53
 msgid "Search"
@@ -1103,7 +1191,7 @@ msgstr "Rechercher"
 
 #: templates/friends.html:65
 msgid "User found"
-msgstr "Utilisateur.trice trouvé.e"
+msgstr "Utilisateur·trice trouvé·e"
 
 #: templates/friends.html:68 templates/friends.html:75
 msgid "Invite"
@@ -1116,6 +1204,32 @@ msgstr "Utilisateurs.trices ayant un préfix similaire"
 #: templates/home.html:17 templates/incnavbartop.html:2
 msgid "Home"
 msgstr "Accueil"
+
+#: templates/incemailsubscriptions.html:5
+msgid "Subscriptions"
+msgstr "Abonnements"
+
+#: templates/incemailsubscriptions.html:5 templates/incfriendsmessages.html:5
+#: templates/incfriendsmessages.html:17 templates/inclibrary.html:5
+#: templates/profile.html:55 templates/profile.html:94
+msgid "Manage"
+msgstr "Gérer"
+
+#: templates/incemailsubscriptions.html:8
+msgid "Subscriptions to newsletters"
+msgstr "Abonnements aux lettres d'information"
+
+#: templates/incemailsubscriptions.html:12 templates/incfriendsmessages.html:12
+#: templates/incfriendsmessages.html:24 templates/inclibrary.html:12
+#: templates/inclibrary.html:19 templates/profile.html:62
+#: templates/profile.html:69 templates/profile.html:76
+#: templates/profile.html:101 templates/profile.html:108
+msgid "None"
+msgstr "Aucun·e"
+
+#: templates/incemailsubscriptionslink.html:2
+msgid "Subscribe to our newsletter"
+msgstr "Abonnez-vous à notre lettre d'information"
 
 #: templates/incfooter.html:6
 msgid "made with enkiWS - source code on GitHub"
@@ -1130,28 +1244,34 @@ msgstr ""
 msgid "Privacy policy"
 msgstr ""
 
+#: templates/incfriendsmessages.html:2
+msgid "Friends and Messaging"
+msgstr "Ami·e·s et Messages"
+
+#: templates/incfriendsmessages.html:8
+msgid "Friend"
+msgid_plural "Friends"
+msgstr[0] "Ami·e"
+msgstr[1] "Ami·e·s"
+
+#: templates/incfriendsmessages.html:17 templates/messages.html:16
+msgid "Messages"
+msgstr "Messages"
+
+#: templates/incfriendsmessages.html:20
+msgid "Message"
+msgid_plural "Messages"
+msgstr[0] "Message"
+msgstr[1] "Messages"
+
 #: templates/inclibrary.html:2 templates/library.html:6
 #: templates/library.html:16
 msgid "Library"
 msgstr "Bibliothèque"
 
-#: templates/inclibrary.html:5 templates/profile.html:55
-#: templates/profile.html:90 templates/profile.html:102
-#: templates/profile.html:127
-msgid "Manage"
-msgstr "Gérer"
-
 #: templates/inclibrary.html:8 templates/library.html:45
 msgid "Available to activate or give"
 msgstr "À activer ou donner"
-
-#: templates/inclibrary.html:12 templates/inclibrary.html:19
-#: templates/profile.html:62 templates/profile.html:69
-#: templates/profile.html:76 templates/profile.html:97
-#: templates/profile.html:109 templates/profile.html:134
-#: templates/profile.html:141
-msgid "None"
-msgstr "Aucun.e"
 
 #: templates/inclibrary.html:15 templates/library.html:62
 msgid "Activated"
@@ -1182,11 +1302,11 @@ msgstr "Langues"
 
 #: templates/incnavbartop.html:66
 msgid "Stay logged in"
-msgstr "Rester connecté.e"
+msgstr "Rester connecté·e"
 
 #: templates/incnavbartop.html:74 templates/incnavbartop.html:76
 msgid "Logged in as"
-msgstr "Connecté.e"
+msgstr "Connecté·e"
 
 #: templates/incnavbartop.html:76
 msgid "Please set up your display name"
@@ -1253,6 +1373,40 @@ msgstr "Activée"
 msgid "Available to give"
 msgstr "À activer ou à donner"
 
+#: templates/licencesgeneratefree.html:6 templates/licencesgeneratefree.html:16
+msgid "Licence Keys Generator"
+msgstr "Générateur de clés de licence"
+
+#: templates/licencesgeneratefree.html:25
+msgid "Product"
+msgstr "Produit"
+
+#: templates/licencesgeneratefree.html:37
+#: templates/storeemulatefastspring.html:54
+msgid "Quantity"
+msgstr "Quantité"
+
+#: templates/licencesgeneratefree.html:44
+#: templates/storeemulatefastspring.html:61
+msgid "Order type"
+msgstr "Type de commande"
+
+#: templates/licencesgeneratefree.html:55
+msgid "Recipient email (optional)"
+msgstr "Courrier électronique destinataire (facultatif)"
+
+#: templates/licencesgeneratefree.html:62
+msgid "Recipient user Id (optional)"
+msgstr "Identifiant destinataire (facultatif)"
+
+#: templates/licencesgeneratefree.html:69
+msgid "Information (optional)"
+msgstr "Information (facultatif)"
+
+#: templates/licencesgeneratefree.html:77
+msgid "Generate"
+msgstr "Générer"
+
 #: templates/login.html:22 templates/registeroauthwithexistingemail.html:29
 msgid "Log in with a third party provider"
 msgstr "Accéder à mon compte en m'authentifiant auprès d'une tierce partie"
@@ -1286,7 +1440,7 @@ msgstr "Mot de passe oublié"
 
 #: templates/login.html:76 templates/register.html:67
 msgid "You are currently logged in."
-msgstr "Vous êtes actuellement connecté.e."
+msgstr "Vous êtes actuellement connecté·e."
 
 #: templates/loginaddconfirm.html:6
 msgid "Confirm addition of a login method"
@@ -1321,13 +1475,9 @@ msgstr "Médias"
 msgid "Media - images and videos"
 msgstr "Médias - images et vidéos"
 
-#: templates/messages.html:16 templates/profile.html:102
-msgid "Messages"
-msgstr "Messages"
-
 #: templates/messages.html:25
 msgid "Friend requests"
-msgstr "Demandes d'ajout à votre liste d'ami.e.s"
+msgstr "Demandes d'ajout à votre liste d'ami·e·s"
 
 #: templates/messages.html:29
 msgid "Accept"
@@ -1421,7 +1571,7 @@ msgstr "Voir"
 
 #: templates/profile.html:28
 msgid "User Id"
-msgstr "Identifiant utilisateur.trice :"
+msgstr "Identifiant utilisateur·trice :"
 
 #: templates/profile.html:29
 msgid "Public page link"
@@ -1437,7 +1587,7 @@ msgstr "Modifier"
 
 #: templates/profile.html:37
 msgid "Your display name is your public Id. You need a display name to post in the forums, invite friends and join games."
-msgstr "Votre nom d'affichage est votre identité publique. Il est nécessaire pour poster des messages dans le forum, inviter des ami.e.s et jouer."
+msgstr "Votre nom d'affichage est votre identité publique. Il est nécessaire pour poster des messages dans le forum, inviter des ami·e·s et jouer."
 
 #: templates/profile.html:40
 msgid "Current"
@@ -1461,48 +1611,26 @@ msgstr "Authentification"
 msgid "Enabled"
 msgstr "Activé"
 
-#: templates/profile.html:87
-msgid "Friends and Messaging"
-msgstr "Ami.e.s et Messages"
-
-#: templates/profile.html:93
-msgid "Friend"
-msgid_plural "Friends"
-msgstr[0] "Ami.e"
-msgstr[1] "Ami.e.s"
-
-#: templates/profile.html:105
-msgid "Message"
-msgid_plural "Messages"
-msgstr[0] "Message"
-msgstr[1] "Messages"
-
-#: templates/profile.html:124 templates/sessions.html:6
+#: templates/profile.html:91 templates/sessions.html:6
 #: templates/sessions.html:16
 msgid "Sessions"
 msgstr "Sessions"
 
-#: templates/profile.html:127
+#: templates/profile.html:94
 msgid "Connected sessions"
 msgstr "Sessions connectées"
 
-#: templates/profile.html:130
+#: templates/profile.html:97
 msgid "Browser sessions (including current session)"
 msgstr "Sessions navigateurs (session actuelle incluse)"
 
-#: templates/profile.html:137 templates/sessions.html:37
+#: templates/profile.html:104 templates/sessions.html:37
 msgid "Apps sessions"
 msgstr "Sessions applications"
 
 #: templates/profilepublic.html:7 templates/profilepublic.html:21
 msgid "User"
-msgstr "Utilisateur.trice"
-
-#: templates/profilepublic.html:23
-msgid "Previous display name"
-msgid_plural "Previous display names"
-msgstr[0] "Nom d'affichage précédent"
-msgstr[1] "Noms d'affichage précédents"
+msgstr "Utilisateur·trice"
 
 #: templates/reauthenticate.html:7 templates/reauthenticate.html:60
 msgid "Reauthenticate"
@@ -1589,7 +1717,7 @@ msgstr "Se connecter à un compte existant"
 #: templates/registeroauthwithexistingemail.html:23
 #, python-format
 msgid "Use an authentication method you've used before. Once logged in, you'll be able to add %(providername)s as a login method from your profile page."
-msgstr "Utiliser une méthode d'authentification déjà enregistrée. Une fois connecté.e, vous pourrez ajouter %(providername)s à vos méthodes d'authentification à partir de la page des paramètres de votre compte."
+msgstr "Utiliser une méthode d'authentification déjà enregistrée. Une fois connecté·e, vous pourrez ajouter %(providername)s à vos méthodes d'authentification à partir de la page des paramètres de votre compte."
 
 #: templates/registeroauthwithexistingemail.html:35
 msgid "You may need to log out or use a different browser"
@@ -1623,7 +1751,7 @@ msgstr "Déconnecter"
 
 #: templates/sessions.html:39
 msgid "Connected"
-msgstr "Connecté.e"
+msgstr "Connecté·e"
 
 #: templates/store.html:22
 msgid "Purchase"
@@ -1639,7 +1767,7 @@ msgstr "Émulateur de magasin - FastSpring"
 
 #: templates/storeemulatefastspring.html:24
 msgid "This form enables you to emulate purchases. You have been redirected to the store emulator because either the third-party FastSpring store is not set up, you are in debug mode or use of the emulator has been forced."
-msgstr "Cette page vous permet d'émuler des achats. Vous avez été redirigé.e vers l'émulateur de magasin car soit le magasin FastSpring n'est pas configuré, soit vous êtes en mode débogage, soit l'utilisation de l'émulateur a été imposée."
+msgstr "Cette page vous permet d'émuler des achats. Vous avez été redirigé·e vers l'émulateur de magasin car soit le magasin FastSpring n'est pas configuré, soit vous êtes en mode débogage, soit l'utilisation de l'émulateur a été imposée."
 
 #: templates/storeemulatefastspring.html:25
 msgid "The emulator creates product licence records of order_type 'emulated'."
@@ -1692,7 +1820,4 @@ msgstr "Veuillez créer votre nom d'affichage pour répondre."
 #: templates/thread.html:135
 msgid "Please log in or create an account to post an answer."
 msgstr "Veuillez vous connecter ou créer un compte pour répondre."
-
-#~ msgid "Use <a href='%(url)s' target='_blank'>markdown</a> for formatting."
-#~ msgstr "Utilisez <a href='%(url)s' target='_blank'>markdown</a> pour formater votre message."
 
