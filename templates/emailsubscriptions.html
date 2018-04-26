@@ -20,7 +20,7 @@
                     <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     <fieldset>
 
-                        <legend>{{ _( "Subscribe to newsletters" ) }}</legend>
+                        <legend>{{ _( "Subscribe to newsletter" ) }}</legend>
 
 						{# <!-- IF is_logged_in --> #}
 						{% if data[0] %}
@@ -49,9 +49,9 @@
 							<div class="form-group {% if error %}has-error{% endif%}">
 								<label for="email" class="col-lg-2 control-label">{{ _( "Email" ) }}</label>
 								 <div class="col-lg-10">
-									 <input class="form-control" type="text" name="email" placeholder="{{ _( "email" ) }}" value = "{{ email }}"/> {# <!-- email escaped in the handler --> #}
+									 <input class="form-control" type="text" name="email" placeholder="{{ _( "Email" ) }}" value = "{{ email }}"/> {# <!-- email escaped in the handler --> #}
 									 {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
-									 <p class="text-info">{{ _( "You will receive an email to confirm your subscription. If you don't, please try again after a delay and otherwise contact us." ) }}</p>
+									 <p class="text-info">{{ _( "You will receive an email to confirm your subscription. If you don't, please try again after a delay and otherwise contact us." ) }} <a href="mailto:{{ data[3] }}">{{ data[3] }}</a></p>
 								 </div>
 							</div>
 

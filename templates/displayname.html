@@ -15,11 +15,11 @@
 
             {% if data %}
                 {% if data.entity %}
-                    <p class="text-info">{{ _( "Current display name:" ) }} {{ data.entity.display_name }}</p>
+                    <p class="text-info">{{ _( "Current display name" ) }} {{ data.entity.display_name }}</p>
                 {% endif %}
 
                 {% if data.list %}
-                    <p class="text-info">{{ ngettext( "Previous display name:", "Previous display names:", data.list | count ) }} {{ data.list | join(', ') }}</p>
+                    <p class="text-info">{{ ngettext( "Previous display name", "Previous display names", data.list | count ) }} {{ data.list | join(', ') }}</p>
                 {% endif %}
             {% endif %}
 

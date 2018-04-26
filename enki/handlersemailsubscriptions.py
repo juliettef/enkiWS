@@ -85,12 +85,13 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 		is_logged_in = False
 		has_email_subscriptions = False
 		has_email = ''
+		contact_us = settings.COMPANY_CONTACT
 		if self.is_logged_in() and self.enki_user.email:
 			is_logged_in = True
 			has_email = self.enki_user.email if ( self.enki_user.email != 'removed' ) else ''
 			if has_email:
 				has_email_subscriptions = True if EnkiModelEmailSubscriptions.count_newsletters_by_email( self.enki_user.email ) else False
-		return [ is_logged_in, has_email_subscriptions, has_email ]
+		return [ is_logged_in, has_email_subscriptions, has_email, contact_us ]
 
 
 class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
@@ -154,7 +155,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 				self.send_email( self.enki_user.email, subject, body_text + footer_template )
 				self.add_infomessage( MSG.INFORMATION(), 'Test email sent to ' +  self.enki_user.email )
 			elif submit_type == 'send':
-				ready_to_send = self.request.get('readytosend')
+				ready_to_send = self.request.get( 'readytosend' )
 				if ready_to_send == 'on':
 					batches_emails, batches_emails_recipient_variables = EnkiModelEmailSubscriptions.get_mailgun_email_batches( newsletter )
 					send_success = False
@@ -177,7 +178,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 		link_home = webapp2.uri_for( 'home', _full = True )
 		link_unsubscribe_all = webapp2.uri_for( 'emailunsubscribe', unsubscribetoken='PLACEHOLDER_MAILGUN_RECIPIENT_TOKEN', _full = True ).replace( 'PLACEHOLDER_MAILGUN_RECIPIENT_TOKEN', '%recipient.token%' )
 		link_unsubscribe_newsletter = link_unsubscribe_all + '?newsletter=' + newsletter
-		text = u'''\n\n\nThis newsletter was sent to you by enkiWS. Visit our website {link_home} or contact us at {contact}\nTo unsubscribe from this newsletter follow this link: {link_unsubscribe_newsletter}\nTo unsubscribe from all newsletters follow this link: {link_unsubscribe_all} (click or copy and paste in your browser)\n\nCe bulletin d'information vous a été envoyée par enkiWS. Visitez notre site {link_home} ou contactez-nous à {contact}\nPour vous désabonner de ce bulletin suivez ce lien : {link_unsubscribe_newsletter}\nPour vous désabonner de tous les bulletins suivez ce lien : {link_unsubscribe_all} (cliquez ou copiez-collez le lien dans votre navigateur)'''.format( link_home = link_home, contact = settings.COMPANY_CONTACT, link_unsubscribe_newsletter = link_unsubscribe_newsletter, link_unsubscribe_all = link_unsubscribe_all )
+		text = u'''\n\n\nThis newsletter was sent to you by enkiWS. Visit our website {link_home} or contact us at {contact}\nTo unsubscribe from this newsletter follow this link: {link_unsubscribe_newsletter}\nTo unsubscribe from all newsletters follow this link: {link_unsubscribe_all} (click or copy and paste in your browser)\n\nCette lettre d'information vous a été envoyée par enkiWS. Visitez notre site {link_home} ou contactez-nous à {contact}\nPour vous désabonner de cette lettre suivez ce lien : {link_unsubscribe_newsletter}\nPour vous désabonner de toutes les lettres d'information suivez ce lien : {link_unsubscribe_all} (cliquez ou copiez-collez le lien dans votre navigateur)'''.format( link_home = link_home, contact = settings.COMPANY_CONTACT, link_unsubscribe_newsletter = link_unsubscribe_newsletter, link_unsubscribe_all = link_unsubscribe_all )
 		return text
 
 	def send_mailgun_batch_email( self, email_addresses, email_subject, email_body, email_footer_template, recipient_variables ):
