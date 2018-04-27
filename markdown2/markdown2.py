@@ -1361,58 +1361,62 @@ class Markdown(object):
                     is_img = start_idx > 0 and text[start_idx-1] == "!"
                     if is_img:
                         start_idx -= 1
-                    # Video?
-                    is_video, is_youtube, is_vimeo, is_mp4 = False, False, False, False
-                    # Youtube video or playlist? (When both playlist and video Id are included, the playlist is ignored. The video is embedded alone.)
-                    # https://developers.google.com/youtube/player_parameters
-                    len_id_youtube = 11    # video id length
-                    len_id_youtube_playlist = 34	# playlist id length
-                    url_youtube_embed = "https://www.youtube.com/embed/"	# https://www.youtube.com/embed/dQw4w9WgXcQ or https://www.youtube.com/embed/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ => https://www.youtube.com/embed/dQw4w9WgXcQ
-                    url_youtube_watch = "https://www.youtube.com/watch?v="    # https://www.youtube.com/watch?v=dQw4w9WgXcQ or https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ => https://www.youtube.com/embed/dQw4w9WgXcQ
-                    url_youtu_be = "https://youtu.be/"    # https://youtu.be/dQw4w9WgXcQ or https://youtu.be/dQw4w9WgXcQ?t=1m24s or https://youtu.be/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ => https://www.youtube.com/embed/dQw4w9WgXcQ
-                    url_youtube_playlist_embed = "https://www.youtube.com/embed?listType=playlist&list="    # https://www.youtube.com/embed?listType=playlist&list=RDdQw4w9WgXcQ => https://www.youtube.com/embed?listType=playlist&list=RDdQw4w9WgXcQ
-                    url_youtube_playlist = "https://www.youtube.com/playlist?list="    # https://www.youtube.com/playlist?list=RDdQw4w9WgXcQ => https://www.youtube.com/embed?listType=playlist&list=RDdQw4w9WgXcQ
-                    # Vimeo
-                    len_id_vimeo = 9    # video id length
-                    url_vimeo_embed = "https://player.vimeo.com/video/"    # https://player.vimeo.com/video/208812809 => https://player.vimeo.com/video/208812809
-                    url_vimeo = "https://vimeo.com/"    # https://vimeo.com/208812809 => https://player.vimeo.com/video/208812809
-                    if url_youtube_embed in url[ : len( url_youtube_embed )]:
-                        is_video = True
-                        is_youtube = True
-                        url = url[ : len( url_youtube_embed ) + len_id_youtube ]
-                    elif url_youtube_watch in url[ : len( url_youtube_watch )]:
-                        is_video = True
-                        is_youtube = True
-                        url = url_youtube_embed + url[ len( url_youtube_watch ) : len( url_youtube_watch ) + len_id_youtube ]
-                    elif url_youtu_be in url[ : len( url_youtu_be )]:
-                        is_video = True
-                        is_youtube = True
-                        url = url_youtube_embed + url[ len( url_youtu_be ) : len( url_youtu_be ) + len_id_youtube ]
-                    elif url_youtube_playlist_embed in url[ : len( url_youtube_playlist_embed) ]:
-                        is_video = True
-                        is_youtube = True
-                        url = url[ : len( url_youtube_playlist_embed ) + len_id_youtube_playlist ]
-                    elif url_youtube_playlist in url [ : len( url_youtube_playlist )]:
-                        is_video = True
-                        is_youtube = True
-                        url = url_youtube_playlist_embed + url[ len( url_youtube_playlist ) : len( url_youtube_playlist ) + len_id_youtube_playlist ]
-                    # Vimeo?
-                    elif url_vimeo_embed in url[ : len( url_vimeo_embed )]:
-                        is_video = True
-                        is_vimeo = True
-                        url = url[ : len( url_vimeo_embed ) + len_id_vimeo ]
-                    elif url_vimeo in url[ : len( url_vimeo ) ]:
-                        is_video = True
-                        is_vimeo = True
-                        url = url_vimeo_embed + url[ len( url_vimeo ) : len( url_vimeo ) + len_id_vimeo ]
-                    # mp4?
-                    if not is_video and ".mp4" in url[-5:]:
-                        is_video = True
-                        is_mp4 = True
-                    # We've got to encode these to avoid conflicting
-                    # with italics/bold.
-                    url = url.replace('*', self._escape_table['*']) \
-                             .replace('_', self._escape_table['_'])
+
+					# Video?
+					is_video, is_youtube, is_vimeo, is_mp4 = False, False, False, False
+
+					# Youtube?
+					# video or playlist? (When both playlist and video Id are included, the playlist is ignored. The video is embedded alone.)
+					# https://developers.google.com/youtube/player_parameters
+					url_youtube_keyword = "youtu"
+					url_vimeo_keyword = "vimeo.com"
+					if url_youtube_keyword in url:
+						is_video, is_youtube = True, True
+						len_id_youtube = 11    										# video id length
+						len_id_youtube_playlist = 34   								# playlist id length
+						url_youtube_embed = "https://www.youtube.com/embed/"    	# https://www.youtube.com/embed/dQw4w9WgXcQ or https://www.youtube.com/embed/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ => https://www.youtube.com/embed/dQw4w9WgXcQ
+						url_youtube_watch = "https://www.youtube.com/watch?v="    	# https://www.youtube.com/watch?v=dQw4w9WgXcQ or https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ => https://www.youtube.com/embed/dQw4w9WgXcQ
+						url_youtu_be = "https://youtu.be/"    						# https://youtu.be/dQw4w9WgXcQ or https://youtu.be/dQw4w9WgXcQ?t=1m24s or https://youtu.be/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ => https://www.youtube.com/embed/dQw4w9WgXcQ
+						url_youtube_playlist_embed = "https://www.youtube.com/embed?listType=playlist&list="    # https://www.youtube.com/embed?listType=playlist&list=RDdQw4w9WgXcQ => https://www.youtube.com/embed?listType=playlist&list=RDdQw4w9WgXcQ
+						url_youtube_playlist = "https://www.youtube.com/playlist?list="    # https://www.youtube.com/playlist?list=RDdQw4w9WgXcQ => https://www.youtube.com/embed?listType=playlist&list=RDdQw4w9WgXcQ
+						url_youtube_embed_nocookie = "https://www.youtube-nocookie.com/embed/"	# insert -nocookie in the final url to enforce Youtube privacy-enhanced mode
+						url_youtube_playlist_embed_nocookie = "https://www.youtube-nocookie.com/embed?listType=playlist&list="
+						url = url.replace( "-nocookie", "" )						# https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ => # https://www.youtube.com/embed/dQw4w9WgXcQ
+						url = url.replace ( "m.youtu", "www.youtu")					# https://m.youtube.com/watch?v=ZtBahG8fqIg => https://www.youtube.com/watch?v=ZtBahG8fqIg
+						if url_youtube_embed in url[ : len( url_youtube_embed )]:
+							url = url_youtube_embed_nocookie + url[ len( url_youtube_embed ) : len( url_youtube_embed ) + len_id_youtube ]
+						elif url_youtube_watch in url[ : len( url_youtube_watch )]:
+							url = url_youtube_embed_nocookie + url[ len( url_youtube_watch ) : len( url_youtube_watch ) + len_id_youtube ]
+						elif url_youtu_be in url[ : len( url_youtu_be )]:
+							url = url_youtube_embed_nocookie + url[ len( url_youtu_be ) : len( url_youtu_be ) + len_id_youtube ]
+						elif url_youtube_playlist_embed in url[ : len( url_youtube_playlist_embed) ]:
+							url = url_youtube_playlist_embed_nocookie + url[ len( url_youtube_playlist_embed ) : len( url_youtube_playlist_embed ) + len_id_youtube_playlist ]
+						elif url_youtube_playlist in url [ : len( url_youtube_playlist )]:
+							url = url_youtube_playlist_embed_nocookie + url[ len( url_youtube_playlist ) : len( url_youtube_playlist ) + len_id_youtube_playlist ]
+						else:
+							is_video, is_youtube = False, False
+
+					# Vimeo?
+					elif url_vimeo_keyword in url:
+						is_video, is_vimeo = True, True
+						len_id_vimeo = 9    										# video id length
+						url_vimeo_embed = "https://player.vimeo.com/video/"    		# https://player.vimeo.com/video/208812809 => https://player.vimeo.com/video/208812809
+						url_vimeo = "https://vimeo.com/"    						# https://vimeo.com/208812809 => https://player.vimeo.com/video/208812809
+						if url_vimeo_embed in url[ : len( url_vimeo_embed )]:
+							url = url[ : len( url_vimeo_embed ) + len_id_vimeo ]
+						elif url_vimeo in url[ : len( url_vimeo ) ]:
+							url = url_vimeo_embed + url[ len( url_vimeo ) : len( url_vimeo ) + len_id_vimeo ]
+						else:
+							is_video, is_vimeo = False, False
+
+					# mp4?
+					if not is_video and ".mp4" in url[-5:]:
+						is_video, is_mp4 = True, True
+					# We've got to encode these to avoid conflicting
+					# with italics/bold.
+					url = url.replace('*', self._escape_table['*']) \
+							 .replace('_', self._escape_table['_'])
+
                     if title:
                         title_str = ' title="%s"' % (
                             _xml_escape_attr(title)
