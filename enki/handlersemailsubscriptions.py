@@ -85,7 +85,7 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 		is_logged_in = False
 		has_email_subscriptions = False
 		has_email = ''
-		contact_us = settings.COMPANY_CONTACT
+		contact_us = settings.ORGANISATION_CONTACT
 		if self.is_logged_in() and self.enki_user.email:
 			is_logged_in = True
 			has_email = self.enki_user.email if ( self.enki_user.email != 'removed' ) else ''
@@ -180,7 +180,7 @@ class HandlerEmailBatchSending( enki.HandlerBase ):
 		link_home = webapp2.uri_for( 'home', _full = True )
 		link_unsubscribe_all = webapp2.uri_for( 'emailunsubscribe', unsubscribetoken='PLACEHOLDER_MAILGUN_RECIPIENT_TOKEN', _full = True ).replace( 'PLACEHOLDER_MAILGUN_RECIPIENT_TOKEN', '%recipient.token%' )
 		link_unsubscribe_newsletter = link_unsubscribe_all + '?newsletter=' + newsletter
-		text = u'''\n\n\nThis newsletter was sent to you by enkiWS. Visit our website {link_home} or contact us at {contact}\nTo unsubscribe from this newsletter follow this link: {link_unsubscribe_newsletter}\nTo unsubscribe from all newsletters follow this link: {link_unsubscribe_all} (click or copy and paste in your browser)\n\nCette lettre d'information vous a été envoyée par enkiWS. Visitez notre site {link_home} ou contactez-nous à {contact}\nPour vous désabonner de cette lettre suivez ce lien : {link_unsubscribe_newsletter}\nPour vous désabonner de toutes les lettres d'information suivez ce lien : {link_unsubscribe_all} (cliquez ou copiez-collez le lien dans votre navigateur)'''.format( link_home = link_home, contact = settings.COMPANY_CONTACT, link_unsubscribe_newsletter = link_unsubscribe_newsletter, link_unsubscribe_all = link_unsubscribe_all )
+		text = u'''\n\n\nThis newsletter was sent to you by enkiWS. Visit our website {link_home} or contact us at {contact}\nTo unsubscribe from this newsletter follow this link: {link_unsubscribe_newsletter}\nTo unsubscribe from all newsletters follow this link: {link_unsubscribe_all} (click or copy and paste in your browser)\n\nCette lettre d'information vous a été envoyée par enkiWS. Visitez notre site {link_home} ou contactez-nous à {contact}\nPour vous désabonner de cette lettre suivez ce lien : {link_unsubscribe_newsletter}\nPour vous désabonner de toutes les lettres d'information suivez ce lien : {link_unsubscribe_all} (cliquez ou copiez-collez le lien dans votre navigateur)'''.format(link_home = link_home, contact = settings.ORGANISATION_CONTACT, link_unsubscribe_newsletter = link_unsubscribe_newsletter, link_unsubscribe_all = link_unsubscribe_all)
 		return text
 
 	def send_mailgun_batch_email( self, email_addresses, email_subject, email_body, email_footer_template, recipient_variables ):

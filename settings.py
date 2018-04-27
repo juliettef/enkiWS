@@ -20,8 +20,8 @@ product_displayname = { 'product_a' : 'Product A',
                         'product_c' : 'Product C',
                         'product_d' : 'Product D', }
 
-COMPANY_NAME = "Company"
-COMPANY_CONTACT = "contact@company.com"
+ORGANISATION_NAME = "Organisation"
+ORGANISATION_CONTACT = "contact@organisation.com"
 
 email_newsletter_name = [ 'Default' ]
 

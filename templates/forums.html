@@ -27,7 +27,7 @@
 
 			{% for group in forums_data %}
 				<div class="row">
-					<div class="col-xs-10"><p id="company">{{ group.name }}</p></div>
+					<div class="col-xs-10"><p id="{{ group.name }}">{{ group.name }}</p></div>
 					<div class="col-xs-1"><p><span class="badge">{{ group.num_threads }}</span></p></div>
 					<div class="col-xs-1"><p><span class="badge">{{ group.num_posts }}</span></p></div>
 				</div>
