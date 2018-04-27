@@ -699,7 +699,7 @@ class HandlerBase( webapp2.RequestHandler ):
 				relevant_pages |= { '/profile', '/accountconnect', '/displayname', '/emailchange',
 									'/passwordchange', '/friends', '/messages', '/admin/apps',
 									'/appdatastores', '/loginaddconfirm', '/accountdelete', '/library',
-									'/sessions', '/stayloggedin' }
+									'/sessions', '/stayloggedin', '/admin/emailbatchsending' }
 				# note: '/reauthenticate' not included in relevant_pages as users should only be sent there explicitely
 				relevant_paths |= { '/u/' }
 			# Choose the redirection

@@ -130,49 +130,51 @@ class HandlerEmailUnsubscribe( enki.HandlerBase ):
 class HandlerEmailBatchSending( enki.HandlerBase ):
 
 	def get( self ):
-		default_newsletter = settings.email_newsletter_name[ 0 ]
-		default_subject = settings.email_newsletter_name[ 0 ] + ' newsletter - <subject>'
-		default_body_text = 'Hello,\n\n<your text>'
-		self.render_tmpl( 'emailbatchsending.html',
-						  newsletter = default_newsletter,
-						  subject = default_subject,
-						  body_text = default_body_text,
-						  footer = self.get_mailgun_email_footer_template( default_newsletter ),
-						  ready_to_send = 'off')
+		if self.ensure_is_logged_in():
+			default_newsletter = settings.email_newsletter_name[ 0 ]
+			default_subject = settings.email_newsletter_name[ 0 ] + ' newsletter - <subject>'
+			default_body_text = 'Hello,\n\n<your text>'
+			self.render_tmpl( 'emailbatchsending.html',
+							  newsletter = default_newsletter,
+							  subject = default_subject,
+							  body_text = default_body_text,
+							  footer = self.get_mailgun_email_footer_template( default_newsletter ),
+							  ready_to_send = 'off')
 
 	def post( self ):
-		self.check_CSRF()
-		submit_type = self.request.get( 'submittype' )
-		if submit_type == 'reset':
-			self.redirect( enki.libutil.get_local_url( 'emailbatchsending' ))
-		elif submit_type == 'send' or submit_type == 'sendtest':
-			ready_to_send = 'off'
-			newsletter = self.request.get( 'newsletter' )
-			subject = self.request.get( 'subject' )
-			body_text = self.request.get( 'body_text' )
-			footer_template = self.get_mailgun_email_footer_template( newsletter )
-			if submit_type == 'sendtest':
-				self.send_email( self.enki_user.email, subject, body_text + footer_template )
-				self.add_infomessage( MSG.INFORMATION(), 'Test email sent to ' +  self.enki_user.email )
-			elif submit_type == 'send':
-				ready_to_send = self.request.get( 'readytosend' )
-				if ready_to_send == 'on':
-					batches_emails, batches_emails_recipient_variables = EnkiModelEmailSubscriptions.get_mailgun_email_batches( newsletter )
-					send_success = False
-					for batch_emails, batch_emails_recipient_variables in zip( batches_emails, batches_emails_recipient_variables ):
-						send_success = self.send_mailgun_batch_email( batch_emails, subject, body_text, footer_template, batch_emails_recipient_variables )
-					if send_success:
-						self.add_infomessage( MSG.SUCCESS(), 'Batch email sent' )
-						self.redirect(enki.libutil.get_local_url( 'emailbatchsending' ))
-						return
-					else:
-						self.add_infomessage( MSG.WARNING(), 'Batch email sending failed' )
-			self.render_tmpl( 'emailbatchsending.html',
-							  newsletter = newsletter,
-							  subject = subject,
-							  body_text = body_text,
-							  footer = footer_template,
-							  ready_to_send = ready_to_send )
+		if self.ensure_is_logged_in():
+			self.check_CSRF()
+			submit_type = self.request.get( 'submittype' )
+			if submit_type == 'reset':
+				self.redirect( enki.libutil.get_local_url( 'emailbatchsending' ))
+			elif submit_type == 'send' or submit_type == 'sendtest':
+				ready_to_send = 'off'
+				newsletter = self.request.get( 'newsletter' )
+				subject = self.request.get( 'subject' )
+				body_text = self.request.get( 'body_text' )
+				footer_template = self.get_mailgun_email_footer_template( newsletter )
+				if submit_type == 'sendtest':
+					self.send_email( self.enki_user.email, subject, body_text + footer_template )
+					self.add_infomessage( MSG.INFORMATION(), 'Test email sent to ' +  self.enki_user.email )
+				elif submit_type == 'send':
+					ready_to_send = self.request.get( 'readytosend' )
+					if ready_to_send == 'on':
+						batches_emails, batches_emails_recipient_variables = EnkiModelEmailSubscriptions.get_mailgun_email_batches( newsletter )
+						send_success = False
+						for batch_emails, batch_emails_recipient_variables in zip( batches_emails, batches_emails_recipient_variables ):
+							send_success = self.send_mailgun_batch_email( batch_emails, subject, body_text, footer_template, batch_emails_recipient_variables )
+						if send_success:
+							self.add_infomessage( MSG.SUCCESS(), 'Batch email sent' )
+							self.redirect(enki.libutil.get_local_url( 'emailbatchsending' ))
+							return
+						else:
+							self.add_infomessage( MSG.WARNING(), 'Batch email sending failed' )
+				self.render_tmpl( 'emailbatchsending.html',
+								  newsletter = newsletter,
+								  subject = subject,
+								  body_text = body_text,
+								  footer = footer_template,
+								  ready_to_send = ready_to_send )
 
 	def get_mailgun_email_footer_template( self, newsletter = '' ):
 		link_home = webapp2.uri_for( 'home', _full = True )
