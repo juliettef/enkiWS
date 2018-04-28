@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-04-26 18:22+0100\n"
+"POT-Creation-Date: 2018-04-28 18:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -587,6 +587,23 @@ msgstr ""
 msgid ""
 "Follow this link to confirm your subscription to the %(newsletter)s email newsletter: %(link)s (click or copy and paste in your browser). \n"
 "If you do not wish to subscribe, ignore this message."
+msgstr ""
+
+#: enki/textmessages.py:166
+#, python-format
+msgid "A welcome email has been sent to your address. It contains a link that will enable you to unsusbscribe from the %(newsletter)s newsletter."
+msgstr ""
+
+#: enki/textmessages.py:167
+#, python-format
+msgid "%(newsletter)s newsletter welcome"
+msgstr ""
+
+#: enki/textmessages.py:168
+#, python-format
+msgid ""
+"Welcome to the %(newsletter)s email newsletter. \n"
+"If you wish to unsubscribe, follow this link: %(link)s (click or copy and paste in your browser)."
 msgstr ""
 
 #: templates/accountconnect.html:7 templates/accountconnect.html:17
