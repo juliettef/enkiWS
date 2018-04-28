@@ -38,6 +38,10 @@ class EnkiModelEmailSubscriptions(model.Model):
 		return count > 0
 
 	@classmethod
+	def get_by_email_newsletter( cls, email, newsletter ):
+		return cls.query( ndb.AND( cls.email == email, cls.newsletters == newsletter )).get()
+
+	@classmethod
 	def exist_by_token_newsletter( cls, token, newsletter ):
 		count = cls.query( ndb.AND( cls.token == token, cls.newsletters == newsletter )).count( 1 )
 		return count > 0
@@ -50,17 +54,22 @@ class EnkiModelEmailSubscriptions(model.Model):
 
 	@classmethod
 	def add_newsletter( cls, email, newsletter ):
-		if not cls.exist_by_email_newsletter( email, newsletter ):
+		entity = cls.get_by_email_newsletter( email, newsletter )
+		if entity:
+			return entity.token
+		else:
 			existing_entity = cls.get_by_email( email )
 			if existing_entity:
 				# add the newsletter to the list
 				existing_entity.newsletters.append( newsletter )
 				existing_entity.put()
+				return existing_entity.token
 			else:
 				# create a new entity
 				token = security.generate_random_string( entropy = 256 )
 				new_entity = cls( email = email, newsletters = [ newsletter ], token = token )
 				new_entity.put()
+				return token
 
 	@classmethod
 	def remove_newsletter_by_email( cls, email, newsletter ):

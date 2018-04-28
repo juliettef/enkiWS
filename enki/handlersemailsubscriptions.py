@@ -99,8 +99,13 @@ class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 	def get( self, verifytoken ):
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( xstr( verifytoken ), 'emailsubscriptionconfirm' )
 		if tokenEntity:
-			EnkiModelEmailSubscriptions.add_newsletter( tokenEntity.email, tokenEntity.state )
-			self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED( tokenEntity.state ))
+			newsletter = tokenEntity.state
+			unsubscribe_token = EnkiModelEmailSubscriptions.add_newsletter( tokenEntity.email, newsletter )
+			self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED( newsletter ))
+			# send welcome email with unsubscribe link
+			link = enki.libutil.get_local_url( 'emailunsubscribe', { 'unsubscribetoken' : unsubscribe_token, 'newsletter' : newsletter })
+			self.send_email(tokenEntity.email, MSG.SEND_EMAIL_EMAIL_NEWSLETTER_WELCOME_SUBJECT( newsletter ), MSG.SEND_EMAIL_EMAIL_NEWSLETTER_WELCOME_BODY( newsletter, link ))
+			self.add_infomessage( MSG.INFORMATION(), MSG.EMAIL_NEWSLETTER_WELCOME_EMAIL_SENT( newsletter ))
 			self.redirect( enki.libutil.get_local_url( 'home' ))
 			tokenEntity.key.delete()
 		else:
