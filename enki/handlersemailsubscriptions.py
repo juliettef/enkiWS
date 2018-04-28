@@ -55,7 +55,7 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 			elif result == self.ERROR_EMAIL_MISSING:
 				error_message = MSG.MISSING_EMAIL()
 			elif result == enki.libutil.ENKILIB_OK:
-				if EnkiModelBackoffTimer.get( 'es:' + email, True ) == 0:
+				if EnkiModelBackoffTimer.get( self.request.remote_addr, increment = True, expires = True ) == 0:
 					if not EnkiModelEmailSubscriptions.exist_by_email_newsletter( email, settings.email_newsletter_name[ 0 ]):
 						# if not already subscribed, create a token and send email with a link to allow the user to confirm their subscription
 						if not EnkiModelTokenVerify.get_by_email_state_type( email, settings.email_newsletter_name[ 0 ], 'emailsubscriptionconfirm'):
@@ -69,7 +69,7 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 					self.add_debugmessage( 'Comment - whether the email is sent or not, the feedback through the UI is identical to prevent email checking.' )
 					email = ''
 				else:
-					backoff_timer = EnkiModelBackoffTimer.get( 'es:' + email )
+					backoff_timer = EnkiModelBackoffTimer.get( self.request.remote_addr, expires = True )
 					if backoff_timer != 0:
 						error_message = MSG.TIMEOUT( enki.libutil.format_timedelta( backoff_timer ))
 		if data[ 0 ]:	# is_logged_in
@@ -99,7 +99,6 @@ class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 	def get( self, verifytoken ):
 		tokenEntity = EnkiModelTokenVerify.get_by_token_type( xstr( verifytoken ), 'emailsubscriptionconfirm' )
 		if tokenEntity:
-			EnkiModelBackoffTimer.remove( 'es:' + tokenEntity.email )
 			EnkiModelEmailSubscriptions.add_newsletter( tokenEntity.email, tokenEntity.state )
 			self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED( tokenEntity.state ))
 			self.redirect( enki.libutil.get_local_url( 'home' ))

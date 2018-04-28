@@ -51,13 +51,17 @@ class EnkiModelBackoffTimer( model.Model ):
 			entity.put()
 
 	@classmethod
-	def get( cls, identifier, increment = False ):
+	def get( cls, identifier, increment = False, expires = False ):
 		entity = cls.get_by_identifier( identifier )
 		if entity:
 			result = entity.last_failure - datetime.datetime.now() + entity.backoff_duration
 			if result <= datetime.timedelta( 0 ):
-				# inactive backoff timer. Increase the delay.
+				# inactive backoff timer.
+				if expires and result <= datetime.timedelta( days = -1 ):
+					# if backoff timer can expire and is older than a day, delete it
+					cls.remove( identifier )
 				if increment:
+					# Increase the delay.
 					entity.backoff_duration += entity.backoff_duration
 					entity.last_failure = datetime.datetime.now()
 					entity.put()
