@@ -1,38 +1,42 @@
 # enkiWS
 
 
-## Web Services for Games on Python Google App Engine
+## Web Services for independent games developers on Python Google App Engine
 
-A permissively licensed Python web service for games developers. enkiWS is a library for setting up a website and ancillary services for games on [Google App Engine](https://github.com/juliettef/enkiWS#why-use-google-app-engine).
+A permissively licensed Python web service for independent games developers. enkiWS is a library for setting up a website and ancillary services for games on [Google App Engine](https://github.com/juliettef/enkiWS#why-use-google-app-engine).
 
 [Online demo](https://enkisoftware-webservices.appspot.com) - *may be out of sync with the source code* 
 
 ## Status
 
 This is a work in progress and not yet ready for production use.
- 
-__[ NEW in v0.15 ] Added forums responsive images and video embedding and code syntax highlighting (pygment); added media gallery page; added custom 404 page not found.__  
-[ NEW in v0.14 ] Added stay logged in, fixed localised links in store emulator.  
-[ NEW in v0.13 ] Added user roles; reworked the personal user profile page; moved  user's licences library and sessions management to dedicated pages; updated French translation; improved icons accessibility features; refactoring: moved library functions into related model classes.  
-[ NEW in v0.12 ] Sticky threads and posts, Forum events email notifications to admin  
-[ NEW in v0.11 ] Added Admin tools page with free licence key generator, reporting cron, gcloud deployment script  
-[ NEW in v0.10 ] Added canonical host url, event counters for download and purchase, Store fixes and escaping, prevent remove auth method if user would only have email without pw left, email validation detects empty  
-[ NEW in v0.9 ] Security fixes and improvements  
+
+__[ NEW in v0.16 ] Added extension email newsletter subscriptions and batch email sending; enforced Youtube privacy enhanced mode in forum posts; fixed anchor links to video in forum posts; fixed Store and Friends extensions breaking profile and admin pages.__   
+[ v0.15 ] Added forums responsive images and video embedding and code syntax highlighting (pygment); added media gallery page; added custom 404 page not found.  
+[ v0.14 ] Added stay logged in, fixed localised links in store emulator.  
+[ v0.13 ] Added user roles; reworked the personal user profile page; moved  user's licences library and sessions management to dedicated pages; updated French translation; improved icons accessibility features; refactoring: moved library functions into related model classes.  
+[ v0.12 ] Sticky threads and posts, Forum events email notifications to admin  
+[ v0.11 ] Added Admin tools page with free licence key generator, reporting cron, gcloud deployment script  
+[ v0.10 ] Added canonical host url, event counters for download and purchase, Store fixes and escaping, prevent remove auth method if user would only have email without pw left, email validation detects empty  
+[ v0.9 ] Security fixes and improvements  
 
 ## Functionality
 
-### Current
+### Current  
 
+#### Base
 * User Accounts - [demo](https://enkisoftware-webservices.appspot.com/profile)
-    * display name
-    * email
-    * password change and recovery
-    * login with email/password or with [OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter-github) - Facebook, Google, Twitter, Github, Steam
-    * manage licence keys
-    * manage sessions
-    * stay logged in
-    * user roles
-    * account deletion
+    * Display name
+    * Email
+    * Password change and recovery
+    * Login with email/password or with [OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter-github) - Facebook, Google, Twitter, Github, Steam
+    * Stay logged in
+    * Manage sessions
+    * Delete account
+    * Extensions:  
+        * Library: manage licence keys  
+        * Manage email newsletter subscriptions
+        * Manage friends
 * Security and privacy - [demo](https://enkisoftware-webservices.appspot.com/login)
     * Backoff timer
     * User enumeration prevention
@@ -42,31 +46,43 @@ __[ NEW in v0.15 ] Added forums responsive images and video embedding and code s
     * Passwords encrypted using [PassLib scheme pbkdf2_sha512](http://passlib.readthedocs.io/en/stable/lib/passlib.hash.sha512_crypt.html?highlight=512)
     * User display name (alias)
     * User display name can be changed but the old display name(s) remain public
+    * User roles (Admin)
+* Media - [demo](https://enkisoftware-webservices.appspot.com/media)
+    * Gallery of images and videos
+    * Enlarge and browse images - [demo](https://enkisoftware-webservices.appspot.com/media?g=0&i=0)
+    * Data-Driven contents and layout using JSON  
+
+#### Extensions
 * Online store - [demo](https://enkisoftware-webservices.appspot.com/store)
     * Payment provider [FastSpring](https://www.fastspring.com/)  
     * Licence key generation and activation
     * Store emulator
+* Email newsletter subscription - [demo](https://enkisoftware-webservices.appspot.com/emailsubscriptions)
+    * Subscription with double opt-in
+    * Unsubscribe links
+    * Batch email sending (Admin)
+* Friends - [demo](https://enkisoftware-webservices.appspot.com/profile#friends)
+    * Search by display name and invite
+    * Message alert for friend invite
 * Forums - [demo](https://enkisoftware-webservices.appspot.com/forums)
     * Posts can be edited or deleted by author
     * Sticky threads and posts
     * Posts formatting using [Markdown2](https://github.com/trentm/python-markdown2), including:
         * video embedding: Youtube, Vimeo, mp4, using the image syntax `![alt text](url)`
         * code syntax highlighting using [Pygments](http://pygments.org/)
-* Media - [demo](https://enkisoftware-webservices.appspot.com/media)
-    * Gallery of images and videos
-    * Enlarge and browse images - [demo](https://enkisoftware-webservices.appspot.com/media?g=0&i=0)
-    * Data-Driven contents and layout using JSON
-* Friends
-    * Search by display name and invite
-    * Message alert for friend invite
 * [REST API](https://github.com/juliettef/enkiWS#rest-api)
     * Authentication (account and game key)
     * Friends list
     * Data Store  
+
+#### Admin
 * Admin tools
     * Reporting
-    * Free licence keys generator
     * Forum events email notifications
+    * Extensions: 
+        * Free licence keys generator
+        * Batch email sending
+        * Apps management
 * Localisation - English & French - [demo](https://enkisoftware-webservices.appspot.com/fr_FR/)
 * Custom 404 Page not Found - [demo](https://enkisoftware-webservices.appspot.com/show_404)
 
