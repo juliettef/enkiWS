@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-04-28 18:27+0100\n"
+"POT-Creation-Date: 2018-04-29 17:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -989,7 +989,8 @@ msgid "Deleting your email address cancels all your subscriptions."
 msgstr ""
 
 #: templates/emailsubscriptions.html:23
-msgid "Subscribe to newsletter"
+#, python-format
+msgid "%(newsletter)s newsletter"
 msgstr ""
 
 #: templates/emailsubscriptions.html:32
@@ -1242,7 +1243,8 @@ msgid "None"
 msgstr ""
 
 #: templates/incemailsubscriptionslink.html:2
-msgid "Subscribe to our newsletter"
+#, python-format
+msgid "Subscribe to the %(newsletter)s newsletter"
 msgstr ""
 
 #: templates/incfooter.html:6

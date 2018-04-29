@@ -20,7 +20,7 @@
                     <input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
                     <fieldset>
 
-                        <legend>{{ _( "Subscribe to newsletter" ) }}</legend>
+                        <legend>{{ _( "%(newsletter)s newsletter", newsletter = data[ 4 ] ) }}</legend>
 
 						{# <!-- IF is_logged_in --> #}
 						{% if data[0] %}

@@ -86,12 +86,13 @@ class HandlerEmailSubscriptions(enki.HandlerBase):
 		has_email_subscriptions = False
 		has_email = ''
 		contact_us = settings.ORGANISATION_CONTACT
+		newsletter = settings.email_newsletter_name[ 0 ]
 		if self.is_logged_in() and self.enki_user.email:
 			is_logged_in = True
 			has_email = self.enki_user.email if ( self.enki_user.email != 'removed' ) else ''
 			if has_email:
 				has_email_subscriptions = True if EnkiModelEmailSubscriptions.count_newsletters_by_email( self.enki_user.email ) else False
-		return [ is_logged_in, has_email_subscriptions, has_email, contact_us ]
+		return [ is_logged_in, has_email_subscriptions, has_email, contact_us, newsletter ]
 
 
 class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
@@ -234,6 +235,9 @@ class ExtensionPageEmailSubscriptionsLink( ExtensionPage ):
 
 	def __init__( self ):
 		ExtensionPage.__init__( self, route_name = 'navbar', template_include = 'incemailsubscriptionslink.html' )
+
+	def get_data( self, handler ):
+		return settings.email_newsletter_name[ 0 ]
 
 
 class ExtensionEmailSubscriptions(Extension):
