@@ -3,7 +3,7 @@ import json
 
 # application url
 URL_LOCAL = 'http://127.0.0.1:8881'
-URL_ONLINE = 'https://enkisoftware-webservices.appspot.com'
+URL_ONLINE = 'https://enkiws.appspot.com'
 
 # default values
 DEFAULT_URL = URL_LOCAL

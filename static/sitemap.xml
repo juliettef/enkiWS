@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
-		<loc>https://enkisoftware-webservices.appspot.com</loc>
+		<loc>https://enkiws.appspot.com</loc>
 	</url>
     <url>
-		<loc>https://enkisoftware-webservices.appspot.com/store</loc>
+		<loc>https://enkiws.appspot.com/media</loc>
 	</url>
     <url>
-		<loc>https://enkisoftware-webservices.appspot.com/storeemulatefastspring</loc>
+		<loc>https://enkiws.appspot.com/terms</loc>
 	</url>
     <url>
-		<loc>https://enkisoftware-webservices.appspot.com/forums</loc>
+		<loc>https://enkiws.appspot.com/privacy</loc>
 	</url>
     <url>
-		<loc>https://enkisoftware-webservices.appspot.com/media</loc>
+		<loc>https://enkiws.appspot.com/register</loc>
 	</url>
     <url>
-		<loc>https://enkisoftware-webservices.appspot.com/register</loc>
+		<loc>https://enkiws.appspot.com/login</loc>
 	</url>
     <url>
-		<loc>https://enkisoftware-webservices.appspot.com/login</loc>
+		<loc>https://enkiws.appspot.com/store</loc>
 	</url>
     <url>
-		<loc>https://enkisoftware-webservices.appspot.com/terms</loc>
+		<loc>https://enkiws.appspot.com/storeemulatefastspring</loc>
 	</url>
     <url>
-		<loc>https://enkisoftware-webservices.appspot.com/privacy</loc>
+		<loc>https://enkiws.appspot.com/emailsubscriptions</loc>
+	</url>
+    <url>
+		<loc>https://enkiws.appspot.com/forums</loc>
 	</url>
 </urlset>

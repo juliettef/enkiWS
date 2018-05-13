@@ -5,7 +5,7 @@
 
 A permissively licensed Python web service for independent games developers. enkiWS is a library for setting up a website and ancillary services for games on [Google App Engine](https://github.com/juliettef/enkiWS#why-use-google-app-engine).
 
-[Online demo](https://enkisoftware-webservices.appspot.com) - *may be out of sync with the source code* 
+[Online demo](https://enkiws.appspot.com) - *may be out of sync with the source code* 
 
 ## Status
 
@@ -25,7 +25,7 @@ __[ NEW in v0.16 ] Added extension email newsletter subscriptions and batch emai
 ### Current  
 
 #### Base
-* User Accounts - [demo](https://enkisoftware-webservices.appspot.com/profile)
+* User Accounts - [demo](https://enkiws.appspot.com/profile)
     * Display name
     * Email
     * Password change and recovery
@@ -37,7 +37,7 @@ __[ NEW in v0.16 ] Added extension email newsletter subscriptions and batch emai
         * Library: manage licence keys  
         * Manage email newsletter subscriptions
         * Manage friends
-* Security and privacy - [demo](https://enkisoftware-webservices.appspot.com/login)
+* Security and privacy - [demo](https://enkiws.appspot.com/login)
     * Backoff timer
     * User enumeration prevention
     * Account recovery via email (if account was breached and email changed by a third party)
@@ -47,24 +47,24 @@ __[ NEW in v0.16 ] Added extension email newsletter subscriptions and batch emai
     * User display name (alias)
     * User display name can be changed but the old display name(s) remain public
     * User roles (Admin)
-* Media - [demo](https://enkisoftware-webservices.appspot.com/media)
+* Media - [demo](https://enkiws.appspot.com/media)
     * Gallery of images and videos
-    * Enlarge and browse images - [demo](https://enkisoftware-webservices.appspot.com/media?g=0&i=0)
+    * Enlarge and browse images - [demo](https://enkiws.appspot.com/media?g=0&i=0)
     * Data-Driven contents and layout using JSON  
 
 #### Extensions
-* Online store - [demo](https://enkisoftware-webservices.appspot.com/store)
+* Online store - [demo](https://enkiws.appspot.com/store)
     * Payment provider [FastSpring](https://www.fastspring.com/)  
     * Licence key generation and activation
     * Store emulator
-* Email newsletter subscription - [demo](https://enkisoftware-webservices.appspot.com/emailsubscriptions)
+* Email newsletter subscription - [demo](https://enkiws.appspot.com/emailsubscriptions)
     * Subscription with double opt-in
     * Unsubscribe links
     * Batch email sending (Admin)
-* Friends - [demo](https://enkisoftware-webservices.appspot.com/profile#friends)
+* Friends - [demo](https://enkiws.appspot.com/profile#friends)
     * Search by display name and invite
     * Message alert for friend invite
-* Forums - [demo](https://enkisoftware-webservices.appspot.com/forums)
+* Forums - [demo](https://enkiws.appspot.com/forums)
     * Posts can be edited or deleted by author
     * Sticky threads and posts
     * Posts formatting using [Markdown2](https://github.com/trentm/python-markdown2), including:
@@ -83,8 +83,8 @@ __[ NEW in v0.16 ] Added extension email newsletter subscriptions and batch emai
         * Free licence keys generator
         * Batch email sending
         * Apps management
-* Localisation - English & French - [demo](https://enkisoftware-webservices.appspot.com/fr_FR/)
-* Custom 404 Page not Found - [demo](https://enkisoftware-webservices.appspot.com/show_404)
+* Localisation - English & French - [demo](https://enkiws.appspot.com/fr_FR/)
+* Custom 404 Page not Found - [demo](https://enkiws.appspot.com/show_404)
 
 ### Intended for release 1.0.0 
 
@@ -370,7 +370,7 @@ Most of the third party libraries, code and tools used in this project are inclu
 
 ## Demo of enkiWS
 
-[Online demo](https://enkisoftware-webservices.appspot.com) - *may be out of sync with the source code* 
+[Online demo](https://enkiws.appspot.com) - *may be out of sync with the source code* 
 
 ## Projects using enkiWS
 
