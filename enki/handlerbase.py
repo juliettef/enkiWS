@@ -79,6 +79,11 @@ class HandlerBase( webapp2.RequestHandler ):
 			locale = ''
 		i18n.get_i18n().set_locale( locale )
 		self.session[ 'locale' ] = locale
+
+		# clickjacking mitigation see https://blog.innerht.ml/google-yolo/
+		self.response.headers.add( "X-Frame-Options", "DENY")
+		self.response.headers.add( "Content-Security-Policy", "frame-ancestors 'self'")
+
 		try:
 			webapp2.RequestHandler.dispatch( self )
 		finally:
