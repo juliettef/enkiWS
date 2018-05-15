@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-04-29 17:40+0100\n"
+"POT-Creation-Date: 2018-05-15 16:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -565,41 +565,45 @@ msgid "You are subscribed to the %(newsletter)s email newsletter."
 msgstr ""
 
 #: enki/textmessages.py:161
+msgid "Your subscription to the email newsletter failed. Please try again."
+msgstr ""
+
+#: enki/textmessages.py:162
 #, python-format
 msgid "You are unsubscribed from the %(newsletter)s email newsletter."
 msgstr ""
 
-#: enki/textmessages.py:162
+#: enki/textmessages.py:163
 msgid "You are unsubscribed from all email newsletters."
 msgstr ""
 
-#: enki/textmessages.py:163
-#, python-format
-msgid "If email address %(email)s is available, a subscription confirmation email was sent to it. Please check your inbox and follow the instructions in the email to confirm your subscription to the %(newsletter)s email newsletter"
-msgstr ""
-
 #: enki/textmessages.py:164
-msgid "Email newsletter subscription confirmation"
+#, python-format
+msgid "A subscription confirmation email was sent to %(email)s. Please check your inbox and follow the instructions in the email to confirm your subscription to the %(newsletter)s email newsletter"
 msgstr ""
 
 #: enki/textmessages.py:165
+msgid "Email newsletter subscription confirmation"
+msgstr ""
+
+#: enki/textmessages.py:166
 #, python-format
 msgid ""
 "Follow this link to confirm your subscription to the %(newsletter)s email newsletter: %(link)s (click or copy and paste in your browser). \n"
 "If you do not wish to subscribe, ignore this message."
 msgstr ""
 
-#: enki/textmessages.py:166
+#: enki/textmessages.py:167
 #, python-format
 msgid "A welcome email has been sent to your address. It contains a link that will enable you to unsusbscribe from the %(newsletter)s newsletter."
 msgstr ""
 
-#: enki/textmessages.py:167
+#: enki/textmessages.py:168
 #, python-format
 msgid "%(newsletter)s newsletter welcome"
 msgstr ""
 
-#: enki/textmessages.py:168
+#: enki/textmessages.py:169
 #, python-format
 msgid ""
 "Welcome to the %(newsletter)s email newsletter. \n"
@@ -997,7 +1001,7 @@ msgstr ""
 msgid "Unsubscribe"
 msgstr ""
 
-#: templates/emailsubscriptions.html:40 templates/emailsubscriptions.html:60
+#: templates/emailsubscriptions.html:40 templates/emailsubscriptions.html:61
 msgid "Subscribe"
 msgstr ""
 
@@ -1005,14 +1009,19 @@ msgstr ""
 #: templates/licencesgeneratefree.html:57 templates/login.html:45
 #: templates/login.html:47 templates/passwordrecover.html:24
 #: templates/passwordrecover.html:26 templates/profile.html:58
-#: templates/reauthenticate.html:44 templates/register.html:43
-#: templates/register.html:45 templates/registerconfirm.html:24
+#: templates/reauthenticate.html:44 templates/register.html:44
+#: templates/register.html:46 templates/registerconfirm.html:24
 #: templates/registeroauthconfirm.html:36
 #: templates/registeroauthwithexistingemail.html:52
 msgid "Email"
 msgstr ""
 
-#: templates/emailsubscriptions.html:54
+#: templates/emailsubscriptions.html:54 templates/register.html:24
+#: templates/register.html:48
+msgid "You must be 16 years or older."
+msgstr ""
+
+#: templates/emailsubscriptions.html:55
 msgid "You will receive an email to confirm your subscription. If you don't, please try again after a delay and otherwise contact us."
 msgstr ""
 
@@ -1160,14 +1169,14 @@ msgstr ""
 #: templates/forum.html:152 templates/incnavbartop.html:10
 #: templates/login.html:7 templates/login.html:61
 #: templates/passwordrecover.html:40 templates/post.html:133
-#: templates/register.html:57 templates/registeroauthwithexistingemail.html:68
+#: templates/register.html:59 templates/registeroauthwithexistingemail.html:68
 #: templates/thread.html:136
 msgid "Log in"
 msgstr ""
 
 #: templates/forum.html:153 templates/incnavbartop.html:9
 #: templates/login.html:66 templates/passwordrecover.html:41
-#: templates/post.html:134 templates/register.html:7 templates/register.html:52
+#: templates/post.html:134 templates/register.html:7 templates/register.html:54
 #: templates/thread.html:137
 msgid "Sign up"
 msgstr ""
@@ -1308,7 +1317,7 @@ msgid "Profile and settings"
 msgstr ""
 
 #: templates/incnavbartop.html:7 templates/login.html:77
-#: templates/register.html:68
+#: templates/register.html:70
 msgid "Log out"
 msgstr ""
 
@@ -1428,7 +1437,7 @@ msgid "Log in with a third party provider"
 msgstr ""
 
 #: templates/login.html:27 templates/reauthenticate.html:25
-#: templates/register.html:27 templates/registeroauthwithexistingemail.html:34
+#: templates/register.html:28 templates/registeroauthwithexistingemail.html:34
 #: templates/registeroauthwithexistingemail.html:93
 msgid "Log in with"
 msgstr ""
@@ -1449,12 +1458,12 @@ msgstr ""
 
 #: templates/login.html:67 templates/passwordchange.html:47
 #: templates/passwordrecover.html:6 templates/passwordrecover.html:21
-#: templates/reauthenticate.html:66 templates/register.html:58
+#: templates/reauthenticate.html:66 templates/register.html:60
 #: templates/registeroauthwithexistingemail.html:69
 msgid "Forgot password"
 msgstr ""
 
-#: templates/login.html:76 templates/register.html:67
+#: templates/login.html:76 templates/register.html:69
 msgid "You are currently logged in."
 msgstr ""
 
@@ -1664,7 +1673,7 @@ msgstr ""
 msgid "Create an account using a third party provider"
 msgstr ""
 
-#: templates/register.html:40
+#: templates/register.html:41
 msgid "Create an account using an email and password"
 msgstr ""
 

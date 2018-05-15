@@ -51,6 +51,7 @@
 								 <div class="col-lg-10">
 									 <input class="form-control" type="text" name="email" placeholder="{{ _( "Email" ) }}" value = "{{ email }}"/> {# <!-- email escaped in the handler --> #}
 									 {% if error %}<label class="control-label">{{ error }}</label>{% endif%}
+									 <p class="text-warning"><b>{{ _( "You must be 16 years or older." ) }}</b></p>
 									 <p class="text-info">{{ _( "You will receive an email to confirm your subscription. If you don't, please try again after a delay and otherwise contact us." ) }} <a href="mailto:{{ data[3] }}">{{ data[3] }}</a></p>
 								 </div>
 							</div>

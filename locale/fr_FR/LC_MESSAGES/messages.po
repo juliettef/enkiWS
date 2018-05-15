@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-04-29 17:40+0100\n"
+"POT-Creation-Date: 2018-05-15 16:45+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -566,24 +566,28 @@ msgid "You are subscribed to the %(newsletter)s email newsletter."
 msgstr "Vous êtes abonné·e à la lettre d'information %(newsletter)s."
 
 #: enki/textmessages.py:161
+msgid "Your subscription to the email newsletter failed. Please try again."
+msgstr "Votre abonnement a échoué. Veuillez renouveler votre tentative."
+
+#: enki/textmessages.py:162
 #, python-format
 msgid "You are unsubscribed from the %(newsletter)s email newsletter."
 msgstr "Vous êtes désabonné·e de la lettre d'information %(newsletter)s."
 
-#: enki/textmessages.py:162
+#: enki/textmessages.py:163
 msgid "You are unsubscribed from all email newsletters."
 msgstr "Vous êtes désabonné·e de toutes les lettres d'information."
 
-#: enki/textmessages.py:163
-#, python-format
-msgid "If email address %(email)s is available, a subscription confirmation email was sent to it. Please check your inbox and follow the instructions in the email to confirm your subscription to the %(newsletter)s email newsletter"
-msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de confirmer votre abonnement à la lettre d'information %(newsletter)s."
-
 #: enki/textmessages.py:164
+#, python-format
+msgid "A subscription confirmation email was sent to %(email)s. Please check your inbox and follow the instructions in the email to confirm your subscription to the %(newsletter)s email newsletter"
+msgstr "Un courrier électronique de confirmation a été envoyé à %(email)s. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de confirmer votre abonnement à la lettre d'information %(newsletter)s."
+
+#: enki/textmessages.py:165
 msgid "Email newsletter subscription confirmation"
 msgstr "Confirmation abonnement lettre d'information"
 
-#: enki/textmessages.py:165
+#: enki/textmessages.py:166
 #, python-format
 msgid ""
 "Follow this link to confirm your subscription to the %(newsletter)s email newsletter: %(link)s (click or copy and paste in your browser). \n"
@@ -592,17 +596,17 @@ msgstr ""
 "Suivez ce lien pour confirmer votre abonnement à la lettre d'information %(newsletter)s. : %(link)s (cliquez ou copiez-collez le lien dans votre navigateur). \n"
 "Si vous ne souhaitez pas vous abonner, ignorez ce message."
 
-#: enki/textmessages.py:166
+#: enki/textmessages.py:167
 #, python-format
 msgid "A welcome email has been sent to your address. It contains a link that will enable you to unsusbscribe from the %(newsletter)s newsletter."
 msgstr "Un message de bienvenue à la lettre d'information a été envoyé à votre adresse de courrier électronique. Il contient un lien de désinscription."
 
-#: enki/textmessages.py:167
+#: enki/textmessages.py:168
 #, python-format
 msgid "%(newsletter)s newsletter welcome"
 msgstr "Lettre d'information %(newsletter)s bienvenue"
 
-#: enki/textmessages.py:168
+#: enki/textmessages.py:169
 #, python-format
 msgid ""
 "Welcome to the %(newsletter)s email newsletter. \n"
@@ -1002,7 +1006,7 @@ msgstr "Lettre d'information %(newsletter)s"
 msgid "Unsubscribe"
 msgstr "Se désabonner"
 
-#: templates/emailsubscriptions.html:40 templates/emailsubscriptions.html:60
+#: templates/emailsubscriptions.html:40 templates/emailsubscriptions.html:61
 msgid "Subscribe"
 msgstr "S'abonner"
 
@@ -1010,14 +1014,19 @@ msgstr "S'abonner"
 #: templates/licencesgeneratefree.html:57 templates/login.html:45
 #: templates/login.html:47 templates/passwordrecover.html:24
 #: templates/passwordrecover.html:26 templates/profile.html:58
-#: templates/reauthenticate.html:44 templates/register.html:43
-#: templates/register.html:45 templates/registerconfirm.html:24
+#: templates/reauthenticate.html:44 templates/register.html:44
+#: templates/register.html:46 templates/registerconfirm.html:24
 #: templates/registeroauthconfirm.html:36
 #: templates/registeroauthwithexistingemail.html:52
 msgid "Email"
 msgstr "Adresse de courrier électronique"
 
-#: templates/emailsubscriptions.html:54
+#: templates/emailsubscriptions.html:54 templates/register.html:24
+#: templates/register.html:48
+msgid "You must be 16 years or older."
+msgstr "Vous devez avoir 16 ans ou plus."
+
+#: templates/emailsubscriptions.html:55
 msgid "You will receive an email to confirm your subscription. If you don't, please try again after a delay and otherwise contact us."
 msgstr "Vous recevrez un courrier électronique pour confirmer votre abonnement. Si vous ne le recevez pas, réessayez après un délai ou contactez-nous."
 
@@ -1165,14 +1174,14 @@ msgstr "Veuillez vous connecter ou créer un compte pour ajouter un nouveau suje
 #: templates/forum.html:152 templates/incnavbartop.html:10
 #: templates/login.html:7 templates/login.html:61
 #: templates/passwordrecover.html:40 templates/post.html:133
-#: templates/register.html:57 templates/registeroauthwithexistingemail.html:68
+#: templates/register.html:59 templates/registeroauthwithexistingemail.html:68
 #: templates/thread.html:136
 msgid "Log in"
 msgstr "Accéder à mon compte"
 
 #: templates/forum.html:153 templates/incnavbartop.html:9
 #: templates/login.html:66 templates/passwordrecover.html:41
-#: templates/post.html:134 templates/register.html:7 templates/register.html:52
+#: templates/post.html:134 templates/register.html:7 templates/register.html:54
 #: templates/thread.html:137
 msgid "Sign up"
 msgstr "Créer mon compte"
@@ -1313,7 +1322,7 @@ msgid "Profile and settings"
 msgstr "Profil et paramètres du compte"
 
 #: templates/incnavbartop.html:7 templates/login.html:77
-#: templates/register.html:68
+#: templates/register.html:70
 msgid "Log out"
 msgstr "Déconnexion"
 
@@ -1433,7 +1442,7 @@ msgid "Log in with a third party provider"
 msgstr "Accéder à mon compte en m'authentifiant auprès d'une tierce partie"
 
 #: templates/login.html:27 templates/reauthenticate.html:25
-#: templates/register.html:27 templates/registeroauthwithexistingemail.html:34
+#: templates/register.html:28 templates/registeroauthwithexistingemail.html:34
 #: templates/registeroauthwithexistingemail.html:93
 msgid "Log in with"
 msgstr "Se connecter avec"
@@ -1454,12 +1463,12 @@ msgstr "Mot de passe"
 
 #: templates/login.html:67 templates/passwordchange.html:47
 #: templates/passwordrecover.html:6 templates/passwordrecover.html:21
-#: templates/reauthenticate.html:66 templates/register.html:58
+#: templates/reauthenticate.html:66 templates/register.html:60
 #: templates/registeroauthwithexistingemail.html:69
 msgid "Forgot password"
 msgstr "Mot de passe oublié"
 
-#: templates/login.html:76 templates/register.html:67
+#: templates/login.html:76 templates/register.html:69
 msgid "You are currently logged in."
 msgstr "Vous êtes actuellement connecté·e."
 
@@ -1669,7 +1678,7 @@ msgstr "Renouveler mon authentification avec mon adresse électronique et mon mo
 msgid "Create an account using a third party provider"
 msgstr "Créer un compte en s'authentifiant auprès d'une tierce partie"
 
-#: templates/register.html:40
+#: templates/register.html:41
 msgid "Create an account using an email and password"
 msgstr "Créer un compte à partir d'une adresse électronique et d'un mot de passe"
 
