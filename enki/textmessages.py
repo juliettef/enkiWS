@@ -158,9 +158,10 @@ def IMAGE_UNAVAILABLE(): return _( "Image unavailable" )
 
 # Email subscriptions
 def EMAIL_SUBSCRIBED( newsletter ): return _( "You are subscribed to the %(newsletter)s email newsletter.", newsletter = newsletter )
+def EMAIL_SUBSCRIPTION_FAILED(): return _( "Your subscription to the email newsletter failed. Please try again." )
 def EMAIL_UNSUBSCRIBED( newsletter ): return _( "You are unsubscribed from the %(newsletter)s email newsletter.", newsletter = newsletter )
 def EMAIL_UNSUBSCRIBED_ALL(): return _( "You are unsubscribed from all email newsletters." )
-def EMAIL_SUBSCRIBE_CONFIRM_EMAIL_SENT( email, newsletter ): return _( "If email address %(email)s is available, a subscription confirmation email was sent to it. Please check your inbox and follow the instructions in the email to confirm your subscription to the %(newsletter)s email newsletter", email = email, newsletter = newsletter )
+def EMAIL_SUBSCRIBE_CONFIRM_EMAIL_SENT( email, newsletter ): return _( "A subscription confirmation email was sent to %(email)s. Please check your inbox and follow the instructions in the email to confirm your subscription to the %(newsletter)s email newsletter", email = email, newsletter = newsletter )
 def SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_SUBJECT(): return _( "Email newsletter subscription confirmation" )
 def SEND_EMAIL_EMAIL_SUBSCRIBE_CONFIRM_BODY( link, newsletter ): return _( "Follow this link to confirm your subscription to the %(newsletter)s email newsletter: %(link)s (click or copy and paste in your browser). \nIf you do not wish to subscribe, ignore this message.", link = link, newsletter = newsletter )
 def EMAIL_NEWSLETTER_WELCOME_EMAIL_SENT( newsletter ): return _( "A welcome email has been sent to your address. It contains a link that will enable you to unsusbscribe from the %(newsletter)s newsletter.", newsletter = newsletter )

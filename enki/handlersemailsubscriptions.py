@@ -105,12 +105,13 @@ class HandlerEmailSubscriptionConfirm( enki.HandlerBase ):
 			self.add_infomessage( MSG.SUCCESS(), MSG.EMAIL_SUBSCRIBED( newsletter ))
 			# send welcome email with unsubscribe link
 			link = enki.libutil.get_local_url( 'emailunsubscribe', { 'unsubscribetoken' : unsubscribe_token, 'newsletter' : newsletter })
-			self.send_email(tokenEntity.email, MSG.SEND_EMAIL_EMAIL_NEWSLETTER_WELCOME_SUBJECT( newsletter ), MSG.SEND_EMAIL_EMAIL_NEWSLETTER_WELCOME_BODY( newsletter, link ))
+			self.send_email( tokenEntity.email, MSG.SEND_EMAIL_EMAIL_NEWSLETTER_WELCOME_SUBJECT( newsletter ), MSG.SEND_EMAIL_EMAIL_NEWSLETTER_WELCOME_BODY( newsletter, link ))
 			self.add_infomessage( MSG.INFORMATION(), MSG.EMAIL_NEWSLETTER_WELCOME_EMAIL_SENT( newsletter ))
 			self.redirect( enki.libutil.get_local_url( 'home' ))
 			tokenEntity.key.delete()
 		else:
-			self.abort(404)
+			self.add_infomessage( MSG.INFORMATION(), MSG.EMAIL_SUBSCRIPTION_FAILED())
+			self.redirect( enki.libutil.get_local_url( 'emailsubscriptions' ))
 
 
 class HandlerEmailUnsubscribe( enki.HandlerBase ):
