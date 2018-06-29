@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-05-18 16:19+0100\n"
+"POT-Creation-Date: 2018-06-29 16:30+0100\n"
 "PO-Revision-Date: 2015-12-14 20:07+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -1721,9 +1721,7 @@ msgstr "Actuel"
 
 #: templates/profile.html:42 templates/thread.html:51
 msgid "Previous"
-msgid_plural "Previous"
-msgstr[0] "Précédent"
-msgstr[1] "Précédents"
+msgstr "Précédent"
 
 #: templates/profile.html:52
 msgid "Account"

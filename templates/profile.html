@@ -39,7 +39,7 @@
 						{% else %}
 							<p><b>{{ _( "Current" )}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ data.current_display_name.display_name }}</p>
 							{% if data.previous_display_names %}
-							<p><b>{{ ngettext( "Previous", "Previous", data.previous_display_names | count ) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ data.previous_display_names | join(', ') }}</p>
+							<p><b>{{ _( "Previous" ) }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ data.previous_display_names | join(', ') }}</p>
 							{% endif %}
 						{% endif %}
 					</div>
