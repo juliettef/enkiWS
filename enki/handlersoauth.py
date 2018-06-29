@@ -66,6 +66,11 @@ class HandlerOAuthBase( enki.HandlerBase ):
 			self.redirect_to_relevant_page( True )
 		return result
 
+	@classmethod
+	def get_provider_name_obfuscated( self ):
+		return self.get_provider_name()[:3].lower()
+
+
 class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 
 	def auth_request( self ):    # let the user authenticate themselves with the 3rd party provider

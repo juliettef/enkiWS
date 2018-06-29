@@ -24,7 +24,7 @@
 							 <p class="text-warning"><b>{{ _( "You must be 16 years or older." ) }}</b></p>
 		                    {% for item in authhandlers %}
                                 {% set oauthbutton = item.get_button() %}
-		                        <a href="{{ oauthbutton.href }}" class="btn btn-block btn-oauth btn-{{ item.get_provider_name()|lower }}">
+		                        <a href="{{ oauthbutton.href }}" class="btn btn-block btn-oauth btn-{{ item.get_provider_name_obfuscated() }}">
 			                        <i class="i-oauth fa {{ oauthbutton.icon }}"></i> {{ _( "Log in with" )}} {{ item.get_provider_name() }}
 		                        </a>
 		                    {% endfor %}

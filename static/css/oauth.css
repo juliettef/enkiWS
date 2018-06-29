@@ -12,48 +12,48 @@
     font-size : 1.6em;
     vertical-align : text-bottom;
     }
-.btn-google,
-.btn-google:disabled {
+.btn-goo,
+.btn-goo:disabled {
     background-color : #db3236;
     }
-.btn-google:focus,
-.btn-google:hover,
-.btn-google:active {
+.btn-goo:focus,
+.btn-goo:hover,
+.btn-goo:active {
     background-color : #ca2125;
     }
-.btn-facebook,
-.btn-facebook:disabled {
+.btn-fac,
+.btn-fac:disabled {
     background-color : #3b5998;
     }
-.btn-facebook:focus,
-.btn-facebook:hover,
-.btn-facebook:active {
+.btn-fac:focus,
+.btn-fac:hover,
+.btn-fac:active {
     background-color : #2a4887;
     }
-.btn-github,
-.btn-github:disabled {
+.btn-git,
+.btn-git:disabled {
     background-color : #666666;
     }
-.btn-github:focus,
-.btn-github:hover,
-.btn-github:active {
+.btn-git:focus,
+.btn-git:hover,
+.btn-git:active {
     background-color : #555555;
     }
-.btn-twitter,
-.btn-twitter:disabled {
+.btn-twi,
+.btn-twi:disabled {
     background-color : #55acee;
     }
-.btn-twitter:focus,
-.btn-twitter:hover,
-.btn-twitter:active {
+.btn-twi:focus,
+.btn-twi:hover,
+.btn-twi:active {
     background-color : #449bdd;
     }
-.btn-steam,
-.btn-steam:disabled {
+.btn-ste,
+.btn-ste:disabled {
     background-color : #4c6b22;
     }
-.btn-steam:focus,
-.btn-steam:hover,
-.btn-steam:active {
+.btn-ste:focus,
+.btn-ste:hover,
+.btn-ste:active {
     background-color : #3b5a11;
     }
