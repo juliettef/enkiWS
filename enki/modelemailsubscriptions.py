@@ -50,6 +50,10 @@ class EnkiModelEmailSubscriptions(model.Model):
 	def fetch_keys_by_email( cls, email ):
 		return cls.query( cls.email == email ).fetch( keys_only = True )
 
+	@classmethod
+	def count( cls ):
+		return cls.query().count()
+
 	#=== UTILITIES ================================================================
 
 	@classmethod

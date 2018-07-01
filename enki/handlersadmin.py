@@ -8,6 +8,7 @@ from enki.modeluser import EnkiModelUser
 from enki.modeldisplayname import EnkiModelDisplayName
 from enki.modelproductkey import EnkiModelProductKey
 from enki.modelsummary import EnkiModelSummary
+from enki.modelemailsubscriptions import EnkiModelEmailSubscriptions
 
 
 class HandlerAdmin( enki.HandlerBase ):
@@ -32,13 +33,13 @@ class HandlerAdmin( enki.HandlerBase ):
 					'counter_licence_keys_generator_freepress_activated' : EnkiModelProductKey.count_licence_keys( 'Generator', 'free-press', True ),
 					'counter_licence_keys_generator_freepromo_not_activated' : EnkiModelProductKey.count_licence_keys( 'Generator', 'free-promo', False ),
 					'counter_licence_keys_generator_freepromo_activated' : EnkiModelProductKey.count_licence_keys( 'Generator', 'free-promo', True ),
+					'counter_newsletter_subscribers' : EnkiModelEmailSubscriptions.count(),
 					 }
 
 
 class HandlerSummary( enki.HandlerBase ):
 
 	def get( self ):
-		test = enki.libutil.is_debug()
 		if self.request.headers.get( 'X-AppEngine-Cron' ) or enki.libutil.is_debug():
 			counters_from_modelcounter = [ 'downloads_product_a', 'purchases_product_a', 'views_forum' ]
 			for item in counters_from_modelcounter:
@@ -53,6 +54,7 @@ class HandlerSummary( enki.HandlerBase ):
 			EnkiModelSummary.create( 'lic_gen_press_act', EnkiModelProductKey.count_licence_keys( 'Generator', 'free-press', True ))
 			EnkiModelSummary.create( 'lic_gen_promo_not_act', EnkiModelProductKey.count_licence_keys( 'Generator', 'free-promo', False ))
 			EnkiModelSummary.create( 'lic_gen_promo_act', EnkiModelProductKey.count_licence_keys( 'Generator', 'free-promo', True ))
+			EnkiModelSummary.create( 'newsletter_subs', EnkiModelEmailSubscriptions.count())
 			self.response.status = 200
 		else:
 			self.error( 403 )
