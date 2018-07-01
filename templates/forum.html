@@ -17,13 +17,15 @@
             {% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
+			<h1>{{ _( "Forum" ) }}</h1>
+
             {% if data %}
                 <ul class="breadcrumb">
                     <li><a href="{{ data.forums_url }}#{{ data.forum.group }}">{{ data.forum.group|e }}</a></li>
                     <li>{{ _( "Forum" ) }} - {{ data.forum.title|e }}</li>
                 </ul>
 
-                <h3>{{ _( "Forum" ) }} - {{ data.forum.title|e }}</h3>
+                <h2>{{ data.forum.title|e }}</h2>
                 <p><span class="badge">{{ data.forum.num_threads }}</span> {{ _( "Threads" ) }} - <span class="badge">{{ data.num_posts }}</span> {{ _( "Posts" ) }}</p>
 
                 {% if data.list %}

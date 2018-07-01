@@ -13,6 +13,8 @@
             {% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
+			<h1>{{ _( "Display name" ) }}</h1>
+
             {% if data %}
                 {% if data.entity %}
                     <p class="text-info">{{ _( "Current display name" ) }} {{ data.entity.display_name }}</p>

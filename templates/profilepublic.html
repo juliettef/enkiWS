@@ -14,11 +14,13 @@
 			{% include "incnavbartop.html" %}
             {% include "incmessageinfo.html" %}
 
+			<h1>{{ _( "User" ) }}</h1>
+
 	        {% if display_name_data %}
 	            {% if display_name_data.entity.display_name == deleted_dn %}
-	                <h3>{{ deleted_dn_display }}</h3>
+	                <h2>{{ deleted_dn_display }}</h2>
 	            {% else %}
-	                <h3>{{ _( "User" ) }} {{ display_name_data.entity.display_name }}</h3>
+	                <h2>{{ display_name_data.entity.display_name }}</h2>
 	                {% if display_name_data.list %}
 	                    <p><b>{{ ngettext( "Previous display name", "Previous display names", display_name_data.list | count ) }} &nbsp;&nbsp;&nbsp;</b>{{ display_name_data.list | join(', ') }}</p>
 	                {% endif %}
