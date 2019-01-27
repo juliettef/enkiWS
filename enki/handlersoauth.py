@@ -31,6 +31,7 @@ class HandlerOAuthBase( enki.HandlerBase ):
 		if not ref:
 			ref = enki.libutil.get_local_url( ) # home
 		self.session[ 'sessionloginrefpath' ] = ref
+		self.response.headers.add( "X-Robots-Tag", "noindex")
 		self.auth_callback_provider()
 
 	def process_login_info( self, loginInfoSettings, result ):
@@ -74,6 +75,7 @@ class HandlerOAuthBase( enki.HandlerBase ):
 class HandlerOAuthOAUTH2( HandlerOAuthBase ):
 
 	def auth_request( self ):    # let the user authenticate themselves with the 3rd party provider
+		self.response.headers.add( "X-Robots-Tag", "noindex")
 		params = { 'client_id': self.get_auth_request_client_id(),
 					'response_type': 'code',
 					'scope': self.get_scope(),
@@ -378,6 +380,7 @@ class HandlerOAuthSteam( HandlerOAuthBase ):
 		return self.AUTHCALLBACK
 
 	def auth_request( self ):
+		self.response.headers.add( "X-Robots-Tag", "noindex")
 		params = {  'openid.ns': 'http://specs.openid.net/auth/2.0',
 					'openid.mode': 'checkid_setup',
 					'openid.claimed_id': 'http://specs.openid.net/auth/2.0/identifier_select',
@@ -477,6 +480,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 		return oauth_signature
 
 	def auth_request( self ):
+		self.response.headers.add( "X-Robots-Tag", "noindex")
 		# STEP 1
 		# note: these parameters need to be sorted alphabetically by key. They are therefore a list of tuples and not a dictionary.
 		params = [( 'oauth_callback' , self.domain_name[ :-1 ] + self.get_auth_callback()),
