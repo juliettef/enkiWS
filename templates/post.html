@@ -31,7 +31,7 @@
                 <h3>{{ _( "Post" ) }}</h3>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-						{% if data.sticky %}<i class="fa fa-thumb-tack"></i>&nbsp;&nbsp;{% endif %}
+						{% if data.sticky %}<i class="fas fa-thumbtack"></i>&nbsp;&nbsp;{% endif %}
                         {% if data.author_data.display_name == deleted_dn %}{{ deleted_dn_display }}{% else %}<a href="{{ data.author_data.user_page }}">{{ data.author_data.display_name}}</a>{% endif %}
                         - {{ _( "posted" )}} {{ data.post.time_created.strftime( "%a, %d %b %Y %H:%M:%S" )}} UTC
 						{% if data.post.time_updated > data.post.time_created %}- {% if data.post.body == deleted_post %}{{ _( "deleted" ) }}{% else %}{{ _( "edited" ) }}{% endif %} {{ data.post.time_updated.strftime( "%a, %d %b %Y %H:%M:%S" )}} UTC{% endif %}
