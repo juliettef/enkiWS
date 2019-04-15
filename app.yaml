@@ -56,6 +56,7 @@ skip_files:
 - ^(.*/)?.*\.py[co]$
 - ^(.*/)?.*/RCS/.*$
 - ^(.*/)?\..*$
-- ^test$
 - ^babel\.py$
 - ^deploy\.py$
+- test/
+- venv/
