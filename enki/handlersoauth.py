@@ -198,7 +198,7 @@ class HandlerOAuthGoogle( HandlerOAuthOpenIDConnect ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		icon = 'fa-google'
+		icon = 'fab fa-google'
 		return button( href, icon )
 
 	@classmethod
@@ -234,7 +234,7 @@ class HandlerOAuthFacebook( HandlerOAuthOAUTH2 ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		icon = 'fa-facebook'
+		icon = 'fab fa-facebook'
 		return button( href, icon )
 
 	@classmethod
@@ -295,7 +295,7 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		icon = 'fa-github'
+		icon = 'fab fa-github'
 		return button( href, icon )
 
 	@classmethod
@@ -369,7 +369,7 @@ class HandlerOAuthSteam( HandlerOAuthBase ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		icon = 'fa-steam'
+		icon = 'fab fa-steam'
 		return button( href, icon )
 
 	@classmethod
@@ -442,7 +442,7 @@ class HandlerOAuthTwitter( HandlerOAuthBase ):
 	@classmethod
 	def get_button( cls ):
 		href = cls.AUTHREQUEST
-		icon = 'fa-twitter'
+		icon = 'fab fa-twitter'
 		return button( href, icon )
 
 	@classmethod

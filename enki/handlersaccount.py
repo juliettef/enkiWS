@@ -156,7 +156,7 @@ class HandlerAccountConnect( enki.HandlerBaseReauthenticate ):
 			provider_name, provider_uid = item.partition( ':' )[ ::2 ] # save even list items starting at 0
 			auth_providers.append({ 'provider_name': provider_name, 'provider_uid': str( provider_uid ), 'status': 'registered' })
 			providers_temp_list.append( provider_name )
-		for item in settings.HANDLERS:   # remaning providers
+		for item in settings.HANDLERS:   # remaining providers
 			provider = item.get_provider_name()
 			if provider not in providers_temp_list:
 				auth_providers.append({ 'provider_name': provider, 'provider_uid': 'none', 'status': 'unregistered' })

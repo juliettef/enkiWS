@@ -31,7 +31,7 @@
 								{% for handler in authhandlers %}
 									{% set oauthbutton = handler.get_button() %}
 									<a href="{{ oauthbutton.href }}" class="btn btn-block btn-oauth btn-{{ handler.get_provider_name_obfuscated() }}">
-										<i class="i-oauth fa {{ oauthbutton.icon }}"></i> {{ _( "Log in with" )}} {{ handler.get_provider_name() }}
+										<i class="i-oauth {{ oauthbutton.icon }}"></i> {{ _( "Log in with" )}} {{ handler.get_provider_name() }}
 										{% if handler.get_provider_name() == provider_name %}<br><small>{{ _( "You may need to log out or use a different browser" )}}</small>{% endif %}
 									</a>
 								{% endfor %}
@@ -90,7 +90,7 @@
 							<form class="form-group" action="{{ 'registeroauthwithexistingemail'|local  }}" method="post">
 								<input type="hidden" name="CSRF" value="{{ CSRFtoken }}">
 								<button class="btn btn-block btn-oauth btn-{{ provider_authhandler.get_provider_name_obfuscated() }}" type="submit" name="submittype" value="register">
-									<i class="i-oauth fa {{ provider_authhandler.get_button().icon }}"></i> {{ _( "Log in with" )}} {{ provider_name }}<br><small>{{ _( "User identifier" )}} {{ provider_uid }}</small></button>
+									<i class="i-oauth {{ provider_authhandler.get_button().icon }}"></i> {{ _( "Log in with" )}} {{ provider_name }}<br><small>{{ _( "User identifier" )}} {{ provider_uid }}</small></button>
 							</form>
 						</div>
 					</fieldset>
