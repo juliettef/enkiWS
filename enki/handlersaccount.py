@@ -707,7 +707,10 @@ class HandlerDisplayName( enki.HandlerBaseReauthenticate ):
 		if not EnkiModelDisplayName.exist_by_user_id( self.user_id ):
 			# if no displayname exists, auto-generate one
 			auto_generated = EnkiModelDisplayName.cosmopompe()[ 0 ]
-			intro_message = " ".join([ MSG.DISPLAY_NAME_INTRO(), MSG.DISPLAY_NAME_AUTO_GENERATED()])
+			if auto_generated:
+				intro_message = " ".join([MSG.DISPLAY_NAME_INTRO(), MSG.DISPLAY_NAME_AUTO_GENERATED()])
+			else: # Displayname auto-generation failed. Display name field is left blank.
+				intro_message = MSG.DISPLAY_NAME_INTRO()
 		self.render_tmpl( 'displayname.html',
 		                  active_menu = 'profile',
 		                  auto_generated = auto_generated,

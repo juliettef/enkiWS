@@ -165,44 +165,35 @@ class EnkiModelDisplayName( model.Model ):
 
 	@classmethod
 	def cosmopompe( cls ):
-	# generates a display name prefix
-		# syllables are used to generate display names. They must be alphanumeric (including accented characters).
-		# 1 <= syllable length <= PREFIX_LENGTH_MAX
-		syllables = [ 'Ga', 'Bu', 'Zo', 'Meu' ] # shadok syllables
-		syl_len_shortest = len( min(( word for word in syllables if word ), key = len ))
-		syl_nr_min = cls.PREFIX_LENGTH_MIN / syl_len_shortest + ( 0 if cls.PREFIX_LENGTH_MIN % syl_len_shortest == 0 else 1 )
-		syl_nr_max = cls.PREFIX_LENGTH_MAX / syl_len_shortest
-		attempt_prefix = 0
-		unique = False
-		while not unique:
-		# generate a new prefix + suffix combo until unique
-			unique = True
+		# Generate a display name
+		# About the Shadock word generator: https://www.enkisoftware.com/devlogpost-20190405-1
+		syllables = [ 'Ga', 'Bu', 'Zo', 'Meu' ] # shadok syllables (alphanumeric, can include accented characters).
+		min_syllables = cls.PREFIX_LENGTH_MIN / 3	# minimum prefix length / longest syllable length
+		max_syllables = cls.PREFIX_LENGTH_MAX / 2
+		# attempt to generate a unique combo [ prefix, suffix ]. Stop after an arbitrary number of attempts.
+		attempt = 0
+		while attempt < 99:
+			# generate a prefix
 			prefix = ''
-			max_syllables = random.randint( syl_nr_min, syl_nr_max ) # variable number of syllables per word
-			syllable_counter = 1
-			while len( prefix ) < cls.PREFIX_LENGTH_MIN:
-				while syllable_counter <= max_syllables:
-					prefix_test = prefix + syllables[ random.randint( 0, len( syllables ) - 1 )]
-					if len( prefix_test ) <= cls.PREFIX_LENGTH_MAX:
-						prefix = prefix_test
-					else:
-						break
-					syllable_counter += 1
-			suffix = '#' + str( random.randint( 1000, 9999 ))
+			num_syllables = random.randint( min_syllables, max_syllables )
+			count_syllables = 0
+			while count_syllables < num_syllables or len( prefix ) < cls.PREFIX_LENGTH_MIN:
+				syllable = random.choice( syllables )
+				if ( len( prefix + syllable ) > cls.PREFIX_LENGTH_MAX ):
+					break  # abort if the predicted prefix is too long
+				prefix += syllable
+				count_syllables += 1
+			# if the resulting combination already exists, try new suffixes until reach a unique combo. Stop after x attemps.
 			attempt_suffix = 0
-			while cls.exist_by_prefix_lower_suffix( prefix.lower(), suffix ) :
+			while attempt_suffix < 99:
+				# generate a suffix
 				suffix = '#' + str( random.randint( 1000, 9999 ))
-				attempt_suffix += 1
-				if attempt_suffix > 999:
-					unique = False
-					break
-			attempt_prefix += 1
-			if attempt_prefix > 99:
-				unique = False
-				break
-			if unique:
-				display_name_split = [ prefix, suffix ]
-				return display_name_split
+				if cls.exist_by_prefix_lower_suffix( prefix.lower(), suffix ):
+					attempt_suffix += 1
+				else:
+					return [ prefix, suffix ]
+			attempt += 1
+		return [0]	# display name generation failed
 
 	@classmethod
 	def set_display_name( cls, user_id, prefix, suffix ):
