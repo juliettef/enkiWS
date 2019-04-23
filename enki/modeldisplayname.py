@@ -166,7 +166,7 @@ class EnkiModelDisplayName( model.Model ):
 	@classmethod
 	def cosmopompe( cls ):
 		# Generate a display name
-		# About the Shadock word generator: https://www.enkisoftware.com/devlogpost-20190405-1
+		# About the Shadok word generator: https://www.enkisoftware.com/devlogpost-20190405-1
 		syllables = [ 'Ga', 'Bu', 'Zo', 'Meu' ] # shadok syllables (alphanumeric, can include accented characters).
 		min_syllables = cls.PREFIX_LENGTH_MIN / 3	# minimum prefix length / longest syllable length
 		max_syllables = cls.PREFIX_LENGTH_MAX / 2
