@@ -1,6 +1,7 @@
 import collections
 import random
 import re
+import math
 
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import model
@@ -34,7 +35,7 @@ class EnkiModelDisplayName( model.Model ):
 	# 1 <= PREFIX_LENGTH_MIN < PREFIX_LENGTH_MAX
 	# longest syllable in prefix generator <= PREFIX_LENGTH_MAX
 	PREFIX_LENGTH_MAX = 12
-	PREFIX_LENGTH_MIN = 3
+	PREFIX_LENGTH_MIN = 1
 	DISPLAY_NAME_LENGTH_MAX = PREFIX_LENGTH_MAX + 5     # prefix + suffix, suffix = '#' + 4 digits
 
 	ERROR_DISPLAY_NAME_LENGTH = -41
@@ -168,8 +169,8 @@ class EnkiModelDisplayName( model.Model ):
 		# Generate a display name
 		# About the Shadok word generator: https://www.enkisoftware.com/devlogpost-20190405-1
 		syllables = [ 'Ga', 'Bu', 'Zo', 'Meu' ] # shadok syllables (alphanumeric, can include accented characters).
-		min_syllables = cls.PREFIX_LENGTH_MIN / 3	# minimum prefix length / longest syllable length
-		max_syllables = cls.PREFIX_LENGTH_MAX / 2
+		min_syllables = int( math.ceil( float( cls.PREFIX_LENGTH_MIN ) / 3.0 ))    # minimum prefix length / longest syllable length
+		max_syllables = int( math.floor( float( cls.PREFIX_LENGTH_MAX ) / 2.0 ))    # maximum prefix length / shortest syllable length
 		# attempt to generate a unique combo [ prefix, suffix ]. Stop after an arbitrary number of attempts.
 		attempt = 0
 		while attempt < 99:
