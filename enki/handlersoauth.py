@@ -218,67 +218,6 @@ class HandlerOAuthGoogle( HandlerOAuthOpenIDConnect ):
 		return self.AUTHCALLBACK
 
 
-#===== FACEBOOK ========================================================================================================
-
-class HandlerOAuthFacebook( HandlerOAuthOAUTH2 ):
-
-	AUTHCALLBACK = '/facebookcallback'
-	AUTHREQUEST = '/facebookauthrequest'
-
-	@classmethod
-	def get_routes( cls ):
-		routes = [ webapp2.Route( cls.AUTHREQUEST, handler = 'enki.handlersoauth.HandlerOAuthFacebook:auth_request', methods = [ 'GET' ] ),
-		           webapp2.Route( cls.AUTHCALLBACK, handler = 'enki.handlersoauth.HandlerOAuthFacebook:auth_callback', methods = [ 'GET' ] ), ]
-		return routes
-
-	@classmethod
-	def get_button( cls ):
-		href = cls.AUTHREQUEST
-		icon = 'fab fa-facebook'
-		return button( href, icon )
-
-	@classmethod
-	def get_provider_name( cls ):
-		return 'Facebook'
-
-	def get_auth_request_client_id( self ):
-		return settings.secrets.CLIENT_ID_FACEBOOK
-
-	def get_client_secret( self ):
-		return settings.secrets.CLIENT_SECRET_FACEBOOK
-
-	def get_auth_callback( self ):
-		return self.AUTHCALLBACK
-
-	def auth_endpoint( self ):
-		return 'https://www.facebook.com/dialog/oauth'
-
-	def token_endpoint( self ):
-		return 'https://graph.facebook.com/oauth/access_token'
-
-	def profile_endpoint( self ):
-		return 'https://graph.facebook.com/me'
-
-	def get_scope( self ):   # get scope (compulsory) to add to params
-		return 'public_profile email' # https://developers.facebook.com/docs/facebook-login/permissions/v2.2#reference
-
-	def process_token_result( self, result ): # select the processing function
-		data = self.process_result_as_JSON( result )
-		if not data: # failed
-			self.add_infomessage( MSG.INFORMATION(), MSG.REGISTRATION_ABORT())
-			self.redirect_to_relevant_page()
-			return
-		token = data[ 'access_token' ]
-		profile = self.get_profile( token, { 'fields': 'id,email'} )
-		jdoc = self.process_result_as_JSON( profile )
-		jdoc[ 'email_verified' ] = True # Facebook emails only given if verified.
-		loginInfoSettings = {   'provider_uid': 'id',
-								'email': 'email',
-								'email_verified': 'email_verified' }
-		loginInfo = self.process_login_info( loginInfoSettings, jdoc )
-		self.provider_authenticated_callback( loginInfo )
-
-
 #===== GITHUB ==========================================================================================================
 
 class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):

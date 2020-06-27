@@ -34,7 +34,7 @@ __[ NEW in v0.16 ] Added extension email newsletter subscriptions and batch emai
     * Display name
     * Email
     * Password change and recovery
-    * Login with email/password or with [OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-facebook-twitter-github) - Facebook, Google, Twitter, Github, Steam
+    * Login with email/password or with [OAuth & OpenID providers](https://github.com/juliettef/enkiWS#enabling-oauth-login-with-google-twitter-github) - Google, Twitter, Github, Steam
     * Stay logged in
     * Manage sessions
     * Delete account
@@ -136,7 +136,7 @@ Note: if you'd prefer to configure PyCharm CE yourself see the [detailed tutoria
 1. Restart PyCharm
 1. You can now run / debug the project from PyCharm using one of the configurations provided (e.g. *GAE_config*).  
 
-### Enabling OAuth login with Google, Facebook, Twitter, Github
+### Enabling OAuth login with Google, Twitter, Github
 
 To set up Open Authentication, you need to configure secrets.py:  
 

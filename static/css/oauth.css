@@ -21,15 +21,6 @@
 .btn-goo:active {
     background-color : #ca2125;
     }
-.btn-fac,
-.btn-fac:disabled {
-    background-color : #3b5998;
-    }
-.btn-fac:focus,
-.btn-fac:hover,
-.btn-fac:active {
-    background-color : #2a4887;
-    }
 .btn-git,
 .btn-git:disabled {
     background-color : #666666;
