@@ -161,7 +161,7 @@ msgstr ""
 
 #: enki/textmessages.py:49
 #, python-format
-msgid "If email address %(email)s matches an existing account, an email was sent to it. Please check your inbox and follow the instructions in the email to reset you password.<br> If you don't receive an email, it means you don't have an account regitered with that email address."
+msgid "If email address %(email)s matches an existing account, an email was sent to it. Please check your inbox and follow the instructions in the email to reset you password.<br> If you don't receive an email, it means you don't have an account registered with that email address."
 msgstr ""
 
 #: enki/textmessages.py:51

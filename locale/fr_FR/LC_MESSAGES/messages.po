@@ -162,7 +162,7 @@ msgstr "Votre mot de passe est enregistré."
 
 #: enki/textmessages.py:49
 #, python-format
-msgid "If email address %(email)s matches an existing account, an email was sent to it. Please check your inbox and follow the instructions in the email to reset you password.<br> If you don't receive an email, it means you don't have an account regitered with that email address."
+msgid "If email address %(email)s matches an existing account, an email was sent to it. Please check your inbox and follow the instructions in the email to reset you password.<br> If you don't receive an email, it means you don't have an account registered with that email address."
 msgstr "Si l'adresse %(email)s est disponible, un courrier électronique a été envoyé. Veuillez vous rendre sur votre compte de messagerie et suivre les instructions contenues dans le message afin de réinitialiser votre mot de passe.<br> Si vous n'avez pas reçu de message, cela signifie que vous n'avez pas de compte correspondant à cette adresse de courrier électronique."
 
 #: enki/textmessages.py:51
