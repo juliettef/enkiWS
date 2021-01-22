@@ -292,6 +292,11 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 		loginInfo = self.process_login_info( loginInfoSettings, jdoc )
 		self.provider_authenticated_callback( loginInfo )
 
+	def get_profile( self, token, params = {} ):
+		fullUrl = self.profile_endpoint() + '?' + enki.libutil.urlencode( params )
+		profile = self.urlfetch_safe( url = fullUrl, headers={'Authorization': headerToken} )
+		return profile
+
 
 #===== STEAM ===========================================================================================================
 
