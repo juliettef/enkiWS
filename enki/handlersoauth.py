@@ -272,8 +272,9 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 		profile = self.get_profile( token )
 		jdoc = self.process_result_as_JSON( profile )
 
-		emailUrl ='https://api.github.com/user/emails?' + enki.libutil.urlencode({ 'access_token': token })
-		emailDoc = self.urlfetch_safe( url = emailUrl )
+		emailUrl ='https://api.github.com/user/emails'
+		headerToken = 'token ' + token
+		emailDoc = self.urlfetch_safe( url = emailUrl, headers={'Authorization': headerToken} )
 		jemails = self.process_result_as_JSON( emailDoc )
 		for item in jemails:
 			if item.get( 'verified', False ):
