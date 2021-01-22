@@ -294,6 +294,7 @@ class HandlerOAuthGithub( HandlerOAuthOAUTH2 ):
 
 	def get_profile( self, token, params = {} ):
 		fullUrl = self.profile_endpoint() + '?' + enki.libutil.urlencode( params )
+		headerToken = 'token ' + token
 		profile = self.urlfetch_safe( url = fullUrl, headers={'Authorization': headerToken} )
 		return profile
 
