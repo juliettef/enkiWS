@@ -563,11 +563,11 @@ class HandlerBase( webapp2.RequestHandler ):
 
 	def provider_authenticated_callback( self, loginInfo ):
 		# We expect the fields of the dictionary to be:
-		# - 'provider_name' unique 'pretty' provider name (e.g. google, facebook,...)
+		# - 'provider_name' unique 'pretty' provider name (e.g. google, twitter,...)
 		# - 'provider_uid' provider specific (a.k.a "locally unique") user Id, i.e unique to the provider (e.g. the google user id number)
 		# - 'email'
 		# - 'email_verified'
-		# We IGNORE: username, gender (facebook), avatar link, etc.
+		# We IGNORE: username, gender, avatar link, etc.
 
 		# get the verified email from the auth provider
 		email = None
