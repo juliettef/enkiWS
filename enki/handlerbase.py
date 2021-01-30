@@ -9,7 +9,6 @@ import string
 
 from google.appengine.api import app_identity
 from google.appengine.api import mail
-from google.appengine.ext import db
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 from jinja2.runtime import TemplateNotFound
@@ -476,7 +475,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			result = self.ERROR_USER_NOT_CREATED
 		return result
 
-	@db.transactional
 	def set_email( self, email, user_id = None ):
 	# set or change a user's email address
 		user_key = EnkiModelUser.get_key_by_email( email )
@@ -494,7 +492,6 @@ class HandlerBase( webapp2.RequestHandler ):
 		else:
 			return None
 
-	@db.transactional
 	def set_auth_id( self, auth_id, user_id ):
 	# add a new auth Id to an existing account
 		user_has_same_auth_id = EnkiModelUser.exist_by_auth_id( auth_id )
@@ -514,7 +511,6 @@ class HandlerBase( webapp2.RequestHandler ):
 		user = self.get_or_create_user_from_authid( auth_id = auth_id, email = email, allow_create = False )
 		return user
 
-	@db.transactional
 	def get_or_create_user_from_authid( self, auth_id, email = None, allow_create = True ):
 		user = None
 		user_with_same_auth_id = EnkiModelUser.get_by_auth_id( auth_id )
@@ -531,7 +527,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			user.put()
 		return user
 
-	@db.transactional
 	def remove_auth_id( self, auth_id_to_remove ):
 	# remove an auth Id from a user account
 		if self.has_enough_accounts() and ( auth_id_to_remove in self.enki_user.auth_ids_provider ):
@@ -749,7 +744,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			else:
 				self.send_email( self.enki_user.email, MSG.SEND_EMAIL_ACCOUT_DELETE_SUBJECT(), MSG.SEND_EMAIL_ACCOUT_DELETE_BODY( link ))
 
-	@db.transactional
 	def delete_account( self, delete_posts = False, token = '' ):
 		token_to_save = 'accountdelete'
 		if not token:
