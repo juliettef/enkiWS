@@ -790,11 +790,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			# delete user's posts if required
 			if delete_posts:
 				EnkiModelPost.delete_user_posts( user_to_delete.key.id())
-			# delete user's authentication tokens
-			token_keys = EnkiModelTokenAuth.fetch_keys_by_user_id(user_to_delete.key.id()
-			if token_keys:
-				# delete the token from the db
-				ndb.delete_multi(token_keys)
 		# log the deleted user out
 		if self.enki_user == user_to_delete.key.id():
 			self.log_out()
