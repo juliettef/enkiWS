@@ -75,6 +75,8 @@ try:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthGithub ]
 	if secrets.CLIENT_ID_TWITTER:
 		HANDLERS += [ enki.handlersoauth.HandlerOAuthTwitter ]
+	if secrets.ENKI_FORCE_DEBUG:
+		ENKI_FORCE_DEBUG = secrets.ENKI_FORCE_DEBUG
 except ImportError:
 	KEY_SESSION = 'See example_secrets.txt'
 	URL_PURCHASE_FASTSPRING = ''
