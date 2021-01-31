@@ -762,7 +762,12 @@ class HandlerBase( webapp2.RequestHandler ):
 		email_rollback_tokens_to_delete = EnkiModelTokenEmailRollback.fetch_keys_by_user_id( user_to_delete.key.id())
 		if email_rollback_tokens_to_delete:
 			ndb.delete_multi( email_rollback_tokens_to_delete )
-		# Delete the user account and log them out.
+		#remove any authentication tokens prior to deleting user
+		EnkiModelTokenAuth.revoke_user_authentications( user_to_delete.key.id())
+		# log the user out if it is the user being deleted
+		if self.enki_user == user_to_delete.key.id():
+			self.log_out()
+		# Delete the user account
 		if not HandlerBase.account_is_active( user_to_delete.key.id()):
 			# delete user if the account is inactive
 			display_names = EnkiModelDisplayName.fetch_keys_by_user_id(user_to_delete.key.id())
@@ -790,10 +795,6 @@ class HandlerBase( webapp2.RequestHandler ):
 			# delete user's posts if required
 			if delete_posts:
 				EnkiModelPost.delete_user_posts( user_to_delete.key.id())
-		# log the deleted user out
-		if self.enki_user == user_to_delete.key.id():
-			self.log_out()
-		EnkiModelTokenAuth.revoke_user_authentications( user_to_delete.key.id())
 
 	def cleanup_item( self ):
 		number = random.randint( 1, 1000 )
